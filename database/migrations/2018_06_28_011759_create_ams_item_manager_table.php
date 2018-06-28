@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAmsItemAdminTable extends Migration
+class CreateAmsItemManagerTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAmsItemAdminTable extends Migration
      */
     public function up()
     {
-        Schema::create('ams_item_admin', function (Blueprint $table) {
+        Schema::create('ams_item_manager', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('item_id')->index()->comment('项目id');
             $table->unsignedInteger('admin_id')->index()->comment('管理人员id');
@@ -32,6 +32,6 @@ class CreateAmsItemAdminTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ams_item_admin');
+        Schema::dropIfExists('ams_item_manager');
     }
 }
