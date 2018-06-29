@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAmsDepartmentsTable extends Migration
+class CreateDepartmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAmsDepartmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ams_departments', function (Blueprint $table) {
+        Schema::create('departments', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('unit_id')->index()->comment('单位id');
             $table->string('name',50)->comment('部门名称');
@@ -36,6 +36,6 @@ class CreateAmsDepartmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ams_departments');
+        Schema::dropIfExists('departments');
     }
 }

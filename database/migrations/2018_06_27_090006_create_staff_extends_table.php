@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAmsStaffExtendsTable extends Migration
+class CreateStaffExtendsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAmsStaffExtendsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ams_staff_extends', function (Blueprint $table) {
+        Schema::create('staff_extends', function (Blueprint $table) {
             $table->increments('id');
             $table->boolean('contract_handled')->comment('合同是否办理')->nullable();
             $table->timestamp('contract_handled_at')->comment('办理日期')->nullable();
@@ -52,6 +52,6 @@ class CreateAmsStaffExtendsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ams_staff_extends');
+        Schema::dropIfExists('staff_extends');
     }
 }

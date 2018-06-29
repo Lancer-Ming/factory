@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAmsPermissionsTable extends Migration
+class CreatePermissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAmsPermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ams_permissions', function (Blueprint $table) {
+        Schema::create('permissions', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('parent_id')->index()->comment('父级关系id');
             $table->string('icon', 30)->comment('图标')->nullable();
@@ -31,6 +31,6 @@ class CreateAmsPermissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ams_permissions');
+        Schema::dropIfExists('permissions');
     }
 }

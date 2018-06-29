@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAmsStaffTable extends Migration
+class CreateStaffTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAmsStaffTable extends Migration
      */
     public function up()
     {
-        Schema::create('ams_staff', function (Blueprint $table) {
+        Schema::create('staff', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('staff_cert_type')->index()->comment('员工证件类型');
             $table->unsignedInteger('staff_type')->index()->comment('人员类别');
@@ -57,6 +57,6 @@ class CreateAmsStaffTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ams_staff');
+        Schema::dropIfExists('staff');
     }
 }

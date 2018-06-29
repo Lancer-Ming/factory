@@ -19,61 +19,61 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                            </li>
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="py-4">
-            @yield('content')
-        </main>
+<div id="app">
+    <div class="homepage-header">
+        <el-row :gutter="10">
+            <el-col :xs="8" :sm="12" :md="14" :lg="16" :xl="19"><img src="/static/img/logo2.png" class="logo-img" alt=""></el-col>
+            <el-col :xs="8" :sm="6" :md="5" :lg="3" :xl="2" class="Home-p">
+                <i class="fa fa-home"></i><span>系统首页</span>
+            </el-col>
+            {{--<el-col :span="2" class="Modify"><i class="fa fa-gears"></i><span>修改密码</span></el-col>--}}
+            {{--<el-col :span="2" class="Exit"><i class="fa fa-sign-out"></i><span>安全退出</span></el-col>--}}
+            <el-col :xs="8" :sm="6" :md="5" :lg="3" :xl="2">
+                <el-menu class="el-menu-demo dropdown" mode="horizontal"
+                        background-color="#6f7994"
+                        text-color="#fff"
+                        active-text-color="#ffd04b">
+                    <el-submenu index="1" style="background: #fff;">
+                        <template slot="title" class="clearfix"><img src="/static/img/user.png" alt="" class="tit-user clearfix"><span class="tit-username">linlin@</span></template>
+                        <el-menu-item index="2-1"><i class="fa fa-gears"></i><span class="changepwd">修改密码</span></el-menu-item>
+                        <el-menu-item index="2-2"><i class="fa fa-sign-out"></i><span class="signput">安全退出</span></el-menu-item>
+                    </el-submenu>
+                </el-menu>
+            </el-col>
+        </el-row>
     </div>
+    <div class="nav">
+        <div class="homepage-title">
+                {{--<el-button type="info" plain v-for="item in contacts" class="tit-tab"><i :class="`fa fa-${item.icon}`"></i>${item.item}</el-button>--}}
+                <el-row>
+                    <el-col :span="24">
+                        <span class="fa fa-bars take"></span>
+                        <el-menu default-active="2" class="el-menu-vertical-demo" style="background: #6f7994;color: #fff;" v-for="item in nav">
+                            <el-submenu index="1" style="color: #fff;">
+                                <template slot="title">
+                                    <i :class="`fa fa-${item.icon}`" style="color: #fff;"></i>
+                                    <span class="tit-tab" v-text="item.label"></span>
+                                </template>
+                                <div v-for="child in item.child">
+                                    <el-menu-item-group v-if="typeof child.child === 'undefined'">
+                                        <el-menu-item index="1-1" v-text="child.label"></el-menu-item>
+                                    </el-menu-item-group>
+
+                                    <el-submenu index="1-4" v-if="typeof child.child !== 'undefined'">
+                                        <template slot="title" v-text="child.label"></template>
+                                        <el-menu-item index="1-4-1" v-for="c in child.child" v-text="c.label"></el-menu-item>
+                                    </el-submenu>
+                                </div>
+                            </el-submenu>
+                        </el-menu>
+                    </el-col>
+            </el-row>
+
+        </div>
+    </div>
+</div>
 </body>
 </html>

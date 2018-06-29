@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAmsItemUnitsTable extends Migration
+class CreateItemUnitsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAmsItemUnitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ams_item_units', function (Blueprint $table) {
+        Schema::create('item_units', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('contract_id')->index()->comment('施工总承包id');
             $table->unsignedInteger('subcontract_id')->index()->comment('分包单位id')->nullable();
@@ -34,6 +34,6 @@ class CreateAmsItemUnitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ams_item_units');
+        Schema::dropIfExists('item_units');
     }
 }

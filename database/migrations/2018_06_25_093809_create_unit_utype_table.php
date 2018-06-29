@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAmsUnitUtypeTable extends Migration
+class CreateUnitUtypeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAmsUnitUtypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('ams_unit_utype', function (Blueprint $table) {
+        Schema::create('unit_utype', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('utype_id')->comment('单位分类一级id');
             $table->unsignedInteger('p_utype_id')->comment('单位分类二级id');
@@ -30,6 +30,6 @@ class CreateAmsUnitUtypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ams_unit_utype');
+        Schema::dropIfExists('unit_utype');
     }
 }
