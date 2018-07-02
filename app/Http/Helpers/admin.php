@@ -1,6 +1,6 @@
 <?php
 
-function successJson($data='', $msg='', $status='', $extra=null)
+function successJson($data='', $msg='', $status=200, $extra=null)
 {
     return  response()->json([
         'info' => [

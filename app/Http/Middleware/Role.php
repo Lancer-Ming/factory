@@ -6,6 +6,7 @@ use App\Models\Permission;
 use Closure;
 use Cache;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 
 class Role
 {
@@ -18,6 +19,12 @@ class Role
      */
     public function handle($request, Closure $next)
     {
+        //如果该用户是超级管理员，直接拥有任何权限，跳过
+        $role_names = \Auth::user()->roles->pluck('name');
+        if($role_names->contains('超级管理员')) {
+            return $next($request);
+        }
+
         // 首先获取所有的权限
         $permissions = Cache::rememberForever('permissons', function() {
             return Permission::with('roles')->get();

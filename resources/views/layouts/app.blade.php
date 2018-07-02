@@ -15,7 +15,7 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
+    {{--<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">--}}
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -23,57 +23,46 @@
 </head>
 <body>
 <div id="app">
-    <div class="homepage-header">
-        <el-row :gutter="10">
-            <el-col :xs="8" :sm="12" :md="14" :lg="16" :xl="19"><img src="/static/img/logo2.png" class="logo-img" alt=""></el-col>
-            <el-col :xs="8" :sm="6" :md="5" :lg="3" :xl="2" class="Home-p">
+    <div class="homepage-header clearfix">
+        <img src="/static/img/logo2.png" class="logo-img clearfix" alt="">
+        <ul class="sidebar-f">
+            <li v-for="(header,index) in headers" :key="index" v-text="header.label" @click="getSideBars(header.id)"></li>
+        </ul>
+        <div class="sidebar-r">
+            <div class="home">
                 <i class="fa fa-home"></i><span>系统首页</span>
-            </el-col>
-            {{--<el-col :span="2" class="Modify"><i class="fa fa-gears"></i><span>修改密码</span></el-col>--}}
-            {{--<el-col :span="2" class="Exit"><i class="fa fa-sign-out"></i><span>安全退出</span></el-col>--}}
-            <el-col :xs="8" :sm="6" :md="5" :lg="3" :xl="2">
-                <el-menu class="el-menu-demo dropdown" mode="horizontal"
-                        background-color="#6f7994"
-                        text-color="#fff"
-                        active-text-color="#ffd04b">
-                    <el-submenu index="1" style="background: #fff;">
-                        <template slot="title" class="clearfix"><img src="/static/img/user.png" alt="" class="tit-user clearfix"><span class="tit-username">linlin@</span></template>
-                        <el-menu-item index="2-1"><i class="fa fa-gears"></i><span class="changepwd">修改密码</span></el-menu-item>
-                        <el-menu-item index="2-2"><i class="fa fa-sign-out"></i><span class="signput">安全退出</span></el-menu-item>
-                    </el-submenu>
-                </el-menu>
-            </el-col>
-        </el-row>
+            </div>
+            <div class="user-h">
+                <li><img src="/static/img/user.png" alt="" class="tit-user clearfix">linlin@
+                    <ul>
+                        <li><i class="fa fa-gears"></i><span class="changepwd">修改密码</span></li>
+                        <li><i class="fa fa-sign-out"></i><span class="signput">安全退出</span></li>
+                    </ul>
+                </li>
+            </div>
+        </div>
     </div>
     <div class="nav">
         <div class="homepage-title">
-                {{--<el-button type="info" plain v-for="item in contacts" class="tit-tab"><i :class="`fa fa-${item.icon}`"></i>${item.item}</el-button>--}}
-                <el-row>
+            <el-row :collapse="isCollapse">
                     <el-col :span="24">
                         <span class="fa fa-bars take"></span>
-                        <el-menu default-active="2" class="el-menu-vertical-demo" style="background: #6f7994;color: #fff;" v-for="item in nav">
-                            <el-submenu index="1" style="color: #fff;">
+                        <el-menu default-active="2" class="el-menu-vertical-demo" style="background: #333;color: #fff;" v-for="(item,index) in sidebars" :key="index">
+                            <el-submenu index="index" style="color: #fff;">
                                 <template slot="title">
                                     <i :class="`fa fa-${item.icon}`" style="color: #fff;"></i>
                                     <span class="tit-tab" v-text="item.label"></span>
                                 </template>
-                                <div v-for="child in item.child">
-                                    <el-menu-item-group v-if="typeof child.child === 'undefined'">
-                                        <el-menu-item index="1-1" v-text="child.label"></el-menu-item>
-                                    </el-menu-item-group>
-
-                                    <el-submenu index="1-4" v-if="typeof child.child !== 'undefined'">
-                                        <template slot="title" v-text="child.label"></template>
-                                        <el-menu-item index="1-4-1" v-for="c in child.child" v-text="c.label"></el-menu-item>
-                                    </el-submenu>
+                                <div v-for="(child,child_index) in item.children" :key="child_index">
+                                    <el-menu-item index="child_index" v-text="child.label"></el-menu-item>
                                 </div>
                             </el-submenu>
                         </el-menu>
                     </el-col>
             </el-row>
-
         </div>
     </div>
 </div>
 </body>
+
 </html>

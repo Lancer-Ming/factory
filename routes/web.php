@@ -12,4 +12,9 @@
 */
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('index');
+Route::middleware('auth')->get('/', 'HomeController@index')->name('index');
+
+Route::namespace('System')->prefix('permissions')->as('system.permissions.')->middleware(['auth','role'])->group(function() {
+    Route::get('/', 'PermissionsController@index')->name('index');
+    Route::get('/{permission}/getsidebars', 'PermissionsController@getSideBars')->name('getsidebars');
+});

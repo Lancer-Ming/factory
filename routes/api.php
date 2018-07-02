@@ -13,7 +13,4 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::namespace('System')->prefix('permissions')->as('system.permissions.')->group(function() {
-    Route::get('/', 'PermissionsController@index')->name('index');
-});
 
