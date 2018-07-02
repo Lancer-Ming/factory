@@ -28645,7 +28645,7 @@ function required(rule, value, source, errors, options, type) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(78);
-module.exports = __webpack_require__(196);
+module.exports = __webpack_require__(188);
 
 
 /***/ }),
@@ -28681,7 +28681,7 @@ Vue.prototype.axios = __WEBPACK_IMPORTED_MODULE_1_axios___default.a;
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', __webpack_require__(192));
+Vue.component('example-component', __webpack_require__(184));
 
 var app = new Vue({
     el: '#app',
@@ -94346,23 +94346,15 @@ module.exports = __webpack_require__(27);
 /******/ });
 
 /***/ }),
-/* 184 */,
-/* 185 */,
-/* 186 */,
-/* 187 */,
-/* 188 */,
-/* 189 */,
-/* 190 */,
-/* 191 */,
-/* 192 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(193)
+var normalizeComponent = __webpack_require__(185)
 /* script */
-var __vue_script__ = __webpack_require__(194)
+var __vue_script__ = __webpack_require__(186)
 /* template */
-var __vue_template__ = __webpack_require__(195)
+var __vue_template__ = __webpack_require__(187)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -94401,7 +94393,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 193 */
+/* 185 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -94510,7 +94502,7 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 194 */
+/* 186 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -94539,7 +94531,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 195 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -94582,7 +94574,7 @@ if (false) {
 }
 
 /***/ }),
-/* 196 */
+/* 188 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
