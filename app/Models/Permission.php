@@ -12,4 +12,9 @@ class Permission extends Model
     {
         return $this->belongsToMany(Role::class);
     }
+
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
 }
