@@ -45,10 +45,10 @@
     </div>
     <div class="nav">
         <div class="homepage-title" v-if="sidebars.length > 0">
-            <el-row :collapse="isCollapse">
+            <el-row>
                     <el-col :span="24">
-                        <span class="fa fa-bars take"></span>
-                        <el-menu class="el-menu-vertical-demo" style="background: #333;color: #fff;" v-for="(item,index) in sidebars" :key="index" :collapse-transition="false">
+                        <span class="fa fa-bars take" @click="switchBar"></span>
+                        <el-menu class="el-menu-vertical-demo" style="background: #333;color: #fff;" v-for="(item,index) in sidebars" :key="index" :collapse-transition="isTransition" :collapse="isCollapse">
                             <el-submenu :index="`${firstMenuIndex.toString()}-${index.toString()}`" style="color: #fff;" :data-id="`${firstMenuIndex.toString()}-${index.toString()}`">
                                 <template slot="title">
                                     {{--<i :class="`fa fa-${item.icon}`" style="color: #fff;"></i>--}}
