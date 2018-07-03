@@ -64,7 +64,20 @@
                             </el-submenu>
                         </el-menu>
                     </el-col>
+
             </el-row>
+        </div>
+        <div class="homepage-tab">
+            <el-tabs type="card" :editable="true">
+                <el-tab-pane
+                        :key="item.name"
+                        v-for="(item, index) in editableTabs"
+                        :label="item.title"
+                        :name="item.name"
+                >
+                    ${item.content}
+                </el-tab-pane>
+            </el-tabs>
         </div>
     </div>
 </div>
