@@ -40,7 +40,6 @@ const app = new Vue({
     methods: {
         getSideBars(index){
             this.sidebars = this.headers[index].children
-            this.firstMenuIndex = index
         }
     }
 });

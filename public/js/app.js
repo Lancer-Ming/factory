@@ -28703,7 +28703,6 @@ var app = new Vue({
     methods: {
         getSideBars: function getSideBars(index) {
             this.sidebars = this.headers[index].children;
-            this.firstMenuIndex = index;
         }
     }
 });
