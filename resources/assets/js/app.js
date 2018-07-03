@@ -29,13 +29,18 @@ const app = new Vue({
         headers: [],
         sidebars: [],
         isCollapse: false,
+        firstMenuIndex: ''
     },
     created() {
         this.axios.get("/permissions").then(res => {
-            this.headers = res.data;
+            // console.log(res)
+            this.headers = res.data.info.data;
         })
     },
     methods: {
-
+        getSideBars(index){
+            this.sidebars = this.headers[index].children
+            this.firstMenuIndex = index
+        }
     }
 });

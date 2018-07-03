@@ -28688,17 +28688,24 @@ var app = new Vue({
     data: {
         headers: [],
         sidebars: [],
-        isCollapse: false
+        isCollapse: false,
+        firstMenuIndex: ''
     },
     created: function created() {
         var _this = this;
 
         this.axios.get("/permissions").then(function (res) {
-            _this.headers = res.data;
+            // console.log(res)
+            _this.headers = res.data.info.data;
         });
     },
 
-    methods: {}
+    methods: {
+        getSideBars: function getSideBars(index) {
+            this.sidebars = this.headers[index].children;
+            this.firstMenuIndex = index;
+        }
+    }
 });
 
 /***/ }),
