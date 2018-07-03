@@ -28690,7 +28690,6 @@ var app = new Vue({
         sidebars: [],
         isCollapse: false, // 是否折叠
         firstMenuIndex: '', //一级菜单索引
-        isTransition: true, //是否开启动画
         editableTabs2: [{
             title: 'Tab 1',
             name: '1',
@@ -28721,12 +28720,11 @@ var app = new Vue({
 
     methods: {
         getSideBars: function getSideBars(index) {
-            this.isTransition = false;
             this.sidebars = this.headers[index].children;
+            this.isCollapse = false;
             this.firstMenuIndex = index;
         },
         switchBar: function switchBar() {
-            this.isTransition = true;
             this.isCollapse = !this.isCollapse;
         },
         removeTab: function removeTab(targetName) {

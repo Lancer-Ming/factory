@@ -30,7 +30,6 @@ const app = new Vue({
         sidebars: [],
         isCollapse: false,      // 是否折叠
         firstMenuIndex: '',    //一级菜单索引
-        isTransition: true, //是否开启动画
         editableTabs2: [
             {
             title: 'Tab 1',
@@ -64,14 +63,14 @@ const app = new Vue({
     },
     methods: {
         getSideBars(index){
-            this.isTransition = false
             this.sidebars = this.headers[index].children
+            this.isCollapse = false
             this.firstMenuIndex = index
         },
         switchBar() {
-            this.isTransition = true
             this.isCollapse = !this.isCollapse
-        },      removeTab(targetName) {
+        },
+        removeTab(targetName) {
             let tabs = this.editableTabs2;
             let activeName = this.editableTabsValue2;
             if (activeName === targetName) {
