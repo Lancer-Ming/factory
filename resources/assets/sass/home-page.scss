@@ -39,7 +39,7 @@ body,html{
             list-style: none;
             float: left;
             font-size: 16px;
-            padding: 10px 20px 10px 20px;
+            padding: 10px 15px 10px 15px;
             cursor: pointer;
             &:hover{
               background: #fff;
@@ -55,8 +55,8 @@ body,html{
         font-size: 16px;
         .home{
           float: left;
-          margin-right: 20px;
-          padding: 25px 20px 10px 20px;
+          margin-right: 10px;
+          padding: 25px 10px 10px 10px;
           i{
             color: #fff;
             font-size: 18px;
@@ -112,7 +112,7 @@ body,html{
     border: none;
   }
   .el-menu-item, .el-menu-item{
-    background: #000;
+    background: $header;
     color: #fff;
     margin-left: -20px;
     &:hover{
