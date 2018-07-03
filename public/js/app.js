@@ -28696,20 +28696,9 @@ var app = new Vue({
         this.axios.get("/permissions").then(function (res) {
             _this.headers = res.data;
         });
-        this.getSideBars(1);
     },
 
-    methods: {
-        getSideBars: function getSideBars(id) {
-            var _this2 = this;
-
-            this.axios.get('/permissions/' + id + '/getsidebars').then(function (res) {
-                if (res.data.response_status === 'success') {
-                    _this2.sidebars = res.data.info.data;
-                }
-            });
-        }
-    }
+    methods: {}
 });
 
 /***/ }),

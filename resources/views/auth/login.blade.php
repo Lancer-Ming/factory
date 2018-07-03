@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/app.css">
     <title>login</title>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+
 </head>
 <body>
 <div class="wrapper">
@@ -15,6 +16,9 @@
         <div class="col-sm-1 col-xs-6"><img src="/static/img/logo1.png" alt="" class="img-r"></div>
     </div>
     <div class="index-nav">
+
+            @include('layouts._message')
+
             <div class="row nav-index">
                 <div class="col-lg-8 col-md-7 col-sm-5 col-xs-3">&nbsp;</div>
                 <div class="col-lg-3 col-md-4 col-sm-5 col-xs-7 login-index">
@@ -55,6 +59,17 @@
             </span>
     </div>
 </div>
+<script>
+    document.addEventListener('click', function(event) {
+        var target = event.target;
+        var closeDom = document.querySelector('button.close span');
+
+        if (target == closeDom) {
+            document.querySelector('.flash-message').innerHTML = '';
+        }
+
+    })
+</script>
 </body>
 </html>
 

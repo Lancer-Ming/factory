@@ -34,15 +34,8 @@ const app = new Vue({
         this.axios.get("/permissions").then(res => {
             this.headers = res.data;
         })
-        this.getSideBars(1)
     },
     methods: {
-        getSideBars(id) {
-            this.axios.get(`/permissions/${id}/getsidebars`).then(res => {
-                if (res.data.response_status === 'success') {
-                    this.sidebars = res.data.info.data;
-                }
-            })
-        }
+
     }
 });
