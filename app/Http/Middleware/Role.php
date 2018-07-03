@@ -21,7 +21,7 @@ class Role
     {
         //如果该用户是超级管理员，直接拥有任何权限，跳过
         $role_names = \Auth::user()->roles->pluck('name');
-        if($role_names->contains('超级管理员')) {
+        if($role_names->contains('超级管理员') || Route::currentRouteName() == 'system.permission.index') {
             return $next($request);
         }
 

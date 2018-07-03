@@ -48,7 +48,7 @@
             <el-row :collapse="isCollapse">
                     <el-col :span="24">
                         <span class="fa fa-bars take"></span>
-                        <el-menu default-active="2" collapse-transition="false" class="el-menu-vertical-demo" style="background: #333;color: #fff;" v-for="(item,index) in sidebars" :key="index">
+                        <el-menu class="el-menu-vertical-demo" style="background: #333;color: #fff;" v-for="(item,index) in sidebars" :key="index" :collapse-transition="false">
                             <el-submenu :index="`${firstMenuIndex.toString()}-${index.toString()}`" style="color: #fff;" :data-id="`${firstMenuIndex.toString()}-${index.toString()}`">
                                 <template slot="title">
                                     {{--<i :class="`fa fa-${item.icon}`" style="color: #fff;"></i>--}}
