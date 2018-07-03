@@ -13,7 +13,7 @@ function successJson($data='', $msg='', $status=200, $extra=null)
 }
 
 
-function failJson($msg='', $status='')
+function failJson($msg='', $status=401)
 {
     return response()->json([
         'response_status' => 'fail',
