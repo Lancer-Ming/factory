@@ -28690,7 +28690,25 @@ var app = new Vue({
         sidebars: [],
         isCollapse: false, // 是否折叠
         firstMenuIndex: '', //一级菜单索引
-        isTransition: true //是否开启动画
+        isTransition: true, //是否开启动画
+        editableTabs2: [{
+            title: 'Tab 1',
+            name: '1',
+            content: 'Tab 1 content'
+        }, {
+            title: 'Tab 2',
+            name: '2',
+            content: 'Tab 2 content'
+        }, {
+            title: 'Tab 3',
+            name: '3',
+            content: 'Tab 3 content'
+        }, {
+            title: 'Tab 4',
+            name: '4',
+            content: 'Tab 4 content'
+        }],
+        tabIndex: 2
     },
     created: function created() {
         var _this = this;
@@ -28710,6 +28728,24 @@ var app = new Vue({
         switchBar: function switchBar() {
             this.isTransition = true;
             this.isCollapse = !this.isCollapse;
+        },
+        removeTab: function removeTab(targetName) {
+            var tabs = this.editableTabs2;
+            var activeName = this.editableTabsValue2;
+            if (activeName === targetName) {
+                tabs.forEach(function (tab, index) {
+                    if (tab.name === targetName) {
+                        var nextTab = tabs[index + 1] || tabs[index - 1];
+                        if (nextTab) {
+                            activeName = nextTab.name;
+                        }
+                    }
+                });
+            }
+
+            this.editableTabs2 = tabs.filter(function (tab) {
+                return tab.name !== targetName;
+            });
         }
     }
 });

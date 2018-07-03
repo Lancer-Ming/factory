@@ -64,15 +64,16 @@
             </el-row>
         </div>
         <div class="homepage-tab">
-            <el-tabs type="card" :editable="true">
+            <el-tabs type="card" :closable="true" @tab-remove="removeTab">
                 <el-tab-pane
+                        v-for="(item, index) in editableTabs2"
                         :key="item.name"
-                        v-for="(item, index) in editableTabs"
                         :label="item.title"
                         :name="item.name"
                 >
                     ${item.content}
                 </el-tab-pane>
+            </el-tabs>
             </el-tabs>
         </div>
     </div>

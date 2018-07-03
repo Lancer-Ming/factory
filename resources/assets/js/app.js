@@ -30,7 +30,31 @@ const app = new Vue({
         sidebars: [],
         isCollapse: false,      // 是否折叠
         firstMenuIndex: '',    //一级菜单索引
-        isTransition: true  //是否开启动画
+        isTransition: true, //是否开启动画
+        editableTabs2: [
+            {
+            title: 'Tab 1',
+            name: '1',
+            content: 'Tab 1 content'
+        },
+            {
+            title: 'Tab 2',
+            name: '2',
+            content: 'Tab 2 content'
+        },
+            {
+                title: 'Tab 3',
+                name: '3',
+                content: 'Tab 3 content'
+        },
+            {
+                title: 'Tab 4',
+                name: '4',
+                content: 'Tab 4 content'
+        }
+
+        ],
+        tabIndex: 2
     },
     created() {
         this.axios.get("/permissions").then(res => {
@@ -47,6 +71,21 @@ const app = new Vue({
         switchBar() {
             this.isTransition = true
             this.isCollapse = !this.isCollapse
+        },      removeTab(targetName) {
+            let tabs = this.editableTabs2;
+            let activeName = this.editableTabsValue2;
+            if (activeName === targetName) {
+                tabs.forEach((tab, index) => {
+                    if (tab.name === targetName) {
+                        let nextTab = tabs[index + 1] || tabs[index - 1];
+                        if (nextTab) {
+                            activeName = nextTab.name;
+                        }
+                    }
+                });
+            }
+
+            this.editableTabs2 = tabs.filter(tab => tab.name !== targetName);
         }
     }
 });
