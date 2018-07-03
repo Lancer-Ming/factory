@@ -45,21 +45,22 @@
     </div>
     <div class="nav">
         <div class="homepage-title" v-if="sidebars.length > 0">
-            <el-row :collapse="isCollapse">
-                <el-col :span="24">
-                    <span class="fa fa-bars take"></span>
-                    <el-menu class="el-menu-vertical-demo" style="background: #333;color: #fff;" v-for="(item,index) in sidebars" :key="index" :collapse-transition="false">
-                        <el-submenu :index="`${firstMenuIndex.toString()}-${index.toString()}`" style="color: #fff;" :data-id="`${firstMenuIndex.toString()}-${index.toString()}`">
-                            <template slot="title">
-                                {{--<i :class="`fa fa-${item.icon}`" style="color: #fff;"></i>--}}
-                                <span class="tit-tab" v-text="item.label"></span>
-                            </template>
-                            <div v-for="(child,child_index) in item.children" :key="child_index">
-                                <el-menu-item :index="`${firstMenuIndex.toString()}-${index.toString()}-${child_index.toString()}`" v-text="child.label" style="padding: 0px 60px;" :data-id="`${firstMenuIndex.toString()}-${index.toString()}-${child_index.toString()}`"></el-menu-item>
-                            </div>
-                        </el-submenu>
-                    </el-menu>
-                </el-col>
+            <el-row>
+                    <el-col :span="24">
+                        <span class="fa fa-bars take" @click="switchBar"></span>
+                        <el-menu class="el-menu-vertical-demo" style="background: #333;color: #fff;" v-for="(item,index) in sidebars" :key="index" :collapse-transition="isTransition" :collapse="isCollapse">
+                            <el-submenu :index="`${firstMenuIndex.toString()}-${index.toString()}`" style="color: #fff;" :data-id="`${firstMenuIndex.toString()}-${index.toString()}`">
+                                <template slot="title">
+                                    {{--<i :class="`fa fa-${item.icon}`" style="color: #fff;"></i>--}}
+                                    <span class="tit-tab" v-text="item.label"></span>
+                                </template>
+                                <div v-for="(child,child_index) in item.children" :key="child_index">
+                                    <el-menu-item :index="`${firstMenuIndex.toString()}-${index.toString()}-${child_index.toString()}`" v-text="child.label" style="padding: 0px 60px;" :data-id="`${firstMenuIndex.toString()}-${index.toString()}-${child_index.toString()}`"></el-menu-item>
+                                </div>
+                            </el-submenu>
+                        </el-menu>
+                    </el-col>
+
             </el-row>
         </div>
         <div class="homepage-tab">
