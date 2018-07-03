@@ -39,6 +39,11 @@ const app = new Vue({
         })
     },
     methods: {
+        getSideBars(index){
+            this.isTransition = false
+            this.sidebars = this.headers[index].children
+            this.firstMenuIndex = index
+        },
         switchBar() {
             this.isTransition = true
             this.isCollapse = !this.isCollapse
