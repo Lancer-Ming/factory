@@ -30,15 +30,16 @@
         </ul>
         <div class="sidebar-r">
             <div class="home">
-                <i class="fa fa-home"></i><span>系统首页</span>
+                <a href=""><i class="fa fa-home"></i><span>系统首页</span></a>
             </div>
             <div class="user-h">
-                <li><img src="/static/img/user.png" alt="" class="tit-user clearfix">linlin@
-                    <ul>
-                        <li><i class="fa fa-gears"></i><span class="changepwd">修改密码</span></li>
-                        <li><i class="fa fa-sign-out"></i><span class="signput">安全退出</span></li>
-                    </ul>
-                </li>
+                <el-menu class="el-menu-demo" mode="horizontal"  background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+                    <el-submenu index="2">
+                        <template slot="title"><img src="/static/img/user.png" alt="" class="tit-user clearfix">linlin@</template>
+                            <el-menu-item index="2-1"><i class="fa fa-gears" style="color: #fff;display: inline-block;margin: 0 20px 0px 10px;"></i><span class="changepwd">修改密码</span></el-menu-item>
+                            <el-menu-item index="2-2"><i class="fa fa-sign-out" style="color: #fff;display: inline-block;margin: 0 20px 0px 10px;"></i><span class="signput">安全退出</span></el-menu-item>
+                    </el-submenu>
+                </el-menu>
             </div>
         </div>
     </div>
@@ -50,11 +51,11 @@
                         <el-menu default-active="2" class="el-menu-vertical-demo" style="background: #333;color: #fff;" v-for="(item,index) in sidebars" :key="index">
                             <el-submenu index="index" style="color: #fff;">
                                 <template slot="title">
-                                    <i :class="`fa fa-${item.icon}`" style="color: #fff;"></i>
+                                    {{--<i :class="`fa fa-${item.icon}`" style="color: #fff;"></i>--}}
                                     <span class="tit-tab" v-text="item.label"></span>
                                 </template>
                                 <div v-for="(child,child_index) in item.children" :key="child_index">
-                                    <el-menu-item index="child_index" v-text="child.label"></el-menu-item>
+                                    <el-menu-item index="child_index" v-text="child.label" style="padding: 0px 60px;"></el-menu-item>
                                 </div>
                             </el-submenu>
                         </el-menu>

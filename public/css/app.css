@@ -10791,6 +10791,7 @@ html {
   #app .homepage-header .sidebar-f {
     float: left;
     padding-left: 10px;
+    margin-top: 10px;
   }
 
   #app .homepage-header .sidebar-f li {
@@ -10798,7 +10799,13 @@ html {
     list-style: none;
     float: left;
     font-size: 16px;
-    padding: 20px 20px 10px 20px;
+    padding: 10px 20px 10px 20px;
+    cursor: pointer;
+  }
+
+  #app .homepage-header .sidebar-f li:hover {
+    background: #fff;
+    color: #333744;
   }
 
   #app .homepage-header .sidebar-r {
@@ -10810,7 +10817,7 @@ html {
   #app .homepage-header .sidebar-r .home {
     float: left;
     margin-right: 20px;
-    padding: 20px 20px 10px 20px;
+    padding: 25px 20px 10px 20px;
   }
 
   #app .homepage-header .sidebar-r .home i {
@@ -10818,21 +10825,15 @@ html {
     font-size: 18px;
     display: inline-block;
     margin-right: 5px;
+    cursor: pointer;
+  }
+
+  #app .homepage-header .sidebar-r .home span {
+    color: #fff;
   }
 
   #app .homepage-header .sidebar-r .user-h {
     float: left;
-    padding: 10px 20px 10px 20px;
-  }
-
-  #app .homepage-header .sidebar-r .user-h li {
-    list-style: none;
-  }
-
-  #app .homepage-header .sidebar-r .user-h li ul li {
-    background: none;
-    padding: 10px;
-    display: none;
   }
 
   #app .homepage-header .sidebar-r .user-h .tit-user {
@@ -10851,15 +10852,21 @@ html {
 .nav .homepage-title {
   background: #333744;
   height: 100%;
-  width: 10%;
+  width: 11%;
 }
 
 .nav .el-submenu__title {
   color: #fff;
 }
 
+.nav .el-submenu__title:hover {
+  background: #7d7d7d;
+  color: #fff;
+}
+
 .nav .el-submenu__title i {
   color: #fff;
+  display: none;
 }
 
 .nav .take {
@@ -10871,6 +10878,18 @@ html {
 
 .nav .el-menu {
   border: none;
+}
+
+.nav .el-menu-item,
+.nav .el-menu-item {
+  background: #000;
+  color: #fff;
+  margin-left: -20px;
+}
+
+.nav .el-menu-item:hover,
+.nav .el-menu-item:hover {
+  background: #7d7d7d;
 }
 
 /*!
