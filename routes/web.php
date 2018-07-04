@@ -13,8 +13,26 @@
 Auth::routes();
 
 Route::middleware('auth')->get('/', 'HomeController@index')->name('index');
+Route::middleware('auth')->get('/api', 'HomeController@api')->name('api');
 
-Route::namespace('System')->prefix('permissions')->as('system.permission.')->middleware(['auth','role','header'])->group(function() {
-    Route::get('/', 'PermissionsController@index')->name('index');
-    Route::get('/{permission}/getsidebars', 'PermissionsController@getSideBars')->name('getsidebars');
+Route::middleware(['auth','role','header'])->group(function() {
+
+    Route::namespace('System')->group(function() {
+
+        Route::prefix('permissions')->as('system.permission.')->group(function() {
+            Route::get('/', 'PermissionsController@index')->name('index');
+            Route::get('/{permission}/getsidebars', 'PermissionsController@getSideBars')->name('getsidebars');
+        });
+
+        Route::prefix('user')->as('system.user.')->group(function() {
+            Route::get('/', 'UsersController@index')->name('index');
+            Route::post('/', 'UsersController@store')->name('store');
+            Route::get('/{user}', 'UsersController@edit')->name('edit');
+            Route::patch('/{user}', 'UsersController@update')->name('update');
+            Route::delete('/', 'UsersController@destroy')->name('destroy');
+        });
+
+    });
 });
+
+
