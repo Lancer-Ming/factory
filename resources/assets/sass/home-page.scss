@@ -89,7 +89,6 @@ body,html{
   .homepage-title{
     background: $header;
     height: 100%;
-    width: 11%;
   }
   .el-submenu__title{
     color: #fff;
@@ -100,7 +99,14 @@ body,html{
   }
   .el-submenu__title i{
     color: #fff;
-    display: none;
+  }
+  .small-logo{
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .tit-tab{
+    display: inline-block;
+    padding-right: 20px;
   }
   .take{
     color: #fff;
@@ -114,7 +120,6 @@ body,html{
   .el-menu-item, .el-menu-item{
     background: $header;
     color: #fff;
-    margin-left: -20px;
     &:hover{
       background: #7d7d7d;
     }

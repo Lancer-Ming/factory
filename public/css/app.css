@@ -10852,7 +10852,6 @@ html {
 .nav .homepage-title {
   background: #333744;
   height: 100%;
-  width: 11%;
 }
 
 .nav .el-submenu__title {
@@ -10866,7 +10865,16 @@ html {
 
 .nav .el-submenu__title i {
   color: #fff;
-  display: none;
+}
+
+.nav .small-logo {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.nav .tit-tab {
+  display: inline-block;
+  padding-right: 20px;
 }
 
 .nav .take {
@@ -10884,7 +10892,6 @@ html {
 .nav .el-menu-item {
   background: #333744;
   color: #fff;
-  margin-left: -20px;
 }
 
 .nav .el-menu-item:hover,

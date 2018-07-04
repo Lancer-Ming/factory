@@ -28740,7 +28740,6 @@ var app = new Vue({
                     }
                 });
             }
-
             this.editableTabs2 = tabs.filter(function (tab) {
                 return tab.name !== targetName;
             });
