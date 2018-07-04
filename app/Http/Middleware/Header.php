@@ -19,17 +19,7 @@ class Header
     {
 
         // 拿到所有的组装好了的权限菜单，和当前用户有的进行比较，没有的unset掉
-        $sort_permissions = $permissions = Permission::with([
-            'children' => function($query) {
-                $query->where('is_category', 1)->with([
-                    'children' => function($query) {
-                        $query->where('is_category', 1);
-                    }
-                ]);
-            }
-        ])->where(['is_category'=> 1, 'parent_id'=> 0])->get();
-
-
+        $sort_permissions = Permission::getAllPermissions();
 
         foreach($sort_permissions as $key=>$sort_permission) {
             // 如果有用户拥有的一级权限菜单

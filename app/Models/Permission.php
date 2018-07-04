@@ -19,4 +19,17 @@ class Permission extends Model
     {
         return $this->hasMany(self::class, 'parent_id');
     }
+
+    public static function getAllPermissions()
+    {
+        return self::with([
+            'children' => function($query) {
+                $query->where('is_category', 1)->with([
+                    'children' => function($query) {
+                        $query->where('is_category', 1);
+                    }
+                ]);
+            }
+        ])->where(['is_category'=> 1, 'parent_id'=> 0])->get();
+    }
 }
