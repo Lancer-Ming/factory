@@ -15,15 +15,7 @@ class PermissionsController extends Controller
      */
     public function index()
     {
-        $permissions = Permission::with([
-            'children' => function($query) {
-                $query->where('is_category', 1)->with([
-                    'children' => function($query) {
-                        $query->where('is_category', 1);
-                    }
-                ]);
-            }
-        ])->where(['is_category'=> 1, 'parent_id'=> 0])->get();
+        $permissions = Permission::$category;
         return successJson($permissions);
     }
 

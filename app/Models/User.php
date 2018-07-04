@@ -41,9 +41,9 @@ class User extends Authenticatable
         $permission_roles = $permission->roles;
 
         // 查询当前的user拥有的角色
-        $user_roles = $this->roles;
+        $user_roles = \Auth::user()->roles;
 
         // 查询user和权限拥有的角色是否有交集
-        return !!$permission_roles->intersect($user_roles)->count();
+        return $permission_roles->intersect($user_roles)->count() > 0;
     }
 }
