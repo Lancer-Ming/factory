@@ -10849,54 +10849,85 @@ html {
   margin: 0 auto;
 }
 
-.nav .homepage-title {
+.homepage-title {
   background: #333744;
   height: 100%;
 }
 
-.nav .el-submenu__title {
+.el-submenu__title {
   color: #fff;
 }
 
-.nav .el-submenu__title:hover {
+.el-submenu__title:hover {
   background: #7d7d7d;
   color: #fff;
 }
 
-.nav .el-submenu__title i {
+.el-submenu__title i {
   color: #fff;
 }
 
-.nav .small-logo {
+.small-logo {
   display: inline-block;
   margin-right: 10px;
+  margin-left: 5px;
 }
 
-.nav .tit-tab {
+.tit-tab {
   display: inline-block;
   padding-right: 20px;
 }
 
-.nav .take {
+.take {
   color: #fff;
   font-size: 18px;
   display: block;
   text-align: center;
+  padding: 10px 0px;
 }
 
-.nav .el-menu {
+.el-menu {
   border: none;
 }
 
-.nav .el-menu-item,
-.nav .el-menu-item {
+.el-menu-item,
+.el-menu-item {
   background: #333744;
   color: #fff;
 }
 
-.nav .el-menu-item:hover,
-.nav .el-menu-item:hover {
+.el-menu-item:hover,
+.el-menu-item:hover {
   background: #7d7d7d;
+  color: #fff;
+}
+
+.el-tabs__item {
+  padding: 0px 15px;
+  margin-left: 6px;
+  margin-top: 5px;
+  background: #eee;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.el-tabs__item.is-top:last-child {
+  padding-right: 15px !important;
+  background: #fff;
+  border: none;
+}
+
+.el-tabs--top .el-tabs__item.is-top:nth-child(2) {
+  padding-left: 15px;
+}
+
+.el-tabs__active-bar {
+  background: none;
+}
+
+.homepage-tab {
+  width: 90%;
 }
 
 /*!

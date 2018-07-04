@@ -6,12 +6,13 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+import Vue from 'vue'
 import ElementUI from 'element-ui'
-
 import axios from 'axios'
+import router from './router/index'
 
 Vue.use(ElementUI)
+
 Vue.prototype.axios = axios
 
 /**
@@ -24,35 +25,14 @@ Vue.component('example-component', require('./components/ExampleComponent.vue'))
 
 const app = new Vue({
     el: '#app',
+    router,
     delimiters: ['${', '}'],
     data: {
         headers: [],
         sidebars: [],
         isCollapse: false,      // 是否折叠
         firstMenuIndex: '',    //一级菜单索引
-        editableTabs2: [
-            {
-            title: 'Tab 1',
-            name: '1',
-            content: 'Tab 1 content'
-        },
-            {
-            title: 'Tab 2',
-            name: '2',
-            content: 'Tab 2 content'
-        },
-            {
-                title: 'Tab 3',
-                name: '3',
-                content: 'Tab 3 content'
-        },
-            {
-                title: 'Tab 4',
-                name: '4',
-                content: 'Tab 4 content'
-        }
-
-        ],
+        tabs: [],
         tabIndex: 2
     },
     created() {
@@ -70,9 +50,29 @@ const app = new Vue({
         switchBar() {
             this.isCollapse = !this.isCollapse
         },
+        addTab(targetName) {
+            let newTabName = ++this.tabIndex + '';
+            let isRepeat = false
+            this.tabs.forEach((item, index)=> {
+                if (item.title === targetName) {
+                    isRepeat = true
+                }
+            })
+
+            if (!isRepeat) {
+                this.tabs.push({
+                    title: targetName,
+                    name: newTabName,
+                    content: 'New Tab content'
+                })
+
+                this.tabsValue = newTabName;
+            }
+
+        },
         removeTab(targetName) {
-            let tabs = this.editableTabs2;
-            let activeName = this.editableTabsValue2;
+            let tabs = this.tabs;
+            let activeName = this.tabsValue;
             if (activeName === targetName) {
                 tabs.forEach((tab, index) => {
                     if (tab.name === targetName) {
@@ -83,7 +83,8 @@ const app = new Vue({
                     }
                 });
             }
-            this.editableTabs2 = tabs.filter(tab => tab.name !== targetName);
+            this.tabsValue = activeName;
+            this.tabs = tabs.filter(tab => tab.name !== targetName);
         },
         logout() {
             let form = document.querySelector('.logout');

@@ -56,35 +56,41 @@
                         <el-menu class="el-menu-vertical-demo" style="color: #fff;"
                                 :collapse-transition="false"
                                 :collapse="isCollapse"
-                                background-color="#333744">
-                            <el-submenu v-for="(item,index) in sidebars" :key="index"
-                                    :index="`${firstMenuIndex.toString()}-${index.toString()}`" style="color: #fff;" :data-id="`${firstMenuIndex.toString()}-${index.toString()}`">
-                                <template slot="title">
-                                    <i :class="`small-logo fa fa-${item.icon}`"></i>
-                                    <span slot="title" class="tit-tab" v-text="item.label"></span>
-                                </template>
-                                <div v-for="(child,child_index) in item.children" :key="child_index">
-                                    <el-menu-item :index="`${firstMenuIndex.toString()}-${index.toString()}-${child_index.toString()}`" v-text="child.label" :data-id="`${firstMenuIndex.toString()}-${index.toString()}-${child_index.toString()}`"></el-menu-item>
-                                </div>
-                            </el-submenu>
+                                router
+                                :default-active="this.$route.path"
+                                background-color="#333744"
+                                :data-id="this.$route.path">
+                                <el-submenu v-for="(item,index) in sidebars" :key="index" v-if="item.children.length > 0"
+                                        :index="item.name" style="color: #fff;">
+                                    <template slot="title">
+                                        <i :class="`small-logo fa fa-${item.icon}`"></i>
+                                        <span slot="title" class="tit-tab" v-text="item.label"></span>
+                                    </template>
+                                    <div v-for="(child,child_index) in item.children" :key="child_index">
+                                        <el-menu-item style="color: #fff;" :index="`${firstMenuIndex.toString()}-${index.toString()}-${child_index.toString()}`" v-text="child.label" @click="addTab(child.label)"></el-menu-item>
+                                    </div>
+                                </el-submenu>
+                                <el-menu-item v-for="(item,index) in sidebars" :key="index" v-if="item.children.length === 0"
+                                        :index="`/${item.name.split('.').join('/')}`">
+                                    <i :class="`small-logo fa fa-${item.icon}`" style="color: #fff;"></i>
+                                    <span slot="title" class="tit-tab" v-text="item.label" @click="addTab(item.label)"></span>
+                                </el-menu-item>
                         </el-menu>
                     </el-col>
 
             </el-row>
         </div>
         <div class="homepage-tab">
-            <el-tabs type="card" :closable="true" @tab-remove="removeTab">
-                <el-tab-pane
-                        v-for="(item, index) in editableTabs2"
-                        :key="item.name"
-                        :label="item.title"
-                        :name="item.name"
-                >
+            <el-tabs class="input-new-tag" size="medium" closable @tab-remove="removeTab">
+                <el-tab-pane v-for="(item, index) in tabs" :key="item.name" :label="item.title" :name="item.name">
                     ${item.content}
                 </el-tab-pane>
             </el-tabs>
-            </el-tabs>
+
+            <router-view/>
         </div>
+
+
     </div>
 </div>
 </body>
