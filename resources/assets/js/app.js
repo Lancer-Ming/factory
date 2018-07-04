@@ -83,7 +83,6 @@ const app = new Vue({
                     }
                 });
             }
-
             this.editableTabs2 = tabs.filter(tab => tab.name !== targetName);
         }
     }
