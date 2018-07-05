@@ -8,12 +8,14 @@ require('./bootstrap');
 
 import Vue from 'vue'
 import ElementUI from 'element-ui'
+import { Message } from 'element-ui'
 import axios from 'axios'
 import router from './router/index'
 
 Vue.use(ElementUI)
 
 Vue.prototype.axios = axios
+Vue.prototype.message = Message
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -38,7 +40,7 @@ const app = new Vue({
     created() {
         this.axios.get("/permissions").then(res => {
             // console.log(res)
-            this.headers = res.data.info.data;
+            this.headers = res.data.data;
         })
     },
     methods: {
