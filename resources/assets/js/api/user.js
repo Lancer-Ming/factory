@@ -28,3 +28,11 @@ export function updateUser(id, form) {
         data: form
     })
 }
+
+export function addUser(form) {
+    return axios({
+        url: '/user',
+        method: 'post',
+        data: form
+    })
+}
