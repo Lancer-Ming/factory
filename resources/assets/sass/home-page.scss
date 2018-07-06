@@ -25,6 +25,9 @@ body,html{
       margin-top: -10px;
       float: left;
     }
+    .container{
+      min-width: 100%;
+    }
     .sidebar-f {
       float: left;
       padding-left: 10px;
@@ -90,6 +93,7 @@ body,html{
           margin-right: 10px;
           margin-left: 5px;
           width: 16px;
+          color: #fff;
         }
         .tit-tab{
           display: inline-block;
@@ -134,19 +138,17 @@ body,html{
       }
 
   }
-
-
-  .el-header, .el-footer {
+  .el-header.index-header, .el-footer {
     background-color: $header;
     color: #333;
     text-align: center;
     line-height: 40px;
   }
 
-  .el-aside {
+  .el-aside.index-left {
     background-color: $header;
     color: #333;
-    text-align: center;
+    //text-align: center;
     line-height: 200px;
     overflow: hidden;
   }
@@ -154,7 +156,6 @@ body,html{
   .el-main {
     background-color: #efeff8;
     color: #333;
-    text-align: center;
     //line-height: 160px;
   }
 
@@ -162,14 +163,14 @@ body,html{
     margin-bottom: 40px;
   }
 
-  .el-container:nth-child(5) .el-aside,
-  .el-container:nth-child(6) .el-aside {
-    line-height: 260px;
-  }
-
-  .el-container:nth-child(7) .el-aside {
-    line-height: 320px;
-  }
+  //.el-container:nth-child(5) .el-aside,
+  //.el-container:nth-child(6) .el-aside {
+  //  line-height: 260px;
+  //}
+  //
+  //.el-container:nth-child(7) .el-aside {
+  //  line-height: 320px;
+  //}
 
 }
 @media only screen and (max-width: 600px) {}

@@ -25,141 +25,143 @@
     background-size: 100% 100%;
     height: 45rem;
   }
-  .container{
-    width: 100%;
-    min-width: 100%;
-    margin: 0 auto;
-    padding: 0rem 1.25rem 0.625rem 1.25rem;
-    background: -webkit-linear-gradient(90deg, #bebce5, #729dee);
-    background: -o-linear-gradient(90deg, #bebce5, #729dee);
-    background: -moz-linear-gradient(90deg, #bebce5, #729dee);
-    background: linear-gradient(90deg, #bebce5, #729dee);
-  }
-  .container img{
-    width:auto;
-    height:4.5rem;
-  }
-  .container img.img-r{
-    width:auto;
-    height:3rem;
-    margin-top: 1.25rem;
-  }
-  .nav-index{
-    padding-top: 4rem;
-  }
-  .login-index{
-    background: rgba(255,255,255,.4);
-    border-radius: 1.25rem;
-    padding: 0.625rem 0.625rem;
-  }
-  .login-nav{
-    background: rgba(255,255,255,.56);
-  }
-  .login-nav>span{
-    display: block;
-    font-size: 1.25rem;
-    padding: 0.625rem 1.25rem;
-    letter-spacing: 1px;
-    background: -webkit-linear-gradient(90deg, #bebce5, #79a0e8);
-    background: -o-linear-gradient(90deg, #bebce5, #79a0e8);
-    background: -moz-linear-gradient(90deg, #bebce5, #79a0e8);
-    background: linear-gradient(90deg, #bebce5, #79a0e8);
-    color: #fff;
+  .login-page {
+    .container {
+      width: 100%;
+      min-width: 100%;
+      margin: 0 auto;
+      padding: 0rem 1.25rem 0.625rem 1.25rem;
+      background: -webkit-linear-gradient(90deg, #bebce5, #729dee);
+      background: -o-linear-gradient(90deg, #bebce5, #729dee);
+      background: -moz-linear-gradient(90deg, #bebce5, #729dee);
+      background: linear-gradient(90deg, #bebce5, #729dee);
+    }
+    .container img {
+      width: auto;
+      height: 4.5rem;
+    }
+    .container img.img-r {
+      width: auto;
+      height: 3rem;
+      margin-top: 1.25rem;
+    }
+    .nav-index {
+      padding-top: 4rem;
+    }
+    .login-index {
+      background: rgba(255, 255, 255, .4);
+      border-radius: 1.25rem;
+      padding: 0.625rem 0.625rem;
+    }
+    .login-nav {
+      background: rgba(255, 255, 255, .56);
+    }
+    .login-nav > span {
+      display: block;
+      font-size: 1.25rem;
+      padding: 0.625rem 1.25rem;
+      letter-spacing: 1px;
+      background: -webkit-linear-gradient(90deg, #bebce5, #79a0e8);
+      background: -o-linear-gradient(90deg, #bebce5, #79a0e8);
+      background: -moz-linear-gradient(90deg, #bebce5, #79a0e8);
+      background: linear-gradient(90deg, #bebce5, #79a0e8);
+      color: #fff;
 
-  }
-  .checkbox{
-    width: 70%;
-    margin: 0 auto;
-    padding-left: 0.625rem;
-    font-size: 0.938rem;
-    padding-top: 0.625rem;
-  }
-  .checkbox input{
-    width: 0.938rem;
-    height: 0.938rem;
-  }
-  .checkbox .forget{
-    color: #77aee5;
-    margin-left: 1.25rem;
-  }
-  .login-btn{
-    display: block;
-    margin: 20px auto;
-    text-align: center;
-    width: 40%;
-    padding: 0.625rem 0rem;
-    border-radius: 0.625rem;
-    background: -webkit-linear-gradient(90deg, #bebce5, #79a0e8);
-    background: -o-linear-gradient(90deg, #bebce5, #79a0e8);
-    background: -moz-linear-gradient(90deg, #bebce5, #79a0e8);
-    background: linear-gradient(90deg, #bebce5, #79a0e8);
-    border: none;
-    font-size: 1.125rem;
-    color: #fff;
-  }
-  .login-box{
-    width: 100%;
-    margin: 0 auto;
-    background: rgba(255,255,255,0.4);
-  }
-  .box-tab{
-    width: 100%;
-    margin: 0.625rem auto;
-  }
-  .box-tab .user,.box-tab .password{
-    width: 100%;
-    margin: 0 auto;
-    padding-top: 1.5rem;
-  }
-  .user i,.password i{
-    display: inline-block;
-    vertical-align: middle;
-    width: 2.5rem;
-    height: 2.05rem;
-    margin: 0 auto;
-    text-align: center;
-    font-size: 1.25rem;
-    color: #fff;
-    line-height: 2.05rem;
-    border-top-left-radius: 0.438rem;
-    border-bottom-left-radius: 0.438rem;
-    padding: 0rem 0rem;
-    margin-left: 15%;
-    //top: 5px;
-    //left: 4px;
-    background: -webkit-linear-gradient(90deg, #bebce5, #79a0e8);
-    background: -o-linear-gradient(90deg, #bebce5, #79a0e8);
-    background: -moz-linear-gradient(90deg, #bebce5, #79a0e8);
-    background: linear-gradient(90deg, #bebce5, #79a0e8);
-  }
+    }
+    .checkbox {
+      width: 70%;
+      margin: 0 auto;
+      padding-left: 0.625rem;
+      font-size: 0.938rem;
+      padding-top: 0.625rem;
+    }
+    .checkbox input {
+      width: 0.938rem;
+      height: 0.938rem;
+    }
+    .checkbox .forget {
+      color: #77aee5;
+      margin-left: 1.25rem;
+    }
+    .login-btn {
+      display: block;
+      margin: 20px auto;
+      text-align: center;
+      width: 40%;
+      padding: 0.625rem 0rem;
+      border-radius: 0.625rem;
+      background: -webkit-linear-gradient(90deg, #bebce5, #79a0e8);
+      background: -o-linear-gradient(90deg, #bebce5, #79a0e8);
+      background: -moz-linear-gradient(90deg, #bebce5, #79a0e8);
+      background: linear-gradient(90deg, #bebce5, #79a0e8);
+      border: none;
+      font-size: 1.125rem;
+      color: #fff;
+    }
+    .login-box {
+      width: 100%;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.4);
+    }
+    .box-tab {
+      width: 100%;
+      margin: 0.625rem auto;
+    }
+    .box-tab .user, .box-tab .password {
+      width: 100%;
+      margin: 0 auto;
+      padding-top: 1.5rem;
+    }
+    .user i, .password i {
+      display: inline-block;
+      vertical-align: middle;
+      width: 2.5rem;
+      height: 2.05rem;
+      margin: 0 auto;
+      text-align: center;
+      font-size: 1.25rem;
+      color: #fff;
+      line-height: 2.05rem;
+      border-top-left-radius: 0.438rem;
+      border-bottom-left-radius: 0.438rem;
+      padding: 0rem 0rem;
+      margin-left: 15%;
+      //top: 5px;
+      //left: 4px;
+      background: -webkit-linear-gradient(90deg, #bebce5, #79a0e8);
+      background: -o-linear-gradient(90deg, #bebce5, #79a0e8);
+      background: -moz-linear-gradient(90deg, #bebce5, #79a0e8);
+      background: linear-gradient(90deg, #bebce5, #79a0e8);
+    }
 
-  .user input,.password input{
-    width: 60%;
-    padding: 0.1rem 0.2rem 0.3rem 0.2rem;
-    margin-left: -0.3rem;
-  }
-  .fot{
-    display: block;
-    margin:0 auto;
-    text-align: center;
-    color: #999;
-    letter-spacing: 0.1rem;
-    margin-bottom: 1.25rem;
-  }
-  .login-footer{
-    width: 100%;
-    margin: 1.25rem auto;
-  }
-  .login-footer span{
-    display: block;
-    margin: 0 auto;
-    text-align: center;
-    font-size: 0.875rem;
-    color: #999;
-  }
-  .login-footer i{
-    margin-right: 0.3rem;
-    display: inline-block;
+    .user input, .password input {
+      width: 60%;
+      padding: 0.1rem 0.2rem 0.3rem 0.2rem;
+      margin-left: -0.3rem;
+    }
+    .fot {
+      display: block;
+      margin: 0 auto;
+      text-align: center;
+      color: #999;
+      letter-spacing: 0.1rem;
+      margin-bottom: 1.25rem;
+    }
+    .login-footer {
+      width: 100%;
+      margin: 1.25rem auto;
+    }
+    .login-footer span {
+      display: block;
+      margin: 0 auto;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #999;
+    }
+    .login-footer i {
+      margin-right: 0.3rem;
+      display: inline-block;
+    }
   }
 }
 
@@ -172,7 +174,8 @@
     height: 32rem;
     overflow: hidden;
   }
-  .container{
+  .login-page{
+    .container{
     width: 100%;
     min-width: 100%;
     margin: 0 auto;
@@ -309,6 +312,7 @@
   .login-footer i{
     display: inline-block;
   }
+}
 }
 
 
