@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="/css/app.css">
     <title>login</title>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
-
 </head>
 <body>
 <div class="wrapper">
@@ -63,11 +62,9 @@
     document.addEventListener('click', function(event) {
         var target = event.target;
         var closeDom = document.querySelector('button.close span');
-
         if (target == closeDom) {
             document.querySelector('.flash-message').innerHTML = '';
         }
-
     })
 </script>
 </body>
