@@ -74,7 +74,7 @@
                                 <el-menu-item v-for="(item,index) in sidebars" :key="index" v-if="item.children.length === 0"
                                         :index="`/${item.name.split('.').join('/')}`">
                                     <i :class="`small-logo fa fa-${item.icon}`" style="color: #fff;"></i>
-                                    <span slot="title" class="tit-tab" v-text="item.label" @click="addTab(item.label)"></span>
+                                    <span slot="title" class="tit-tab" v-text="item.label" @click="addTab(item.label, item.name)"></span>
                                 </el-menu-item>
                         </el-menu>
                     </el-col>
@@ -83,8 +83,14 @@
             </el-aside>
             <el-container>
                 <el-main class="index-main">
-                    <el-tabs class="input-new-tag" closable @tab-remove="removeTab" @tab-click="tabclick">
-                        <el-tab-pane v-for="(item, index) in tabs" :key="item.name" :label="item.title" :name="item.name" >
+                    <el-tabs v-model="editableTabsValue2" type="card" closable @tab-remove="removeTab" @tab-click="handleClick">
+                        <el-tab-pane
+                                v-for="(item, index) in editableTabs2"
+                                :key="item.name"
+                                :label="item.title"
+                                :name="item.name"
+                        >
+                            ${item.content}
                         </el-tab-pane>
                     </el-tabs>
 
