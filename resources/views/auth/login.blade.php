@@ -10,7 +10,7 @@
 
 </head>
 <body>
-<div class="wrapper">
+<div class="wrapper login-page">
     <div class="row container">
         <div class="col-sm-11 col-xs-6"><img src="/static/img/logo2.png"></div>
         <div class="col-sm-1 col-xs-6"><img src="/static/img/logo1.png" alt="" class="img-r"></div>

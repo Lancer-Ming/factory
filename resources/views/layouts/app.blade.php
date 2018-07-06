@@ -24,7 +24,7 @@
 <body>
 <div id="app">
     <el-container style="height: 100%;">
-        <el-header>
+        <el-header class="index-header">
             <img src="/static/img/logo2.png" class="logo-img clearfix" alt="">
             <ul class="sidebar-f">
                 <li v-for="(header,index) in headers" :key="index" v-text="header.label" @click="getSideBars(index)"></li>
@@ -50,7 +50,7 @@
             </div>
         </el-header>
         <el-container>
-            <el-aside width="auto" v-if="sidebars.length > 0">
+            <el-aside width="auto" v-if="sidebars.length > 0" class="index-left">
                 <el-row>
                     <el-col :span="24">
                         <span class="fa fa-bars take" @click="switchBar"></span>
@@ -82,7 +82,7 @@
             </el-row>
             </el-aside>
             <el-container>
-                <el-main>
+                <el-main class="index-main">
                     <el-tabs class="input-new-tag" closable @tab-remove="removeTab" @tab-click="tabclick">
                         <el-tab-pane v-for="(item, index) in tabs" :key="item.name" :label="item.title" :name="item.name" >
                         </el-tab-pane>
