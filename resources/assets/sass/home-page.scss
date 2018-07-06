@@ -25,6 +25,9 @@ body,html{
       margin-top: -10px;
       float: left;
     }
+    .container{
+      min-width: 100%;
+    }
     .sidebar-f {
       float: left;
       padding-left: 10px;
@@ -150,10 +153,9 @@ body,html{
     overflow: hidden;
   }
 
-  .el-main.index-main {
+  .el-main {
     background-color: #efeff8;
     color: #333;
-    text-align: center;
     //line-height: 160px;
   }
 

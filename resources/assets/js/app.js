@@ -93,7 +93,7 @@ const app = new Vue({
         },
         tabclick: function (tab, event) {
             event.target.style.background = '#fff'
-            
+            event.target
         },
         logout() {
             let form = document.querySelector('.logout');

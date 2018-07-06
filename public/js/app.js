@@ -61045,6 +61045,7 @@ var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 
         tabclick: function tabclick(tab, event) {
             event.target.style.background = '#fff';
+            event.target;
         },
         logout: function logout() {
             var form = document.querySelector('.logout');
