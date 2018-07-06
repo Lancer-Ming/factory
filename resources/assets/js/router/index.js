@@ -17,11 +17,6 @@ const router = new Router({
             name: 'role',
             component: Role
         },
-        {
-            path: '/system/role/index',
-            name: 'role',
-            component: Role
-        }
     ]
 })
 export default router
