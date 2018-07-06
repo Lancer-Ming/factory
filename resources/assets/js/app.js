@@ -8,11 +8,12 @@ require('./bootstrap');
 
 import Vue from 'vue'
 import ElementUI from 'element-ui'
+import $ from 'jquery'
 import axios from 'axios'
 import router from './router/index'
 
 Vue.use(ElementUI)
-
+Vue.prototype.$ = $
 Vue.prototype.axios = axios
 
 /**
@@ -86,9 +87,19 @@ const app = new Vue({
             this.tabsValue = activeName;
             this.tabs = tabs.filter(tab => tab.name !== targetName);
         },
+        tabclick: function (tab, event) {
+            event.target.style.background = '#fff'
+
+        },
         logout() {
             let form = document.querySelector('.logout');
             form.submit();
         }
     }
 });
+
+// $(document).ready(function(){
+// //     $(".input-new-tag").click(function(){
+// //
+//     })
+// })

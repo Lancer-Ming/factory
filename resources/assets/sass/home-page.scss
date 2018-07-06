@@ -18,144 +18,160 @@ body,html{
 @media only screen and (min-width: 600px) {
   #app {
     height: 100%;
-    .homepage-header {
-      width: 100%;
-      margin: 0 auto;
-      background: $header;
-      overflow-y: hidden;
-      .logo-img {
-        width: auto;
-        height: 70px;
-        //margin-bottom: 5px;
-        margin-top: -10px;
-        float: left;
-      }
-      .sidebar-f {
-        float: left;
-        padding-left: 10px;
-        margin-top: 10px;
-          li {
-            color: #fff;
-            list-style: none;
-            float: left;
-            font-size: 16px;
-            padding: 10px 15px 10px 15px;
-            cursor: pointer;
-            &:hover{
-              background: #fff;
-              color: $header;
-            }
-          }
-
-      }
-      .sidebar-r{
-        //width: 300px;
-        float: right;
+    .logo-img {
+      width: auto;
+      height: 70px;
+      //margin-bottom: 5px;
+      margin-top: -10px;
+      float: left;
+    }
+    .sidebar-f {
+      float: left;
+      padding-left: 10px;
+      margin-top: 10px;
+      li {
         color: #fff;
+        list-style: none;
+        float: left;
         font-size: 16px;
-        .home{
-          float: left;
-          margin-right: 10px;
-          padding: 25px 10px 10px 10px;
-          i{
-            color: #fff;
-            font-size: 18px;
-            display: inline-block;
-            margin-right: 5px;
-            cursor: pointer;
-          }
-          span{
-            color: #fff;
-          }
-        }
-        .user-h{
-          float: left;
-          //padding: 10px 20px 10px 20px;
-          .tit-user{
-            width: 45px;
-            height: 45px;
-            margin-right: 10px;
-          }
+        padding: 0px 15px 0px 15px;
+        cursor: pointer;
+        &:hover {
+          background: #fff;
+          color: $header;
         }
       }
     }
+    .sidebar-r{
+      width: 300px;
+      float: right;
+      color: #fff;
+      font-size: 16px;
+      .home{
+        float: left;
+        margin-right: 10px;
+        padding: 10px 10px 0px 10px;
+        i{
+          color: #fff;
+          font-size: 18px;
+          display: inline-block;
+          margin-right: 5px;
+          cursor: pointer;
+        }
+        span{
+          color: #fff;
+        }
+      }
+      .user-h{
+        float: left;
+        .tit-user{
+          width: 45px;
+          height: 45px;
+          margin-right: 10px;
+        }
+      }
+    }
+    .take{
+          color: #fff;
+          font-size: 18px;
+          display: block;
+          text-align: center;
+          padding: 10px 0px;
+        }
+    el-submenu__title{
+          color: #fff;
+          &:hover{
+            background: #7d7d7d;
+            color: #fff;
+          }
+        }
+    .small-logo{
+          display: inline-block;
+          margin-right: 10px;
+          margin-left: 5px;
+          width: 16px;
+        }
+        .tit-tab{
+          display: inline-block;
+          padding-right: 20px;
+          width: 135px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          color: #fff;
+        }
+      .el-menu{
+        border: none;
+      }
+      .el-menu-item, .el-menu-item{
+        background: $header;
+        color: #fff;
+        &:hover{
+          background: #7d7d7d;
+          color: #fff;
+        }
+      }
+      .el-tabs__item {
+        padding: 0px 15px;
+        margin-left: 6px;
+        margin-top: 0px;
+        background: #eee;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        border: 1px solid #ccc;
+      }
+      .el-tabs__item.is-top:last-child{
+         padding-right: 15px !important;
+         background: #fff;
+         border: none;
+       }
+      .el-tabs--top .el-tabs__item.is-top:nth-child(2) {
+        padding-left: 15px;
+      }
+      .el-tabs__active-bar{
+        background: none;
+        height: 0;
+      }
 
   }
-}
-.nav {
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-}
-  .homepage-title{
-    background: $header;
-    height: 100%;
-  }
-  .el-submenu__title{
-    color: #fff;
-    &:hover{
-      background: #7d7d7d;
-      color: #fff;
-    }
-  }
-  .el-submenu__title i{
-    color: #fff;
-  }
-  .small-logo{
-    display: inline-block;
-    margin-right: 10px;
-    margin-left: 5px;
-  }
-  .tit-tab{
-    display: inline-block;
-    padding-right: 20px;
-  }
-  .take{
-    color: #fff;
-    font-size: 18px;
-    display: block;
+
+
+  .el-header, .el-footer {
+    background-color: $header;
+    color: #333;
     text-align: center;
-    padding: 10px 0px;
-  }
-  .el-menu{
-    border: none;
-  }
-  .el-menu-item, .el-menu-item{
-    background: $header;
-    color: #fff;
-    &:hover{
-      background: #7d7d7d;
-      color: #fff;
-    }
-  }
-  .el-tabs__item {
-    padding: 0px 15px;
-    margin-left: 6px;
-    margin-top: 5px;
-    background: #eee;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border: 1px solid #ccc;
-  }
-  .el-tabs__item.is-top:last-child{
-    padding-right: 15px !important;
-    background: #fff;
-    border: none;
-  }
-  .el-tabs--top .el-tabs__item.is-top:nth-child(2) {
-    padding-left: 15px;
-  }
-  .el-tabs__active-bar{
-    background: none;
+    line-height: 40px;
   }
 
-  .homepage-tab {
-    width: 90%;
+  .el-aside {
+    background-color: $header;
+    color: #333;
+    text-align: center;
+    line-height: 200px;
+    overflow: hidden;
   }
 
+  .el-main {
+    background-color: #efeff8;
+    color: #333;
+    text-align: center;
+    //line-height: 160px;
+  }
 
+  body > .el-container {
+    margin-bottom: 40px;
+  }
 
+  .el-container:nth-child(5) .el-aside,
+  .el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+  }
 
+  .el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+  }
+
+}
 @media only screen and (max-width: 600px) {}
 
 

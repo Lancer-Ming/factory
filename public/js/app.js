@@ -28767,9 +28767,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_element_ui__ = __webpack_require__(104);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_element_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_element_ui__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__router_index__ = __webpack_require__(185);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__router_index__ = __webpack_require__(185);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -28783,9 +28785,10 @@ __webpack_require__(80);
 
 
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_element_ui___default.a);
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.axios = __WEBPACK_IMPORTED_MODULE_2_axios___default.a;
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_element_ui___default.a);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$ = __WEBPACK_IMPORTED_MODULE_2_jquery___default.a;
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.axios = __WEBPACK_IMPORTED_MODULE_3_axios___default.a;
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -28797,7 +28800,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('example-component', __web
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     el: '#app',
-    router: __WEBPACK_IMPORTED_MODULE_3__router_index__["a" /* default */],
+    router: __WEBPACK_IMPORTED_MODULE_4__router_index__["a" /* default */],
     delimiters: ['${', '}'],
     data: {
         headers: [],
@@ -28862,12 +28865,22 @@ var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
                 return tab.name !== targetName;
             });
         },
+
+        tabclick: function tabclick(tab, event) {
+            event.target.style.background = '#fff';
+        },
         logout: function logout() {
             var form = document.querySelector('.logout');
             form.submit();
         }
     }
 });
+
+// $(document).ready(function(){
+// //     $(".input-new-tag").click(function(){
+// //
+//     })
+// })
 
 /***/ }),
 /* 80 */
