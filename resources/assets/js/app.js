@@ -8,12 +8,17 @@ require('./bootstrap');
 
 import Vue from 'vue'
 import ElementUI from 'element-ui'
+
+import $ from 'jquery'
+
+import { Message } from 'element-ui'
 import axios from 'axios'
 import router from './router/index'
 
 Vue.use(ElementUI)
-
+Vue.prototype.$ = $
 Vue.prototype.axios = axios
+Vue.prototype.message = Message
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -38,7 +43,7 @@ const app = new Vue({
     created() {
         this.axios.get("/permissions").then(res => {
             // console.log(res)
-            this.headers = res.data.info.data;
+            this.headers = res.data.data;
         })
     },
     methods: {
@@ -86,9 +91,19 @@ const app = new Vue({
             this.tabsValue = activeName;
             this.tabs = tabs.filter(tab => tab.name !== targetName);
         },
+        tabclick: function (tab, event) {
+            event.target.style.background = '#fff'
+
+        },
         logout() {
             let form = document.querySelector('.logout');
             form.submit();
         }
     }
 });
+
+// $(document).ready(function(){
+// //     $(".input-new-tag").click(function(){
+// //
+//     })
+// })

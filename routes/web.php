@@ -26,6 +26,7 @@ Route::middleware(['auth','role','header'])->group(function() {
 
         Route::prefix('user')->as('system.user.')->group(function() {
             Route::get('/', 'UsersController@index')->name('index');
+            Route::get('/get_roles', 'UsersController@getRoles')->name('get_roles');
             Route::post('/', 'UsersController@store')->name('store');
             Route::get('/{user}', 'UsersController@edit')->name('edit');
             Route::patch('/{user}', 'UsersController@update')->name('update');

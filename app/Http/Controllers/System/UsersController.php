@@ -6,16 +6,13 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 
 class UsersController extends Controller
 {
     public function index()
     {
-        $users = User::with([
-            'roles' => function($query) {
-                $query->select('name');
-            }
-        ])->paginate(10);
+        $users = User::with('roles')->paginate(10);
         return successJson($users);
     }
 
@@ -37,7 +34,12 @@ class UsersController extends Controller
 
     public function update(UserRequest $request, User $user)
     {
-        $userData = $request->only(['username', 'realname', 'sex', 'email', 'password']);
+        if ($request->password == '') {
+            $userData = $request->only(['username', 'realname', 'sex', 'email']);
+        } else {
+            $userData = $request->only(['username', 'realname', 'sex', 'email', 'password']);
+        }
+        
         $user->update($userData);
 
         //获取先前的role_id
@@ -47,11 +49,24 @@ class UsersController extends Controller
 
         // 增加新的role_id
         $user->roles()->attach($request->role_id);
-        return successJson('', '', 204);
+
+        $newUser = User::with('roles')->find($user->id);
+    
+        return successJson($newUser, '操作成功！');
     }
 
     public function destroy()
     {
         
+    }
+
+    public function getRoles()
+    {
+        $roles = Role::all();
+        $result = [];
+        foreach($roles as $role) {
+            $result[] = ['value' => $role->id, 'label' => $role->name];
+        }
+        return successJson($result, '');
     }
 }
