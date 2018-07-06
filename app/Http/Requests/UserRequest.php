@@ -44,7 +44,7 @@ class UserRequest extends FormRequest
                     'sex' => 'required|integer',
                     'email' => 'email|required',
                     'role_id' => 'required',
-                    'password' => 'required|between:6,20'
+                    'password' => 'between:6,20|nullable'
                 ];
                 break;
         }
