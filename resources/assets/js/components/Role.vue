@@ -78,7 +78,7 @@
                     <el-button
                             size="mini"
                             type="danger"
-                            @click="/">删除
+                            @click="">删除
                     </el-button>
                 </template>
             </el-table-column>

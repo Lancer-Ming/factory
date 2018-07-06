@@ -28811,7 +28811,8 @@ var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
         sidebars: [],
         isCollapse: false, // 是否折叠
         firstMenuIndex: '', //一级菜单索引
-        tabs: [],
+        editableTabsValue2: '2',
+        editableTabs2: [],
         tabIndex: 2
     },
     created: function created() {
@@ -28828,32 +28829,33 @@ var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
             this.sidebars = this.headers[index].children;
             this.isCollapse = false;
             this.firstMenuIndex = index;
+            console.log(this.sidebars);
         },
         switchBar: function switchBar() {
             this.isCollapse = !this.isCollapse;
         },
-        addTab: function addTab(targetName) {
+        addTab: function addTab(targetName, routerName) {
             var newTabName = ++this.tabIndex + '';
+            var path = '/' + routerName.split('.').join('/');
             var isRepeat = false;
-            this.tabs.forEach(function (item, index) {
+            this.editableTabs2.forEach(function (item, index) {
                 if (item.title === targetName) {
                     isRepeat = true;
                 }
             });
-
             if (!isRepeat) {
-                this.tabs.push({
+                this.editableTabs2.push({
                     title: targetName,
                     name: newTabName,
-                    content: 'New Tab content'
+                    path: path
                 });
 
-                this.tabsValue = newTabName;
+                this.editableTabsValue2 = newTabName;
             }
         },
         removeTab: function removeTab(targetName) {
-            var tabs = this.tabs;
-            var activeName = this.tabsValue;
+            var tabs = this.editableTabs2;
+            var activeName = this.editableTabsValue2;
             if (activeName === targetName) {
                 tabs.forEach(function (tab, index) {
                     if (tab.name === targetName) {
@@ -28864,19 +28866,27 @@ var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
                     }
                 });
             }
-            this.tabsValue = activeName;
-            this.tabs = tabs.filter(function (tab) {
+
+            this.editableTabsValue2 = activeName;
+            this.editableTabs2 = tabs.filter(function (tab) {
                 return tab.name !== targetName;
             });
         },
 
-        tabclick: function tabclick(tab, event) {
-            event.target.style.background = '#fff';
-            event.target;
-        },
+        handleClick: function handleClick(tab, event) {},
         logout: function logout() {
             var form = document.querySelector('.logout');
             form.submit();
+        }
+    },
+    watch: {
+        editableTabsValue2: function editableTabsValue2(val) {
+            var filter = this.editableTabs2.filter(function (item) {
+                return item.name === val;
+            });
+            var path = filter[0].path;
+
+            this.$router.push({ path: path });
         }
     }
 });
@@ -97276,91 +97286,109 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      tableData: [],
-      showForm: false,
-      form: {
-        username: "",
-        realname: "",
-        sex: 1,
-        password: "",
-        role_id: [],
-        email: ""
-      },
-      formLabelWidth: "100px",
-      options: [],
-      no: ''
-    };
-  },
-  created: function created() {
-    var _this = this;
-
-    Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["b" /* getUsers */])().then(function (res) {
-      _this.tableData = res.data.data.data;
-      console.log(_this.tableData);
-    }), Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["a" /* getRoles */])().then(function (res) {
-      if (res.data.response_status === "success") {
-        _this.options = res.data.data;
-      }
-    });
-  },
-
-  methods: {
-    handleEdit: function handleEdit(index, row) {
-      console.log(row);
-      this.form = {
-        username: row.username,
-        realname: row.realname,
-        sex: row.sex,
-        password: "",
-        email: row.email
-      };
-      this.$set(this.form, 'role_id', Object(__WEBPACK_IMPORTED_MODULE_1__utils_common_js__["a" /* implode */])(row.roles, 'id'));
-      this.showForm = true;
-      this.no = row.id;
+    data: function data() {
+        return {
+            tableData: [],
+            showForm: false,
+            formType: '',
+            form: {
+                username: "",
+                realname: "",
+                sex: 1,
+                password: "",
+                role_id: [],
+                email: ""
+            },
+            formLabelWidth: "100px",
+            options: [],
+            no: ''
+        };
     },
-    handleAdd: function handleAdd(index, row) {
-      // 重新初始化表单
-      this.form = {
-        username: "",
-        realname: "",
-        sex: 1,
-        password: "",
-        role_id: [],
-        email: ""
-      };
-      this.showForm = true;
-    },
-    handleDelete: function handleDelete(index, row) {},
-    handleDeleteSeleted: function handleDeleteSeleted() {},
-    submitForm: function submitForm() {
-      var _this2 = this;
+    created: function created() {
+        var _this = this;
 
-      Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["c" /* updateUser */])(this.no, this.form).then(function (res) {
-        console.log(res);
-        _this2.showForm = false;
-        _this2.$message({
-          type: 'success',
-          showClose: true,
-          message: res.data.msg
+        Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["c" /* getUsers */])().then(function (res) {
+            _this.tableData = res.data.data.data;
+            console.log(_this.tableData);
+        }), Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["b" /* getRoles */])().then(function (res) {
+            if (res.data.response_status === "success") {
+                _this.options = res.data.data;
+            }
         });
-        _this2.tableData.forEach(function (elem, index) {
-          if (elem.id == _this2.no) {
-            console.log(index, res.data.data);
-            _this2.$set(_this2.tableData, index, res.data.data);
-          }
-        });
-      });
     },
-    implode: function implode(arr, attr) {
-      return Object(__WEBPACK_IMPORTED_MODULE_1__utils_common_js__["a" /* implode */])(arr, attr);
+
+    methods: {
+        handleEdit: function handleEdit(index, row) {
+            // 给表单赋值
+            this.formType = 'edit';
+            this.form = {
+                username: row.username,
+                realname: row.realname,
+                sex: row.sex,
+                password: "",
+                email: row.email
+            };
+            this.$set(this.form, 'role_id', Object(__WEBPACK_IMPORTED_MODULE_1__utils_common_js__["a" /* implode */])(row.roles, 'id'));
+            this.showForm = true;
+            this.no = row.id;
+        },
+        handleAdd: function handleAdd() {
+            // 重新初始化表单
+            this.formType = 'add';
+            this.form = {
+                username: "",
+                realname: "",
+                sex: 1,
+                password: "",
+                role_id: [],
+                email: ""
+            };
+            this.showForm = true;
+        },
+        handleDelete: function handleDelete(index, row) {},
+        handleDeleteSeleted: function handleDeleteSeleted() {},
+        submitForm: function submitForm() {
+            var _this2 = this;
+
+            if (this.formType === 'edit') {
+                Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["d" /* updateUser */])(this.no, this.form).then(function (res) {
+                    _this2.showForm = false;
+                    _this2.$message({
+                        type: 'success',
+                        showClose: true,
+                        message: res.data.msg
+                    });
+                    _this2.tableData.forEach(function (elem, index) {
+                        if (elem.id == _this2.no) {
+                            console.log(index, res.data.data);
+                            _this2.$set(_this2.tableData, index, res.data.data);
+                        }
+                    });
+                });
+            } else {
+                Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["a" /* addUser */])(this.form).then(function (res) {
+                    console.log(res);
+                });
+            }
+        },
+        implode: function implode(arr, attr) {
+            return Object(__WEBPACK_IMPORTED_MODULE_1__utils_common_js__["a" /* implode */])(arr, attr);
+        }
     }
-  }
 });
 
 /***/ }),
@@ -97618,7 +97646,7 @@ exports = module.exports = __webpack_require__(196)(false);
 
 
 // module
-exports.push([module.i, "\n.el-form-item[data-v-6bbe077c] {\r\n  margin-bottom: 0px;\n}\r\n", ""]);
+exports.push([module.i, "\n.el-form-item[data-v-6bbe077c] {\n    margin-bottom: 0px;\n}\n", ""]);
 
 // exports
 
@@ -97889,10 +97917,11 @@ module.exports = function listToStyles (parentId, list) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["b"] = getUsers;
-/* harmony export (immutable) */ __webpack_exports__["a"] = getRoles;
+/* harmony export (immutable) */ __webpack_exports__["c"] = getUsers;
+/* harmony export (immutable) */ __webpack_exports__["b"] = getRoles;
 /* unused harmony export editUser */
-/* harmony export (immutable) */ __webpack_exports__["c"] = updateUser;
+/* harmony export (immutable) */ __webpack_exports__["d"] = updateUser;
+/* harmony export (immutable) */ __webpack_exports__["a"] = addUser;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 
@@ -97922,6 +97951,14 @@ function updateUser(id, form) {
     return __WEBPACK_IMPORTED_MODULE_0_axios___default()({
         url: '/user/' + id,
         method: 'patch',
+        data: form
+    });
+}
+
+function addUser(form) {
+    return __WEBPACK_IMPORTED_MODULE_0_axios___default()({
+        url: '/user',
+        method: 'post',
         data: form
     });
 }
@@ -97964,7 +98001,7 @@ var render = function() {
               attrs: { size: "mini", type: "primary" },
               on: { click: _vm.handleAdd }
             },
-            [_vm._v("新增")]
+            [_vm._v("新增\n        ")]
           ),
           _vm._v(" "),
           _c(
@@ -97973,7 +98010,7 @@ var render = function() {
               attrs: { size: "mini", type: "danger" },
               on: { click: _vm.handleDeleteSeleted }
             },
-            [_vm._v("删除")]
+            [_vm._v("删除\n        ")]
           )
         ],
         1
@@ -97981,19 +98018,20 @@ var render = function() {
       _vm._v(" "),
       _c(
         "el-table",
-        { staticStyle: { width: "100%" }, attrs: { data: _vm.tableData } },
+        {
+          staticStyle: { width: "100%" },
+          attrs: { data: _vm.tableData, align: "", border: "" }
+        },
         [
           _c("el-table-column", { attrs: { type: "selection", width: "55" } }),
           _vm._v(" "),
           _c("el-table-column", {
-            attrs: { label: "编号", width: "100" },
+            attrs: { label: "编号", align: "center", width: "100" },
             scopedSlots: _vm._u([
               {
                 key: "default",
                 fn: function(scope) {
                   return [
-                    _c("i", { staticClass: "el-icon-time" }),
-                    _vm._v(" "),
                     _c("span", { staticStyle: { "margin-left": "10px" } }, [
                       _vm._v(_vm._s(scope.row.id))
                     ])
@@ -98004,7 +98042,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("el-table-column", {
-            attrs: { label: "用户名", width: "100" },
+            attrs: { label: "用户名", align: "center", width: "100" },
             scopedSlots: _vm._u([
               {
                 key: "default",
@@ -98031,7 +98069,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("el-table-column", {
-            attrs: { label: "真实姓名", width: "100" },
+            attrs: { label: "真实姓名", align: "center", width: "100" },
             scopedSlots: _vm._u([
               {
                 key: "default",
@@ -98058,7 +98096,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("el-table-column", {
-            attrs: { label: "所属用户组", width: "300" },
+            attrs: { label: "所属用户组", align: "center", width: "300" },
             scopedSlots: _vm._u([
               {
                 key: "default",
@@ -98076,7 +98114,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("el-table-column", {
-            attrs: { label: "邮箱", width: "200" },
+            attrs: { label: "邮箱", align: "center", width: "200" },
             scopedSlots: _vm._u([
               {
                 key: "default",
@@ -98103,7 +98141,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("el-table-column", {
-            attrs: { label: "创建时间", width: "300" },
+            attrs: { label: "创建时间", align: "center", width: "300" },
             scopedSlots: _vm._u([
               {
                 key: "default",
@@ -98121,7 +98159,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("el-table-column", {
-            attrs: { label: "操作", width: "500" },
+            attrs: { label: "操作", align: "center", width: "400" },
             scopedSlots: _vm._u([
               {
                 key: "default",
@@ -98137,7 +98175,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("编辑")]
+                      [_vm._v("编辑\n                ")]
                     ),
                     _vm._v(" "),
                     _c(
@@ -98150,7 +98188,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("删除")]
+                      [_vm._v("删除\n                ")]
                     )
                   ]
                 }
@@ -98592,9 +98630,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     created: function created() {
         var _this = this;
 
-        Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["b" /* getUsers */])().then(function (res) {
+        Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["c" /* getUsers */])().then(function (res) {
             _this.tableData = res.data.data.data;s;
-        }), Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["a" /* getRoles */])().then(function (res) {
+        }), Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["b" /* getRoles */])().then(function (res) {
             if (res.data.response_status === "success") {
                 _this.options = res.data.data;
             }
@@ -98631,7 +98669,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         submitForm: function submitForm() {
             var _this2 = this;
 
-            Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["c" /* updateUser */])(this.no, this.form).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["d" /* updateUser */])(this.no, this.form).then(function (res) {
                 console.log(res);
                 _this2.showForm = false;
                 _this2.$message({
@@ -98655,9 +98693,391 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 /* 219 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-throw new Error("Module build failed: SyntaxError: Unterminated regular expression (1:2297)\n    at Parser.pp$4.raise (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2610:13)\n    at Parser.pp$8.readRegexp (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:3284:38)\n    at Parser.pp$8.readToken_slash (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:3103:51)\n    at Parser.pp$8.getTokenFromCode (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:3228:17)\n    at Parser.pp$8.readToken (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2975:15)\n    at Parser.readToken (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:4398:22)\n    at Parser.pp$8.nextToken (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2966:15)\n    at Parser.pp$8.next (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2923:8)\n    at Parser.pp.eat (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:569:10)\n    at Parser.pp.expect (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:631:8)\n    at Parser.pp$1.parseBlock (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1071:8)\n    at Parser.pp$3.parseFunctionBody (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2466:22)\n    at Parser.pp$1.parseFunction (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1177:8)\n    at Parser.pp$3.parseExprAtom (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2082:17)\n    at Parser.parseExprAtom (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:4372:24)\n    at Parser.pp$3.parseExprSubscripts (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1955:19)\n    at Parser.pp$3.parseMaybeUnary (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1932:17)\n    at Parser.pp$3.parseExprOps (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1874:19)\n    at Parser.pp$3.parseMaybeConditional (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1857:19)\n    at Parser.pp$3.parseMaybeAssign (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1832:19)\n    at Parser.pp$3.parsePropertyValue (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2310:87)\n    at Parser.parseObj (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:4472:14)\n    at Parser.pp$3.parseExprAtom (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2077:17)\n    at Parser.parseExprAtom (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:4372:24)\n    at Parser.pp$3.parseExprSubscripts (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1955:19)\n    at Parser.pp$3.parseMaybeUnary (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1932:17)\n    at Parser.pp$3.parseExprOps (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1874:19)\n    at Parser.pp$3.parseMaybeConditional (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1857:19)\n    at Parser.pp$3.parseMaybeAssign (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1832:19)\n    at Parser.pp$3.parsePropertyValue (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2310:87)");
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "container" },
+    [
+      _c(
+        "el-row",
+        { staticStyle: { padding: "10px" } },
+        [
+          _c(
+            "el-button",
+            {
+              attrs: { size: "mini", type: "primary" },
+              on: { click: _vm.handleAdd }
+            },
+            [_vm._v("新增")]
+          ),
+          _vm._v(" "),
+          _c(
+            "el-button",
+            {
+              attrs: { size: "mini", type: "danger" },
+              on: { click: _vm.handleDeleteSeleted }
+            },
+            [_vm._v("删除")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "el-table",
+        { staticStyle: { width: "100%" }, attrs: { data: _vm.tableData } },
+        [
+          _c("el-table-column", { attrs: { type: "selection", width: "55" } }),
+          _vm._v(" "),
+          _c("el-table-column", {
+            attrs: { label: "编号", width: "100" },
+            scopedSlots: _vm._u([
+              {
+                key: "default",
+                fn: function(scope) {
+                  return [
+                    _c("i", { staticClass: "el-icon-time" }),
+                    _vm._v(" "),
+                    _c("span", { staticStyle: { "margin-left": "10px" } }, [
+                      _vm._v(_vm._s(scope.row.id))
+                    ])
+                  ]
+                }
+              }
+            ])
+          }),
+          _vm._v(" "),
+          _c("el-table-column", {
+            attrs: { label: "角色名", width: "100" },
+            scopedSlots: _vm._u([
+              {
+                key: "default",
+                fn: function(scope) {
+                  return [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "name-wrapper",
+                        attrs: { slot: "reference" },
+                        slot: "reference"
+                      },
+                      [
+                        _c("el-tag", { attrs: { size: "medium" } }, [
+                          _vm._v(_vm._s(scope.row.username))
+                        ])
+                      ],
+                      1
+                    )
+                  ]
+                }
+              }
+            ])
+          }),
+          _vm._v(" "),
+          _c("el-table-column", {
+            attrs: { label: "角色描述", width: "100" },
+            scopedSlots: _vm._u([
+              {
+                key: "default",
+                fn: function(scope) {
+                  return [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "name-wrapper",
+                        attrs: { slot: "reference" },
+                        slot: "reference"
+                      },
+                      [
+                        _c("el-tag", { attrs: { size: "medium" } }, [
+                          _vm._v(_vm._s(scope.row.realname))
+                        ])
+                      ],
+                      1
+                    )
+                  ]
+                }
+              }
+            ])
+          }),
+          _vm._v(" "),
+          _c("el-table-column", {
+            attrs: { label: "所属用户组", width: "300" },
+            scopedSlots: _vm._u([
+              {
+                key: "default",
+                fn: function(scope) {
+                  return [
+                    _c("el-tag", { attrs: { size: "medium" } }, [
+                      _vm._v(
+                        _vm._s(_vm.implode(scope.row.roles, "name").join(","))
+                      )
+                    ])
+                  ]
+                }
+              }
+            ])
+          }),
+          _vm._v(" "),
+          _c("el-table-column", {
+            attrs: { label: "创建时间", width: "300" },
+            scopedSlots: _vm._u([
+              {
+                key: "default",
+                fn: function(scope) {
+                  return [
+                    _c("i", { staticClass: "el-icon-time" }),
+                    _vm._v(" "),
+                    _c("span", { staticStyle: { "margin-left": "10px" } }, [
+                      _vm._v(_vm._s(scope.row.created_at))
+                    ])
+                  ]
+                }
+              }
+            ])
+          }),
+          _vm._v(" "),
+          _c("el-table-column", {
+            attrs: { label: "操作", width: "500" },
+            scopedSlots: _vm._u([
+              {
+                key: "default",
+                fn: function(scope) {
+                  return [
+                    _c(
+                      "el-button",
+                      {
+                        attrs: { size: "mini", type: "info" },
+                        on: {
+                          click: function($event) {
+                            _vm.handleEdit(scope.$index, scope.row)
+                          }
+                        }
+                      },
+                      [_vm._v("编辑\n                ")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-button",
+                      {
+                        attrs: { size: "mini", type: "info" },
+                        on: {
+                          click: function($event) {
+                            _vm.handleEdit(scope.$index, scope.row)
+                          }
+                        }
+                      },
+                      [_vm._v("分配权限\n                ")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-button",
+                      {
+                        attrs: { size: "mini", type: "danger" },
+                        on: { click: function($event) {} }
+                      },
+                      [_vm._v("删除\n                ")]
+                    )
+                  ]
+                }
+              }
+            ])
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "el-dialog",
+        {
+          attrs: { title: "用户信息", visible: _vm.showForm, width: "22%" },
+          on: {
+            "update:visible": function($event) {
+              _vm.showForm = $event
+            }
+          }
+        },
+        [
+          _c(
+            "el-form",
+            { attrs: { model: _vm.form } },
+            [
+              _c(
+                "el-form-item",
+                {
+                  attrs: { label: "用户名", "label-width": _vm.formLabelWidth }
+                },
+                [
+                  _c("el-input", {
+                    staticStyle: { width: "200px" },
+                    attrs: { "auto-complete": "off", size: "mini" },
+                    model: {
+                      value: _vm.form.username,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "username", $$v)
+                      },
+                      expression: "form.username"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                {
+                  attrs: {
+                    label: "真实姓名",
+                    "label-width": _vm.formLabelWidth
+                  }
+                },
+                [
+                  _c("el-input", {
+                    staticStyle: { width: "200px" },
+                    attrs: { "auto-complete": "off", size: "mini" },
+                    model: {
+                      value: _vm.form.realname,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "realname", $$v)
+                      },
+                      expression: "form.realname"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "邮箱", "label-width": _vm.formLabelWidth } },
+                [
+                  _c("el-input", {
+                    staticStyle: { width: "250px" },
+                    attrs: { "auto-complete": "off", size: "mini" },
+                    model: {
+                      value: _vm.form.email,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "email", $$v)
+                      },
+                      expression: "form.email"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "密码", "label-width": _vm.formLabelWidth } },
+                [
+                  _c("el-input", {
+                    staticStyle: { width: "200px" },
+                    attrs: {
+                      type: "password",
+                      "auto-complete": "off",
+                      size: "mini"
+                    },
+                    model: {
+                      value: _vm.form.password,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "password", $$v)
+                      },
+                      expression: "form.password"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                {
+                  attrs: {
+                    label: "所属用户组",
+                    "label-width": _vm.formLabelWidth
+                  }
+                },
+                [
+                  _c(
+                    "el-select",
+                    {
+                      attrs: {
+                        multiple: "",
+                        filterable: "",
+                        placeholder: "请选择",
+                        "value-key": "item"
+                      },
+                      model: {
+                        value: _vm.form.role_id,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "role_id", $$v)
+                        },
+                        expression: "form.role_id"
+                      }
+                    },
+                    _vm._l(_vm.options, function(item) {
+                      return _c("el-option", {
+                        key: item.value,
+                        attrs: { label: item.label, value: item.value }
+                      })
+                    })
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "dialog-footer",
+              attrs: { slot: "footer" },
+              slot: "footer"
+            },
+            [
+              _c(
+                "el-button",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.showForm = false
+                    }
+                  }
+                },
+                [_vm._v("取 消")]
+              ),
+              _vm._v(" "),
+              _c(
+                "el-button",
+                { attrs: { type: "primary" }, on: { click: _vm.submitForm } },
+                [_vm._v("确 定")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6bc17926", module.exports)
+  }
+}
 
 /***/ }),
 /* 220 */,

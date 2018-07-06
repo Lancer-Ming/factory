@@ -38,7 +38,8 @@ const app = new Vue({
         sidebars: [],
         isCollapse: false,      // 是否折叠
         firstMenuIndex: '',    //一级菜单索引
-        tabs: [],
+        editableTabsValue2: '2',
+        editableTabs2: [],
         tabIndex: 2
     },
     created() {
@@ -53,33 +54,34 @@ const app = new Vue({
             this.sidebars = this.headers[index].children
             this.isCollapse = false
             this.firstMenuIndex = index
+            console.log(this.sidebars)
         },
         switchBar() {
             this.isCollapse = !this.isCollapse
         },
-        addTab(targetName) {
+        addTab(targetName, routerName) {
             let newTabName = ++this.tabIndex + '';
+            let path = `/${routerName.split('.').join('/')}`
             let isRepeat = false
-            this.tabs.forEach((item, index)=> {
+            this.editableTabs2.forEach((item, index)=> {
                 if (item.title === targetName) {
                     isRepeat = true
                 }
             })
-
             if (!isRepeat) {
-                this.tabs.push({
+                this.editableTabs2.push({
                     title: targetName,
                     name: newTabName,
-                    content: 'New Tab content'
+                    path: path
                 })
 
-                this.tabsValue = newTabName;
-            }
+                this.editableTabsValue2 = newTabName;
 
+            }
         },
         removeTab(targetName) {
-            let tabs = this.tabs;
-            let activeName = this.tabsValue;
+            let tabs = this.editableTabs2;
+            let activeName = this.editableTabsValue2;
             if (activeName === targetName) {
                 tabs.forEach((tab, index) => {
                     if (tab.name === targetName) {
@@ -90,16 +92,26 @@ const app = new Vue({
                     }
                 });
             }
-            this.tabsValue = activeName;
-            this.tabs = tabs.filter(tab => tab.name !== targetName);
+
+            this.editableTabsValue2 = activeName;
+            this.editableTabs2 = tabs.filter(tab => tab.name !== targetName);
         },
-        tabclick: function (tab, event) {
-            event.target.style.background = '#fff'
-            event.target
+        handleClick: function (tab, event) {
+
         },
         logout() {
             let form = document.querySelector('.logout');
             form.submit();
+        }
+    },
+    watch: {
+        editableTabsValue2(val) {
+            const filter = this.editableTabs2.filter(item => {
+                return item.name === val
+            })
+            const path = filter[0].path
+
+            this.$router.push({ path: path})
         }
     }
 });
