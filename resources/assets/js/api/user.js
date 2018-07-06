@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../utils/request'
 
 export function getUsers() {
     return axios({
@@ -34,5 +34,13 @@ export function addUser(form) {
         url: '/user',
         method: 'post',
         data: form
+    })
+}
+
+export function destroyUser(id) {
+    return axios({
+        url: '/user',
+        method: 'delete',
+        data: id
     })
 }

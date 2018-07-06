@@ -12,6 +12,7 @@ import ElementUI from 'element-ui'
 import $ from 'jquery'
 
 import { Message } from 'element-ui'
+import { MessageBox } from 'element-ui';
 import axios from 'axios'
 import router from './router/index'
 

@@ -46,7 +46,7 @@ class Role
 
         if (Gate::denies(Route::currentRouteName())) {
             if ($request->ajax()) {
-                return failJson('您无权限操作，有需要请和管理员联系');
+                return failJson('您无权限操作，有需要请和管理员联系', '403');
             }
         }
 
