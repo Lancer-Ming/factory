@@ -28818,8 +28818,8 @@ var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
         var _this = this;
 
         this.axios.get("/permissions").then(function (res) {
-            // console.log(res)
             _this.headers = res.data.data;
+            _this.getSideBars(6);
         });
     },
 
@@ -94436,6 +94436,9 @@ module.exports = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_User_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_User_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Role_vue__ = __webpack_require__(215);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Role_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_Role_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Auth_vue__ = __webpack_require__(221);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Auth_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_Auth_vue__);
+
 
 
 
@@ -94451,7 +94454,12 @@ var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
     }, {
         path: '/system/role/index',
         name: 'role',
-        component: __WEBPACK_IMPORTED_MODULE_3__components_Role_vue___default.a
+        component: __WEBPACK_IMPORTED_MODULE_3__components_Role_vue___default.a,
+        children: [{
+            path: '/system/role/create',
+            name: 'auth',
+            component: __WEBPACK_IMPORTED_MODULE_4__components_Auth_vue___default.a
+        }]
     }]
 });
 /* harmony default export */ __webpack_exports__["a"] = (router);
@@ -98345,6 +98353,317 @@ if (false) {
 /* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(216)
+}
+var normalizeComponent = __webpack_require__(77)
+/* script */
+var __vue_script__ = __webpack_require__(218)
+/* template */
+var __vue_template__ = __webpack_require__(219)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-6bc17926"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\Role.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6bc17926", Component.options)
+  } else {
+    hotAPI.reload("data-v-6bc17926", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 216 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(217);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(209)("7d5b2bd0", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6bc17926\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Role.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6bc17926\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Role.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 217 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(196)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.el-form-item[data-v-6bc17926] {\n    margin-bottom: 0px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 218 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_user_js__ = __webpack_require__(211);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_common_js__ = __webpack_require__(212);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            tableData: [],
+            showForm: false,
+            form: {
+                username: "",
+                realname: "",
+                sex: 1,
+                password: "",
+                role_id: [],
+                email: ""
+            },
+            formLabelWidth: "100px",
+            options: [],
+            no: ''
+        };
+    },
+    created: function created() {
+        var _this = this;
+
+        Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["b" /* getUsers */])().then(function (res) {
+            _this.tableData = res.data.data.data;s;
+        }), Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["a" /* getRoles */])().then(function (res) {
+            if (res.data.response_status === "success") {
+                _this.options = res.data.data;
+            }
+        });
+    },
+
+    methods: {
+        handleEdit: function handleEdit(index, row) {
+            this.form = {
+                username: row.username,
+                realname: row.realname,
+                sex: row.sex,
+                password: "",
+                email: row.email
+            };
+            this.$set(this.form, 'role_id', Object(__WEBPACK_IMPORTED_MODULE_1__utils_common_js__["a" /* implode */])(row.roles, 'id'));
+            this.showForm = true;
+            this.no = row.id;
+        },
+        handleAdd: function handleAdd(index, row) {
+            // 重新初始化表单
+            this.form = {
+                username: "",
+                realname: "",
+                sex: 1,
+                password: "",
+                role_id: [],
+                email: ""
+            };
+            this.showForm = true;
+        },
+        handleDelete: function handleDelete(index, row) {},
+        handleDeleteSeleted: function handleDeleteSeleted() {},
+        submitForm: function submitForm() {
+            var _this2 = this;
+
+            Object(__WEBPACK_IMPORTED_MODULE_0__api_user_js__["c" /* updateUser */])(this.no, this.form).then(function (res) {
+                console.log(res);
+                _this2.showForm = false;
+                _this2.$message({
+                    type: 'success',
+                    showClose: true,
+                    message: res.data.msg
+                });
+                _this2.tableData.forEach(function (elem, index) {
+                    if (elem.id == _this2.no) {
+                        console.log(index, res.data.data);
+                        _this2.$set(_this2.tableData, index, res.data.data);
+                    }
+                });
+            });
+        },
+        implode: function implode(arr, attr) {
+            return Object(__WEBPACK_IMPORTED_MODULE_1__utils_common_js__["a" /* implode */])(arr, attr);
+        }
+    }
+});
+
+/***/ }),
+/* 219 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: SyntaxError: Unterminated regular expression (1:2297)\n    at Parser.pp$4.raise (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2610:13)\n    at Parser.pp$8.readRegexp (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:3284:38)\n    at Parser.pp$8.readToken_slash (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:3103:51)\n    at Parser.pp$8.getTokenFromCode (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:3228:17)\n    at Parser.pp$8.readToken (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2975:15)\n    at Parser.readToken (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:4398:22)\n    at Parser.pp$8.nextToken (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2966:15)\n    at Parser.pp$8.next (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2923:8)\n    at Parser.pp.eat (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:569:10)\n    at Parser.pp.expect (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:631:8)\n    at Parser.pp$1.parseBlock (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1071:8)\n    at Parser.pp$3.parseFunctionBody (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2466:22)\n    at Parser.pp$1.parseFunction (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1177:8)\n    at Parser.pp$3.parseExprAtom (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2082:17)\n    at Parser.parseExprAtom (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:4372:24)\n    at Parser.pp$3.parseExprSubscripts (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1955:19)\n    at Parser.pp$3.parseMaybeUnary (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1932:17)\n    at Parser.pp$3.parseExprOps (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1874:19)\n    at Parser.pp$3.parseMaybeConditional (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1857:19)\n    at Parser.pp$3.parseMaybeAssign (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1832:19)\n    at Parser.pp$3.parsePropertyValue (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2310:87)\n    at Parser.parseObj (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:4472:14)\n    at Parser.pp$3.parseExprAtom (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2077:17)\n    at Parser.parseExprAtom (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:4372:24)\n    at Parser.pp$3.parseExprSubscripts (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1955:19)\n    at Parser.pp$3.parseMaybeUnary (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1932:17)\n    at Parser.pp$3.parseExprOps (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1874:19)\n    at Parser.pp$3.parseMaybeConditional (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1857:19)\n    at Parser.pp$3.parseMaybeAssign (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:1832:19)\n    at Parser.pp$3.parsePropertyValue (e:\\www\\factory1\\node_modules\\vue-template-es2015-compiler\\buble.js:2310:87)");
+
+/***/ }),
+/* 220 */,
+/* 221 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var normalizeComponent = __webpack_require__(77)
 /* script */
 var __vue_script__ = null
@@ -98366,7 +98685,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\Role.vue"
+Component.options.__file = "resources\\assets\\js\\components\\Auth.vue"
 
 module.exports = Component.exports
 

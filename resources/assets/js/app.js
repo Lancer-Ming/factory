@@ -32,7 +32,8 @@ const app = new Vue({
     el: '#app',
     router,
     delimiters: ['${', '}'],
-    data: {
+    data:
+        {
         headers: [],
         sidebars: [],
         isCollapse: false,      // 是否折叠
@@ -42,11 +43,12 @@ const app = new Vue({
     },
     created() {
         this.axios.get("/permissions").then(res => {
-            // console.log(res)
             this.headers = res.data.data;
+            this.getSideBars(6)
         })
     },
     methods: {
+
         getSideBars(index){
             this.sidebars = this.headers[index].children
             this.isCollapse = false
