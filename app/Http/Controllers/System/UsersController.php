@@ -18,12 +18,19 @@ class UsersController extends Controller
 
     public function store(UserRequest $request)
     {
-        $userData = $request->only(['username', 'realname', 'sex', 'email', 'password']);
-        $user = User::create($userData);
+        $user = User::create([
+            'username' => $request->username,
+            'realname' => $request->realname,
+            'sex' => $request->sex,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
+        ]);
 
         $user->roles()->attach($request->role_id);
 
-        return successJson('', '', 201);
+        $user->roles = $user->roles;
+
+        return successJson($user, '操作成功！', 201);
     }
 
     public function edit(User $user)
@@ -34,13 +41,13 @@ class UsersController extends Controller
 
     public function update(UserRequest $request, User $user)
     {
-        if ($request->password == '') {
-            $userData = $request->only(['username', 'realname', 'sex', 'email']);
-        } else {
-            $userData = $request->only(['username', 'realname', 'sex', 'email', 'password']);
-        }
-        
-        $user->update($userData);
+        $user->update([
+            'username' => $request->username,
+            'realname' => $request->realname,
+            'sex' => $request->sex,
+            'email' => $request->email,
+            'password' => $request->password ? bcrypt($request->password) : $user->password
+        ]);
 
         //获取先前的role_id
         $role_ids = $user->roles->pluck('id');
@@ -55,9 +62,21 @@ class UsersController extends Controller
         return successJson($newUser, '操作成功！');
     }
 
-    public function destroy()
+    public function destroy(Request $request)
     {
-        
+        $id = $request->id;
+        // 删除多个
+        if(is_array($id)) {
+            User::destroy($id);
+            \DB('role_user')->whereIn('user_id', $id)->delete();
+        } else {
+            $user->delete();
+            //获取先前的role_id
+            $role_ids = $user->roles->pluck('id');
+            // 删除以前中间表的role_id
+            $user->roles()->detach($role_ids);
+        }
+        return successJson('','删除成功！');
     }
 
     public function getRoles()
