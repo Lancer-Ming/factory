@@ -2,32 +2,37 @@
     <div class="container">
         <el-row style="padding: 10px;">
             <el-button
-                size="mini"
-                type="primary"
-                @click="handleAdd">新增</el-button>
+                    size="mini"
+                    type="primary"
+                    @click="handleAdd">新增
+            </el-button>
             <el-button
-                size="mini"
-                type="danger"
-                @click="handleDeleteSeleted">删除</el-button>
+                    size="mini"
+                    type="danger"
+                    @click="handleDeleteSeleted">删除
+            </el-button>
         </el-row>
         <el-table
                 :data="tableData"
+                align
+                border
                 style="width: 100%">
 
-             <el-table-column
-                type="selection"
-                width="55">
-            </el-table-column>    
+            <el-table-column
+                    type="selection"
+                    width="55">
+            </el-table-column>
             <el-table-column
                     label="编号"
+                    align="center"
                     width="100">
                 <template slot-scope="scope">
-                    <i class="el-icon-time"></i>
                     <span style="margin-left: 10px">{{ scope.row.id }}</span>
                 </template>
             </el-table-column>
             <el-table-column
                     label="用户名"
+                    align="center"
                     width="100">
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
@@ -38,6 +43,7 @@
 
             <el-table-column
                     label="真实姓名"
+                    align="center"
                     width="100">
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
@@ -48,6 +54,7 @@
 
             <el-table-column
                     label="所属用户组"
+                    align="center"
                     width="300">
                 <template slot-scope="scope">
                     <el-tag size="medium">{{ implode(scope.row.roles, 'name').join(',') }}</el-tag>
@@ -56,6 +63,7 @@
 
             <el-table-column
                     label="邮箱"
+                    align="center"
                     width="200">
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
@@ -66,23 +74,25 @@
 
             <el-table-column
                     label="创建时间"
+                    align="center"
                     width="300">
                 <template slot-scope="scope">
-                    <i class="el-icon-time"></i>
-                    <span style="margin-left: 10px">{{ scope.row.created_at }}</span>
+                    <i class="el-icon-time"></i> <span style="margin-left: 10px">{{ scope.row.created_at }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="操作" width="500">
+            <el-table-column label="操作" align="center" width="400">
                 <template slot-scope="scope">
                     <el-button
                             size="mini"
                             type="info"
-                            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                            @click="handleEdit(scope.$index, scope.row)">编辑
+                    </el-button>
                     <el-button
                             size="mini"
                             type="danger"
-                            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                            @click="handleDelete(scope.$index, scope.row)">删除
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -101,16 +111,16 @@
                 <el-form-item label="密码" :label-width="formLabelWidth">
                     <el-input type="password" v-model="form.password" auto-complete="off" style="width:200px;" size="mini"></el-input>
                 </el-form-item>
-                 <el-form-item label="所属用户组" :label-width="formLabelWidth">
+                <el-form-item label="所属用户组" :label-width="formLabelWidth">
                     <el-select v-model="form.role_id" multiple filterable placeholder="请选择" value-key="item">
                         <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
                         </el-option>
                     </el-select>
-                 </el-form-item>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="showForm = false">取 消</el-button>
@@ -122,93 +132,103 @@
 </template>
 
 <script>
-import { getUsers, getRoles, updateUser } from "../api/user.js";
-import { implode } from "../utils/common.js";
-export default {
-  data() {
-    return {
-      tableData: [],
-      showForm: false,
-      form: {
-        username: "",
-        realname: "",
-        sex: 1,
-        password: "",
-        role_id: [],
-        email: ""
-      },
-      formLabelWidth: "100px",
-      options: [],
-      no: ''
-    };
-  },
-  created() {
-    getUsers().then(res => {
-        this.tableData = res.data.data.data;
-        console.log(this.tableData)
-    }),
-    getRoles().then(res => {
-        if (res.data.response_status === "success") {
-          this.options = res.data.data;
-        }
-    })
-  },
-  methods: {
-    handleEdit(index, row) {
-        console.log(row)
-        this.form = {
-            username: row.username,
-            realname: row.realname,
-            sex: row.sex,
-            password: "",
-            email: row.email
-        };
-        this.$set(this.form, 'role_id', implode(row.roles, 'id'))
-        this.showForm = true;
-        this.no = row.id
-    },
-    handleAdd(index, row) {
-      // 重新初始化表单
-      this.form = {
-        username: "",
-        realname: "",
-        sex: 1,
-        password: "",
-        role_id: [],
-        email: ""
-      };
-      this.showForm = true;
-    },
-    handleDelete(index, row) {
-      
-    },
-    handleDeleteSeleted() {},
-    submitForm() {
-        updateUser(this.no, this.form).then(res => {
-            console.log(res)
-            this.showForm = false
-            this.$message({
-                type: 'success',
-                showClose: true,
-                message: res.data.msg
-            })
-            this.tableData.forEach((elem, index) => {
-                if (elem.id == this.no) {
-                    console.log(index, res.data.data)
-                    this.$set(this.tableData, index, res.data.data)
+    import {getUsers, getRoles, updateUser, addUser} from "../api/user.js";
+    import {implode} from "../utils/common.js";
+    export default {
+        data() {
+            return {
+                tableData: [],
+                showForm: false,
+                formType: '',
+                form: {
+                    username: "",
+                    realname: "",
+                    sex: 1,
+                    password: "",
+                    role_id: [],
+                    email: ""
+                },
+                formLabelWidth: "100px",
+                options: [],
+                no: ''
+            };
+        },
+        created() {
+            getUsers().then(res => {
+                this.tableData = res.data.data.data;
+                console.log(this.tableData)
+            }),
+                getRoles().then(res => {
+                    if (res.data.response_status === "success") {
+                        this.options = res.data.data;
+                    }
+                })
+        },
+        methods: {
+            handleEdit(index, row) {
+                // 给表单赋值
+                this.formType = 'edit'
+                this.form = {
+                    username: row.username,
+                    realname: row.realname,
+                    sex: row.sex,
+                    password: "",
+                    email: row.email
+                };
+                this.$set(this.form, 'role_id', implode(row.roles, 'id'))
+                this.showForm = true;
+                this.no = row.id
+            },
+            handleAdd() {
+                // 重新初始化表单
+                this.formType = 'add'
+                this.form = {
+                    username: "",
+                    realname: "",
+                    sex: 1,
+                    password: "",
+                    role_id: [],
+                    email: ""
+                };
+                this.showForm = true;
+            },
+            handleDelete(index, row) {
+
+            },
+            handleDeleteSeleted() {
+            },
+            submitForm() {
+                if (this.formType === 'edit') {
+                    updateUser(this.no, this.form).then(res => {
+                        this.showForm = false
+                        this.$message({
+                            type: 'success',
+                            showClose: true,
+                            message: res.data.msg
+                        })
+                        this.tableData.forEach((elem, index) => {
+                            if (elem.id == this.no) {
+                                console.log(index, res.data.data)
+                                this.$set(this.tableData, index, res.data.data)
+                            }
+                        })
+                    })
+                } else {
+                    addUser(this.form).then(res => {
+                        console.log(res)
+                    })
                 }
-            })
-        })
-    },
-    implode(arr, attr) {
-      return implode(arr, attr);
-    }
-  },
-};
+
+            },
+            implode(arr, attr) {
+                return implode(arr, attr);
+            }
+        },
+    };
 </script>
 
 <style scoped>
-.el-form-item {
-  margin-bottom: 0px;
-}
+    .el-form-item {
+        margin-bottom: 0px;
+    }
 </style>
