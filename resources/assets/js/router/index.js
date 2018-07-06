@@ -16,6 +16,11 @@ const router = new Router({
             path: '/system/role/index',
             name: 'role',
             component: Role
+        },
+        {
+            path: '/system/role/index',
+            name: 'role',
+            component: Role
         }
     ]
 })
