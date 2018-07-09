@@ -21,13 +21,12 @@ body, html {
   #app {
     height: 100%;
   }
-
   .index-main {
     .container {
       min-width: 100% !important;
     }
   }
-
+  //导航栏
   .index-header {
     .logo-img {
       width: auto;
@@ -36,7 +35,6 @@ body, html {
       margin-top: -10px;
       float: left;
     }
-
     .sidebar-f {
       float: left;
       padding-left: 10px;
@@ -50,7 +48,6 @@ body, html {
         cursor: pointer;
       }
     }
-
     .sidebar-r {
       width: 300px;
       float: right;
@@ -100,50 +97,45 @@ body, html {
         color: #fff;
       }
     }
-
     .el-menu-item.is-active {
       background: #7d7d7d;
       color: #fff;
     }
-  }
-
-
-  .take {
-    color: #fff;
-    font-size: 18px;
-    display: block !important;
-    text-align: center;
-    padding: 10px 0px;
-  }
-  el-submenu__title {
-    color: #fff;
-    &:hover {
-      background: #7d7d7d;
+    .take {
+      color: #fff;
+      font-size: 18px;
+      display: block;
+      text-align: center;
+      padding: 10px 0px;
+    }
+    .el-submenu__title {
+      color: #fff;
+      &:hover {
+        background: #7d7d7d;
+        color: #fff;
+      }
+    }
+    .small-logo {
+      display: inline-block;
+      margin-right: 10px;
+      margin-left: 5px;
+      width: 16px;
       color: #fff;
     }
-  }
-  .small-logo {
-    display: inline-block;
-    margin-right: 10px;
-    margin-left: 5px;
-    width: 16px;
-    color: #fff;
-  }
-  .tit-tab {
-    display: inline-block;
-    padding-right: 20px;
-    width: 135px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #fff;
-  }
-  .el-menu {
-    border: none;
-  }
+    .tit-tab {
+      display: inline-block;
+      padding-right: 20px;
+      width: 135px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #fff;
+    }
+    .el-menu-vertical-demo{
+      background: $header;
+    }
 
-
-
+  }
   .el-tabs__item {
     padding: 0px 15px;
     margin-left: 6px;
@@ -152,11 +144,8 @@ body, html {
     border-top-right-radius: 8px;
     border: 1px solid #ccc;
   }
-  .el-tabs__item.is-top:last-child {
-    padding-right: 15px !important;
-  }
-  .el-tabs--top .el-tabs__item.is-top:nth-child(2) {
-    padding-left: 15px;
+  .el-menu {
+    border: none;
   }
   .el-tabs__active-bar {
     background: none;
@@ -167,7 +156,7 @@ body, html {
     background: #fff;
   }
 
-}
+
 
 .el-header.index-header, .el-footer {
   background-color: $header;
@@ -192,6 +181,7 @@ body, html {
 
 body > .el-container {
   margin-bottom: 40px;
+}
 }
 
 //.el-container:nth-child(5) .el-aside,
