@@ -41,12 +41,13 @@ const app = new Vue({
         firstMenuIndex: '',    //一级菜单索引
         editableTabsValue2: '2',
         editableTabs2: [],
-        tabIndex: 2
+        tabIndex: 2,
+        activeNavIndex: 0
     },
     created() {
         this.axios.get("/permissions").then(res => {
             this.headers = res.data.data;
-            this.getSideBars(6)
+            this.getSideBars(0)
         })
     },
     methods: {
@@ -55,7 +56,9 @@ const app = new Vue({
             this.sidebars = this.headers[index].children
             this.isCollapse = false
             this.firstMenuIndex = index
-            console.log(this.sidebars)
+            this.activeNavIndex = index
+            console.log(this.activeNavIndex)
+
         },
         switchBar() {
             this.isCollapse = !this.isCollapse
@@ -114,7 +117,10 @@ const app = new Vue({
 
             this.$router.push({ path: path})
         }
-    }
+    },
+    // changeNavIndex(index) {
+    //
+    // }
 });
 
 // $(document).ready(function(){

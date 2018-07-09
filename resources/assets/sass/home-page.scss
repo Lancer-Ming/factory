@@ -39,11 +39,11 @@ body,html{
         font-size: 16px;
         padding: 0px 15px 0px 15px;
         cursor: pointer;
-        &:hover {
-          background: #fff;
-          color: $header;
-        }
       }
+    }
+    .index-header .sidebar-f .active{
+      background: #fff;
+      color: $header;
     }
     .sidebar-r{
       width: 300px;
