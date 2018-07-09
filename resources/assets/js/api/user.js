@@ -27,6 +27,7 @@ export function updateUser(id, form) {
         method: 'patch',
         data: form
     })
+    console.log(123)
 }
 
 export function addUser(form) {
