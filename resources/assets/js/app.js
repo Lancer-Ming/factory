@@ -29,25 +29,30 @@ Vue.prototype.message = Message
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
+import { Local } from './utils/common'
 const app = new Vue({
     el: '#app',
     router,
     delimiters: ['${', '}'],
-    data:
-        {
+    data:{
         headers: [],
         sidebars: [],
         isCollapse: false,      // 是否折叠
         firstMenuIndex: '',    //一级菜单索引
-        editableTabsValue2: '2',
+        editableTabsValue2: '0',
         editableTabs2: [],
         tabIndex: 2,
-        activeNavIndex: 0
+        activeNavIndex: 0,
+        activeSideBar: ''
     },
     created() {
+        this.activeSideBar = new Local().get('activeSideBar')
+        this.editableTabsValue2 = new Local().get('activeTabs') || '0'
+        this.editableTabs2 = new Local().get('tabs') || []
+        this.activeNavIndex = new Local().get('activeNavIndex') || 0
         this.axios.get("/permissions").then(res => {
             this.headers = res.data.data;
-            this.getSideBars(0)
+            this.getSideBars(this.activeNavIndex)
         })
     },
     methods: {
@@ -58,13 +63,13 @@ const app = new Vue({
             this.firstMenuIndex = index
             this.activeNavIndex = index
 
+            new Local().set('activeNavIndex', index)
         },
         switchBar() {
             this.isCollapse = !this.isCollapse
         },
         addTab(targetName, routerName) {
             let newTabName = routerName;
-            console.log(newTabName)
             let path = `/${routerName.split('.').join('/')}`
             let isRepeat = false
             this.editableTabs2.forEach((item, index)=> {
@@ -78,10 +83,14 @@ const app = new Vue({
                     name: newTabName,
                     path: path
                 })
-                this.editableTabsValue2 = newTabName;
-            } else {
-                this.editableTabsValue2 = newTabName;
+
+                new Local().set('tabs', this.editableTabs2)
             }
+            this.activeSideBar = path
+            this.editableTabsValue2 = newTabName;
+            new Local().set('activeTabs', routerName)
+            new Local().set('activeSideBar', path)
+
         },
         removeTab(targetName) {
             let tabs = this.editableTabs2;
@@ -113,8 +122,10 @@ const app = new Vue({
             const filter = this.editableTabs2.filter(item => {
                 return item.name === val
             })
+            console.log(val)
             const path = filter[0].path
 
+            new Local().set('activeTabs', val)
             this.$router.push({ path: path})
         }
     },

@@ -141,7 +141,7 @@
         },
         created() {
             getUsers().then(res => {
-                this.tableData = res.data.data.data;s
+                this.tableData = res.data.data.data;
             }),
                 getRoles().then(res => {
                     if (res.data.response_status === "success") {

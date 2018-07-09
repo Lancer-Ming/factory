@@ -58,8 +58,8 @@
                                 :collapse-transition="false"
                                 :collapse="isCollapse"
                                 router
-                                :default-active="this.$route.path"
-                                :data-id="this.$route.path">
+                                :default-active="activeSideBar"
+                                >
                                 <el-submenu v-for="(item,index) in sidebars" :key="index" v-if="item.children.length > 0"
                                         :index="item.name" style="color: #fff;">
                                     <template slot="title">
