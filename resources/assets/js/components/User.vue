@@ -52,7 +52,7 @@
                     </div>
                 </template>
             </el-table-column>
-           
+
             <el-table-column
                     label="所属用户组"
                     align="center"
@@ -109,9 +109,6 @@
                 <el-form-item label="邮箱" :label-width="formLabelWidth">
                     <el-input v-model="form.email" auto-complete="off" style="width:250px;" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" :label-width="formLabelWidth">
-                    <el-input type="password" v-model="form.password" auto-complete="off" style="width:200px;" size="mini"></el-input>
-                </el-form-item>
                 <el-form-item label="所属用户组" :label-width="formLabelWidth">
                     <el-select v-model="form.role_id" multiple filterable placeholder="请选择" value-key="item">
                         <el-option
@@ -121,6 +118,10 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="性别" :label-width="formLabelWidth">
+                    <el-radio v-model="form.sex" :label="1">男</el-radio>
+                    <el-radio v-model="form.sex" :label="2">女</el-radio>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -144,7 +145,7 @@
                 form: {
                     username: "",
                     realname: "",
-                    sex: 1,
+                    sex: '1',
                     password: "",
                     role_id: [],
                     email: ""
@@ -256,12 +257,20 @@
                 } else {
                     addUser(this.form).then(res => {
                         if (res.data.response_status === 'success') {
-                            this.tableData = res.data.data.data
-                            this.$message({
-                                type: 'success',
-                                showClose: true,
-                                message: res.data.msg
-                            })
+                            this.tableData = res.data.data.users.data
+
+                            let username = res.data.data.userInfo['username']
+                            let password = res.data.data.userInfo['password']
+                            this.$alert(`用户名：${username}<br>密 &nbsp;&nbsp;码：${password}`, '用户信息', {
+                                confirmButtonText: '确定',
+                                dangerouslyUseHTMLString: true,
+                                callback: action => {
+                                    this.$message({
+                                        type: 'success',
+                                        message: res.data.msg
+                                    });
+                                }
+                            });
                         }
                         this.showForm = false
                     })

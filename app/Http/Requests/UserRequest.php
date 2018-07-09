@@ -32,7 +32,6 @@ class UserRequest extends FormRequest
                     'sex' => 'required|integer',
                     'email' => 'email|required|unique:users',
                     'role_id' => 'required',
-                    'password' => 'required|between:6,20'
                 ];
                 break;
             case "PATCH":
