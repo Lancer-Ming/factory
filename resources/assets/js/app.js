@@ -58,7 +58,9 @@ const app = new Vue({
     methods: {
 
         getSideBars(index){
-            this.sidebars = this.headers[index].children
+            this.$nextTick(() => {
+                this.sidebars = this.headers[index].children
+            })
             this.isCollapse = false
             this.firstMenuIndex = index
             this.activeNavIndex = index
@@ -86,10 +88,10 @@ const app = new Vue({
 
                 new Local().set('tabs', this.editableTabs2)
             }
-            this.activeSideBar = path
+            this.activeSideBar = routerName
             this.editableTabsValue2 = newTabName;
             new Local().set('activeTabs', routerName)
-            new Local().set('activeSideBar', path)
+            new Local().set('activeSideBar', routerName)
 
         },
         removeTab(targetName) {
@@ -126,6 +128,7 @@ const app = new Vue({
             const path = filter[0].path
 
             new Local().set('activeTabs', val)
+            this.activeSideBar = val
             this.$router.push({ path: path})
         }
     },
