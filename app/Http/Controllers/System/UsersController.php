@@ -12,7 +12,7 @@ class UsersController extends Controller
 {
     public function index()
     {
-        $users = User::with('roles')->paginate(10);
+        $users = User::with('roles')->orderBy('created_at', 'desc')->paginate(10);
         return successJson($users);
     }
 
@@ -28,9 +28,9 @@ class UsersController extends Controller
 
         $user->roles()->attach($request->role_id);
 
-        $user->roles = $user->roles;
-
-        return successJson($user, '操作成功！', 201);
+        // 重新查users列表
+        $users = User::with('roles')->orderBy('created_at', 'desc')->paginate(10);
+        return successJson($users, '操作成功！', 201);
     }
 
     public function edit(User $user)
@@ -65,18 +65,23 @@ class UsersController extends Controller
     public function destroy(Request $request)
     {
         $id = $request->id;
+
         // 删除多个
         if(is_array($id)) {
             User::destroy($id);
-            \DB('role_user')->whereIn('user_id', $id)->delete();
+            \DB::table('role_user')->whereIn('user_id', $id)->delete();
         } else {
+            $user = User::find($id);
             $user->delete();
             //获取先前的role_id
             $role_ids = $user->roles->pluck('id');
             // 删除以前中间表的role_id
             $user->roles()->detach($role_ids);
         }
-        return successJson('','删除成功！');
+
+        // 重新查users列表
+        $users = User::with('roles')->orderBy('created_at', 'desc')->paginate(10);
+        return successJson($users,'删除成功！');
     }
 
     public function getRoles()

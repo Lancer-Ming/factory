@@ -16,6 +16,7 @@
                 :data="tableData"
                 align
                 border
+                @selection-change="handleSelectionChange"
                 style="width: 100%">
 
             <el-table-column
@@ -132,7 +133,7 @@
 </template>
 
 <script>
-    import {getUsers, getRoles, updateUser, addUser} from "../api/user.js";
+    import {getUsers, getRoles, updateUser, addUser, destroyUser} from "../api/user.js";
     import {implode} from "../utils/common.js";
     export default {
         data() {
@@ -150,13 +151,14 @@
                 },
                 formLabelWidth: "100px",
                 options: [],
-                no: ''
+                no: '',
+                currentPage: 1,
+                multipleSelection: []
             };
         },
         created() {
-            getUsers().then(res => {
+            getUsers(this.currentPage).then(res => {
                 this.tableData = res.data.data.data;
-                console.log(this.tableData)
             }),
                 getRoles().then(res => {
                     if (res.data.response_status === "success") {
@@ -193,22 +195,48 @@
                 this.showForm = true;
             },
             handleDelete(index, row) {
-                console.log(row)
                 this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning',
                     center: true
                 }).then(() => {
-                    
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
+                    destroyUser(row.id, this.currentPage).then(res => {
+                        if (res.data.response_status === "success") {
+                            // 改变tableData
+                            this.tableData = res.data.data.data
+                            this.$message({
+                                type: 'success',
+                                showClose: true,
+                                message: res.data.msg
+                            })
+                        }
                     })
+                }).catch(() => {
+                    return
                 })
             },
             handleDeleteSeleted() {
+                this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    destroyUser(this.multipleSelection, this.currentPage).then(res => {
+                        if (res.data.response_status === "success") {
+                            // 改变tableData
+                            this.tableData = res.data.data.data
+                            this.$message({
+                                type: 'success',
+                                showClose: true,
+                                message: res.data.msg
+                            })
+                        }
+                    })
+                }).catch(() => {
+                    return
+                })
             },
             submitForm() {
                 if (this.formType === 'edit') {
@@ -221,7 +249,6 @@
                         })
                         this.tableData.forEach((elem, index) => {
                             if (elem.id == this.no) {
-                                console.log(index, res.data.data)
                                 this.$set(this.tableData, index, res.data.data)
                             }
                         })
@@ -229,21 +256,25 @@
                 } else {
                     addUser(this.form).then(res => {
                         if (res.data.response_status === 'success') {
+                            this.tableData = res.data.data.data
                             this.$message({
                                 type: 'success',
                                 showClose: true,
                                 message: res.data.msg
                             })
                         }
-                        this.tableData.push(res.data.data)
                         this.showForm = false
                     })
                 }
 
             },
+            handleSelectionChange(val) {
+                this.multipleSelection = implode(val, 'id')
+            },
             implode(arr, attr) {
                 return implode(arr, attr);
-            }
+            },
+
         },
     };
 </script>
