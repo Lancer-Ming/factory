@@ -1,9 +1,10 @@
-body,html{
+body, html {
   background: #efeff8;
   height: 100%;
   min-width: 1200px;
 }
-.clearfix:after{
+
+.clearfix:after {
   display: block;
   visibility: hidden;
   font-size: 0;
@@ -11,13 +12,23 @@ body,html{
   content: "";
   clear: both;
 }
-.clearfix{
+
+.clearfix {
   zoom: 1;
 }
 
 @media only screen and (min-width: 600px) {
   #app {
     height: 100%;
+  }
+
+  .index-main {
+    .container {
+      min-width: 100% !important;
+    }
+  }
+
+  .index-header {
     .logo-img {
       width: auto;
       height: 70px;
@@ -25,9 +36,7 @@ body,html{
       margin-top: -10px;
       float: left;
     }
-    .container{
-      min-width: 100%;
-    }
+
     .sidebar-f {
       float: left;
       padding-left: 10px;
@@ -41,143 +50,160 @@ body,html{
         cursor: pointer;
       }
     }
-    .index-header .sidebar-f .active{
-      background: #fff;
-      color: $header;
-    }
-    .sidebar-r{
+
+    .sidebar-r {
       width: 300px;
       float: right;
       color: #fff;
       font-size: 16px;
-      .home{
+      .home {
         float: left;
         margin-right: 10px;
         padding: 10px 10px 0px 10px;
-        i{
+        i {
           color: #fff;
           font-size: 18px;
           display: inline-block;
           margin-right: 5px;
           cursor: pointer;
         }
-        span{
+        span {
           color: #fff;
         }
       }
-      .user-h{
+      .user-h {
         float: left;
-        .tit-user{
+        .tit-user {
           width: 45px;
           height: 45px;
           margin-right: 10px;
         }
       }
     }
-    .take{
-          color: #fff;
-          font-size: 18px;
-          display: block;
-          text-align: center;
-          padding: 10px 0px;
-        }
-    el-submenu__title{
-          color: #fff;
-          &:hover{
-            background: #7d7d7d;
-            color: #fff;
-          }
-        }
-    .small-logo{
-          display: inline-block;
-          margin-right: 10px;
-          margin-left: 5px;
-          width: 16px;
-          color: #fff;
-        }
-        .tit-tab{
-          display: inline-block;
-          padding-right: 20px;
-          width: 135px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          color: #fff;
-        }
-      .el-menu{
-        border: none;
-      }
-      .el-menu-item, .el-menu-item{
-        background: $header;
+  }
+  .index-header .sidebar-f .active {
+    background: #fff;
+    color: $header;
+  }
+
+  // 左边菜单栏
+  .index-left {
+    .el-menu-item {
+      background: $header;
+      color: #fff;
+      &:hover {
+        background: #7d7d7d;
         color: #fff;
-        //&:active{
-        //  background: #7d7d7d;
-        //  color: #fff;
-        //}
-        //&:focus{
-        //  background: #7d7d7d;
-        //  color: #fff;
-        //}
       }
-      .el-tabs__item {
-        padding: 0px 15px;
-        margin-left: 6px;
-        margin-top: 0px;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        border: 1px solid #ccc;
+      &:focus {
+        background: #7d7d7d;
+        color: #fff;
       }
-      .el-tabs__item.is-top:last-child{
-         padding-right: 15px !important;
-       }
-      .el-tabs--top .el-tabs__item.is-top:nth-child(2) {
-        padding-left: 15px;
-      }
-      .el-tabs__active-bar{
-        background: none;
-        height: 0;
-      }
-      .el-tabs__item.is-active {
-        color: #000;
-        background: #fff;
-      }
+    }
 
+    .el-menu-item.is-active {
+      background: #7d7d7d;
+      color: #fff;
+    }
   }
-  .el-header.index-header, .el-footer {
-    background-color: $header;
-    color: #333;
+
+
+  .take {
+    color: #fff;
+    font-size: 18px;
+    display: block !important;
     text-align: center;
-    line-height: 40px;
+    padding: 10px 0px;
   }
-
-  .el-aside.index-left {
-    background-color: $header;
-    color: #333;
-    //text-align: center;
-    line-height: 200px;
+  el-submenu__title {
+    color: #fff;
+    &:hover {
+      background: #7d7d7d;
+      color: #fff;
+    }
+  }
+  .small-logo {
+    display: inline-block;
+    margin-right: 10px;
+    margin-left: 5px;
+    width: 16px;
+    color: #fff;
+  }
+  .tit-tab {
+    display: inline-block;
+    padding-right: 20px;
+    width: 135px;
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #fff;
+  }
+  .el-menu {
+    border: none;
   }
 
-  .el-main {
-    background-color: #efeff8;
-    color: #333;
-    //line-height: 160px;
-  }
 
-  body > .el-container {
-    margin-bottom: 40px;
-  }
 
-  //.el-container:nth-child(5) .el-aside,
-  //.el-container:nth-child(6) .el-aside {
-  //  line-height: 260px;
-  //}
-  //
-  //.el-container:nth-child(7) .el-aside {
-  //  line-height: 320px;
-  //}
+  .el-tabs__item {
+    padding: 0px 15px;
+    margin-left: 6px;
+    margin-top: 0px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  .el-tabs__item.is-top:last-child {
+    padding-right: 15px !important;
+  }
+  .el-tabs--top .el-tabs__item.is-top:nth-child(2) {
+    padding-left: 15px;
+  }
+  .el-tabs__active-bar {
+    background: none;
+    height: 0;
+  }
+  .el-tabs__item.is-active {
+    color: #000;
+    background: #fff;
+  }
 
 }
-@media only screen and (max-width: 600px) {}
+
+.el-header.index-header, .el-footer {
+  background-color: $header;
+  color: #333;
+  text-align: center;
+  line-height: 40px;
+}
+
+.el-aside.index-left {
+  background-color: $header;
+  color: #333;
+  //text-align: center;
+  line-height: 200px;
+  overflow: hidden;
+}
+
+.el-main {
+  background-color: #efeff8;
+  color: #333;
+  //line-height: 160px;
+}
+
+body > .el-container {
+  margin-bottom: 40px;
+}
+
+//.el-container:nth-child(5) .el-aside,
+//.el-container:nth-child(6) .el-aside {
+//  line-height: 260px;
+//}
+//
+//.el-container:nth-child(7) .el-aside {
+//  line-height: 320px;
+//}
+
+@media only screen and (max-width: 600px) {
+}
 
 

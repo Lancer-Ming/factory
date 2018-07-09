@@ -63,7 +63,8 @@ const app = new Vue({
             this.isCollapse = !this.isCollapse
         },
         addTab(targetName, routerName) {
-            let newTabName = ++this.tabIndex + '';
+            let newTabName = routerName;
+            console.log(newTabName)
             let path = `/${routerName.split('.').join('/')}`
             let isRepeat = false
             this.editableTabs2.forEach((item, index)=> {
@@ -77,9 +78,9 @@ const app = new Vue({
                     name: newTabName,
                     path: path
                 })
-
                 this.editableTabsValue2 = newTabName;
-
+            } else {
+                this.editableTabsValue2 = newTabName;
             }
         },
         removeTab(targetName) {
