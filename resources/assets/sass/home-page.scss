@@ -110,10 +110,14 @@ body,html{
       .el-menu-item, .el-menu-item{
         background: $header;
         color: #fff;
-        &:hover{
-          background: #7d7d7d;
-          color: #fff;
-        }
+        //&:active{
+        //  background: #7d7d7d;
+        //  color: #fff;
+        //}
+        //&:focus{
+        //  background: #7d7d7d;
+        //  color: #fff;
+        //}
       }
       .el-tabs__item {
         padding: 0px 15px;

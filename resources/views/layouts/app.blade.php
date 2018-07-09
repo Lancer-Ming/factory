@@ -59,7 +59,6 @@
                                 :collapse="isCollapse"
                                 router
                                 :default-active="this.$route.path"
-                                background-color="#333744"
                                 :data-id="this.$route.path">
                                 <el-submenu v-for="(item,index) in sidebars" :key="index" v-if="item.children.length > 0"
                                         :index="item.name" style="color: #fff;">
@@ -68,7 +67,7 @@
                                         <span slot="title" class="tit-tab" v-text="item.label"></span>
                                     </template>
                                     <div v-for="(child,child_index) in item.children" :key="child_index">
-                                        <el-menu-item style="color: #fff;" :index="`${firstMenuIndex.toString()}-${index.toString()}-${child_index.toString()}`" v-text="child.label" @click="addTab(child.label)"></el-menu-item>
+                                        <el-menu-item style="color: #fff;" :index="`${firstMenuIndex.toString()}-${index.toString()}-${child_index.toString()}`" v-text="child.label"  @click="addTab(child.label)"></el-menu-item>
                                     </div>
                                 </el-submenu>
                                 <el-menu-item v-for="(item,index) in sidebars" :key="index" v-if="item.children.length === 0"

@@ -57,7 +57,6 @@ const app = new Vue({
             this.isCollapse = false
             this.firstMenuIndex = index
             this.activeNavIndex = index
-            console.log(this.activeNavIndex)
 
         },
         switchBar() {
@@ -118,9 +117,6 @@ const app = new Vue({
             this.$router.push({ path: path})
         }
     },
-    // changeNavIndex(index) {
-    //
-    // }
 });
 
 // $(document).ready(function(){
