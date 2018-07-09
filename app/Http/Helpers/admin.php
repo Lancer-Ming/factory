@@ -16,5 +16,10 @@ function failJson($msg='', $status=401)
         'response_status' => 'fail',
         'msg' => $msg
     ], $status);
+}
 
+
+function createRandomPwd()
+{
+    return str_pad(random_int(1, 99999), 6, 0, STR_PAD_LEFT);
 }

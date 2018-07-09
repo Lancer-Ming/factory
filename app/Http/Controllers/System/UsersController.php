@@ -18,19 +18,22 @@ class UsersController extends Controller
 
     public function store(UserRequest $request)
     {
+        $password = createRandomPwd();
         $user = User::create([
             'username' => $request->username,
             'realname' => $request->realname,
             'sex' => $request->sex,
             'email' => $request->email,
-            'password' => bcrypt($request->password)
+            'password' => bcrypt($password)
         ]);
 
         $user->roles()->attach($request->role_id);
 
         // 重新查users列表
         $users = User::with('roles')->orderBy('created_at', 'desc')->paginate(10);
-        return successJson($users, '操作成功！', 201);
+        $data['users'] = $users;
+        $data['userInfo'] = ['username'=> $request->username, 'password'=> $password];
+        return successJson($data, '操作成功！', 201);
     }
 
     public function edit(User $user)
