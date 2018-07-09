@@ -27,7 +27,7 @@
         <el-header class="index-header">
             <img src="/static/img/logo2.png" class="logo-img clearfix" alt="">
             <ul class="sidebar-f">
-                <li v-for="(header,index) in headers" :key="index" v-text="header.label" @click="getSideBars(index)"></li>
+                <li :class="{ active: index === activeNavIndex }" v-for="(header,index) in headers" :key="index" v-text="header.label" @click="getSideBars(index)"></li>
             </ul>
             <div class="sidebar-r">
                 <div class="home">
