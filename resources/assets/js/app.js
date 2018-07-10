@@ -36,36 +36,34 @@ const app = new Vue({
     router,
     delimiters: ['${', '}'],
     data:{
-        headers: [],
-        sidebars: [],
+        headers: [],    // 导航头
+        sidebars: [],   // 侧边栏
         isCollapse: false,      // 是否折叠
-        tabsValue: '0',
-        tabs: [],
-        tabIndex: 2,
-        activeNavIndex: 0,
-        activeSideBar: '',
-        recordTabsWithHeader: {}
+        tabsValue: '0', // 标签值
+        tabs: [],       // 标签数组对象
+        activeNavIndex: 0,  // active 导航
+        activeSideBar: '',  // active 侧边栏
+        recordTabsWithHeader: {},   // 表示记录标签和头的关系
+        isInit: false   // 是否刷新初始化
     },
     created() {
-        this.activeSideBar = new Local().get('activeSideBar')
-        this.tabsValue = new Local().get('activeTabs') || '0'
-        this.tabs = new Local().get('tabs') || []
-        this.activeNavIndex = new Local().get('activeNavIndex') || 0
-        this.recordTabsWithHeader = new Local().get('recordTabsWithHeader') || {}
-    
+        this.initLocal()
 
         this.axios.get("/permissions").then(res => {
             this.headers = res.data.data;
+            if (this.activeSideBar) {
+                this.getSideBars(this.recordTabsWithHeader[this.activeSideBar])
+            }
             this.getSideBars(this.activeNavIndex)
         })
+
+        this.isInit = true
     },
     methods: {
 
         getSideBars(index){
-         
-                console.log(this.headers[index].children)
-                this.sidebars = this.headers[index].children
-   
+
+            this.sidebars = this.headers[index].children
             this.isCollapse = false
             this.activeNavIndex = index
 
@@ -126,6 +124,13 @@ const app = new Vue({
             let form = document.querySelector('.logout');
             form.submit();
         },
+        initLocal() {
+            this.activeSideBar = new Local().get('activeSideBar')
+            this.tabsValue = new Local().get('activeTabs') || '0'
+            this.tabs = new Local().get('tabs') || []
+            this.activeNavIndex = new Local().get('activeNavIndex') || 0
+            this.recordTabsWithHeader = new Local().get('recordTabsWithHeader') || {}
+        },
         implode(arr, attr) {
             return implode(arr, attr);
         }
@@ -137,16 +142,16 @@ const app = new Vue({
             })
          
             const path = filter[0].path
-            
+
             // 将currentActiveTab 存到LocalStorage里
             new Local().set('activeTabs', val)
-            
-            // 使对应的header高亮并且跳转
-            if (this.recordTabsWithHeader[val] === this.activeNavIndex) return   //如果还是当前的就不用获取了
 
-            this.getSideBars(this.recordTabsWithHeader[val])
-            
-          
+            if (!this.isInit) {     // 如果是刷新了页面，这个就不用再次获取了。
+                this.getSideBars(this.recordTabsWithHeader[val])
+            }
+
+            this.isInit = false
+
             // 并且路由跳转
             this.$router.push({ path: path})
         }
