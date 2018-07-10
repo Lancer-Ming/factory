@@ -19,17 +19,27 @@ Route::middleware(['auth','role','header'])->group(function() {
 
     Route::namespace('System')->group(function() {
 
+        // 权限菜单
         Route::prefix('permissions')->as('system.permission.')->group(function() {
             Route::get('/', 'PermissionsController@index')->name('index');
             Route::get('/{permission}/getsidebars', 'PermissionsController@getSideBars')->name('getsidebars');
         });
 
+        // 用户
         Route::prefix('user')->as('system.user.')->group(function() {
             Route::get('/', 'UsersController@index')->name('index');
             Route::get('/get_roles', 'UsersController@getRoles')->name('get_roles');
             Route::post('/', 'UsersController@store')->name('store');
             Route::get('/{user}', 'UsersController@edit')->name('edit');
             Route::patch('/{user}', 'UsersController@update')->name('update');
+            Route::delete('/', 'UsersController@destroy')->name('destroy');
+        });
+
+        // 用户组
+        Route::prefix('role')->as('system.role.')->group(function() {
+            Route::get('/', 'RolesController@index')->name('index');
+            Route::post('/', 'RolesController@store')->name('store');
+            Route::patch('/{role}', 'RolesController@update')->name('update');
             Route::delete('/', 'UsersController@destroy')->name('destroy');
         });
 

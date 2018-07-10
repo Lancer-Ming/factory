@@ -64,9 +64,9 @@
                                 :collapse="isCollapse"
                                 default-active='false'
                                 :unique-opened="true"
-                                :default-openeds="['/statistics/unit']"
-                                router
-                        >
+                                :default-openeds="currentOpenMenuName"
+                                @open="openSubMenu"
+                                router>
                             <el-submenu v-for="(item,index) in sidebars" :key="index" v-if="item.children.length > 0"
                                     :index="`/${item.name.split('.').join('/')}`" style="color: #fff;"
                                     :data-id="`/${item.name.split('.').join('/')}`"

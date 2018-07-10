@@ -44,7 +44,8 @@ const app = new Vue({
         activeNavIndex: 0,  // active 导航
         activeSideBar: '',  // active 侧边栏
         recordTabsWithHeader: {},   // 表示记录标签和头的关系
-        isInit: false   // 是否刷新初始化
+        isInit: false,   // 是否刷新初始化
+        currentOpenMenuName: []
     },
     created() {
         this.initLocal()
@@ -62,7 +63,7 @@ const app = new Vue({
     methods: {
 
         getSideBars(index){
-
+            console.log(index)
             this.sidebars = this.headers[index].children
             this.isCollapse = false
             this.activeNavIndex = index
@@ -130,6 +131,11 @@ const app = new Vue({
             this.tabs = new Local().get('tabs') || []
             this.activeNavIndex = new Local().get('activeNavIndex') || 0
             this.recordTabsWithHeader = new Local().get('recordTabsWithHeader') || {}
+            this.currentOpenMenuName = new Local().get('currentOpenMenuName') || []
+        },
+        openSubMenu(index) {
+            this.currentOpenMenuName[0] = index
+            new Local().set('currentOpenMenuName',  this.currentOpenMenuName)
         },
         implode(arr, attr) {
             return implode(arr, attr);
@@ -151,6 +157,7 @@ const app = new Vue({
             }
 
             this.isInit = false
+            this.activeSideBar = val
 
             // 并且路由跳转
             this.$router.push({ path: path})
