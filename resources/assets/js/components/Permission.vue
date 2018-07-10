@@ -1,295 +1,146 @@
 <template>
     <div class="container">
-        <el-row style="padding: 10px;">
-            <el-button
-                    size="mini"
-                    type="primary"
-                    @click="handleAdd">新增
-            </el-button>
-            <el-button
-                    size="mini"
-                    type="danger"
-                    @click="handleDeleteSeleted">删除
-            </el-button>
-        </el-row>
-        <el-table
-                :data="tableData"
-                align
-                border
-                @selection-change="handleSelectionChange"
-                style="width: 100%">
-
-            <el-table-column
-                    type="selection"
-                    width="55">
-            </el-table-column>
-            <el-table-column
-                    label="编号"
-                    align="center"
-                    width="100">
-                <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.id }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="用户名"
-                    align="center"
-                    width="100">
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ scope.row.username }}</el-tag>
-                    </div>
-                </template>
-            </el-table-column>
-
-            <el-table-column
-                    label="真实姓名"
-                    align="center"
-                    width="100">
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ scope.row.realname }}</el-tag>
-                    </div>
-                </template>
-            </el-table-column>
-
-            <el-table-column
-                    label="所属用户组"
-                    align="center"
-                    width="300">
-                <template slot-scope="scope">
-                    <el-tag size="medium">{{ implode(scope.row.roles, 'name').join(',') }}</el-tag>
-                </template>
-            </el-table-column>
-
-            <el-table-column
-                    label="邮箱"
-                    align="center"
-                    width="200">
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ scope.row.email }}</el-tag>
-                    </div>
-                </template>
-            </el-table-column>
-
-            <el-table-column
-                    label="创建时间"
-                    align="center"
-                    width="300">
-                <template slot-scope="scope">
-                    <i class="el-icon-time"></i> <span style="margin-left: 10px">{{ scope.row.created_at }}</span>
-                </template>
-            </el-table-column>
-
-            <el-table-column label="操作" align="center" width="400">
-                <template slot-scope="scope">
-                    <el-button
-                            size="mini"
-                            type="info"
-                            @click="handleEdit(scope.$index, scope.row)">编辑
-                    </el-button>
-                    <el-button
-                            size="mini"
-                            type="danger"
-                            @click="handleDelete(scope.$index, scope.row)">删除
-                    </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-
-        <el-dialog title="用户信息" :visible.sync="showForm" width="22%">
-            <el-form :model="form">
-                <el-form-item label="用户名" :label-width="formLabelWidth">
-                    <el-input v-model="form.username" auto-complete="off" style="width:200px;" size="mini"></el-input>
-                </el-form-item>
-                <el-form-item label="真实姓名" :label-width="formLabelWidth">
-                    <el-input v-model="form.realname" auto-complete="off" style="width:200px;" size="mini"></el-input>
-                </el-form-item>
-                <el-form-item label="邮箱" :label-width="formLabelWidth">
-                    <el-input v-model="form.email" auto-complete="off" style="width:250px;" size="mini"></el-input>
-                </el-form-item>
-                <el-form-item label="所属用户组" :label-width="formLabelWidth">
-                    <el-select v-model="form.role_id" multiple filterable placeholder="请选择" value-key="item">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="性别" :label-width="formLabelWidth">
-                    <el-radio v-model="form.sex" :label="1">男</el-radio>
-                    <el-radio v-model="form.sex" :label="2">女</el-radio>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="showForm = false">取 消</el-button>
-                <el-button type="primary" @click="submitForm">确 定</el-button>
-            </div>
-        </el-dialog>
-
+        <el-tree
+                :data="data6"
+                node-key="id"
+                :default-expand-all="false"
+                @node-drag-start="handleDragStart"
+                @node-drag-enter="handleDragEnter"
+                @node-drag-leave="handleDragLeave"
+                @node-drag-over="handleDragOver"
+                @node-drag-end="handleDragEnd"
+                @node-drop="handleDrop"
+                draggable
+                :allow-drop="allowDrop"
+                :allow-drag="allowDrag">
+        </el-tree>
     </div>
 </template>
-
 <script>
-    import {getUsers, getRoles, updateUser, addUser, destroyUser} from "../api/user.js";
-    import {implode} from "../utils/common.js";
     export default {
         data() {
             return {
-                tableData: [],
-                showForm: false,
-                formType: '',
-                form: {
-                    username: "",
-                    realname: "",
-                    sex: '1',
-                    password: "",
-                    role_id: [],
-                    email: ""
+                data6: [{
+                    id: 1,
+                    label: '企业人员库',
+                    children: [{
+                        id: 8,
+                        label: '建筑工人库',
+                        children:[{
+                            id: 17,
+                            label: '新增',
+                        },{
+                            id: 18,
+                            label: '保存',
+                        },{
+                            id: 19,
+                            label: '编辑',
+                        },{
+                            id: 20,
+                            label: '更新',
+                        },{
+                            id: 21,
+                            label: '删除',
+                        }]
+                    },{
+                        id: 9,
+                        label: '管理人员库',
+                        children: [{
+                                id: 22,
+                                label: '新增',
+                            },{
+                                id: 23,
+                                label: '保存',
+                            },{
+                                id: 24,
+                                label: '编辑',
+                            },{
+                                id: 25,
+                                label: '更新',
+                            },{
+                                id: 26,
+                                label: '删除',
+                            }]
+
+                    },{
+                        id: 10,
+                        label: '实名制统计',
+                        children: [{
+                            id: 27,
+                            label: '新增',
+                        },{
+                            id: 28,
+                            label: '保存',
+                        },{
+                            id: 29,
+                            label: '编辑',
+                        },{
+                            id: 30,
+                            label: '更新',
+                        },{
+                            id: 31,
+                            label: '删除',
+                        }]
+                    },{
+                        id: 11,
+                        label: '企业管理'
+                    },{
+                        id: 12,
+                         label: '部门管理'
+            }]
+                }, {
+                    id: 2,
+                    label: '项目管理',
+                    children: [{
+                        id: 13,
+                        label: '现场管理'
+                    }, {
+                        id: 14,
+                        label: '花名册'
+                    },{
+                        id: 15,
+                        label: '同步市级配置'
+                    },{
+                        id: 16,
+                        label: '培训管理'
+                    }]
                 },
-                formLabelWidth: "100px",
-                options: [],
-                no: '',
-                currentPage: 1,
-                multipleSelection: []
+                    ],
+                defaultProps: {
+                    children: 'children',
+                    label: 'label'
+                }
             };
         },
-        created() {
-            getUsers(this.currentPage).then(res => {
-                this.tableData = res.data.data.data;
-            }),
-                getRoles().then(res => {
-                    if (res.data.response_status === "success") {
-                        this.options = res.data.data;
-                    }
-                })
-        },
         methods: {
-            handleEdit(index, row) {
-                // 给表单赋值
-                this.formType = 'edit'
-                this.form = {
-                    username: row.username,
-                    realname: row.realname,
-                    sex: row.sex,
-                    password: "",
-                    email: row.email
-                };
-                this.$set(this.form, 'role_id', implode(row.roles, 'id'))
-                this.showForm = true;
-                this.no = row.id
+            handleDragStart(node, ev) {
+                console.log('drag start', node);
             },
-            handleAdd() {
-                // 重新初始化表单
-                this.formType = 'add'
-                this.form = {
-                    username: "",
-                    realname: "",
-                    sex: 1,
-                    password: "",
-                    role_id: [],
-                    email: ""
-                };
-                this.showForm = true;
+            handleDragEnter(draggingNode, dropNode, ev) {
+                console.log('tree drag enter: ', dropNode.label);
             },
-            handleDelete(index, row) {
-                this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning',
-                    center: true
-                }).then(() => {
-                    destroyUser(row.id, this.currentPage).then(res => {
-                        if (res.data.response_status === "success") {
-                            // 改变tableData
-                            this.tableData = res.data.data.data
-                            this.$message({
-                                type: 'success',
-                                showClose: true,
-                                message: res.data.msg
-                            })
-                        }
-                    })
-                }).catch(() => {
-                    return
-                })
+            handleDragLeave(draggingNode, dropNode, ev) {
+                console.log('tree drag leave: ', dropNode.label);
             },
-            handleDeleteSeleted() {
-                this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning',
-                    center: true
-                }).then(() => {
-                    destroyUser(this.multipleSelection, this.currentPage).then(res => {
-                        if (res.data.response_status === "success") {
-                            // 改变tableData
-                            this.tableData = res.data.data.data
-                            this.$message({
-                                type: 'success',
-                                showClose: true,
-                                message: res.data.msg
-                            })
-                        }
-                    })
-                }).catch(() => {
-                    return
-                })
+            handleDragOver(draggingNode, dropNode, ev) {
+                console.log('tree drag over: ', dropNode.label);
             },
-            submitForm() {
-                if (this.formType === 'edit') {
-                    updateUser(this.no, this.form).then(res => {
-                        this.showForm = false
-                        this.$message({
-                            type: 'success',
-                            showClose: true,
-                            message: res.data.msg
-                        })
-                        this.tableData.forEach((elem, index) => {
-                            if (elem.id == this.no) {
-                                this.$set(this.tableData, index, res.data.data)
-                            }
-                        })
-                    })
+            handleDragEnd(draggingNode, dropNode, dropType, ev) {
+                console.log('tree drag end: ', dropNode && dropNode.label, dropType);
+            },
+            handleDrop(draggingNode, dropNode, dropType, ev) {
+                console.log('tree drop: ', dropNode.label, dropType);
+            },
+            allowDrop(draggingNode, dropNode, type) {
+                if (dropNode.data.label === '二级 3-1') {
+                    return type !== 'inner';
                 } else {
-                    addUser(this.form).then(res => {
-                        if (res.data.response_status === 'success') {
-                            this.tableData = res.data.data.users.data
-
-                            let username = res.data.data.userInfo['username']
-                            let password = res.data.data.userInfo['password']
-                            this.$alert(`用户名：${username}<br>密 &nbsp;&nbsp;码：${password}`, '用户信息', {
-                                confirmButtonText: '确定',
-                                dangerouslyUseHTMLString: true,
-                                callback: action => {
-                                    this.$message({
-                                        type: 'success',
-                                        message: res.data.msg
-                                    });
-                                }
-                            });
-                        }
-                        this.showForm = false
-                    })
+                    return true;
                 }
-
             },
-            handleSelectionChange(val) {
-                this.multipleSelection = implode(val, 'id')
-            },
-            implode(arr, attr) {
-                return implode(arr, attr);
-            },
-
-        },
+            allowDrag(draggingNode) {
+                return draggingNode.data.label.indexOf('三级 3-2-2') === -1;
+            }
+        }
     };
 </script>
-
-<style scoped>
-    .el-form-item {
-        margin-bottom: 0px;
-    }
-</style>

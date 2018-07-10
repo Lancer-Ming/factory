@@ -62,29 +62,10 @@
             </el-table-column>
         </el-table>
 
-        <el-dialog title="用户信息" :visible.sync="showForm" width="22%">
+        <el-dialog title="用户组" :visible.sync="showForm" width="22%">
             <el-form :model="form">
-                <el-form-item label="用户名" :label-width="formLabelWidth">
+                <el-form-item label="用户组名" :label-width="formLabelWidth">
                     <el-input v-model="form.username" auto-complete="off" style="width:200px;" size="mini"></el-input>
-                </el-form-item>
-                <el-form-item label="真实姓名" :label-width="formLabelWidth">
-                    <el-input v-model="form.realname" auto-complete="off" style="width:200px;" size="mini"></el-input>
-                </el-form-item>
-                <el-form-item label="邮箱" :label-width="formLabelWidth">
-                    <el-input v-model="form.email" auto-complete="off" style="width:250px;" size="mini"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" :label-width="formLabelWidth">
-                    <el-input type="password" v-model="form.password" auto-complete="off" style="width:200px;" size="mini"></el-input>
-                </el-form-item>
-                <el-form-item label="所属用户组" :label-width="formLabelWidth">
-                    <el-select v-model="form.role_id" multiple filterable placeholder="请选择" value-key="item">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -97,7 +78,7 @@
 </template>
 
 <script>
-    import { getUsers, getRoles, updateUser } from "../api/user.js";
+    import {  getRoles, updateUser } from "../api/user.js";
     import { implode } from "../utils/common.js";
     export default {
         data() {
@@ -118,7 +99,7 @@
             };
         },
         created() {
-            getUsers().then(res => {
+            getRoles().then(res => {
                 this.tableData = res.data.data.data;
             }),
                 getRoles().then(res => {
