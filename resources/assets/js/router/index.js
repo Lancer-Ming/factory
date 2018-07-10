@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import User from '../components/User.vue'
 import Role from '../components/Role.vue'
 import Auth from '../components/Auth.vue'
+import Permission from '../components/Permission.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -22,6 +23,11 @@ const router = new Router({
                 name: 'auth',
                 component: Auth
             }]
+        },
+        {
+            path: '/system/permission/index',
+            name: 'permission',
+            component: Permission
         }
     ]
 })

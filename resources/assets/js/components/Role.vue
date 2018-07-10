@@ -20,34 +20,16 @@
             </el-table-column>
             <el-table-column
                     label="编号"
+                    align="center"
                     width="100">
                 <template slot-scope="scope">
-                    <i class="el-icon-time"></i>
+                    <!--<i class="el-icon-time"></i>-->
                     <span style="margin-left: 10px">{{ scope.row.id }}</span>
                 </template>
             </el-table-column>
             <el-table-column
-                    label="角色名"
-                    width="100">
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ scope.row.username }}</el-tag>
-                    </div>
-                </template>
-            </el-table-column>
-
-            <el-table-column
-                    label="角色描述"
-                    width="100">
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ scope.row.realname }}</el-tag>
-                    </div>
-                </template>
-            </el-table-column>
-
-            <el-table-column
-                    label="所属用户组"
+                    label="用户组名"
+                    align="center"
                     width="300">
                 <template slot-scope="scope">
                     <el-tag size="medium">{{ implode(scope.row.roles, 'name').join(',') }}</el-tag>
@@ -56,6 +38,7 @@
 
             <el-table-column
                     label="创建时间"
+                    align="center"
                     width="300">
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
@@ -63,17 +46,12 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="操作" width="500">
+            <el-table-column label="操作" align="center" width="500">
                 <template slot-scope="scope">
                     <el-button
                             size="mini"
                             type="info"
                             @click="handleEdit(scope.$index, scope.row)">编辑
-                    </el-button>
-                    <el-button
-                        size="mini"
-                        type="info"
-                        @click="handleEdit(scope.$index, scope.row)">分配权限
                     </el-button>
                     <el-button
                             size="mini"
