@@ -15,6 +15,7 @@ import { Message } from 'element-ui'
 import { MessageBox } from 'element-ui';
 import axios from 'axios'
 import router from './router/index'
+import { implode } from "./utils/common.js";
 
 Vue.use(ElementUI)
 Vue.prototype.$ = $
@@ -38,18 +39,21 @@ const app = new Vue({
         headers: [],
         sidebars: [],
         isCollapse: false,      // 是否折叠
-        firstMenuIndex: '',    //一级菜单索引
-        editableTabsValue2: '0',
-        editableTabs2: [],
+        tabsValue: '0',
+        tabs: [],
         tabIndex: 2,
         activeNavIndex: 0,
-        activeSideBar: ''
+        activeSideBar: '',
+        recordTabsWithHeader: {}
     },
     created() {
         this.activeSideBar = new Local().get('activeSideBar')
-        this.editableTabsValue2 = new Local().get('activeTabs') || '0'
-        this.editableTabs2 = new Local().get('tabs') || []
+        this.tabsValue = new Local().get('activeTabs') || '0'
+        this.tabs = new Local().get('tabs') || []
         this.activeNavIndex = new Local().get('activeNavIndex') || 0
+        this.recordTabsWithHeader = new Local().get('recordTabsWithHeader') || {}
+    
+
         this.axios.get("/permissions").then(res => {
             this.headers = res.data.data;
             this.getSideBars(this.activeNavIndex)
@@ -58,11 +62,11 @@ const app = new Vue({
     methods: {
 
         getSideBars(index){
-            this.$nextTick(() => {
+         
+                console.log(this.headers[index].children)
                 this.sidebars = this.headers[index].children
-            })
+   
             this.isCollapse = false
-            this.firstMenuIndex = index
             this.activeNavIndex = index
 
             new Local().set('activeNavIndex', index)
@@ -74,29 +78,33 @@ const app = new Vue({
             let newTabName = routerName;
             let path = `/${routerName.split('.').join('/')}`
             let isRepeat = false
-            this.editableTabs2.forEach((item, index)=> {
+            this.tabs.forEach((item, index)=> {
                 if (item.title === targetName) {
                     isRepeat = true
                 }
             })
             if (!isRepeat) {
-                this.editableTabs2.push({
+                this.tabs.push({
                     title: targetName,
                     name: newTabName,
                     path: path
                 })
 
-                new Local().set('tabs', this.editableTabs2)
+                new Local().set('tabs', this.tabs)
             }
             this.activeSideBar = routerName
-            this.editableTabsValue2 = newTabName;
+            this.tabsValue = newTabName;
             new Local().set('activeTabs', routerName)
             new Local().set('activeSideBar', routerName)
 
+            // 对tabs的name和header的index进行关联
+            this.recordTabsWithHeader[routerName] = this.activeNavIndex
+            new Local().set('recordTabsWithHeader', this.recordTabsWithHeader)
+
         },
         removeTab(targetName) {
-            let tabs = this.editableTabs2;
-            let activeName = this.editableTabsValue2;
+            let tabs = this.tabs;
+            let activeName = this.tabsValue;
             if (activeName === targetName) {
                 tabs.forEach((tab, index) => {
                     if (tab.name === targetName) {
@@ -108,8 +116,8 @@ const app = new Vue({
                 });
             }
 
-            this.editableTabsValue2 = activeName;
-            this.editableTabs2 = tabs.filter(tab => tab.name !== targetName);
+            this.tabsValue = activeName;
+            this.tabs = tabs.filter(tab => tab.name !== targetName);
         },
         handleClick: function (tab, event) {
 
@@ -117,25 +125,30 @@ const app = new Vue({
         logout() {
             let form = document.querySelector('.logout');
             form.submit();
+        },
+        implode(arr, attr) {
+            return implode(arr, attr);
         }
     },
     watch: {
-        editableTabsValue2(val) {
-            const filter = this.editableTabs2.filter(item => {
+        tabsValue(val) {
+            const filter = this.tabs.filter(item => {
                 return item.name === val
             })
-            console.log(val)
+         
             const path = filter[0].path
-
+            
+            // 将currentActiveTab 存到LocalStorage里
             new Local().set('activeTabs', val)
-            this.activeSideBar = val
+            
+            // 使对应的header高亮并且跳转
+            if (this.recordTabsWithHeader[val] === this.activeNavIndex) return   //如果还是当前的就不用获取了
+
+            this.getSideBars(this.recordTabsWithHeader[val])
+            
+          
+            // 并且路由跳转
             this.$router.push({ path: path})
         }
     },
 });
-
-// $(document).ready(function(){
-// //     $(".input-new-tag").click(function(){
-// //
-//     })
-// })

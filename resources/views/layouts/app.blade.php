@@ -27,7 +27,7 @@
         <el-header class="index-header">
             <img src="/static/img/logo2.png" class="logo-img clearfix" alt="">
             <ul class="sidebar-f">
-                <li :class="{ active: index === activeNavIndex }" v-for="(header,index) in headers" :key="index" v-text="header.label" @click="getSideBars(index)"></li>
+                <li :class="{ active: index === activeNavIndex }" :data-id="implode(header.children, 'name')" v-for="(header,index) in headers" :key="index" v-text="header.label" @click="getSideBars(index)"></li>
             </ul>
             <div class="sidebar-r">
                 <div class="home">
@@ -57,21 +57,24 @@
                         <el-menu class="el-menu-vertical-demo" style="color: #fff;"
                                 :collapse-transition="false"
                                 :collapse="isCollapse"
+                                default-active='false'
                                 router
-                                :default-active="activeSideBar"
                                 >
                                 <el-submenu v-for="(item,index) in sidebars" :key="index" v-if="item.children.length > 0"
-                                        :index="item.name" style="color: #fff;">
+                                        :index="item.name" style="color: #fff;"
+                                        :class="{'is-highlight': item.name === tabsValue}"
+                                        >
                                     <template slot="title">
                                         <i :class="`small-logo fa fa-${item.icon}`"></i>
                                         <span slot="title" class="tit-tab" v-text="item.label"></span>
                                     </template>
                                     <div v-for="(child,child_index) in item.children" :key="child_index">
-                                        <el-menu-item style="color: #fff;" :data-id="`${firstMenuIndex.toString()}-${index.toString()}-${child_index.toString()}`" :index="`${firstMenuIndex.toString()}-${index.toString()}-${child_index.toString()}`" v-text="child.label"  @click="addTab(child.label)"></el-menu-item>
+                                        <el-menu-item style="color: #fff;" :data-id="`${activeNavIndex.toString()}-${index.toString()}-${child_index.toString()}`" :index="`${activeNavIndex.toString()}-${index.toString()}-${child_index.toString()}`" v-text="child.label"  @click="addTab(child.label)"></el-menu-item>
                                     </div>
                                 </el-submenu>
                                 <el-menu-item v-for="(item,index) in sidebars" :key="index" v-if="item.children.length === 0"
                                         :index="item.name"
+                                        :class="{'is-highlight': item.name === tabsValue}"
                                         :data-id="item.name">
                                     <i :class="`small-logo fa fa-${item.icon}`" style="color: #fff;"></i>
                                     <span slot="title" class="tit-tab" v-text="item.label" @click="addTab(item.label, item.name)"></span>
@@ -83,9 +86,9 @@
             </el-aside>
             <el-container>
                 <el-main class="index-main">
-                    <el-tabs v-model="editableTabsValue2" type="card" closable @tab-remove="removeTab" @tab-click="handleClick">
+                    <el-tabs v-model="tabsValue" type="card" closable @tab-remove="removeTab" @tab-click="handleClick">
                         <el-tab-pane
-                                v-for="(item, index) in editableTabs2"
+                                v-for="(item, index) in tabs"
                                 :key="item.name"
                                 :label="item.title"
                                 :name="item.name"
