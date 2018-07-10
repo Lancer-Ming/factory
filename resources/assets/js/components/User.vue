@@ -16,6 +16,7 @@
                 :data="tableData"
                 align
                 border
+                @selection-change="handleSelectionChange"
                 style="width: 100%">
 
             <el-table-column
@@ -51,7 +52,7 @@
                     </div>
                 </template>
             </el-table-column>
-           
+
             <el-table-column
                     label="所属用户组"
                     align="center"
@@ -108,9 +109,6 @@
                 <el-form-item label="邮箱" :label-width="formLabelWidth">
                     <el-input v-model="form.email" auto-complete="off" style="width:250px;" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" :label-width="formLabelWidth">
-                    <el-input type="password" v-model="form.password" auto-complete="off" style="width:200px;" size="mini"></el-input>
-                </el-form-item>
                 <el-form-item label="所属用户组" :label-width="formLabelWidth">
                     <el-select v-model="form.role_id" multiple filterable placeholder="请选择" value-key="item">
                         <el-option
@@ -120,6 +118,10 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="性别" :label-width="formLabelWidth">
+                    <el-radio v-model="form.sex" :label="1">男</el-radio>
+                    <el-radio v-model="form.sex" :label="2">女</el-radio>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -132,7 +134,7 @@
 </template>
 
 <script>
-    import {getUsers, getRoles, updateUser, addUser} from "../api/user.js";
+    import {getUsers, getRoles, updateUser, addUser, destroyUser} from "../api/user.js";
     import {implode} from "../utils/common.js";
     export default {
         data() {
@@ -143,20 +145,21 @@
                 form: {
                     username: "",
                     realname: "",
-                    sex: 1,
+                    sex: '1',
                     password: "",
                     role_id: [],
                     email: ""
                 },
                 formLabelWidth: "100px",
                 options: [],
-                no: ''
+                no: '',
+                currentPage: 1,
+                multipleSelection: []
             };
         },
         created() {
-            getUsers().then(res => {
+            getUsers(this.currentPage).then(res => {
                 this.tableData = res.data.data.data;
-                console.log(this.tableData)
             }),
                 getRoles().then(res => {
                     if (res.data.response_status === "success") {
@@ -193,22 +196,48 @@
                 this.showForm = true;
             },
             handleDelete(index, row) {
-                console.log(row)
                 this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning',
                     center: true
                 }).then(() => {
-                    
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
+                    destroyUser(row.id, this.currentPage).then(res => {
+                        if (res.data.response_status === "success") {
+                            // 改变tableData
+                            this.tableData = res.data.data.data
+                            this.$message({
+                                type: 'success',
+                                showClose: true,
+                                message: res.data.msg
+                            })
+                        }
                     })
+                }).catch(() => {
+                    return
                 })
             },
             handleDeleteSeleted() {
+                this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    destroyUser(this.multipleSelection, this.currentPage).then(res => {
+                        if (res.data.response_status === "success") {
+                            // 改变tableData
+                            this.tableData = res.data.data.data
+                            this.$message({
+                                type: 'success',
+                                showClose: true,
+                                message: res.data.msg
+                            })
+                        }
+                    })
+                }).catch(() => {
+                    return
+                })
             },
             submitForm() {
                 if (this.formType === 'edit') {
@@ -221,7 +250,6 @@
                         })
                         this.tableData.forEach((elem, index) => {
                             if (elem.id == this.no) {
-                                console.log(index, res.data.data)
                                 this.$set(this.tableData, index, res.data.data)
                             }
                         })
@@ -229,21 +257,33 @@
                 } else {
                     addUser(this.form).then(res => {
                         if (res.data.response_status === 'success') {
-                            this.$message({
-                                type: 'success',
-                                showClose: true,
-                                message: res.data.msg
-                            })
+                            this.tableData = res.data.data.users.data
+
+                            let username = res.data.data.userInfo['username']
+                            let password = res.data.data.userInfo['password']
+                            this.$alert(`用户名：${username}<br>密 &nbsp;&nbsp;码：${password}`, '用户信息', {
+                                confirmButtonText: '确定',
+                                dangerouslyUseHTMLString: true,
+                                callback: action => {
+                                    this.$message({
+                                        type: 'success',
+                                        message: res.data.msg
+                                    });
+                                }
+                            });
                         }
-                        this.tableData.push(res.data.data)
                         this.showForm = false
                     })
                 }
 
             },
+            handleSelectionChange(val) {
+                this.multipleSelection = implode(val, 'id')
+            },
             implode(arr, attr) {
                 return implode(arr, attr);
-            }
+            },
+
         },
     };
 </script>

@@ -1,8 +1,8 @@
 import axios from '../utils/request'
 
-export function getUsers() {
+export function getUsers(page=1) {
     return axios({
-        url: '/user',
+        url: `/user?page=${page}`,
         method: 'get',
     })
 }
@@ -27,6 +27,7 @@ export function updateUser(id, form) {
         method: 'patch',
         data: form
     })
+    console.log(123)
 }
 
 export function addUser(form) {
@@ -37,10 +38,10 @@ export function addUser(form) {
     })
 }
 
-export function destroyUser(id) {
+export function destroyUser(id, page) {
     return axios({
-        url: '/user',
+        url: `/user?page=${page}`,
         method: 'delete',
-        data: id
+        data: {id}
     })
 }
