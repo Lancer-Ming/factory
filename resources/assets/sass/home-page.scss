@@ -98,6 +98,11 @@ body, html {
       }
     }
     .el-menu-item.is-active {
+      background: #333744;
+      color: #fff;
+    }
+
+    .el-menu-item.is-highlight {
       background: #7d7d7d;
       color: #fff;
     }
