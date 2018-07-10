@@ -16,13 +16,14 @@ class RolesController extends Controller
 
     public function store(Request $request)
     {
-        $role = Role::create($request->name);
-        return successJson($role, '操作成功');
+        Role::create(['name' => $request->name]);
+        $roles = Role::OrderBy('created_at', 'desc')->paginate(10);
+        return successJson($roles, '操作成功');
     }
 
     public function update(Request $request, Role $role)
     {
-        $role->update($request->name);
+        $role->update(['name'=> $request->name]);
         return successJson($role, '操作成功');
     }
 

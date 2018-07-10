@@ -40,7 +40,7 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::get('/', 'RolesController@index')->name('index');
             Route::post('/', 'RolesController@store')->name('store');
             Route::patch('/{role}', 'RolesController@update')->name('update');
-            Route::delete('/', 'UsersController@destroy')->name('destroy');
+            Route::delete('/', 'RolesController@destroy')->name('destroy');
         });
 
     });

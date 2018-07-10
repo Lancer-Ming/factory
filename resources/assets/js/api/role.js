@@ -6,25 +6,25 @@ export function getRoles(page=1){
         method: 'get',
     })
 }
-export function storeRole(id){
+export function storeRole(name){
     return axios({
-        url: `/role/${id}`,
+        url: `/role`,
         method: 'post',
+        data: { name }
     })
 }
 
-export function destroyRole(id,page){
+export function destroyRole(id,page=1){
     return axios({
-        url: `/role/${id}`,
-        methods: 'delete',
-        data: {id}
+        url: `/role`,
+        method: 'delete',
+        data: {id, page}
     })
 }
-export function updateRole(id, form) {
+export function updateRole(id, name) {
     return axios({
         url: `/role/${id}`,
         method: 'patch',
-        data: form
+        data: { name }
     })
-    console.log(123)
 }
