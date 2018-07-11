@@ -58,7 +58,7 @@ const app = new Vue({
     created() {
         this.initLocal()
 
-        this.axios.get("/permissions").then(res => {
+        this.axios.get("/permission").then(res => {
             this.headers = res.data.data;
             if (this.activeSideBar) {
                 this.getSideBars(this.recordTabsWithHeader[this.activeSideBar])
