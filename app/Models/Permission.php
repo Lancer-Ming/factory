@@ -20,6 +20,9 @@ class Permission extends Model
         return $this->hasMany(self::class, 'parent_id');
     }
 
+    /**不包括操作的
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public static function getAllPermissions()
     {
         return self::with([
@@ -31,5 +34,26 @@ class Permission extends Model
                 ]);
             }
         ])->where(['is_category'=> 1, 'parent_id'=> 0])->get();
+    }
+
+    /**
+     * 包括操作
+     */
+    public static function allPermissions()
+    {
+        return self::with([
+            'children' => function($query) {
+                $query->order()->with([
+                    'children' => function($query) {
+                        $query->order();
+                    }
+                ]);
+            }
+        ])->where(['parent_id' => 0])->get();
+    }
+
+    public function scopeOrder($query)
+    {
+        $query->orderBy('sort', 'asc')->orderBy('created_at', 'desc');
     }
 }

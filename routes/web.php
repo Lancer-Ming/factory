@@ -41,6 +41,8 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::post('/', 'RolesController@store')->name('store');
             Route::patch('/{role}', 'RolesController@update')->name('update');
             Route::delete('/', 'RolesController@destroy')->name('destroy');
+            Route::get('/{role}/permission', 'RolesController@editPermission')->name('edit_permission');
+            Route::put('/{role}/permission', 'RolesController@updatePermission')->name('update_permission');
         });
 
     });
