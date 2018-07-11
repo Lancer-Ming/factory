@@ -1,48 +1,31 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- ------------------
- *首先，我们将加载这个项目的所有JavaScript依赖项
- *包括VUE和其他库。这是一个很好的起点
- *使用VUE和Laravel构建健壮、强大的Web应用程序。
- */
+require('./bootstrap')
 
-require('./bootstrap');
-//import Vue from 'vue'
-window.Vue = require('vue');
+//window.Vue = require('vue')
+import Vue from 'vue'
 Vue.config.productionTip = false
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- --------------------
- *接下来，我们将创建一个新的VUE应用实例并将其附加到
- *页面。然后，您可以开始向该应用程序添加组件。
- *或自定义JavaScript脚手架以满足您的独特需求。
- */
-//Vue.component('example-component', require('./components/ExampleComponent.vue'));
-// import Hello from './components/Hello.vue'; // 引入Hello 组件
-//
+//import App from './App.vue'
+import router from './router'
+//import './directives'
 import ElementUI from 'element-ui'
 //
 import $ from 'jquery'
 //
 import { Message } from 'element-ui'
-import { MessageBox } from 'element-ui';
+import { MessageBox } from 'element-ui'
 import axios from 'axios'
-import router from './router/index'
-import { implode } from "./utils/common.js";
+import { implode } from "./utils/common.js"
 //
+
 Vue.use(ElementUI)
 Vue.prototype.$ = $
 Vue.prototype.axios = axios
 Vue.prototype.message = Message
-
 import { Local } from './utils/common'
-const app = new Vue({
+new Vue({
     el: '#app',
     router,
+    //components: { App },
+    //template: '<App/>',
     delimiters: ['${', '}'],
     data:{
         headers: [],    // 导航头
@@ -174,4 +157,4 @@ const app = new Vue({
 
         }
     },
-});
+})

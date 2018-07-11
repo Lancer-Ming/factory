@@ -6,11 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <script src="{{ asset('js/app.js') }}" defer></script>
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    {{--<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">--}}
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+{{--<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">--}}
+<!-- Styles -->
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
 <div id="app">
@@ -92,15 +91,15 @@
             <el-container>
                 <el-main class="index-main">
                     <el-tabs v-model="tabsValue" type="card" closable @tab-remove="removeTab" @tab-click="handleClick">
-                    <el-tab-pane
-                            v-for="(item, index) in tabs"
-                            :key="item.name"
-                            :label="item.title"
-                            :name="item.name"
+                        <el-tab-pane
+                                v-for="(item, index) in tabs"
+                                :key="item.name"
+                                :label="item.title"
+                                :name="item.name"
 
-                    >
-                        ${item.content}
-                    </el-tab-pane>
+                        >
+                            ${item.content}
+                        </el-tab-pane>
                     </el-tabs>
 
                     <router-view/>
@@ -112,7 +111,8 @@
         </el-container>
     </el-container>
 </div>
-
+{{--<script src="{{ mix('js/manifest.js') }}"></script>--}}
+{{--<script src="{{ mix('js/vendor.js') }}"></script>--}}
+<script src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>
-
