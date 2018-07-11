@@ -12,7 +12,7 @@ export default [
             {
                 path: '/system/role/edit_permission',
                 name: 'system.role.edit_permission',
-                component: () => import('../router/components/edit_permission')
+                component: () => import('../router/components/Edit_permission')
             }
         ]
     },
