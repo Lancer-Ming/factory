@@ -57,7 +57,7 @@
                     <el-button
                             size="mini"
                             type="primary"
-                            @click="">编辑权限
+                            @click="handleEditPermission(scope.$index, scope.row)">编辑权限
                     </el-button>
                     <el-button
                             size="mini"
@@ -168,6 +168,9 @@
                 }).catch(() => {
                     return
                 })
+            },
+            handleEditPermission(index, row) {
+                this.$router.push({path: `/system/role/${row.id}/edit_permission`})
             },
             submitForm() {
                 if (this.formType === 'edit') {

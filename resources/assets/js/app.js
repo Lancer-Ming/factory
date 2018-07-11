@@ -161,14 +161,16 @@ const app = new Vue({
             new Local().set('activeTabs', val)
 
             if (!this.isInit) {     // 如果是刷新了页面，这个就不用再次获取了。
-                this.getSideBars(this.recordTabsWithHeader[val])
+                this.isInit = false
+                this.activeSideBar = val
+
+                // 并且路由跳转
+                this.$router.push({ path: path})
+            } else {
+                this.isInit = false
             }
 
-            this.isInit = false
-            this.activeSideBar = val
 
-            // 并且路由跳转
-            this.$router.push({ path: path})
         }
     },
 });
