@@ -10,6 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+//Route::get('/', function () {
+//    return view('index');
+//});
+
 Auth::routes();
 
 Route::middleware('auth')->get('/', 'HomeController@index')->name('index');
@@ -41,6 +45,8 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::post('/', 'RolesController@store')->name('store');
             Route::patch('/{role}', 'RolesController@update')->name('update');
             Route::delete('/', 'RolesController@destroy')->name('destroy');
+            Route::get('/{role}/permission', 'RolesController@editPermission')->name('edit_permission');
+            Route::put('/{role}/permission', 'RolesController@updatePermission')->name('update_permission');
         });
 
     });
