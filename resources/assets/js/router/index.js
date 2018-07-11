@@ -9,6 +9,7 @@ import edit_permission from '../components/edit_permission.vue'
 Vue.use(Router)
 
 const router = new Router({
+    saveScrollPosition: true,
     linkExactActiveClass: 'active',
     routes: [
         {
