@@ -13,10 +13,6 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-<<<<<<< HEAD
-ss
-</body>
-=======
 <div id="app">
     <el-container style="height: 100%;">
         <el-header class="index-header">
@@ -118,4 +114,4 @@ ss
 </div>
 </body>
 </html>
->>>>>>> 39f60a0e9cd2413bb904f4c9bc315fe434774afb
+
