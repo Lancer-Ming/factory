@@ -24,6 +24,7 @@ body, html {
   .index-main {
     .container {
       min-width: 100% !important;
+      background: #fff;
     }
   }
   //导航栏
@@ -181,6 +182,9 @@ body, html {
 .el-main {
   background-color: #efeff8;
   color: #333;
+  .el-tabs__header{
+    margin: 0;
+  }
   //line-height: 160px;
 }
 

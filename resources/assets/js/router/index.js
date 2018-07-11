@@ -4,6 +4,7 @@ import User from '../components/User.vue'
 import Role from '../components/Role.vue'
 import Auth from '../components/Auth.vue'
 import Permission from '../components/Permission.vue'
+import  edit_permission from '../components/edit_permission.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -22,6 +23,11 @@ const router = new Router({
                 path: '/system/role/create',
                 name: 'auth',
                 component: Auth
+            },
+        {
+            path: '/system/role/edit_permission',
+            name: 'system.role.edit_permission',
+            component: edit_permission
             }]
         },
         {
