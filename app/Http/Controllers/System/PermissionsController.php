@@ -44,13 +44,13 @@ class PermissionsController extends Controller
     {
         $permission->update($request->all());
         $permission = Permission::allPermissions();
-        return successJson($permission);
+        return successJson($permission, '操作成功！');
     }
 
     public function destroy(Permission $permission)
     {
         $permission->delete();
         $permission = Permission::allPermissions();
-        return successJson($permission);
+        return successJson($permission, '操作成功！');
     }
 }

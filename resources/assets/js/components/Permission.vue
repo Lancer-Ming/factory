@@ -1,293 +1,145 @@
 <template>
     <div class="container">
-        <div class="dd">
-            <ol class="dd-list">
-                <li class="dd-item dd3-item" :data-id="permission.id" v-for="(permission, index) in permissions">
-                    <div class="dd-handle dd3-handle">Drag</div>
-                    <div class="dd3-content">
-                        <span :class="permission.icon"></span>
-                        <span>permission.label</span>
-                        <span>(permission.name)</span>
-                        <div class="pull-right action-buttons">
-                            <el-button type="primary" icon="el-icon-plus" plain></el-button>
-                            <el-button type="primary" icon="el-icon-edit" plain></el-button>
-                            <el-button type="danger" icon="el-icon-delete" plain></el-button>
-                        </div>
-                    </div>
-                    <ol class="dd-list">
-                        <li class="dd-item dd3-item" data-id="">
-                            <div class="dd-handle dd3-handle">Drag</div>
-                            <div class="dd3-content">
-                                <span class=""></span>
-                                <span></span>
-                                <span>()</span>
-                                <div class="pull-right action-buttons">
-                                    <a href="javascript:;" class="create-permission">
-                                        <i class="am-icon-plus"></i>
-                                    </a>
-                                    <a href="javascript:;" class="edit-permission">
-                                        <i class="am-icon-pencil"></i>
-                                    </a>
-                                    <a href="javascript:;" class="delete-permission">
-                                        <i class="am-icon-trash"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <ol class="dd-list">
-                                <li class="dd-item dd3-item" data-id="">
-                                    <div class="dd-handle dd3-handle">Drag</div>
-                                    <div class="dd3-content">
-                                        <span class=""></span>
-                                        <span></span>
-                                        <span>()</span>
-                                        <div class="pull-right action-buttons">
-                                            <a href="javascript:;" class="edit-permission">
-                                                <i class="am-icon-pencil"></i>
-                                            </a>
-                                            <a href="javascript:;" class="delete-permission">
-                                                <i class="am-icon-trash"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ol>
-                        </li>
-                    </ol>
-                </li>
-            </ol>
-        </div>
+        <el-tree
+                :data="treeData"
+                node-key="id"
+                :expand-on-click-node="false"
+                @node-drag-start="handleDragStart"
+                @node-drag-enter="handleDragEnter"
+                @node-drag-leave="handleDragLeave"
+                @node-drag-over="handleDragOver"
+                @node-drag-end="handleDragEnd"
+                @node-drop="handleDrop"
+                draggable
+                :allow-drop="allowDrop"
+                :allow-drag="allowDrag">
+
+            <span class="custom-tree-node" slot-scope="{ node, data }">
+            <span>{{ node.label }}</span>
+                <span>
+                    <i class="el-icon-edit" @click="handleEdit(data)"></i>
+                    <i class="el-icon-delete" @click="handleDelete(data)"></i>
+                </span>
+            </span>
+        </el-tree>
+
+        <el-dialog title="编辑菜单权限" :visible.sync="showForm" width="22%">
+            <el-form :model="form">
+                <el-form-item label="权限路由名" :label-width="formLabelWidth">
+                    <el-input v-model="form.name" auto-complete="off" style="width:200px;" size="mini"></el-input>
+                </el-form-item>
+                <el-form-item label="权限菜单名" :label-width="formLabelWidth">
+                    <el-input v-model="form.label" auto-complete="off" style="width:200px;" size="mini"></el-input>
+                </el-form-item>
+                <el-form-item label="图标icon" :label-width="formLabelWidth">
+                    <el-input v-model="form.icon" auto-complete="off" style="width:250px;" size="mini"></el-input>
+                </el-form-item>
+
+                <el-form-item label="是否为菜单" :label-width="formLabelWidth">
+                    <el-radio v-model="form.is_category" :label="1">是</el-radio>
+                    <el-radio v-model="form.is_category" :label="0">否</el-radio>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="showForm = false">取 消</el-button>
+                <el-button type="primary" @click="submitForm">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
+
+
 <script>
-    import { getPermissions } from '../api/permission'
+    import { getPermissions, editPermissions, updatePermissions } from '../api/permission'
     export default {
         data() {
             return {
-                permissions: []
-            }
+                treeData: [],
+                defaultProps: {
+                    children: 'children',
+                    label: 'label'
+                },
+                form: {
+                    name: '',
+                    label: '',
+                    icon: '',
+                    is_category: 0
+                },
+                formLabelWidth: "100px",
+                formType: '',
+                showForm: false,
+                id: null
+            };
         },
         created() {
             getPermissions().then(res => {
-                this.permissions = res.data.data
+                if (res.data.response_status === "success") {
+                    this.treeData = res.data.data
+                }
             })
         },
-        updated() {
-
-//            $('.dd').nestable({}).on('change', function() {
-//                var sort = JSON.stringify($('.dd').nestable('serialize'));
-//                console.log(sort)
-//            })
-        },
         methods: {
+            handleDragStart(node, ev) {
+                console.log('drag start', node);
+            },
+            handleDragEnter(draggingNode, dropNode, ev) {
+                console.log('tree drag enter: ', dropNode.label);
+            },
+            handleDragLeave(draggingNode, dropNode, ev) {
+                console.log('tree drag leave: ', dropNode.label);
+            },
+            handleDragOver(draggingNode, dropNode, ev) {
+                console.log('tree drag over: ', dropNode.label);
+            },
+            handleDragEnd(draggingNode, dropNode, dropType, ev) {
+                console.log('tree drag end: ', dropNode && dropNode.label, dropType);
+            },
+            handleDrop(draggingNode, dropNode, dropType, ev) {
+                console.log('tree drop: ', dropNode.label, dropType);
+            },
+            allowDrop(draggingNode, dropNode, type) {
+                if (dropNode.data.label === '二级 3-1') {
+                    return type !== 'inner';
+                } else {
+                    return true;
+                }
+            },
+            allowDrag(draggingNode) {
+                return draggingNode.data.label.indexOf('三级 3-2-2') === -1;
+            },
 
+            submitForm() {
+                if (this.formType === 'edit') {
+                    updatePermissions(this.id, this.form).then(res => {
+                        if (res.data.response_status === "success") {
+                            this.treeData = res.data.data
+                            this.showForm = false
+                            this.$message({
+                                type: 'success',
+                                showClose: true,
+                                message: res.data.msg
+                            })
+                        }
+                    })
+                }
+            },
+
+            handleEdit(data) {
+                this.formType = 'edit'
+                editPermissions(data.id).then(res => {
+                    if (res.data.response_status === "success") {
+                        let editData = res.data.data
+                        this.form = {
+                            name: editData.name,
+                            label: editData.label,
+                            icon: editData.icon,
+                            is_category: editData.is_category
+                        }
+                        this.id = editData.id
+                        this.showForm = true
+                    }
+                })
+            }
         }
-    }
+    };
 </script>
-
-<style scoped>
-    /**
- * Nestable
- */
-    .dd-list {
-        display: block;
-        position: relative;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-    .dd-list .dd-list {
-        padding-left: 30px;
-    }
-
-    .dd-collapsed .dd-list {
-        display: none;
-    }
-
-    .dd-item,
-    .dd-empty,
-    .dd-placeholder {
-        display: block;
-        position: relative;
-        margin: 0;
-        padding: 0;
-        min-height: 20px;
-        font-size: 13px;
-        line-height: 20px;
-    }
-
-    .dd-handle {
-        display: block;
-        height: 30px;
-        margin: 5px 0;
-        cursor: move;
-        padding: 5px 10px;
-        color: #333;
-        text-decoration: none;
-        font-weight: 400;
-        border: 1px solid #ccc;
-        background: #fafafa;
-        -webkit-border-radius: 3px;
-        border-radius: 3px;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-    }
-
-    .dd-handle:hover {
-        color: #2ea8e5;
-        background: #fff;
-    }
-
-    .dd-item > button {
-        display: block;
-        position: relative;
-        cursor: pointer;
-        float: left;
-        width: 25px;
-        height: 20px;
-        margin: 7px 0;
-        padding: 0;
-        text-indent: 100%;
-        white-space: nowrap;
-        overflow: hidden;
-        border: 0;
-        background: transparent;
-        font-size: 10px;
-        line-height: 1;
-        text-align: center;
-        font-weight: bold;
-    }
-
-    .dd-item > button:before {
-        content: '\f067';
-        display: block;
-        position: absolute;
-        width: 100%;
-        text-align: center;
-        text-indent: 0;
-        font-family: 'FontAwesome'
-    }
-
-    .dd-item > button[data-action="collapse"]:before {
-        content: '\f068';
-    }
-
-    .dd-placeholder,
-    .dd-empty {
-        margin: 5px 0;
-        padding: 0;
-        min-height: 30px;
-        background: #f2fbff;
-        border: 1px dashed #b6bcbf;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-    }
-
-    .dd-empty {
-        border: 1px dashed #bbb;
-        min-height: 100px;
-        background-color: #e5e5e5;
-        background-size: 60px 60px;
-        background-position: 0 0, 30px 30px;
-    }
-
-    .dd-dragel {
-        position: absolute;
-        pointer-events: none;
-        z-index: 9999;
-    }
-
-    .dd-dragel > .dd-item .dd-handle {
-        margin-top: 0;
-    }
-
-    .dd-dragel .dd-handle {
-        -webkit-box-shadow: 2px 4px 6px 0 rgba(0, 0, 0, .1);
-        box-shadow: 2px 4px 6px 0 rgba(0, 0, 0, .1);
-    }
-
-    .dd-hover > .dd-handle {
-        background: #2ea8e5 !important;
-    }
-
-    /**
-     * Nestable Draggable Handles
-     */
-
-    .dd3-content {
-        display: block;
-        height: 30px;
-        margin: 5px 0;
-        padding: 5px 10px 5px 40px;
-        color: #333;
-        text-decoration: none;
-        font-weight: 400;
-        border: 1px solid #ccc;
-        background: #fafafa;
-        -webkit-border-radius: 3px;
-        border-radius: 3px;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-    }
-
-    .dd3-content:hover {
-        color: #2ea8e5;
-        background: #fff;
-    }
-
-    .dd-dragel > .dd3-item > .dd3-content {
-        margin: 0;
-    }
-
-    .dd3-item > button {
-        margin-left: 30px;
-    }
-
-    .dd3-handle {
-        position: absolute;
-        margin: 0;
-        left: 0;
-        top: 0;
-        cursor: move;
-        width: 30px;
-        text-indent: 100%;
-        white-space: nowrap;
-        overflow: hidden;
-        border: 1px solid #aaa;
-        background: #ddd;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-    }
-
-    .dd3-handle:before {
-        content: '≡';
-        display: block;
-        position: absolute;
-        left: 0;
-        top: 3px;
-        width: 100%;
-        text-align: center;
-        text-indent: 0;
-        color: #fff;
-        font-size: 20px;
-        font-weight: normal;
-    }
-
-    .dd3-handle:hover {
-        background: #ddd;
-    }
-
-    .dd-hide {
-        display: none;
-    }
-
-    .pull-right {
-        float: right;
-    }
-
-    .pull-right a {
-        width: 25px;
-        display: inline-block;
-        float: left;
-    }
-</style>
