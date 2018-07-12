@@ -21,3 +21,26 @@ export function updatePermissions(id, form) {
         data: form
     })
 }
+
+export function addPermissions(form) {
+    return axios({
+        url: `/permission`,
+        method: 'post',
+        data: form
+    })
+}
+
+export function deletePermissions(id) {
+    return axios({
+        url: `/permission/${id}`,
+        method: 'delete',
+    })
+}
+
+export function sortPermissions(data) {
+    return axios({
+        url: `/permission/sort`,
+        method: 'put',
+        data: {sort: data}
+    })
+}

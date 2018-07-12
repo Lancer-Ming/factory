@@ -24,12 +24,13 @@ Route::middleware(['auth','role','header'])->group(function() {
     Route::namespace('System')->group(function() {
 
         // 权限菜单
+        Route::prefix('permission')->as('system.permission.')->group(function() {
+            Route::put('/sort', 'PermissionsController@sort')->name('sort');
+        });
         Route::as('system.')->group(function() {
-            Route::resource('permission', 'PermissionsController')->except('create');
+            Route::resource('permission', 'PermissionsController')->except(['create', 'show']);
         });
-        Route::prefix('permissions')->as('system.permission.')->group(function() {
 
-        });
 
         // 用户
         Route::prefix('user')->as('system.user.')->group(function() {

@@ -4,19 +4,14 @@
                 :data="treeData"
                 node-key="id"
                 :expand-on-click-node="false"
-                @node-drag-start="handleDragStart"
-                @node-drag-enter="handleDragEnter"
-                @node-drag-leave="handleDragLeave"
-                @node-drag-over="handleDragOver"
+                :default-expand-all="true"
                 @node-drag-end="handleDragEnd"
-                @node-drop="handleDrop"
-                draggable
-                :allow-drop="allowDrop"
-                :allow-drag="allowDrag">
+                draggable>
 
             <span class="custom-tree-node" slot-scope="{ node, data }">
             <span>{{ node.label }}</span>
                 <span>
+                    <i class="el-icon-plus" @click="handleAdd(data)" v-if="data.is_category > 0"></i>
                     <i class="el-icon-edit" @click="handleEdit(data)"></i>
                     <i class="el-icon-delete" @click="handleDelete(data)"></i>
                 </span>
@@ -25,12 +20,25 @@
 
         <el-dialog title="编辑菜单权限" :visible.sync="showForm" width="22%">
             <el-form :model="form">
+                 <el-form-item label="上级菜单" :label-width="formLabelWidth">
+                    <el-select v-model="form.parent_id" placeholder="请选择" value-key="item" disabled>
+                        <el-option
+                                v-for="item in options"
+                                :key="item.id"
+                                :value="item.id"
+                                :label="item.label">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            
                 <el-form-item label="权限路由名" :label-width="formLabelWidth">
                     <el-input v-model="form.name" auto-complete="off" style="width:200px;" size="mini"></el-input>
                 </el-form-item>
+
                 <el-form-item label="权限菜单名" :label-width="formLabelWidth">
                     <el-input v-model="form.label" auto-complete="off" style="width:200px;" size="mini"></el-input>
                 </el-form-item>
+
                 <el-form-item label="图标icon" :label-width="formLabelWidth">
                     <el-input v-model="form.icon" auto-complete="off" style="width:250px;" size="mini"></el-input>
                 </el-form-item>
@@ -50,20 +58,22 @@
 
 
 <script>
-    import { getPermissions, editPermissions, updatePermissions } from '../api/permission'
+    import { getPermissions, editPermissions, updatePermissions, addPermissions, deletePermissions, sortPermissions } from '../api/permission'
     export default {
         data() {
             return {
                 treeData: [],
+                options: [],
                 defaultProps: {
                     children: 'children',
                     label: 'label'
                 },
                 form: {
+                    parent_id: null,
                     name: '',
                     label: '',
                     icon: '',
-                    is_category: 0
+                    is_category: 1
                 },
                 formLabelWidth: "100px",
                 formType: '',
@@ -74,52 +84,20 @@
         created() {
             getPermissions().then(res => {
                 if (res.data.response_status === "success") {
-                    this.treeData = res.data.data
+                    this.treeData = res.data.data.permissions
+                    this.options = res.data.data.simplePermissions
                 }
             })
         },
         methods: {
-            handleDragStart(node, ev) {
-                console.log('drag start', node);
-            },
-            handleDragEnter(draggingNode, dropNode, ev) {
-                console.log('tree drag enter: ', dropNode.label);
-            },
-            handleDragLeave(draggingNode, dropNode, ev) {
-                console.log('tree drag leave: ', dropNode.label);
-            },
-            handleDragOver(draggingNode, dropNode, ev) {
-                console.log('tree drag over: ', dropNode.label);
-            },
-            handleDragEnd(draggingNode, dropNode, dropType, ev) {
-                console.log('tree drag end: ', dropNode && dropNode.label, dropType);
-            },
-            handleDrop(draggingNode, dropNode, dropType, ev) {
-                console.log('tree drop: ', dropNode.label, dropType);
-            },
-            allowDrop(draggingNode, dropNode, type) {
-                if (dropNode.data.label === '二级 3-1') {
-                    return type !== 'inner';
-                } else {
-                    return true;
-                }
-            },
-            allowDrag(draggingNode) {
-                return draggingNode.data.label.indexOf('三级 3-2-2') === -1;
-            },
-
             submitForm() {
                 if (this.formType === 'edit') {
                     updatePermissions(this.id, this.form).then(res => {
-                        if (res.data.response_status === "success") {
-                            this.treeData = res.data.data
-                            this.showForm = false
-                            this.$message({
-                                type: 'success',
-                                showClose: true,
-                                message: res.data.msg
-                            })
-                        }
+                        this.successCallback(res)
+                    })
+                } else {
+                    addPermissions(this.form).then(res => {
+                        this.successCallback(res)
                     })
                 }
             },
@@ -135,10 +113,60 @@
                             icon: editData.icon,
                             is_category: editData.is_category
                         }
+                        this.$set(this.form, 'parent_id', editData.parent_id)
                         this.id = editData.id
                         this.showForm = true
                     }
                 })
+            },
+            handleAdd(data) {
+                // 改变表单类型
+                this.formType = 'add'
+                // 清空form
+                this.form = {
+                    parent_id: null,
+                    name: '',
+                    label: '',
+                    icon: '',
+                    is_category: 1
+                }
+                // 改变表单的上级菜单
+                this.$set(this.form, 'parent_id', data.id)
+                // 使表单显示
+                this.showForm = true
+            },
+            handleDelete(data) {
+                this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    deletePermissions(data.id).then(res => {
+                        this.successCallback(res)
+                    })
+                }).catch(() => {
+                    return
+                })
+            },
+            handleDragEnd() {
+                let data = JSON.stringify(this.treeData)
+                sortPermissions(data).then(res=> {
+                    if (res.data.response_status === "success") {
+                        this.successCallback(res)
+                    }
+                })
+            },
+            successCallback(res) {
+                if (res.data.response_status === "success") {
+                    this.treeData = res.data.data
+                    this.showForm = false
+                    this.$message({
+                        type: 'success',
+                        showClose: true,
+                        message: res.data.msg
+                    })
+                }
             }
         }
     };
