@@ -2,24 +2,22 @@ export default [
     {
         path: '/system/user/index',
         name: 'user',
-        component: () => import('../router/components/User')
+        component: () => import('../views/User')
     },
     {
         path: '/system/role/index',
         name: 'role',
-        component: role,
-        children:[
-            {
-                path: '/system/role/edit_permission',
-                name: 'system.role.edit_permission',
-                component: () => import('../router/components/Edit_permission')
-            }
-        ]
+        component: () => import('../views/Role')
+    },
+    {
+        path: '/system/role/:id/edit_permission',
+        name: 'system.role.edit_permission',
+        component: () => import('../views/Edit_permission')
     },
     {
         path: '/system/permission/index',
         name: 'permission',
-        component: () => import('../router/components/Permission')
-    }
+        component: () => import('../views/Permission')
+    },
 
 ]

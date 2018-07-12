@@ -24,9 +24,11 @@ Route::middleware(['auth','role','header'])->group(function() {
     Route::namespace('System')->group(function() {
 
         // 权限菜单
+        Route::as('system.')->group(function() {
+            Route::resource('permission', 'PermissionsController')->except('create');
+        });
         Route::prefix('permissions')->as('system.permission.')->group(function() {
-            Route::get('/', 'PermissionsController@index')->name('index');
-            Route::get('/{permission}/getsidebars', 'PermissionsController@getSideBars')->name('getsidebars');
+
         });
 
         // 用户
