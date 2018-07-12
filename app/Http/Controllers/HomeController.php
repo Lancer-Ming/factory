@@ -12,7 +12,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return view('layouts.app', compact('permissions'));
+        return view('index', compact('permissions'));
     }
 
     public function api()
