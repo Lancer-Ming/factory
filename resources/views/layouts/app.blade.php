@@ -64,7 +64,7 @@
                             >
                                 <template slot="title">
                                     <i :class="`small-logo fa fa-${item.icon}`"></i>
-                                    <span slot="title" class="tit-tab" v-text="item.label"></span>
+                                    <span slot="title" class="tit-tab" v-text="item.label" style="background: pink"></span>
                                 </template>
                                 <div v-for="(child,child_index) in item.children" :key="child_index">
                                     <el-menu-item style="color: #fff;"
@@ -98,10 +98,9 @@
                                 :name="item.name"
 
                         >
-                            ${item.content}
+                            {{--${item.content}--}}
                         </el-tab-pane>
                     </el-tabs>
-
                     <router-view/>
                 </el-main>
                 <el-footer></el-footer>

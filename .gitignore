@@ -4,7 +4,7 @@
 /storage/*.key
 /public/js/app.js
 /public/css/app.css
-/js/lazy/*.js
+/public/js/lazy/*.js
 /vendor
 /.idea
 /.vscode
