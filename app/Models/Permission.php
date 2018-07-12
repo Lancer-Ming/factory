@@ -52,6 +52,14 @@ class Permission extends Model
         ])->where(['parent_id' => 0])->get();
     }
 
+    public static function sort($id, $parent_id, $sort)
+    {
+        $permission = self::find($id);
+        $permission->sort = $sort;
+        $permission->parent_id = $parent_id;
+        $permission->save();
+    }
+
     public function scopeOrder($query)
     {
         $query->orderBy('sort', 'asc')->orderBy('created_at', 'desc');
