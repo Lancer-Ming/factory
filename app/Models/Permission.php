@@ -45,7 +45,11 @@ class Permission extends Model
             'children' => function($query) {
                 $query->order()->with([
                     'children' => function($query) {
-                        $query->order();
+                        $query->order()->with([
+                            'children' => function($query) {
+                                $query->order();
+                            }
+                        ]);
                     }
                 ]);
             }
