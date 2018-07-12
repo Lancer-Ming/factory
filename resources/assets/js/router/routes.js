@@ -19,5 +19,10 @@ export default [
         name: 'permission',
         component: () => import('../views/Permission')
     },
+    {
+        path: '/system/cache/index',
+        name: 'system.cache.index',
+        component: () => import('../views/Cache')
+    },
 
 ]
