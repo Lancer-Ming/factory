@@ -1,0 +1,15 @@
+.cache {
+    height: 300px;
+    padding: 1px;
+    .el-row {
+        margin-top: 150px;
+        transform: translateY(-50%);
+
+        button.el-button {
+            margin: 0 auto;
+            display: block;
+            width: 200px;
+            height: 100px;
+        }
+    }
+}

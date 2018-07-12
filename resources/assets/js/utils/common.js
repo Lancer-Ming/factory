@@ -24,5 +24,8 @@ export function Local() {
     this.remove = (key) => {
         localStorage.removeItem(key)
     }
+    this.clear = () => {
+        localStorage.clear()
+    }
 }
 
