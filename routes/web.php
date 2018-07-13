@@ -52,6 +52,11 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::put('/{role}/permission', 'RolesController@updatePermission')->name('update_permission');
         });
 
+        // 清除缓存
+        Route::prefix('cache')->as('system.cache.')->group(function() {
+            Route::delete('/delete', 'CachesController@delete')->name('delete');
+        });
+
     });
 });
 

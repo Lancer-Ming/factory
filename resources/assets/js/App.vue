@@ -1,24 +1,20 @@
 <template>
-    <div id="wrap">
-        <Header/>
-        <div id="main-container" class="container main-container">
+    <div id="app">
+        <!--<Header/>-->
+        <!--<div id="main-container" class="container main-container">-->
             <router-view/>
-        </div>
-        <Footer/>
+        <!--</div>-->
+        <!--<Footer/>-->
     </div>
 </template>
 <script>
-    import Header from './components/layouts/Header'
-    import Footer from './components/layouts/Footer'
+    //import Header from './components/layouts/Header'
+    //import Footer from './components/layouts/Footer'
     export default {
         name: 'App',
-        components: {
-            Header,
-            Footer
-        },
+        // components: {
+        //     Header,
+        //     Footer
+        // },
     }
 </script>
-
-<style lang="scss">
-
-</style>

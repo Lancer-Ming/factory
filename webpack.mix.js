@@ -13,7 +13,8 @@ let mix = require('laravel-mix');
 mix.webpackConfig({
     output: {
         publicPath: "/",
-        chunkFilename: 'js/lazy/[name].[chunkhash].js'
+        //chunkFilename: 'js/lazy/[name].[chunkhash].js'
+        chunkFilename: 'js/lazy/[name].js'
     },
 })
 mix.js('resources/assets/js/app.js', 'public/js')

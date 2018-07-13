@@ -109,6 +109,18 @@ new Vue({
 
             this.tabsValue = activeName;
             this.tabs = tabs.filter(tab => tab.name !== targetName);
+            // 如果tabs全部关闭了
+            if(this.tabs.length === 0) {
+                // 清空localStorage
+                new Local().clear()
+                // 清空一写data
+                this.activeNavIndex = null,
+                this.recordTabsWithHeader = {}
+                this.activeSideBar = ''
+                this.tabsValue = ""
+                // 跳转主页
+                this.$router.push({path: '/'})
+            }
         },
         handleClick: function (tab, event) {
 

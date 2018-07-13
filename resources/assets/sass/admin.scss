@@ -1,0 +1,30 @@
+/**
+**自定义admin.css
+**/
+.header-container{
+.sidebar-f{
+  margin-left: 18px;
+  //height: 60px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0;
+  height: 36px;
+  line-height: 36px;
+  li{
+    margin: 12px 0;
+    border-radius: 2px 2px 0 0;
+    //font-size: 14px;
+    //padding: 6px 6px 0 8px;
+    height: auto;
+  }
+}
+  .el-submenu__title{ height: 48px !important; line-height: 48px;
+  img{ vertical-align:top;margin-top: 5px;}
+  }
+}
+.main-header{ height: 0px;margin-top: 10px;}
+.main-container{ padding: 0;
+  .main-header{
+    margin: 0;
+  }
+}

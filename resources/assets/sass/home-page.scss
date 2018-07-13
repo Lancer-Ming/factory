@@ -21,14 +21,14 @@ body, html {
   #app {
     height: 100%;
   }
-  .index-main {
+  .main-container {
     .container {
       min-width: 100% !important;
       background: #fff;
     }
   }
   //导航栏
-  .index-header {
+  .header-container {
     .logo-img {
       width: auto;
       height: 70px;
@@ -74,20 +74,20 @@ body, html {
       .user-h {
         float: left;
         .tit-user {
-          width: 45px;
-          height: 45px;
+          width: 35px;
+          height: 35px;
           margin-right: 10px;
         }
       }
     }
   }
-  .index-header .sidebar-f .active {
+  .header-container .sidebar-f .active {
     background: #fff;
     color: $header;
   }
 
   // 左边菜单栏
-  .index-left {
+  .aside-container {
     .el-menu-item {
       background: $header;
       color: #fff;
@@ -118,6 +118,7 @@ body, html {
     }
     .el-submenu__title {
       color: #fff;
+      height: auto;
       &:hover {
         background: #7d7d7d;
         color: #fff;
@@ -166,19 +167,19 @@ body, html {
 
 
 
-.el-header.index-header, .el-footer {
+.el-header.header-container, .el-footer {
   background-color: $header;
   color: #333;
   text-align: center;
   line-height: 40px;
 }
 
-.el-aside.index-left {
+.el-aside.aside-container {
   background-color: $header;
   color: #333;
   //text-align: center;
   line-height: 200px;
-  overflow: hidden;
+  overflow:auto;
 }
 
 .el-main {
