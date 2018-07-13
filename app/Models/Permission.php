@@ -10,6 +10,8 @@ class Permission extends Model
 
     static $category = [];
 
+    private $children_ids = [];
+
     public function roles()
     {
         return $this->belongsToMany(Role::class);
@@ -69,16 +71,17 @@ class Permission extends Model
         $permission->save();
     }
 
-    public function destroyRelationPermission($permission)
+    public function getChildPermissionIds($permission)
     {
-        if (!isset($permission->children)) {
-            return;
+        if (isset($permission->children) && $permission->children->count() > 0) {
+            foreach($permission->children as $value) {
+                $this->children_ids[] = $value->id;
+                $this->getChildPermissionIds($value);
+            }
         }
 
-        $this->destroyRelationPermission($permission->children);
-        $child_ids = $permission->children->pluck('id');
-        self::destroy($child_ids);
-        $permission->delete();
+        return $this->children_ids;
+
     }
 
     public function scopeOrder($query)
