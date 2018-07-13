@@ -52,7 +52,8 @@ class PermissionsController extends Controller
 
     public function destroy(Permission $permission)
     {
-        $permission->delete();
+        $permission->destroyRelationPermission($permission);
+
         $permission = Permission::allPermissions();
         return successJson($permission, '操作成功！');
     }

@@ -56,12 +56,29 @@ class Permission extends Model
         ])->where(['parent_id' => 0])->get();
     }
 
+    /** 排序
+     * @param $id
+     * @param $parent_id
+     * @param $sort
+     */
     public static function sort($id, $parent_id, $sort)
     {
         $permission = self::find($id);
         $permission->sort = $sort;
         $permission->parent_id = $parent_id;
         $permission->save();
+    }
+
+    public function destroyRelationPermission($permission)
+    {
+        if (!isset($permission->children)) {
+            return;
+        }
+
+        $this->destroyRelationPermission($permission->children);
+        $child_ids = $permission->children->pluck('id');
+        self::destroy($child_ids);
+        $permission->delete();
     }
 
     public function scopeOrder($query)
