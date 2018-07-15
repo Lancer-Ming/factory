@@ -55,7 +55,7 @@ new Vue({
     methods: {
 
         getSideBars(index){
-            console.log(index)
+            //console.log(index)
             this.sidebars = this.headers[index].children
             this.isCollapse = false
             this.activeNavIndex = index

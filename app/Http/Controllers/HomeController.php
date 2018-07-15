@@ -17,6 +17,10 @@ class HomeController extends Controller
 
     public function api()
     {
+        return view('api');
+    }
+    public function test()
+    {
         return view('test');
     }
 }

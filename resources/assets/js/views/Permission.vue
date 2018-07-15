@@ -4,12 +4,12 @@
                 :data="treeData"
                 node-key="id"
                 :expand-on-click-node="false"
-                :default-expand-all="true"
+                :default-expand-all="false"
                 @node-drag-end="handleDragEnd"
                 draggable>
 
             <span class="custom-tree-node" slot-scope="{ node, data }">
-            <span>{{ node.label }}</span>
+            <default-expand-allspan>{{ node.label }}</default-expand-allspan>
                 <span>
                     <i class="el-icon-plus" @click="handleAdd(data)" v-if="data.is_category > 0"></i>
                     <i class="el-icon-edit" @click="handleEdit(data)"></i>

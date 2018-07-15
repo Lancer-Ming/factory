@@ -1,5 +1,10 @@
 export default [
     {
+        path: '/test',
+        name: 'test',
+        component: () => import('../views/Test')
+    },
+    {
         path: '/system/user/index',
         name: 'user',
         component: () => import('../views/User')
