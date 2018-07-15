@@ -10,6 +10,8 @@ class Permission extends Model
 
     static $category = [];
 
+    private $children_ids = [];
+
     public function roles()
     {
         return $this->belongsToMany(Role::class);
@@ -56,12 +58,30 @@ class Permission extends Model
         ])->where(['parent_id' => 0])->get();
     }
 
+    /** 排序
+     * @param $id
+     * @param $parent_id
+     * @param $sort
+     */
     public static function sort($id, $parent_id, $sort)
     {
         $permission = self::find($id);
         $permission->sort = $sort;
         $permission->parent_id = $parent_id;
         $permission->save();
+    }
+
+    public function getChildPermissionIds($permission)
+    {
+        if (isset($permission->children) && $permission->children->count() > 0) {
+            foreach($permission->children as $value) {
+                $this->children_ids[] = $value->id;
+                $this->getChildPermissionIds($value);
+            }
+        }
+
+        return $this->children_ids;
+
     }
 
     public function scopeOrder($query)

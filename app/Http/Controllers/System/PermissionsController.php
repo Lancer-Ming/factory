@@ -52,7 +52,12 @@ class PermissionsController extends Controller
 
     public function destroy(Permission $permission)
     {
-        $permission->delete();
+        // 获取所有的children的id
+        $childIds = $permission->getChildPermissionIds($permission);
+        // 加上当前的permission的id
+        $childIds[] = $permission->id;
+        Permission::destroy($childIds);
+
         $permission = Permission::allPermissions();
         return successJson($permission, '操作成功！');
     }

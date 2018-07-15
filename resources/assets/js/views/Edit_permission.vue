@@ -1,73 +1,88 @@
 <template>
     <div class="container" style="border: 1px solid #eee">
-        <div class="edit-nav" v-for="(header,index) in edit_header">
-            <div class="edit_firstmenu">
-                <el-checkbox :indeterminate="isIndeterminate" v-model="checkedFirst" @change="handleCheckAllChange" :key="index">{{header.label}}</el-checkbox>
-            </div>
-            <div class="edit_box clearfix" v-for="(item,index) in header.children">
-                <div class="edit-secondmenu clearfix">
-                    <el-checkbox-group v-model="checkedSecond" @change="handleCheckedSecondChange">
-                        <el-checkbox :key="index" style="color: #3a5aaa;">{{item.label}}</el-checkbox>
-                    </el-checkbox-group>
+        <div :class="`edit-nav check-all-${header.id}`" v-for="(header,index) in edit_header">
+                <div class="edit_firstmenu">  
+                    <el-checkbox v-model="permission_id" @change="handleCheckAllChange(header)" :label="header.id" :key="index">{{header.label}}</el-checkbox>
                 </div>
-                <div class="edit_box2" v-for="(child,child_index) in item.children">
-                    <div class="edit-threemenu clearfix">
-                        <el-checkbox-group v-model="checkedThree" @change="handleCheckedThreeChange">
-                            <el-checkbox :key="child_index" style="color: #7f47a3;">{{child.label}}</el-checkbox>
-                        </el-checkbox-group>
-
+                <div :class="`edit_box clearfix check-${item.id}`" v-for="(item,index) in header.children">
+                    <div class="edit-secondmenu clearfix">
+                            <el-checkbox v-model="permission_id" @change="handleCheckTwo(item)" :label="item.id" :key="index" style="color: #3a5aaa;">{{item.label}}</el-checkbox>
                     </div>
-                    <div class="edit-fourmenu" v-if="child.children.length > 0">
-                        <el-checkbox-group v-model="checkedFour" @change="handleCheckedFourChange">
-                            <el-checkbox v-for="(children,children_index) in child.children" :key="children_index" style="color: #aa5f3a;">{{children.label}}</el-checkbox>
-                        </el-checkbox-group>
+                    <div class="edit_box2" v-for="(child,child_index) in item.children">
+                        <div class="edit-threemenu clearfix">
+                                <el-checkbox v-model="permission_id" @change="handleCheckThree(child)" :label="child.id" :key="child_index" style="color: #7f47a3;">{{child.label}}</el-checkbox>
+                        </div>
+                        <div class="edit-fourmenu" v-if="child.children.length > 0">
+                                <el-checkbox  v-model="permission_id" @change="handleCheckAllChange(children)" :label="children.id" v-for="(children,children_index) in child.children" :key="children_index" style="color: #aa5f3a;">{{children.label}}</el-checkbox>
+                        </div>
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
-
+    import { FindChildren } from '../utils/common.js'
     export default {
         name: 'edit_permission',
         data() {
             return {
                 edit_header: [],
-                checkedFirst: false,
-                checkedSecond: [],
-                checkedThree: [],
-                checkedFour: [],
-                isIndeterminate: true
+                permission_id: [],
+                checked: false
             }
         },
         created() {
             let role_id = this.$route.params.id
             this.axios.get(`/role/${role_id}/permission`).then(res => {
                 this.edit_header = res.data.data.permissions
-                console.log(this.edit_header)
             })
 
         },
         methods: {
-            handleCheckAllChange(val) {
-                this.checkedSecond = val ? this.edit_header : []
-                this.isIndeterminate = false
+            handleCheckAllChange(object) {
+                let ids = []
+                let findChildren = new FindChildren(ids)
+                ids = findChildren.childRecursion(object)
+                // console.log(ids)
+                if(this.permission_id.indexOf(object.id) > -1) {
+                    this.permission_id = this.permission_id.concat(ids)
+                } else {
+                    this.permission_id = this.permission_id.filter(item => {
+                        return ids.indexOf(item) === -1
+                    })
+                }
+               
             },
-            handleCheckedSecondChange(value) {
-                let checkedCount = value.length
-                this.checkedFirst = checkedCount === this.edit_header.length
-                this.isIndeterminate = checkedCount > 0 && checkedCount < this.edit_header.length
+            handleCheckTwo(object) {
+                let ids = []
+                let findChildren = new FindChildren(ids)
+                ids = findChildren.childRecursion(object)
+                if(this.permission_id.indexOf(object.id) > -1) {
+                    this.permission_id = this.permission_id.concat(ids)
+                    if (this.permission_id.indexOf(object.parent_id) === -1) {
+                        this.permission_id.push(object.parent_id)                        
+                    }
+                } else {
+                    this.permission_id = this.permission_id.filter(item => {
+                        return ids.indexOf(item) === -1 && item !== object.parent_id
+                    })
+                }
             },
-            handleCheckedThreeChange(value) {
-                let checkedOount = value.length
-                this.checkedFirst = checkedOount === this.edit_header.length
-                this.isIndeterminate = checkedOount > 0 && checkedOount < this.edit_header.length
-            },
-            handleCheckedFourChange(value){
-                let checkedOount = value.length
-
+            handleCheckThree(object) {
+                let ids = []
+                let findChildren = new FindChildren(ids)
+                ids = findChildren.childRecursion(object)
+                if(this.permission_id.indexOf(object.id) > -1) {
+                    this.permission_id = this.permission_id.concat(ids)
+                    if (this.permission_id.indexOf(object.parent_id) === -1) {
+                        this.permission_id.push(object.parent_id)                        
+                    }
+                } else {
+                    this.permission_id = this.permission_id.filter(item => {
+                        return ids.indexOf(item) === -1 && item !== object.parent_id
+                    })
+                }
             }
         }
     }

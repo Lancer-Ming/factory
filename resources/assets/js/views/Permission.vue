@@ -1,5 +1,6 @@
 <template>
-    <div class="container">
+    <div class="container permission-page">
+        <el-button type="danger" class="el-icon-plus" @click="handleAdd({id: 0})"></el-button>
         <el-tree
                 :data="treeData"
                 node-key="id"
@@ -101,7 +102,7 @@
                     })
                 }
             },
-
+            
             handleEdit(data) {
                 this.formType = 'edit'
                 editPermissions(data.id).then(res => {

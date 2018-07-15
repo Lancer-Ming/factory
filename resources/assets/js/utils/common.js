@@ -29,3 +29,47 @@ export function Local() {
     }
 }
 
+
+// export const findChildRecursion = function(obj) {
+//     let ids = []
+    
+//     function findChildRecursion (obj) {
+    
+//         if (obj.children.length === 0) {
+//             return
+//         } else {
+//             obj.children.forEach(item => {
+//                 ids.push(item.id)
+//                 findChildRecursion(item)
+//             })
+//         }
+        
+//         return ids
+    
+//     }
+
+//     return findChildRecursion(obj)
+
+// }
+
+export class FindChildren {
+    constructor(ids) {
+        this.ids = ids
+    }
+
+    childRecursion (obj) {
+        if (obj.children.length === 0) {
+            return
+        } else {
+            obj.children.forEach(item => {
+                this.ids.push(item.id)
+                this.childRecursion(item)
+            })
+        }
+        
+        return this.ids
+    
+    }
+}
+
+
