@@ -1,7 +1,18 @@
-<el-header class="header-container" height="48px">
+<el-header class="header-container">
     <img src="/static/img/logo2.png" class="logo-img clearfix" alt="">
     <ul class="sidebar-f">
-        <li :class="{ active: index === activeNavIndex }" :data-id="implode(header.children, 'name')" v-for="(header,index) in headers" :key="index" v-text="header.label" @click="getSideBars(index)"></li>
+        <li><i class="fa fa-home"></i>&nbsp;<span style="display: inline-block">首&nbsp;&nbsp;页</span></li>
+
+        {{--:data-id="implode(header.children, 'name')"--}}
+        <li v-for="(header,index) in headers" :class="{ active: index === activeNavIndex }">
+            <i :class="`${header.icon}`"></i>
+            <span
+                    :key="index" v-text="header.label"
+                    @click="getSideBars(index)"
+                    style="display: inline-block"
+            >
+            </span>
+        </li>
     </ul>
     <div class="sidebar-r">
         <div class="home">

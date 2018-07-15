@@ -5,6 +5,25 @@ export default [
         component: () => import('../views/Test')
     },
     {
+        path: '/',
+        name: 'Home',
+        component: () => import('../views/Home')
+    },
+    {
+        path: '*',
+        redirect: '/'
+    },
+    {
+        path: '/401',
+        name:'error-401',
+        component: () => import('../views/errorPage/401')
+    },
+    {
+        path: '/404',
+        name:'error-404',
+        component: () => import('../views/errorPage/404')
+    },
+    {
         path: '/system/user/index',
         name: 'user',
         component: () => import('../views/User')

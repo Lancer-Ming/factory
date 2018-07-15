@@ -19,7 +19,10 @@ body, html {
 
 @media only screen and (min-width: 600px) {
   #app {
+    width: 100%;
     height: 100%;
+    background: #030829;
+    //background: url("/img/map_bg.png");
   }
   .main-container {
     .container {
@@ -47,7 +50,7 @@ body, html {
         list-style: none;
         float: left;
         font-size: 16px;
-        padding: 0px 15px 0px 15px;
+        margin: 12px 15px 12px 15px !important;
         cursor: pointer;
       }
     }
@@ -82,8 +85,9 @@ body, html {
     }
   }
   .header-container .sidebar-f .active {
-    background: #fff;
-    color: $header;
+    //background: #fff;
+    color: $white;
+    border-bottom: 4px solid #4b8df8;
   }
 
   // 左边菜单栏
@@ -112,9 +116,11 @@ body, html {
     .take {
       color: #fff;
       font-size: 18px;
-      display: block;
+      display: inline-block;
+      width: 100%;
       text-align: center;
       padding: 10px 0px;
+      height: 40px;
     }
     .el-submenu__title {
       color: #fff;
@@ -152,6 +158,8 @@ body, html {
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     border: 1px solid #ccc;
+    //background:#2a2a2a;
+    color: #fff;
   }
   .el-menu {
     border: none;
@@ -167,7 +175,7 @@ body, html {
 
 
 
-.el-header.header-container, .el-footer {
+.el-footer {
   background-color: $header;
   color: #333;
   text-align: center;
@@ -178,8 +186,8 @@ body, html {
   background-color: $header;
   color: #333;
   //text-align: center;
-  line-height: 200px;
   overflow:auto;
+  margin-top: 10px;
 }
 
 .el-main {

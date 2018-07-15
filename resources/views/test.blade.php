@@ -6,9 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Document</title>
+
 </head>
 <body>
-22
+test
 <script src="/js/jquery.min.js"></script>
 <script>
 
