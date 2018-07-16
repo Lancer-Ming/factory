@@ -77,4 +77,40 @@ export class FindChildren {
     }
 }
 
+export class UnfoldAll{
+    constructor(){
+        this.parents = []
+        this.parentsId = []
+    }
+
+    parentRecursion (arr){
+            if(arr.length === 0){
+                return
+            }
+            else{
+               arr.forEach(item =>{
+                   this.parents[item.id] = item.parent_id
+                   if(typeof item.children !== 'undefined'){
+                        this.parentRecursion(item.children)
+                   }
+                   else{
+                       return
+                   }
+               })
+            }
+            return this.parents
+    }
+
+    findParent(id,parents){
+        if(parents[id] === 0){
+            return
+        }
+        else{
+            this.parentsId.push(parents[id])
+            this.findParent(parents[id], parents)
+        }
+        return this.parentsId
+    }
+}
+
 

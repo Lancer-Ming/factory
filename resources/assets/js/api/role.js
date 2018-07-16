@@ -28,3 +28,16 @@ export function updateRole(id, name) {
         data: { name }
     })
 }
+export function getPermission(role_id){
+    return axios({
+        url:`/role/${role_id}/permission`,
+        method: 'get'
+    })
+}
+export function updatePermission(role_id,permission_id){
+    return axios({
+        url:`/role/${role_id}/permission`,
+        method: 'put',
+        data: { permission_id }
+    })
+}
