@@ -76,7 +76,8 @@
                 console.log(ids)
                 // 点亮
                 if(this.permission_id.indexOf(object.id) > -1) {
-                    this.permission_id = this.permission_id.concat(ids)
+                    this.permission_id = ids === undefined ? this.permission_id : this.permission_id.concat(ids)
+                    console.log(this.permission_id)
                     if (this.permission_id.indexOf(object.parent_id) === -1) {
                         this.permission_id.push(object.parent_id)                        
                     }
@@ -93,7 +94,8 @@
                 ids = findChildren.childRecursion(object)
                 console.log(ids)
                 if(this.permission_id.indexOf(object.id) > -1) {
-                    this.permission_id = this.permission_id.concat(ids)
+                    this.permission_id = ids === 'undefined' ? this.permission_id : this.permission_id.concat(ids)
+                    console.log(this.permission_id)
                     if (this.permission_id.indexOf(object.parent_id) === -1) {
                         this.permission_id.push(object.parent_id)                        
                     }
