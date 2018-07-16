@@ -159,7 +159,7 @@ new Vue({
             if (!this.isInit) {     // 如果是刷新了页面，这个就不用再次获取了。
                 this.isInit = false
                 this.activeSideBar = val
-
+                this.activeNavIndex = this.recordTabsWithHeader[val]
                 // 并且路由跳转
                 this.$router.push({ path: path})
             } else {

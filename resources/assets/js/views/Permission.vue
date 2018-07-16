@@ -10,7 +10,7 @@
                 draggable>
 
             <span class="custom-tree-node" slot-scope="{ node, data }">
-            <default-expand-allspan>{{ node.label }}</default-expand-allspan>
+            <span>{{ node.label }}</span>
                 <span>
                     <i class="el-icon-plus" @click="handleAdd(data)" v-if="data.is_category > 0"></i>
                     <i class="el-icon-edit" @click="handleEdit(data)"></i>
