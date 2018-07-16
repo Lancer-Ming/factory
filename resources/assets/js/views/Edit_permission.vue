@@ -13,7 +13,7 @@
                                 <el-checkbox v-model="permission_id" @change="handleCheckThree(child)" :label="child.id" :key="child_index" style="color: #7f47a3;">{{child.label}}</el-checkbox>
                         </div>
                         <div class="edit-fourmenu" v-if="child.children.length > 0">
-                                <el-checkbox  v-model="permission_id" @change="handleCheckAllChange(children)" :label="children.id" v-for="(children,children_index) in child.children" :key="children_index" style="color: #aa5f3a;">{{children.label}}</el-checkbox>
+                                <el-checkbox  v-model="permission_id" @change="handleCheckFour(children)" :label="children.id" v-for="(children,children_index) in child.children" :key="children_index" style="color: #aa5f3a;">{{children.label}}</el-checkbox>
                         </div>
                     </div>
                 </div>
@@ -42,9 +42,9 @@
         methods: {
             handleCheckAllChange(object) {
                 let ids = []
+                console.log(object)
                 let findChildren = new FindChildren(ids)
                 ids = findChildren.childRecursion(object)
-                // console.log(ids)
                 if(this.permission_id.indexOf(object.id) > -1) {
                     this.permission_id = this.permission_id.concat(ids)
                 } else {
@@ -73,12 +73,32 @@
                 let ids = []
                 let findChildren = new FindChildren(ids)
                 ids = findChildren.childRecursion(object)
+                console.log(ids)
+                // 点亮
+                if(this.permission_id.indexOf(object.id) > -1) {
+                    this.permission_id = this.permission_id.concat(ids)
+                    if (this.permission_id.indexOf(object.parent_id) === -1) {
+                        this.permission_id.push(object.parent_id)                        
+                    }
+                } else {    // 取消
+                    if (ids === undefined) return
+                    this.permission_id = this.permission_id.filter(item => {
+                        return ids.indexOf(item) === -1 && item !== object.parent_id
+                    })
+                }
+            },
+            handleCheckFour(object) {
+                let ids = []
+                let findChildren = new FindChildren(ids)
+                ids = findChildren.childRecursion(object)
+                console.log(ids)
                 if(this.permission_id.indexOf(object.id) > -1) {
                     this.permission_id = this.permission_id.concat(ids)
                     if (this.permission_id.indexOf(object.parent_id) === -1) {
                         this.permission_id.push(object.parent_id)                        
                     }
                 } else {
+                    if (ids === undefined) return
                     this.permission_id = this.permission_id.filter(item => {
                         return ids.indexOf(item) === -1 && item !== object.parent_id
                     })

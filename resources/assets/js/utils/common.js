@@ -58,16 +58,21 @@ export class FindChildren {
     }
 
     childRecursion (obj) {
-        if (obj.children.length === 0) {
-            return
+        if (typeof obj.children !== 'undefined') {
+            if (obj.children.length === 0) {
+                return
+            } else {
+                obj.children.forEach(item => {
+                    this.ids.push(item.id)
+                    this.childRecursion(item)
+                })
+            }
+            
+            return this.ids
         } else {
-            obj.children.forEach(item => {
-                this.ids.push(item.id)
-                this.childRecursion(item)
-            })
+            return
         }
         
-        return this.ids
     
     }
 }
