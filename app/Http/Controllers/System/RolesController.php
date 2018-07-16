@@ -53,5 +53,6 @@ class RolesController extends Controller
     {
         $permission_id = $request->permission_id;
         $role->permissions()->sync($permission_id);
+        return successJson('','操作成功！');
     }
 }

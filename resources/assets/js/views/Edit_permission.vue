@@ -42,6 +42,7 @@
             this.role_id = this.$route.params.id
             getPermission(this.role_id).then(res => {
                 this.edit_header = res.data.data.permissions
+                this.permission_id = res.data.data.own_permissions_id
             })
 
         },
@@ -86,7 +87,18 @@
                 }
             },
             submit(){
-                updatePermission(this.role_id,this.permission_id)
+                updatePermission(this.role_id,this.permission_id).then(res => {
+                    if (res.data.response_status === "success") {
+                        this.$message({
+                            type: 'success',
+                            showClose: true,
+                            message: res.data.msg
+                        })
+                       
+                        this.$router.push({path: '/system/role/index'})
+                       
+                    }
+                })
             }
 
         }
