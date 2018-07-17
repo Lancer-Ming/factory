@@ -16,7 +16,7 @@ class CreatePermissionsTable extends Migration
         Schema::create('permissions', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('parent_id')->index()->comment('父级关系id');
-            $table->string('icon', 30)->comment('图标')->nullable();
+            $table->string('icon', 100)->comment('图标')->nullable();
             $table->string('name')->comment('路由名');
             $table->unsignedInteger('sort')->index()->comment('排序')->default(100);
             $table->string('label', 20)->comment('操作权限名称');

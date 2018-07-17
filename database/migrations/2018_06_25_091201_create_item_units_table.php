@@ -15,6 +15,7 @@ class CreateItemUnitsTable extends Migration
     {
         Schema::create('item_units', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('item_id')->index()->comment('关联单位id');
             $table->unsignedInteger('contract_id')->index()->comment('施工总承包id');
             $table->unsignedInteger('subcontract_id')->index()->comment('分包单位id')->nullable();
             $table->unsignedInteger('build_id')->index()->comment('建设单位id')->nullable();

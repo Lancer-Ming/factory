@@ -58,6 +58,14 @@ Route::middleware(['auth','role','header'])->group(function() {
         });
 
     });
+
+
+    Route::namespace('Item')->group(function() {
+        // 现场管理
+        Route::as('item.')->group(function() {
+            Route::resource('project', 'ProjectsController')->except(['create']);
+        });
+    });
 });
 
 
