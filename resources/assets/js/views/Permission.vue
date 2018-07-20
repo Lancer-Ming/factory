@@ -5,7 +5,7 @@
                 :data="treeData"
                 node-key="id"
                 :expand-on-click-node="false"
-                :default-expand-all="false"
+                :default-expand-all="true"
                 @node-drag-end="handleDragEnd"
                 draggable>
 

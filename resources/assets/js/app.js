@@ -45,9 +45,11 @@ new Vue({
         this.axios.get("/permission").then(res => {
             this.headers = res.data.data;
             if (this.activeSideBar) {
-                this.getSideBars(this.recordTabsWithHeader[this.activeSideBar])
+                this.activeNavIndex = this.recordTabsWithHeader[this.activeSideBar]
             }
+        
             this.getSideBars(this.activeNavIndex)
+        
         })
 
         this.isInit = true
@@ -109,6 +111,8 @@ new Vue({
 
             this.tabsValue = activeName;
             this.tabs = tabs.filter(tab => tab.name !== targetName);
+            // 给localStorage里更改tabs
+            new Local().set('tabs', this.tabs)
             // 如果tabs全部关闭了
             if(this.tabs.length === 0) {
                 // 清空localStorage
@@ -155,11 +159,13 @@ new Vue({
 
             // 将currentActiveTab 存到LocalStorage里
             new Local().set('activeTabs', val)
+            new Local().set('activeSideBar', val)
 
             if (!this.isInit) {     // 如果是刷新了页面，这个就不用再次获取了。
                 this.isInit = false
                 this.activeSideBar = val
                 this.activeNavIndex = this.recordTabsWithHeader[val]
+                this.getSideBars(this.activeNavIndex)
                 // 并且路由跳转
                 this.$router.push({ path: path})
             } else {
