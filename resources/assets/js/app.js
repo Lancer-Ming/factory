@@ -44,6 +44,7 @@ new Vue({
 
         this.axios.get("/permission").then(res => {
             this.headers = res.data.data;
+
             if (this.activeSideBar) {
                 this.activeNavIndex = this.recordTabsWithHeader[this.activeSideBar]
             }

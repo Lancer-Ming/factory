@@ -52,6 +52,10 @@ export default [
         path: '/unit/company/index',
         name: 'unit.company.index',
         component: () => import('../views/Company')
+    },
+    {
+        path: '/item/project/index',
+        name: 'item.project.index',
+        component: () => import('../views/Project')
     }
-
 ]
