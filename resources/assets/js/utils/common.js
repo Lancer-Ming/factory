@@ -114,3 +114,23 @@ export class UnfoldAll{
 }
 
 
+export function decodeAddress(addresses, province_code, city_code, county_code) {
+    let result = []
+    addresses.forEach(item => {
+        if (item.value === province_code) {
+            result.push(item.label)
+            item.children.forEach(citem => {
+                if (citem.value === city_code) {
+                    result.push(citem.label)
+                    citem.children.forEach(ccitem => {
+                        if (ccitem.value === county_code) {
+                            result.push(ccitem.label)
+                        }
+                    })
+                }
+            })
+        }
+    })
+
+    return result
+}
