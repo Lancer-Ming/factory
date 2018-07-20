@@ -48,5 +48,9 @@ export default [
         name: 'system.cache.index',
         component: () => import('../views/Cache')
     },
-
+    {
+        path: '/item/project/index',
+        name: 'item.project.index',
+        component: () => import('../views/Project')
+    }
 ]
