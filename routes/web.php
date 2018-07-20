@@ -66,6 +66,23 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::resource('project', 'ProjectsController')->except(['create']);
         });
     });
+
+    Route::namespace('Unit')->group(function() {
+        // 单位管理
+        Route::as('unit.')->group(function() {
+            Route::resource('company', 'UnitsController')->except(['create']);
+        });
+
+        // 单位类型管理
+        Route::as('unit.')->group(function() {
+            Route::get('utype/{utype}/option', 'UtypesController@option')->name('utype.option');
+            Route::get('utype/searchoption', 'UtypesController@searchOption')->name('utype.searchOption');
+        });
+
+        Route::as('unit.')->group(function() {
+            Route::resource('utype', 'UtypesController')->except(['show']);
+        });
+    });
 });
 
 
