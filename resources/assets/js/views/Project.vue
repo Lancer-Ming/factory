@@ -81,9 +81,37 @@
                     <el-input auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="GPS" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
-                    <el-button type="info">设置GPS</el-button>
+                    <el-input auto-complete="off" v-model="center.lat+','+center.lng"></el-input>
+                    <el-button type="info" @click="gps">设置GPS</el-button>
                 </el-form-item>
+                <div style="padding-top:50px;display: none;" class="gps">
+                    <div @on-cancel="cancel" v-model="showMapComponent" width="400" :closable="false" :mask-closable="false">
+                        <baidu-map v-bind:style="mapStyle" class="bm-view" ak="你的密钥"
+                                :center="center"
+                                :zoom="zoom"
+                                :scroll-wheel-zoom="true"
+                                @click="getClickInfo"
+                                @moving="syncCenterAndZoom"
+                                @moveend="syncCenterAndZoom"
+                                @zoomend="syncCenterAndZoom">
+                            <bm-view style="width: 100%; height:300px;"></bm-view>
+                            <bm-marker :position="{lng: center.lng, lat: center.lat}" :dragging="true" animation="BMAP_ANIMATION_BOUNCE">
+                            </bm-marker>
+                            <bm-control :offset="{width: '10px', height: '10px'}">
+                                <bm-auto-complete v-model="keyword" :sugStyle="{zIndex: 999999}">
+                                    <input type="text" placeholder="请输入搜索关键字" class="serachinput">
+                                </bm-auto-complete>
+                            </bm-control>
+                            <bm-local-search :keyword="keyword" :auto-viewport="true" style="width:0px;height:0px;overflow: hidden;"></bm-local-search>
+                        </baidu-map>
+                        <div slot="footer" style="margin-top: 300px;">
+                            <Button @click="cancel" type="ghost"
+                                    style="width: 60px;height: 36px;">取消
+                            </Button>
+                            <Button type="primary" style="width: 60px;height: 36px;" @click="confirm">确定</Button>
+                        </div>
+                    </div>
+                </div>
                 <el-form-item label="接收时间" :label-width="formLabelWidth">
                     <el-date-picker v-model="value1" type="date" placeholder="接收时间">
                     </el-date-picker>
@@ -98,27 +126,109 @@
                 </el-form-item>
                 <el-form-item label="施工总承包" :label-width="formLabelWidth">
                     <el-input auto-complete="off"></el-input>
-                    <el-button type="info">...</el-button>
-
+                    <el-button plain @click="chose=true">...</el-button>
                 </el-form-item>
-
+                <el-form-item label="分包单位" :label-width="formLabelWidth">
+                    <el-input auto-complete="off"></el-input>
+                    <el-button plain>...</el-button>
+                </el-form-item>
+                <el-form-item label="建设单位" :label-width="formLabelWidth">
+                    <el-input auto-complete="off"></el-input>
+                    <el-button plain>...</el-button>
+                </el-form-item>
+                <el-form-item label="监理单位" :label-width="formLabelWidth">
+                    <el-input auto-complete="off"></el-input>
+                    <el-button plain>...</el-button>
+                </el-form-item>
+                <el-form-item label="勘察单位" :label-width="formLabelWidth">
+                    <el-input auto-complete="off"></el-input>
+                    <el-button plain>...</el-button>
+                </el-form-item>
+                <el-form-item label="设计单位" :label-width="formLabelWidth">
+                    <el-input auto-complete="off"></el-input>
+                    <el-button plain>...</el-button>
+                </el-form-item>
+                <el-form-item label="审图单位" :label-width="formLabelWidth">
+                    <el-input auto-complete="off"></el-input>
+                    <el-button plain>...</el-button>
+                </el-form-item>
+                <el-form-item label="安监站" :label-width="formLabelWidth">
+                    <el-input auto-complete="off"></el-input>
+                    <el-button plain>...</el-button>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="addform = false" style="margin-top:100px;">取 消</el-button>
                 <el-button type="primary" @click="addform = false">确 定</el-button>
             </div>
         </el-dialog>
+
+        <el-dialog title="弹出选择" :visible.sync="chose" class="chose">
+            <el-form :model="form">
+                <div style="width: 60%;margin: -20px 0px 10px 0px;" class="chose-name">
+                    名称：<el-input></el-input>
+                    <i class="el-icon-search"></i><span>查询</span>
+                    <i class="el-icon-delete"></i><span>清空</span>
+                </div>
+                <el-table :data="tableData3" height="250" border style="width: 100%">
+                    <el-table-column prop="date" width="100" align="center">
+                    </el-table-column>
+                    <el-table-column prop="name" label="名称" width="600" align="center">
+                    </el-table-column>
+                    <el-table-column>
+                    </el-table-column>
+                </el-table>
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage4"
+                        :page-sizes="[100, 200, 300, 400]"
+                        :page-size="100"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="400"
+                        align="center"
+                        style="margin-top: 20px;"
+                >
+                </el-pagination>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="chose = false">取 消</el-button>
+                <el-button type="primary" @click="chose = false">确 定</el-button>
+            </div>
+        </el-dialog>
+
     </div>
 </template>
 
 <script>
     import { buildType,invest,itemcategory,structuraltype,citys } from "../api/json"
+    import {BaiduMap, BmControl, BmView, BmAutoComplete, BmLocalSearch, BmMarker} from 'vue-baidu-map'
     export default {
+        components: {
+            BaiduMap,
+            BmControl,
+            BmView,
+            BmAutoComplete,
+            BmLocalSearch,
+            BmMarker
+        },
         data() {
             return {
+                //地图
+                showMapComponent: this.value,
+                keyword: '',
+                mapStyle: {
+                    width: '100%',
+                    height: this.mapHeight + 'px'
+                },
+                center: {lng: 113.271429, lat: 23.135336},
+                zoom: 15,
+                chose: false,
                 addform: false,
                 formLabelWidth: "100px",
                 num1: 1,
+                //分页
+                currentPage4: 4,
                 //建设方式
                 buildType: [],
                 //资金来源
@@ -146,6 +256,28 @@
                     resource: '',
                     desc: ''
                 },
+                tableData3: [{
+                    date: '1',
+                    name: '云南建设投资集团有限公司'
+                }, {
+                    date: '2',
+                    name: '安徽汇源建设工程有限公司'
+                }, {
+                    date: '3',
+                    name: '安徽鑫源建设集团有限公司'
+                }, {
+                    date: '4',
+                    name: '六安市精华建筑安装工程有限公司'
+                }, {
+                    date: '5',
+                    name: '安微省九华山建设工程有限公司'
+                }, {
+                    date: '6',
+                    name: '泰州裕国建筑工程有限公司'
+                }, {
+                    date: '7',
+                    name: '长沙建筑安装工程公司'
+                }],
                 data: [{
                     label: '坝光片区场平工程(I标段)',
                     children: [{
@@ -202,7 +334,10 @@
                     label: 'label'
                 },
                 handleChange(value) {
-                    console.log(value);
+                    console.log(value)
+                },
+                gps(){
+                    $('.gps').toggle()
                 }
             };
         },
@@ -223,18 +358,65 @@
                 this.citys = res.data
             })
         },
+        watch: {
+            value: function (currentValue) {
+                this.showMapComponent = currentValue
+                if (currentValue) {
+                    this.keyword = ''
+                }
+            }
+        },
+        props: {
+            value: Boolean,
+            mapHeight: {
+                type: Number,
+                default: 500
+            }
+        },
         methods: {
             handleNodeClick(data) {
                 console.log(data);
             },
             toggleY: function(){
                 $('.pro-box-l').animate({width:'toggle'})
+            },
+            getClickInfo (e) {
+                this.center.lng = e.point.lng
+                this.center.lat = e.point.lat
+            },
+            syncCenterAndZoom (e) {
+                const {lng, lat} = e.target.getCenter()
+                this.center.lng = lng
+                this.center.lat = lat
+                this.zoom = e.target.getZoom()
+            },
+            /***
+             * 确认
+             */
+            confirm: function () {
+                this.showMapComponent = false
+                this.$emit('map-confirm', this.center)
+            },
+            /***
+             * 取消
+             */
+            cancel: function () {
+                this.showMapComponent = false
+                this.$emit('cancel', this.showMapComponent)
+            },
+            //分页
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
             }
         }
+
     };
 </script>
 
-<style>
+<style scoped>
     .project .pro-btn{
         padding: 8px 15px;
     }
@@ -310,5 +492,26 @@
     .el-input.el-input--suffix{
         width: 100%;
     }
+    .serachinput{
+        width: 300px;
+        box-sizing: border-box;
+        padding: 9px;
+        border: 1px solid #dddee1;
+        line-height: 20px;
+        font-size: 16px;
+        height: 38px;
+        color: #333;
+        position: relative;
+        border-radius: 4px;
+        -webkit-box-shadow: #666 0px 0px 10px;
+        -moz-box-shadow: #666 0px 0px 10px;
+        box-shadow: #666 0px 0px 10px;
+    }
+    .chose-name i{
+        display: inline-block;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
 </style>
+
 
