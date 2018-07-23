@@ -10,13 +10,20 @@ export function getUtypes() {
 export function getUnits(page,data=null) {
     if (data) {
         return axios({
-            url: `/company`,
+            url: `/unit`,
             method: 'get',
             params: data
         })
     }
     return axios({
-        url: `/company?page=${page}`,
+        url: `/unit?page=${page}`,
         method: 'get',
+    })
+}
+
+export function editUnit(id) {
+    return axios({
+        url: `/unit/${id}/edit`,
+        method: 'get'
     })
 }

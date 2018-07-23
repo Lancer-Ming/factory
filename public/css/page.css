@@ -706,3 +706,12 @@ li {
   display: inline;
 }
 
+.company-page .el-form-item {
+  width: 50%;
+  float: left;
+}
+
+.company-page .el-dialog {
+  width: 60%;
+}
+

@@ -31,4 +31,9 @@ class UnitsController extends Controller
 
         return successJson($units);
     }
+
+    public function edit(Unit $unit)
+    {
+        return successJson($unit);
+    }
 }
