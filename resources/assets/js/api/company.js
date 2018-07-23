@@ -7,9 +7,16 @@ export function getUtypes() {
     })
 }
 
-export function getUnits(page) {
+export function getUnits(page,data=null) {
+    if (data) {
+        return axios({
+            url: `/company`,
+            method: 'get',
+            params: data
+        })
+    }
     return axios({
         url: `/company?page=${page}`,
-        method: 'get'
+        method: 'get',
     })
 }

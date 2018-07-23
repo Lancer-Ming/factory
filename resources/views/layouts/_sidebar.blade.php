@@ -1,8 +1,8 @@
 <el-aside width="auto" v-if="sidebars.length > 0" class="aside-container">
     <el-row>
         <el-col :span="24">
-            <span class="fa fa-bars take" @click="switchBar"></span>
-            <el-menu class="el-menu-vertical-demo" style="color: #fff;"
+            <span class="el-sideclose fa fa-bars take" @click="switchBar"></span>
+            <el-menu class="el-menu-vertical-sidebar" style="color: #fff;"
                     :collapse-transition="false"
                     :collapse="isCollapse"
                     default-active='false'

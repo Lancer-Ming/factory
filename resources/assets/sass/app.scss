@@ -1,28 +1,16 @@
-
-// Fonts
-//@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
-
-// Variables
+//这里只放一些框架的sass 自己的样式在page/page.css 中引入 !
 @import "variables";
-
-// Bootstrap
-
+//载入各框架字体库文件
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
 $fa-font-path: "~font-awesome/fonts/";
-
+//bootstrap
 @import "~bootstrap-sass/assets/stylesheets/_bootstrap";
-@import '~element-ui/lib/theme-chalk/index.css';
+//element-ui
+@import "~element-ui/packages/theme-chalk/src/index";
+//font-awesome
 @import "~font-awesome/scss/font-awesome";
 
-//@import '~bootstrap/scss/bootstrap';
-//@import '~font-awesome-sass/assets/stylesheets/font-awesome';
-@import 'login';
-@import 'home-page';
-@import 'admin';
-@import 'cache';
-@import 'permission';
-@import 'reset-ui';
-@import 'company';
 
 
 
