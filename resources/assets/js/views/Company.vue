@@ -196,7 +196,6 @@
                 <el-form-item label="主营业务" :label-width="formLabelWidth">
                     <el-input type="textarea" v-model="form.main_business"></el-input>
                 </el-form-item>
-               
                 <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input type="textarea" v-model="form.remark"></el-input>
                 </el-form-item>

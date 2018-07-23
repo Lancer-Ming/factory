@@ -125,32 +125,32 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="施工总承包" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
-                    <el-button plain @click="chose=true">...</el-button>
+                    <el-input auto-complete="off" v-model="form.contract_id"></el-input>
+                    <el-button plain @click="searchUnitBox('contract_id')">...</el-button>
                 </el-form-item>
                 <el-form-item label="分包单位" :label-width="formLabelWidth">
                     <el-input auto-complete="off"></el-input>
-                    <el-button plain>...</el-button>
+                    <el-button plain @click="searchUnitBox">...</el-button>
                 </el-form-item>
                 <el-form-item label="建设单位" :label-width="formLabelWidth">
                     <el-input auto-complete="off"></el-input>
-                    <el-button plain>...</el-button>
+                    <el-button plain @click="searchUnitBox">...</el-button>
                 </el-form-item>
                 <el-form-item label="监理单位" :label-width="formLabelWidth">
                     <el-input auto-complete="off"></el-input>
-                    <el-button plain>...</el-button>
+                    <el-button plain @click="searchUnitBox">...</el-button>
                 </el-form-item>
                 <el-form-item label="勘察单位" :label-width="formLabelWidth">
                     <el-input auto-complete="off"></el-input>
-                    <el-button plain>...</el-button>
+                    <el-button plain @click="searchUnitBox">...</el-button>
                 </el-form-item>
                 <el-form-item label="设计单位" :label-width="formLabelWidth">
                     <el-input auto-complete="off"></el-input>
-                    <el-button plain>...</el-button>
+                    <el-button plain @click="searchUnitBox">...</el-button>
                 </el-form-item>
                 <el-form-item label="审图单位" :label-width="formLabelWidth">
                     <el-input auto-complete="off"></el-input>
-                    <el-button plain>...</el-button>
+                    <el-button plain @click="searchUnitBox">...</el-button>
                 </el-form-item>
                 <el-form-item label="安监站" :label-width="formLabelWidth">
                     <el-input auto-complete="off"></el-input>
@@ -163,39 +163,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="弹出选择" :visible.sync="chose" class="chose">
-            <el-form :model="form">
-                <div style="width: 60%;margin: -20px 0px 10px 0px;" class="chose-name">
-                    名称：<el-input></el-input>
-                    <i class="el-icon-search"></i><span>查询</span>
-                    <i class="el-icon-delete"></i><span>清空</span>
-                </div>
-                <el-table :data="tableData3" height="250" border style="width: 100%">
-                    <el-table-column prop="date" width="100" align="center">
-                    </el-table-column>
-                    <el-table-column prop="name" label="名称" width="600" align="center">
-                    </el-table-column>
-                    <el-table-column>
-                    </el-table-column>
-                </el-table>
-                <el-pagination
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        :current-page="currentPage4"
-                        :page-sizes="[100, 200, 300, 400]"
-                        :page-size="100"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total="400"
-                        align="center"
-                        style="margin-top: 20px;"
-                >
-                </el-pagination>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="chose = false">取 消</el-button>
-                <el-button type="primary" @click="chose = false">确 定</el-button>
-            </div>
-        </el-dialog>
+        <search-box :chose="chose" v-on:dbClickSelection="getUnitValue"></search-box>
 
     </div>
 </template>
@@ -203,6 +171,7 @@
 <script>
     import { buildType,invest,itemcategory,structuraltype,citys } from "../api/json"
     import {BaiduMap, BmControl, BmView, BmAutoComplete, BmLocalSearch, BmMarker} from 'vue-baidu-map'
+    import SearchBox from '../components/SearchBox.vue'
     export default {
         components: {
             BaiduMap,
@@ -210,7 +179,8 @@
             BmView,
             BmAutoComplete,
             BmLocalSearch,
-            BmMarker
+            BmMarker,
+            SearchBox
         },
         data() {
             return {
@@ -237,11 +207,13 @@
                 itemcategory: [],
                 //结构形式
                 structuraltype:[],
+                currentUnitModel: '',    // 当前选择的单位input 的name
                 //省市区
                 citys:[],
                 value1: "",
                 value2: "",
                 value3: "",
+                chose: false,   // 这个是search-box是否显示
                 form: {
                     name: '',
                     region: '',
@@ -256,28 +228,7 @@
                     resource: '',
                     desc: ''
                 },
-                tableData3: [{
-                    date: '1',
-                    name: '云南建设投资集团有限公司'
-                }, {
-                    date: '2',
-                    name: '安徽汇源建设工程有限公司'
-                }, {
-                    date: '3',
-                    name: '安徽鑫源建设集团有限公司'
-                }, {
-                    date: '4',
-                    name: '六安市精华建筑安装工程有限公司'
-                }, {
-                    date: '5',
-                    name: '安微省九华山建设工程有限公司'
-                }, {
-                    date: '6',
-                    name: '泰州裕国建筑工程有限公司'
-                }, {
-                    date: '7',
-                    name: '长沙建筑安装工程公司'
-                }],
+                unitData: [],
                 data: [{
                     label: '坝光片区场平工程(I标段)',
                     children: [{
@@ -410,8 +361,18 @@
             },
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
+            },
+            searchUnitBox(currentUnitModel) {
+                this.chose = true
+                this.currentUnitModel = currentUnitModel
+            },
+            getUnitValue(row) {
+                console.log(row)
+                this.unitData.push(row)
+                this.form[this.currentUnitModel] = row.name
+                this.chose = false
             }
-        }
+        },
 
     };
 </script>

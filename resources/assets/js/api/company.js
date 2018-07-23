@@ -7,7 +7,7 @@ export function getUtypes() {
     })
 }
 
-export function getUnits(page,data=null) {
+export function getUnits(page,data=null, pagesize) {
     if (data) {
         return axios({
             url: `/unit`,
@@ -16,7 +16,7 @@ export function getUnits(page,data=null) {
         })
     }
     return axios({
-        url: `/unit?page=${page}`,
+        url: `/unit?page=${page}&pagesize=${pagesize}`,
         method: 'get',
     })
 }
