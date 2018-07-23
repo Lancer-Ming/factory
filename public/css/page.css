@@ -201,7 +201,7 @@ li {
 
 .tags-con .el-tabs--border-card > .el-tabs__header .el-tabs__item {
   background: #2E353B;
-  color: #333;
+  color: #fff;
   /*background:#fff url("/static/img/btn.png");*/
   margin: 0;
   height: 35px;
@@ -210,7 +210,7 @@ li {
 }
 
 .tags-con .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
-  background: #909399;
+  background: #284E5D;
   color: #fff;
   border-right-color: transparent;
   border-left-color: transparent;
@@ -262,7 +262,7 @@ li {
 }
 
 .ivu-btn-primary {
-  color: #333;
+  color: #fff;
   background-color: #fff;
   border-color: #fff;
 }
