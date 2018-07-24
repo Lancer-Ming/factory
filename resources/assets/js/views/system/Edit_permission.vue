@@ -25,8 +25,8 @@
 </template>
 
 <script>
-    import { FindChildren,UnfoldAll } from '../utils/common.js'
-    import { updatePermission,getPermission } from '../api/role'
+    import { FindChildren,UnfoldAll } from '../../utils/common.js'
+    import { updatePermission,getPermission } from '../../api/role'
 
     export default {
         name: 'edit_permission',

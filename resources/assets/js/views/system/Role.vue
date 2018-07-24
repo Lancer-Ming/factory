@@ -84,8 +84,8 @@
 </template>
 
 <script>
-    import {  getRoles, updateRole, storeRole, destroyRole } from "../api/role.js";
-    import {implode} from "../utils/common.js";
+    import {  getRoles, updateRole, storeRole, destroyRole } from "../../api/role.js";
+    import {implode} from "../../utils/common.js";
     export default {
         data() {
             return {

@@ -134,8 +134,8 @@
 </template>
 
 <script>
-    import {getUsers, getRoles, updateUser, addUser, destroyUser} from "../api/user.js";
-    import {implode} from "../utils/common.js";
+    import {getUsers, getRoles, updateUser, addUser, destroyUser} from "../../api/user.js";
+    import {implode} from "../../utils/common.js";
     export default {
         data() {
             return {

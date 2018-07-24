@@ -209,10 +209,10 @@
 </template>
 
 <script>
-    import { getUtypes, getUnits, editUnit } from '../api/company'
-    import { implode, decodeAddress } from '../utils/common'
-    import { citys } from '../api/json'
-    import { status, attrs } from '../config/company'
+    import { getUtypes, getUnits, editUnit } from '../../api/company'
+    import { implode, decodeAddress } from '../../utils/common'
+    import { citys } from '../../api/json'
+    import { status, attrs } from '../../config/company'
     export default {
         data() {
             return {

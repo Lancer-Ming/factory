@@ -59,7 +59,7 @@
 
 
 <script>
-    import { getPermissions, editPermissions, updatePermissions, addPermissions, deletePermissions, sortPermissions } from '../api/permission'
+    import { getPermissions, editPermissions, updatePermissions, addPermissions, deletePermissions, sortPermissions } from '../../api/permission'
     export default {
         data() {
             return {

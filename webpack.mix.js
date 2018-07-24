@@ -11,6 +11,7 @@ let mix = require('laravel-mix');
  |
  */
 mix.webpackConfig({
+    devtool: "#cheap-module-eval-source-map",
     output: {
         publicPath: "/",
         //chunkFilename: 'js/lazy/[name].[chunkhash].js'

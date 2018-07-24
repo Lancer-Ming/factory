@@ -6,6 +6,14 @@
             <el-button round class="pro-btn"><i class="el-icon-circle-plus-outline pro-i"></i>添加参建单位</el-button>
             <el-button round class="pro-btn"><i class="el-icon-refresh pro-i"></i>同步数据</el-button>
         </el-row>
+        <split-pane v-on:resize="resize" split="vertical" :default-percent='20' :min-percent='10' :max-percent='30' class="projectBox">
+            <template slot="paneL">
+                <div class="left-container">left</div>
+            </template>
+            <template slot="paneR">
+                <div class="right-container">left</div>
+            </template>
+        </split-pane>
         <div class="pro-box clearfix">
             <div class="pro-box-l clearfix">
                 <el-row class="pro-l-tit clearfix">
@@ -164,14 +172,14 @@
         </el-dialog>
 
         <search-box :chose="chose" v-on:dbClickSelection="getUnitValue"></search-box>
-
     </div>
 </template>
 
 <script>
-    import { buildType,invest,itemcategory,structuraltype,citys } from "../api/json"
+    import splitPane from 'vue-splitpane'
+    import { buildType,invest,itemcategory,structuraltype,citys } from "../../api/json"
     import {BaiduMap, BmControl, BmView, BmAutoComplete, BmLocalSearch, BmMarker} from 'vue-baidu-map'
-    import SearchBox from '../components/SearchBox.vue'
+    import SearchBox from '../../components/SearchBox.vue'
     export default {
         components: {
             BaiduMap,
@@ -180,7 +188,8 @@
             BmAutoComplete,
             BmLocalSearch,
             BmMarker,
-            SearchBox
+            SearchBox,
+            splitPane,
         },
         data() {
             return {
@@ -325,6 +334,9 @@
             }
         },
         methods: {
+            resize() {
+                console.log('resize')
+            },
             handleNodeClick(data) {
                 console.log(data);
             },

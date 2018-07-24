@@ -48,12 +48,12 @@ textarea {
 
 html,
 body,
-#app,
-.el-container {
+#app {
   height: 100%;
 }
 
-.el-container {
+.el-container,
+.main-container {
   height: 100%;
 }
 
@@ -704,5 +704,27 @@ li {
 
 .company-page .search .el-form-item__label {
   display: inline;
+}
+
+.company-page .el-form-item {
+  width: 50%;
+  float: left;
+}
+
+.company-page .el-dialog {
+  width: 60%;
+}
+
+.components-container {
+  position: relative;
+  height: 100vh;
+}
+
+.left-container {
+  height: 100%;
+}
+
+.right-container {
+  height: 100%;
 }
 

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { removeCache } from '../api/cache'
+import { removeCache } from '../../api/cache'
     export default {
         name: 'cache',
         data() {
