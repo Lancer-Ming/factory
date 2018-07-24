@@ -72,6 +72,9 @@ Route::middleware(['auth','role','header'])->group(function() {
         Route::as('unit.company.')->group(function() {
             Route::get('/unit', 'UnitsController@index')->name('index');
             Route::get('/unit/{unit}/edit', 'UnitsController@edit')->name('edit');
+            Route::get('/unit/{unit}/find', 'UnitsController@find')->name('find');
+            Route::put('/unit/{unit}', 'UnitsController@update')->name('update');
+            Route::post('/unit', 'UnitsController@store')->name('store');
         });
 
         // 单位类型管理

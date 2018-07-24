@@ -5,6 +5,5 @@ export const status = [
 ]
 
 export const attrs = [
-    {label: '请选择', value: 0},
     {label: '单位', value: 1},
 ]

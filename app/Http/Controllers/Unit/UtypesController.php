@@ -30,6 +30,10 @@ class UtypesController extends Controller
     public function searchOption()
     {
         $utypes = Utype::get();
-        return successJson($utypes);
+        $data = [];
+        forEach($utypes as $utype) {
+            $data[] = ['label' => $utype->name, 'value' => $utype->id];
+        }
+        return successJson($data);
     }
 }
