@@ -40,9 +40,10 @@
                 :data="tableData"
                 align
                 border
-                height=600
+                v-loading="loading"
                 @selection-change="handleSelectionChange"
-                @cell-click = "cellClick"
+                @row-click = "cellClick"
+                @row-dblclick="dblclick"
                 ref="table"
                 style="width: 100%">
 
@@ -133,6 +134,20 @@
                 </template>
             </el-table-column>
         </el-table>
+        
+        <el-row class="paginate">
+            <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[5, 10, 15, 20]"
+                :page-size="10"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="total">
+            </el-pagination>
+        </el-row>
+
+        
 
         <el-dialog title="编辑单位" :visible.sync="formShown" class="pro-add">
             <el-form class="clearfix">
@@ -140,17 +155,18 @@
                     <el-input v-model="form.name"></el-input>
                 </el-form-item>
                 <el-form-item label="单位类型" :label-width="formLabelWidth">
-                    <el-select v-model="form.unit_attr_id" placeholder="请选择项目类型">
+                    <el-select v-model="form.utype_id" placeholder="请选择单位类型" multiple>
                         <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="上级机构" :label-width="formLabelWidth">
-                    <el-select v-model="form.utype_id" placeholder="请选择项目类型">
-                        <el-option v-for="(item,index) in options" :key="index" :label="item.name" :value="item.name"></el-option>
+                    <el-select v-model="form.parent_id" placeholder="请选择上级机构" disabled>
+                        <el-option v-for="(item,index) in units" :key="index" :label="item.label" :value="item.value"></el-option>
                     </el-select>
+                    <el-button plain @click="searchUnitBox">...</el-button>
                 </el-form-item>
                 <el-form-item label="单位属性" :label-width="formLabelWidth">
-                    <el-select v-model="form.utype_id" placeholder="请选择项目类型">
+                    <el-select v-model="form.unit_attr_id" placeholder="">
                         <el-option v-for="(item,index) in attrs" :key="index" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
@@ -205,34 +221,44 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
+
+        <search-box :chose="chose" v-on:dbClickSelection="getUnitValue"></search-box>
     </div>
 </template>
 
 <script>
-    import { getUtypes, getUnits, editUnit } from '../api/company'
+    import { getUtypes, getUnits, editUnit, findUnit, updateUnit, storeUnit} from '../api/company'
     import { implode, decodeAddress } from '../utils/common'
     import { citys } from '../api/json'
     import { status, attrs } from '../config/company'
+    import {pagesize, perPagesize } from '../config/common'
+    import SearchBox from '../components/SearchBox.vue' 
     export default {
         data() {
             return {
                 tableData: [],
                 multipleSelection: [],
                 options: [],
+                units: [],
                 leader: '',
                 utype_id: '',
                 name: '',
-                page: 1,
                 addressData: [],
                 editData: {},
+                currentPage: 1, //当前页数
+                pagesize: pagesize,
+                perPagesize: perPagesize,
+                total: null,
+                loading: true,
+                searchData: {},
+                chose: false,
                 form: {
                     name: '',
-                    unit_attr_id: 0,
-                    utype_id: 0,
+                    unit_attr_id: null,
+                    parent_id: null,
                     status: 0,
                     address: [],
                     detail: '',
-                    utype_id: 0,
                     unit_no: '',
                     qualification_no: '',
                     safety_permit: '',
@@ -247,6 +273,7 @@
                 },
                 formShown: false,
                 formLabelWidth: "120px",
+                submitType: ''
             }
         },
         created() {
@@ -255,54 +282,127 @@
             })
             getUtypes().then(res => {
                 if (res.data.response_status === "success") {
-                    res.data.data.forEach(item => {
-                        this.options.push({
-                            label: item.name,
-                            value: item.id
-                        })
-                    })
+                    this.options = res.data.data
                 }
             })
 
-            getUnits(this.page).then(res => {
-                if (res.data.response_status === "success") {
-                    this.tableData = res.data.data.data
-                }
-            })
+            this.getTableData()
+            
         },
         methods: {
-            handleAdd() {},
+            handleAdd() {
+                this.form = {
+                    name: '',
+                    unit_attr_id: null,
+                    parent_id: null,
+                    status: 0,
+                    address: [],
+                    detail: '',
+                    unit_no: '',
+                    qualification_no: '',
+                    safety_permit: '',
+                    concact_person: '',
+                    concact_tel: '',
+                    leader: '',
+                    leader_tel: '',
+                    company_site: '',
+                    fax: '',
+                    main_business: '',
+                    remark: '',
+                    utype_id: []
+                }
+                this.formShown = true
+                this.submitType = 'add'
+            },
             handleDeleteSeleted() {},
             handleSelectionChange(selection) {
                 this.multipleSelection = implode(selection, 'id')
             },
             handleEdit() {
-                this.editOptions()  // 调用
+                findUnit(this.multipleSelection[0]).then(res => {
+                    this.units.push(res.data.data)
+                })
                 // 如果选中个数等于1的时候才触发编辑
                 if (this.multipleSelection.length === 1) {
                     editUnit(this.multipleSelection[0]).then(res => {
                         this.editData = res.data.data
                         // 给form对象赋值
                         this.form = this.editData
-                        this.form.address = [this.editData.province, this.editData.city, this.editData.county]
+                        this.$set(this.form, 'address',  [this.editData.province, this.editData.city, this.editData.county])
+                        this.$set(this.form, 'utype_id', implode(this.editData.utypes, 'id'))
                         // 显示dialog编辑框
                         this.formShown = true
                     })
                 }
-
-
+                this.submitType = 'edit'
             },
             handleDelete() {},
-            onSubmit() {},
+            handleSizeChange(pagesize) {
+                this.pagesize = pagesize 
+                this.getTableData(this.searchData)
+            },
+            handleCurrentChange(currentPage) {
+                this.currentPage = currentPage
+                this.getTableData(this.searchData)
+            },
+            onSubmit() {
+                // 对要提交的数据进行简单的更改
+                let data = this.form
+                data.province = this.form.address[0]
+                data.city = this.form.address[1]
+                data.county = this.form.address[2]
+                
+                if (this.submitType === 'edit') {
+                    updateUnit(this.editData.id, data).then(res => {
+                        this.tableData.forEach((item, index) => {
+                            if (item.id === this.editData.id) {
+                                this.$set(this.tableData, index, res.data.data)
+                                this.formShown = false
+                                this.$message({
+                                    type: 'success',
+                                    showClose: true,
+                                    message: res.data.msg
+                                })
+                            }
+                        })
+                    })
+                } else {
+                    storeUnit(data, this.pagesize).then(res => {
+                        if(res.data.response_status === 'success') {
+                            console.log(res)
+                            this.tableData = res.data.data.data
+                            this.formShown = false
+                                this.$message({
+                                    type: 'success',
+                                    showClose: true,
+                                    message: res.data.msg
+                                })
+                        }
+                    })
+                }
+            },
             search() {
-                getUnits(this.page, {leader: this.leader, name: this.name, utype_id: this.utype_id}).then(res => {
-                    if (res.data.response_status === "success") {
-                        this.tableData = res.data.data.data
-                    }
-                })
+                this.searchData = {leader: this.leader, name: this.name, utype_id: this.utype_id}
+                this.getTableData(this.searchData)
             },
             cellClick(row) {
                 this.$refs.table.toggleRowSelection(row)
+            },
+            dblclick(row) {
+                this.$refs.table.clearSelection()
+                this.$refs.table.toggleRowSelection(row, true)
+                findUnit(row.id).then(res => {
+                    this.units.push(res.data.data)
+                    editUnit(row.id).then(res => {
+                        this.editData = res.data.data
+                        // 给form对象赋值
+                        this.form = this.editData
+                        this.$set(this.form, 'address',  [this.editData.province, this.editData.city, this.editData.county])
+                        this.$set(this.form, 'utype_id', implode(this.editData.utypes, 'id'))
+                        // 显示dialog编辑框
+                        this.formShown = true
+                    })
+                })
             },
             implode(arr, attr) {
                 return implode(arr, attr);
@@ -312,10 +412,29 @@
                 resultArr = decodeAddress(this.addressData, province_code, city_code, county_code)
                 return resultArr.join('')
             },
-            // 编辑的时候更改一下options
-            editOptions() {
-                this.options.unshift({label: '请选择', value: 0})
-            }
+            
+            getTableData(data={}) {
+                getUnits(this.currentPage, data, this.pagesize).then(res => {
+                    if (res.data.response_status === "success") {
+                        //总条数
+                        this.total = res.data.data.total
+                        //table显示的数据
+                        this.tableData = res.data.data.data
+                        // 加载loading
+                        this.loading = false
+                    }
+                })
+            },
+            searchUnitBox() {
+                this.chose = true
+            },
+
+            getUnitValue(row) {
+                this.chose = false
+                this.$set(this.units, 0, {label: row.name, value: row.id})
+                // this.units.push({label: row.name, value: row.id})
+                this.form.parent_id = row.id
+            },
         },
         computed: {
             status() {
@@ -324,6 +443,9 @@
             attrs() {
                 return attrs
             }
+        },
+        components: {
+            SearchBox
         }
     }
 </script>

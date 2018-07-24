@@ -715,3 +715,12 @@ li {
   width: 60%;
 }
 
+.company-page .el-row {
+  width: 100%;
+}
+
+.company-page .el-row .el-pagination {
+  width: 32%;
+  margin: 20px auto 0;
+}
+
