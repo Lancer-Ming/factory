@@ -15,7 +15,7 @@
                             </el-option>
                         </el-select>
                 </el-form-item>
-                <el-button type="info" size="mini" @click="search">搜索</el-button>
+                <el-button type="info" size="mini" @click="search" icon="el-icon-search">搜索</el-button>
             </el-form>
         </el-row>
         </div>
@@ -23,17 +23,40 @@
             <el-button
                     size="mini"
                     type="primary"
+                    icon="el-icon-plus"
                     @click="handleAdd">新增
             </el-button>
             <el-button
                     size="mini"
                     type="info"
+                    icon="el-icon-edit"
                     @click="handleEdit">编辑
             </el-button>
             <el-button
                     size="mini"
                     type="danger"
+                    icon="el-icon-delete"
                     @click="handleDeleteSeleted">删除
+            </el-button>
+            <el-button
+                    size="mini"
+                    icon="el-icon-sort"
+                    @click="">导入
+            </el-button>
+            <el-button
+                    size="mini"
+                    icon="el-icon-download"
+                    @click="">模板下载
+            </el-button>
+            <el-button
+                    size="mini"
+                    icon="el-icon-download"
+                    @click="">导出当前数据
+            </el-button>
+            <el-button
+                    size="mini"
+                    icon="el-icon-download"
+                    @click="">导出全部数据
             </el-button>
         </el-row>
         <el-table
@@ -49,20 +72,20 @@
 
             <el-table-column
                     type="selection"
-                    width="55">
+                    >
             </el-table-column>
             <el-table-column
                     label="编号"
                     align="center"
-                    width="100">
+                    >
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{ scope.row.unit_no }}</span>
                 </template>
             </el-table-column>
             <el-table-column
                     label="企业名称"
-                    align="center"
-                    width="200">
+                    width="350"
+                    >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ scope.row.name }}</el-tag>
@@ -73,7 +96,7 @@
             <el-table-column
                     label="单位类型"
                     align="center"
-                    width="200">
+                    >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ implode(scope.row.utypes, 'name').join(',') }}</el-tag>
@@ -84,7 +107,7 @@
             <el-table-column
                     label="单位地址"
                     align="center"
-                    width="300">
+                    >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ decodeAddress(scope.row.province, scope.row.city, scope.row.county)+scope.row.detail }}</el-tag>
@@ -95,7 +118,7 @@
             <el-table-column
                     label="法人代表"
                     align="center"
-                    width="200">
+                    >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ scope.row.leader }}</el-tag>
@@ -106,7 +129,7 @@
             <el-table-column
                     label="邮箱"
                     align="center"
-                    width="200">
+                    >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ scope.row.leader_tel }}</el-tag>
@@ -117,7 +140,7 @@
             <el-table-column
                     label="创建时间"
                     align="center"
-                    width="200">
+                    >
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i> <span style="margin-left: 10px">{{ scope.row.created_at }}</span>
                 </template>
@@ -126,7 +149,7 @@
             <el-table-column
                     label="处理状态"
                     align="center"
-                    width="200">
+                    >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ status[scope.row.status] }}</el-tag>
@@ -233,9 +256,11 @@
     import { status, attrs } from '../../config/company'
     import {pagesize, perPagesize } from '../../config/common'
     import SearchBox from '../../components/SearchBox.vue'
+    //import UploadExcelComponent from '../../components/UploadExcel/index.vue'
     export default {
         data() {
             return {
+                //UploadExcelComponent,
                 tableData: [],
                 multipleSelection: [],
                 options: [],

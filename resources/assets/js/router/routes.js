@@ -9,9 +9,19 @@
 */
 export default [
     {
-        path: '/test',
-        name: 'test',
-        component: () => import('../views/Test')
+        path: '/demo/excel/upload/index',
+        name: 'demo.excel.upload.index',
+        component: () => import('../views/demo/uploadExcel')
+    },
+    {
+        path: '/demo/excel/export/index',
+        name: 'demo.excel.export.index',
+        component: () => import('../views/demo/export')
+    },
+    {
+        path: '/demo/excel/selected/index',
+        name: 'demo.excel.selected.index',
+        component: () => import('../views/demo/selected')
     },
     {
         path: '/',
