@@ -60,7 +60,7 @@
                     <el-input auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="所在省市区" :label-width="formLabelWidth">
-                    <el-cascader v-model="address" :options="citys"></el-cascader>
+                    <el-cascader  :options="citys"></el-cascader>
                 </el-form-item>
                 <el-form-item label="详细地址" :label-width="formLabelWidth">
                     <el-input auto-complete="off"></el-input>
@@ -81,9 +81,37 @@
                     <el-input auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="GPS" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
-                    <el-button type="info" disabled>信息按钮</el-button>
+                    <el-input auto-complete="off" v-model="center.lat+','+center.lng"></el-input>
+                    <el-button type="info" @click="gps">设置GPS</el-button>
                 </el-form-item>
+                <div style="padding-top:50px;display: none;" class="gps">
+                    <div @on-cancel="cancel" v-model="showMapComponent" width="400" :closable="false" :mask-closable="false">
+                        <baidu-map v-bind:style="mapStyle" class="bm-view" ak="你的密钥"
+                                :center="center"
+                                :zoom="zoom"
+                                :scroll-wheel-zoom="true"
+                                @click="getClickInfo"
+                                @moving="syncCenterAndZoom"
+                                @moveend="syncCenterAndZoom"
+                                @zoomend="syncCenterAndZoom">
+                            <bm-view style="width: 100%; height:300px;"></bm-view>
+                            <bm-marker :position="{lng: center.lng, lat: center.lat}" :dragging="true" animation="BMAP_ANIMATION_BOUNCE">
+                            </bm-marker>
+                            <bm-control :offset="{width: '10px', height: '10px'}">
+                                <bm-auto-complete v-model="keyword" :sugStyle="{zIndex: 999999}">
+                                    <input type="text" placeholder="请输入搜索关键字" class="serachinput">
+                                </bm-auto-complete>
+                            </bm-control>
+                            <bm-local-search :keyword="keyword" :auto-viewport="true" style="width:0px;height:0px;overflow: hidden;"></bm-local-search>
+                        </baidu-map>
+                        <div slot="footer" style="margin-top: 300px;">
+                            <Button @click="cancel" type="ghost"
+                                    style="width: 60px;height: 36px;">取消
+                            </Button>
+                            <Button type="primary" style="width: 60px;height: 36px;" @click="confirm">确定</Button>
+                        </div>
+                    </div>
+                </div>
                 <el-form-item label="接收时间" :label-width="formLabelWidth">
                     <el-date-picker v-model="value1" type="date" placeholder="接收时间">
                     </el-date-picker>
@@ -96,25 +124,81 @@
                     <el-date-picker v-model="value3" type="date" placeholder="竣工时间">
                     </el-date-picker>
                 </el-form-item>
-
+                <el-form-item label="施工总承包" :label-width="formLabelWidth">
+                    <el-input auto-complete="off" v-model="form.contract_id"></el-input>
+                    <el-button plain @click="searchUnitBox('contract_id')">...</el-button>
+                </el-form-item>
+                <el-form-item label="分包单位" :label-width="formLabelWidth">
+                    <el-input auto-complete="off"></el-input>
+                    <el-button plain @click="searchUnitBox">...</el-button>
+                </el-form-item>
+                <el-form-item label="建设单位" :label-width="formLabelWidth">
+                    <el-input auto-complete="off"></el-input>
+                    <el-button plain @click="searchUnitBox">...</el-button>
+                </el-form-item>
+                <el-form-item label="监理单位" :label-width="formLabelWidth">
+                    <el-input auto-complete="off"></el-input>
+                    <el-button plain @click="searchUnitBox">...</el-button>
+                </el-form-item>
+                <el-form-item label="勘察单位" :label-width="formLabelWidth">
+                    <el-input auto-complete="off"></el-input>
+                    <el-button plain @click="searchUnitBox">...</el-button>
+                </el-form-item>
+                <el-form-item label="设计单位" :label-width="formLabelWidth">
+                    <el-input auto-complete="off"></el-input>
+                    <el-button plain @click="searchUnitBox">...</el-button>
+                </el-form-item>
+                <el-form-item label="审图单位" :label-width="formLabelWidth">
+                    <el-input auto-complete="off"></el-input>
+                    <el-button plain @click="searchUnitBox">...</el-button>
+                </el-form-item>
+                <el-form-item label="安监站" :label-width="formLabelWidth">
+                    <el-input auto-complete="off"></el-input>
+                    <el-button plain>...</el-button>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="addform = false">取 消</el-button>
+                <el-button @click="addform = false" style="margin-top:100px;">取 消</el-button>
                 <el-button type="primary" @click="addform = false">确 定</el-button>
             </div>
         </el-dialog>
+
+        <search-box :chose="chose" v-on:dbClickSelection="getUnitValue"></search-box>
+
     </div>
 </template>
 
 <script>
     import { buildType,invest,itemcategory,structuraltype,citys } from "../api/json"
+    import {BaiduMap, BmControl, BmView, BmAutoComplete, BmLocalSearch, BmMarker} from 'vue-baidu-map'
+    import SearchBox from '../components/SearchBox.vue'
     export default {
+        components: {
+            BaiduMap,
+            BmControl,
+            BmView,
+            BmAutoComplete,
+            BmLocalSearch,
+            BmMarker,
+            SearchBox
+        },
         data() {
             return {
+                //地图
+                showMapComponent: this.value,
+                keyword: '',
+                mapStyle: {
+                    width: '100%',
+                    height: this.mapHeight + 'px'
+                },
+                center: {lng: 113.271429, lat: 23.135336},
+                zoom: 15,
+                chose: false,
                 addform: false,
                 formLabelWidth: "100px",
                 num1: 1,
-                address:[],
+                //分页
+                currentPage4: 4,
                 //建设方式
                 buildType: [],
                 //资金来源
@@ -123,11 +207,13 @@
                 itemcategory: [],
                 //结构形式
                 structuraltype:[],
+                currentUnitModel: '',    // 当前选择的单位input 的name
                 //省市区
                 citys:[],
                 value1: "",
                 value2: "",
                 value3: "",
+                chose: false,   // 这个是search-box是否显示
                 form: {
                     name: '',
                     region: '',
@@ -136,11 +222,13 @@
                     region3: '',
                     date1: '',
                     date2: '',
+                    address:'',
                     delivery: false,
                     type: [],
                     resource: '',
                     desc: ''
                 },
+                unitData: [],
                 data: [{
                     label: '坝光片区场平工程(I标段)',
                     children: [{
@@ -197,7 +285,10 @@
                     label: 'label'
                 },
                 handleChange(value) {
-                    console.log(value);
+                    console.log(value)
+                },
+                gps(){
+                    $('.gps').toggle()
                 }
             };
         },
@@ -218,18 +309,75 @@
                 this.citys = res.data
             })
         },
+        watch: {
+            value: function (currentValue) {
+                this.showMapComponent = currentValue
+                if (currentValue) {
+                    this.keyword = ''
+                }
+            }
+        },
+        props: {
+            value: Boolean,
+            mapHeight: {
+                type: Number,
+                default: 500
+            }
+        },
         methods: {
             handleNodeClick(data) {
                 console.log(data);
             },
             toggleY: function(){
                 $('.pro-box-l').animate({width:'toggle'})
+            },
+            getClickInfo (e) {
+                this.center.lng = e.point.lng
+                this.center.lat = e.point.lat
+            },
+            syncCenterAndZoom (e) {
+                const {lng, lat} = e.target.getCenter()
+                this.center.lng = lng
+                this.center.lat = lat
+                this.zoom = e.target.getZoom()
+            },
+            /***
+             * 确认
+             */
+            confirm: function () {
+                this.showMapComponent = false
+                this.$emit('map-confirm', this.center)
+            },
+            /***
+             * 取消
+             */
+            cancel: function () {
+                this.showMapComponent = false
+                this.$emit('cancel', this.showMapComponent)
+            },
+            //分页
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+            },
+            searchUnitBox(currentUnitModel) {
+                this.chose = true
+                this.currentUnitModel = currentUnitModel
+            },
+            getUnitValue(row) {
+                console.log(row)
+                this.unitData.push(row)
+                this.form[this.currentUnitModel] = row.name
+                this.chose = false
             }
-        }
+        },
+
     };
 </script>
 
-<style>
+<style scoped>
     .project .pro-btn{
         padding: 8px 15px;
     }
@@ -305,127 +453,26 @@
     .el-input.el-input--suffix{
         width: 100%;
     }
+    .serachinput{
+        width: 300px;
+        box-sizing: border-box;
+        padding: 9px;
+        border: 1px solid #dddee1;
+        line-height: 20px;
+        font-size: 16px;
+        height: 38px;
+        color: #333;
+        position: relative;
+        border-radius: 4px;
+        -webkit-box-shadow: #666 0px 0px 10px;
+        -moz-box-shadow: #666 0px 0px 10px;
+        box-shadow: #666 0px 0px 10px;
+    }
+    .chose-name i{
+        display: inline-block;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
 </style>
 
 
-
-<!--<template>-->
-    <!--<div style="padding-top:50px; border:1px solid red">-->
-        <!--<Modal @on-cancel="cancel" v-model="showMapComponent" width="800" :closable="false" :mask-closable="false">-->
-            <!--<baidu-map v-bind:style="mapStyle" class="bm-view" ak="你的密钥"-->
-                    <!--:center="center"-->
-                    <!--:zoom="zoom"-->
-                    <!--:scroll-wheel-zoom="true"-->
-                    <!--@click="getClickInfo"-->
-                    <!--@moving="syncCenterAndZoom"-->
-                    <!--@moveend="syncCenterAndZoom"-->
-                    <!--@zoomend="syncCenterAndZoom">-->
-                <!--<bm-view style="width: 100%; height:500px;"></bm-view>-->
-                <!--<bm-marker :position="{lng: center.lng, lat: center.lat}" :dragging="true" animation="BMAP_ANIMATION_BOUNCE">-->
-                <!--</bm-marker>-->
-                <!--<bm-control :offset="{width: '10px', height: '10px'}">-->
-                    <!--<bm-auto-complete v-model="keyword" :sugStyle="{zIndex: 999999}">-->
-                        <!--<input type="text" placeholder="请输入搜索关键字" class="serachinput">-->
-                    <!--</bm-auto-complete>-->
-                <!--</bm-control>-->
-                <!--<bm-local-search :keyword="keyword" :auto-viewport="true" style="width:0px;height:0px;overflow: hidden;"></bm-local-search>-->
-            <!--</baidu-map>-->
-            <!--<div slot="footer" style="margin-top: 0px;">-->
-                <!--<Button @click="cancel" type="ghost"-->
-                        <!--style="width: 60px;height: 36px;">取消-->
-                <!--</Button>-->
-                <!--<Button type="primary" style="width: 60px;height: 36px;" @click="confirm">确定</Button>-->
-            <!--</div>-->
-        <!--</Modal>-->
-    <!--</div>-->
-<!--</template>-->
-
-<!--<script>-->
-
-    <!--import {BaiduMap, BmControl, BmView, BmAutoComplete, BmLocalSearch, BmMarker} from 'vue-baidu-map'-->
-
-    <!--export default {-->
-        <!--components: {-->
-            <!--BaiduMap,-->
-            <!--BmControl,-->
-            <!--BmView,-->
-            <!--BmAutoComplete,-->
-            <!--BmLocalSearch,-->
-            <!--BmMarker-->
-        <!--},-->
-        <!--data: function () {-->
-            <!--return {-->
-                <!--showMapComponent: this.value,-->
-                <!--keyword: '',-->
-                <!--mapStyle: {-->
-                    <!--width: '100%',-->
-                    <!--height: this.mapHeight + 'px'-->
-                <!--},-->
-                <!--center: {lng: 116.404, lat: 39.915},-->
-                <!--zoom: 15-->
-            <!--}-->
-        <!--},-->
-        <!--watch: {-->
-            <!--value: function (currentValue) {-->
-                <!--this.showMapComponent = currentValue-->
-                <!--if (currentValue) {-->
-                    <!--this.keyword = ''-->
-                <!--}-->
-            <!--}-->
-        <!--},-->
-        <!--props: {-->
-            <!--value: Boolean,-->
-            <!--mapHeight: {-->
-                <!--type: Number,-->
-                <!--default: 500-->
-            <!--}-->
-        <!--},-->
-        <!--methods: {-->
-            <!--/***-->
-             <!--* 地图点击事件。-->
-             <!--*/-->
-            <!--getClickInfo (e) {-->
-                <!--this.center.lng = e.point.lng-->
-                <!--this.center.lat = e.point.lat-->
-            <!--},-->
-            <!--syncCenterAndZoom (e) {-->
-                <!--const {lng, lat} = e.target.getCenter()-->
-                <!--this.center.lng = lng-->
-                <!--this.center.lat = lat-->
-                <!--this.zoom = e.target.getZoom()-->
-            <!--},-->
-            <!--/***-->
-             <!--* 确认-->
-             <!--*/-->
-            <!--confirm: function () {-->
-                <!--this.showMapComponent = false-->
-                <!--this.$emit('map-confirm', this.center)-->
-            <!--},-->
-            <!--/***-->
-             <!--* 取消-->
-             <!--*/-->
-            <!--cancel: function () {-->
-                <!--this.showMapComponent = false-->
-                <!--this.$emit('cancel', this.showMapComponent)-->
-            <!--}-->
-        <!--}-->
-    <!--}-->
-<!--</script>-->
-
-<!--<style scoped>-->
-    <!--.serachinput{-->
-        <!--width: 300px;-->
-        <!--box-sizing: border-box;-->
-        <!--padding: 9px;-->
-        <!--border: 1px solid #dddee1;-->
-        <!--line-height: 20px;-->
-        <!--font-size: 16px;-->
-        <!--height: 38px;-->
-        <!--color: #333;-->
-        <!--position: relative;-->
-        <!--border-radius: 4px;-->
-        <!-- -webkit-box-shadow: #666 0px 0px 10px;-->
-        <!-- -moz-box-shadow: #666 0px 0px 10px;-->
-        <!--box-shadow: #666 0px 0px 10px;-->
-    <!--}-->
-<!--</style>-->

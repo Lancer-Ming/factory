@@ -69,8 +69,9 @@ Route::middleware(['auth','role','header'])->group(function() {
 
     Route::namespace('Unit')->group(function() {
         // 单位管理
-        Route::as('unit.')->group(function() {
-            Route::resource('company', 'UnitsController')->except(['create']);
+        Route::as('unit.company.')->group(function() {
+            Route::get('/unit', 'UnitsController@index')->name('index');
+            Route::get('/unit/{unit}/edit', 'UnitsController@edit')->name('edit');
         });
 
         // 单位类型管理

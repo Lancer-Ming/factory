@@ -7,16 +7,23 @@ export function getUtypes() {
     })
 }
 
-export function getUnits(page,data=null) {
+export function getUnits(page,data=null, pagesize) {
     if (data) {
         return axios({
-            url: `/company`,
+            url: `/unit`,
             method: 'get',
             params: data
         })
     }
     return axios({
-        url: `/company?page=${page}`,
+        url: `/unit?page=${page}&pagesize=${pagesize}`,
         method: 'get',
+    })
+}
+
+export function editUnit(id) {
+    return axios({
+        url: `/unit/${id}/edit`,
+        method: 'get'
     })
 }
