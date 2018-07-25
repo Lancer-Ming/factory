@@ -2,36 +2,39 @@
     <div class="container project" style="height: 100%;">
         <el-row style="border-bottom: 1px solid #eee;padding-bottom: 10px;">
             <el-button round class="pro-btn" @click="addform = true"><i class="el-icon-circle-plus-outline pro-i"></i>新增项目</el-button>
-            <el-button round class="pro-btn"><i class="el-icon-remove-outline pro-i"></i>移除</el-button>
-            <el-button round class="pro-btn"><i class="el-icon-circle-plus-outline pro-i"></i>添加参建单位</el-button>
-            <el-button round class="pro-btn"><i class="el-icon-refresh pro-i"></i>同步数据</el-button>
+            <el-button round class="pro-btn" @click=""><i class="el-icon-edit pro-i"></i>编辑项目</el-button>
+            <el-button round class="pro-btn" @click=""><i class="el-icon-remove-outline pro-i"></i>移除</el-button>
+            <el-button round class="pro-btn" @click=""><i class="el-icon-circle-plus-outline pro-i"></i>添加参建单位</el-button>
+            <el-button round class="pro-btn" @click=""><i class="el-icon-refresh pro-i"></i>同步数据</el-button>
         </el-row>
         <split-pane v-on:resize="resize" split="vertical" :default-percent='20' :min-percent='10' :max-percent='30' class="projectBox">
             <template slot="paneL">
-                <div class="left-container">left</div>
+                <div class="left-container">
+                    <div class="pro-box clearfix">
+                        <div class="pro-box-l clearfix">
+                            <el-row class="pro-l-tit clearfix">
+                                <el-col :span="20" style="font-weight: bold;">项目/单位名称</el-col>
+                                <i class="el-icon-d-arrow-left tool" @click="toggleY"></i>
+                            </el-row>
+                            <el-row class="pro-l-query">
+                                <el-col :span="12"><el-input class="query"></el-input></el-col>
+                                <el-col :span="3">&nbsp;</el-col>
+                                <el-col :span="9" class="query-text"><i class="el-icon-search"></i>查询</el-col>
+                            </el-row>
+                            <el-row>
+                                <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+                            </el-row>
+                        </div>
+                        <div class="pro-box-r clearfix">
+                        </div>
+                    </div>
+                </div>
             </template>
             <template slot="paneR">
-                <div class="right-container">left</div>
+                <div class="right-container">right</div>
             </template>
         </split-pane>
-        <div class="pro-box clearfix">
-            <div class="pro-box-l clearfix">
-                <el-row class="pro-l-tit clearfix">
-                    <el-col :span="20" style="font-weight: bold;">项目/单位名称</el-col>
-                    <i class="el-icon-d-arrow-left tool" @click="toggleY"></i>
-                </el-row>
-                <el-row class="pro-l-query">
-                    <el-col :span="12"><el-input class="query"></el-input></el-col>
-                    <el-col :span="3">&nbsp;</el-col>
-                    <el-col :span="9" class="query-text"><i class="el-icon-search"></i>查询</el-col>
-                </el-row>
-                <el-row>
-                    <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-                </el-row>
-            </div>
-            <div class="pro-box-r clearfix">
-            </div>
-        </div>
+
 
         <el-dialog title="新增项目" :visible.sync="addform" class="pro-add">
             <el-form :model="form">
@@ -133,7 +136,9 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="施工总承包" :label-width="formLabelWidth">
-                    <el-input auto-complete="off" v-model="form.contract_id"></el-input>
+                    <el-select v-model="form.contract_id" disabled placeholder="">
+                        <el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
                     <el-button plain @click="searchUnitBox('contract_id')">...</el-button>
                 </el-form-item>
                 <el-form-item label="分包单位" :label-width="formLabelWidth">
@@ -171,7 +176,7 @@
             </div>
         </el-dialog>
 
-        <search-box :chose="chose" v-on:dbClickSelection="getUnitValue"></search-box>
+        <search-box :chose="chose" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue"></search-box>
     </div>
 </template>
 
@@ -380,8 +385,12 @@
             },
             getUnitValue(row) {
                 console.log(row)
-                this.unitData.push(row)
-                this.form[this.currentUnitModel] = row.name
+                // this.unitData.push(row)
+                this.$set(this.unitData, 0, {label: row.name, value: row.id})
+                this.form[this.currentUnitModel] = row.id
+                this.chose = false
+            },
+            closeUnitValue(){
                 this.chose = false
             }
         },
@@ -415,10 +424,10 @@
         height: 100%;
     }
     .pro-box-l{
-        width: 40%;
+        width: 100%;
         float: left;
-        border-right: 2px solid #eee;
         height: 100%;
+        overflow: hidden;
     }
     .pro-box-r{
         width: 60%;

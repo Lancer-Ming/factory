@@ -125,7 +125,7 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="施工总承包" :label-width="formLabelWidth">
-                    <el-select disabled auto-complete="off" v-model="form.contract_id">
+                    <el-select v-model="form.contract_id" disabled placeholder="">
                         <el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                     <el-button plain @click="searchUnitBox('contract_id')">...</el-button>

@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="弹出选择" :visible.sync="chose" class="chose">
+    <el-dialog title="弹出选择" :visible.sync="chose" class="chose" @close="close">
         <el-form :model="form">
             <div style="width: 60%;margin: -20px 0px 10px 0px;" class="chose-name">
                 名称：<el-input v-model="name"></el-input>
@@ -34,8 +34,8 @@
             </el-pagination>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="choseCancel">取 消</el-button>
-            <el-button type="primary" @click="choseCancel">确 定</el-button>
+            <el-button @click="close">取 消</el-button>
+            <el-button type="primary" @click="close">确 定</el-button>
         </div>
     </el-dialog>
 </template>
@@ -62,6 +62,7 @@ import { getUnits } from '../api/company'
             form: {
                 type: Object
             },
+
             // tableData: Array,
             // currentPage: Number
 
@@ -77,8 +78,9 @@ import { getUnits } from '../api/company'
             dbclick(row) {
                 this.$emit('dbClickSelection', row)
             },
-            choseCancel(row){
-                this.$emit('dbClickSelection', row)
+            close(){
+               this.$emit('closeSearchBox')
+                console.log(4444)
             },
             // 请求数据
             getTableData(data={}) {
