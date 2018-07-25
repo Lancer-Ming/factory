@@ -41,22 +41,22 @@
             <el-button
                     size="mini"
                     icon="el-icon-sort"
-                    @click="">导入
+                    @click="importData">导入
             </el-button>
             <el-button
                     size="mini"
                     icon="el-icon-download"
-                    @click="">模板下载
+                    @click="downloadTmp">模板下载
             </el-button>
             <el-button
                     size="mini"
                     icon="el-icon-download"
-                    @click="">导出当前数据
+                    @click="exportCurrentData">导出当前数据
             </el-button>
             <el-button
                     size="mini"
                     icon="el-icon-download"
-                    @click="">导出全部数据
+                    @click="exportAllData">导出全部数据
             </el-button>
         </el-row>
         <el-table
@@ -250,7 +250,7 @@
 </template>
 
 <script>
-    import { getUtypes, getUnits, editUnit, findUnit, updateUnit, storeUnit} from '../../api/company'
+    import { getUtypes, getUnits, editUnit, findUnit, updateUnit, storeUnit, destroyUnit} from '../../api/company'
     import { implode, decodeAddress } from '../../utils/common'
     import { citys } from '../../api/json'
     import { status, attrs } from '../../config/company'
@@ -302,6 +302,8 @@
             }
         },
         created() {
+            this.$router.replace({path: this.$route.path, query: {page: this.currentPage}})
+
             citys().then(res => {
                 this.addressData = res.data
             })
@@ -339,7 +341,6 @@
                 this.formShown = true
                 this.submitType = 'add'
             },
-            handleDeleteSeleted() {},
             handleSelectionChange(selection) {
                 this.multipleSelection = implode(selection, 'id')
             },
@@ -361,13 +362,34 @@
                 }
                 this.submitType = 'edit'
             },
-            handleDelete() {},
+            handleDeleteSeleted() {
+                this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    destroyUnit({id: this.multipleSelection}, this.currentPage, this.pagesize).then(res => {
+                        if (res.data.response_status === 'success') {
+                            this.tableData = res.data.data.data
+                            this.$message({
+                                type: 'success',
+                                showClose: true,
+                                message: res.data.msg
+                            })
+                        }
+                    })
+                }).catch(() => {
+                    return
+                })
+            },
             handleSizeChange(pagesize) {
                 this.pagesize = pagesize 
                 this.getTableData(this.searchData)
             },
             handleCurrentChange(currentPage) {
                 this.currentPage = currentPage
+                this.$router.replace({path: this.$route.path, query: {page: this.currentPage}})
                 this.getTableData(this.searchData)
             },
             onSubmit() {
@@ -394,14 +416,13 @@
                 } else {
                     storeUnit(data, this.pagesize).then(res => {
                         if(res.data.response_status === 'success') {
-                            console.log(res)
                             this.tableData = res.data.data.data
                             this.formShown = false
-                                this.$message({
-                                    type: 'success',
-                                    showClose: true,
-                                    message: res.data.msg
-                                })
+                            this.$message({
+                                type: 'success',
+                                showClose: true,
+                                message: res.data.msg
+                            })
                         }
                     })
                 }
@@ -460,6 +481,10 @@
                 // this.units.push({label: row.name, value: row.id})
                 this.form.parent_id = row.id
             },
+            importData(){},
+            downloadTmp(){},
+            exportCurrentData(){},
+            exportAllData(){},
         },
         computed: {
             status() {

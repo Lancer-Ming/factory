@@ -23,16 +23,30 @@ class UnitRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required',
-            'unit_no' => 'required'
-        ];
+        switch ($this->method()) {
+            case "DELETE":
+                return [
+                    'id' => 'required|Array',
+                    'page' => 'required'
+                ];
+                break;
+            default:
+                return [
+                    'name' => 'required',
+                    'unit_no' => 'required'
+                ];
+            break;
+        }
+
+
     }
 
     public function attributes()
     {
         return [
-            'unit_no' => '单位机构代码'
+            'name' => '企业名',
+            'unit_no' => '单位机构代码',
+            'page' => '页码'
         ];
     }
 }

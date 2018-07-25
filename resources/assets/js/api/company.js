@@ -52,3 +52,13 @@ export function storeUnit(data, pagesize) {
         data: data
     })
 }
+
+export function destroyUnit(data, page, pagesize) {
+    data.page = page
+    data.pagesize = pagesize
+    return axios({
+        url: `/unit`,
+        method: 'delete',
+        data: data
+    })
+}

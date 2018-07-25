@@ -64,4 +64,12 @@ class UnitsController extends Controller
         $units = Unit::orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
         return successJson($units, '操作成功！');
     }
+
+    public function destroy(UnitRequest $request)
+    {
+        Unit::destroy($request->id);
+        $pagesize = $request->has('pagesize') ? $request->pagesize: 10;
+        $units = Unit::orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
+        return successJson($units, '操作成功！');
+    }
 }
