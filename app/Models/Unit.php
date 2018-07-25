@@ -12,4 +12,9 @@ class Unit extends Model
     {
         return $this->belongsToMany(Utype::class);
     }
+
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
 }

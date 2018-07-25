@@ -214,6 +214,9 @@
                 <el-form-item label="安全生产许可证" :label-width="formLabelWidth">
                     <el-input v-model="form.safety_permit"></el-input>
                 </el-form-item>
+                <el-form-item label="邮箱" :label-width="formLabelWidth">
+                    <el-input v-model="form.email"></el-input>
+                </el-form-item>
                 <el-form-item label="联系人" :label-width="formLabelWidth">
                     <el-input v-model="form.concact_person"></el-input>
                 </el-form-item>
@@ -245,17 +248,18 @@
             </el-form>
         </el-dialog>
 
-        <search-box :chose="chose" v-on:dbClickSelection="getUnitValue"></search-box>
+        <search-box :chose="chose" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue"></search-box>
     </div>
 </template>
 
 <script>
     import { getUtypes, getUnits, editUnit, findUnit, updateUnit, storeUnit, destroyUnit} from '../../api/company'
-    import { implode, decodeAddress } from '../../utils/common'
+    import { implode, decodeAddress, formatJson } from '../../utils/common'
     import { citys } from '../../api/json'
-    import { status, attrs } from '../../config/company'
+    import { status, attrs, exportTemp, tHeader, filterVal } from '../../config/company'
     import {pagesize, perPagesize } from '../../config/common'
     import SearchBox from '../../components/SearchBox.vue'
+    import { export_json_to_excel } from '../../vendor/Export2Excel'
     //import UploadExcelComponent from '../../components/UploadExcel/index.vue'
     export default {
         data() {
@@ -298,7 +302,9 @@
                 },
                 formShown: false,
                 formLabelWidth: "120px",
-                submitType: ''
+                submitType: '',
+                filename: '',
+                autoWidth: true
             }
         },
         created() {
@@ -345,7 +351,8 @@
                 this.multipleSelection = implode(selection, 'id')
             },
             handleEdit() {
-                findUnit(this.multipleSelection[0]).then(res => {
+                this.submitType = 'edit'
+                findUnit(this.editData.id).then(res => {
                     this.units.push(res.data.data)
                 })
                 // 如果选中个数等于1的时候才触发编辑
@@ -360,7 +367,6 @@
                         this.formShown = true
                     })
                 }
-                this.submitType = 'edit'
             },
             handleDeleteSeleted() {
                 this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
@@ -435,6 +441,7 @@
                 this.$refs.table.toggleRowSelection(row)
             },
             dblclick(row) {
+                this.submitType = 'edit'
                 this.$refs.table.clearSelection()
                 this.$refs.table.toggleRowSelection(row, true)
                 findUnit(row.id).then(res => {
@@ -452,6 +459,9 @@
             },
             implode(arr, attr) {
                 return implode(arr, attr);
+            },
+            formatJson(filterVal, jsonData) {
+                return formatJson(filterVal, jsonData)
             },
             decodeAddress(province_code, city_code, county_code) {
                 let resultArr = []
@@ -478,13 +488,26 @@
             getUnitValue(row) {
                 this.chose = false
                 this.$set(this.units, 0, {label: row.name, value: row.id})
-                // this.units.push({label: row.name, value: row.id})
-                this.form.parent_id = row.id
+                this.$set(this.form, 'parent_id', row.id)
             },
             importData(){},
-            downloadTmp(){},
+            downloadTmp(){                
+                const list = exportTemp
+                const data = this.formatJson(filterVal, list)
+                this.filename = 'company'
+                export_json_to_excel({
+                    header: tHeader,
+                    data,
+                    filename: this.filename,
+                    autoWidth: this.autoWidth
+                })
+                
+            },
             exportCurrentData(){},
             exportAllData(){},
+            closeUnitValue() {
+                this.chose = false
+            }
         },
         computed: {
             status() {
