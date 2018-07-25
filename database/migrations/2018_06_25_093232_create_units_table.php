@@ -15,15 +15,14 @@ class CreateUnitsTable extends Migration
     {
         Schema::create('units', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('unit_attr_id')->comment('单位属性id');
-            $table->unsignedInteger('parent_id')->index()->comment('上级单位id');
+            $table->unsignedInteger('unit_attr_id')->comment('单位属性id')->default(1)->nullable();
+            $table->unsignedInteger('parent_id')->index()->comment('上级单位id')->nullable();
 
-            $table->string('unit_no')->comment('单位机构代码');
+            $table->string('unit_no')->comment('单位机构代码')->nullable();
             $table->string('name')->comment('单位名称');
-            $table->string('country')->comment('项目所在国家');
-            $table->string('province')->comment('省');
-            $table->string('city')->comment('市');
-            $table->string('county')->comment('区');
+            $table->string('province')->comment('省')->nullable();
+            $table->string('city')->comment('市')->nullable();
+            $table->string('county')->comment('区')->nullable();
             $table->string('detail')->comment('详细地址')->nullable();
             $table->string('region')->comment('区域')->nullable();
             $table->string('grade')->comment('资质等级')->nullable();
@@ -37,8 +36,8 @@ class CreateUnitsTable extends Migration
             $table->string('fax')->comment('传真')->nullable();
             $table->string('main_business')->comment('主营业务')->nullable();
             $table->string('remark')->comment('备注')->nullable();
-
             $table->timestamps();
+            $table->unsignedInteger('status')->nullable();
         });
     }
 

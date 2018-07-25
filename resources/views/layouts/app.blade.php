@@ -11,7 +11,7 @@
 </head>
 <body>
 <div id="app">
-    <el-container style="height: 100%;">
+    <el-container>
         @include('layouts._header')
         <el-container>
             @include('layouts._sidebar')

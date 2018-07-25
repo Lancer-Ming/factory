@@ -48,12 +48,12 @@ textarea {
 
 html,
 body,
-#app,
-.el-container {
+#app {
   height: 100%;
 }
 
-.el-container {
+.el-container,
+.main-container {
   height: 100%;
 }
 
@@ -121,7 +121,7 @@ li {
 
 .header-nav .as-header__actions .as-menu__top .el-menu-item {
   float: left;
-  color: #fff;
+  color: #fff !important;
 }
 
 .header-nav .as-header__actions .as-menu__top .el-menu-item .icon-menu__top {
@@ -156,7 +156,6 @@ li {
 }
 
 .tags-con {
-  height: 40px;
   z-index: -1;
   overflow: hidden;
   background: #f0f0f0;
@@ -191,12 +190,13 @@ li {
 }
 
 .tags-con .el-tabs--border-card {
-  background: #fff;
+  background: #2E353B;
   border: 0px none;
 }
 
 .tags-con .el-tabs--border-card > .el-tabs__header {
   background: none;
+  border-bottom: 0px none;
 }
 
 .tags-con .el-tabs--border-card > .el-tabs__header .el-tabs__item {
@@ -263,8 +263,8 @@ li {
 
 .ivu-btn-primary {
   color: #fff;
-  background-color: #fff;
-  border-color: #fff;
+  background-color: #2E353B;
+  border-color: #2E353B;
 }
 
 .ivu-btn-small {
@@ -285,7 +285,7 @@ li {
 }
 
 .ivu-btn-small:focus {
-  background: #fff;
+  background: #2E353B;
 }
 
 .ivu-icon-arrow-down-b:before {
@@ -713,5 +713,27 @@ li {
 
 .company-page .el-dialog {
   width: 60%;
+}
+
+.company-page .el-row {
+  width: 100%;
+}
+
+.company-page .el-row .el-pagination {
+  width: 32%;
+  margin: 20px auto 0;
+}
+
+.components-container {
+  position: relative;
+  height: 100vh;
+}
+
+.left-container {
+  height: 100%;
+}
+
+.right-container {
+  height: 100%;
 }
 

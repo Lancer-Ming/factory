@@ -68,25 +68,21 @@ import { getUnits } from '../api/company'
         },
         methods: {
             handleSizeChange(pagesize) {
-                console.log(pagesize)
                 this.pagesize = pagesize
-                this.getTableData(this.currentPage, null, pagesize)
+                this.getTableData()
             },
             handleCurrentChange(currentPage) {
-                console.log(currentPage)
                 this.getTableData(currentPage)
             },
             dbclick(row) {
-                console.log(123)
                 this.$emit('dbClickSelection', row)
             },
             choseCancel(row){
                 this.$emit('dbClickSelection', row)
             },
             // 请求数据
-            getTableData(currentPage ,data=null, pagesize=this.pagesize) {
-                getUnits(currentPage, data, pagesize).then(res => {
-                    console.log(res)
+            getTableData(data={}) {
+                getUnits(this.currentPage, data, this.pagesize).then(res => {
                     if (res.data.response_status === 'success') {
                         this.tableData = res.data.data.data
                         this.total = res.data.data.total

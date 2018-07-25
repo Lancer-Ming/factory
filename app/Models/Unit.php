@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Unit extends Model
 {
-    protected $guarded = [];
+    protected $guarded = ['address', 'utypes'];
 
     public function utypes()
     {

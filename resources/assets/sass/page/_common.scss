@@ -33,7 +33,7 @@
       background-color: $--as-header-menu-bgColor;
       .el-menu-item {
         float: left;
-        color: $--as-header-menu-textColor;
+        color: $--as-header-menu-textColor !important;
         .icon-menu__top{ color:$--as-header-menu-textColor; }
         &:hover {
           //border-bottom: 2px solid;
@@ -65,7 +65,7 @@
 }
 //tab
 .tags-con {
-  height: 40px;
+  //height: 40px;
   z-index: -1;
   overflow: hidden;
   background: #f0f0f0;
@@ -99,7 +99,7 @@
     //transition: left .3s ease;
   }
   .el-tabs--border-card{background:$--as-header-tab-bgColor;border: 0px none;}
-  .el-tabs--border-card > .el-tabs__header{ background: $--as-header-tabs-bgColor;}
+  .el-tabs--border-card > .el-tabs__header{ background: $--as-header-tabs-bgColor; border-bottom: 0px none;}
   .el-tabs--border-card > .el-tabs__header .el-tabs__item{background: $--as-header-tabs__itemBgColor;color: $--as-header-tabs__itemtextColor; /*background:#fff url("/static/img/btn.png");*/margin:0; height:$--as-header-tab-height; line-height:$--as-header-tab-height;background-position: 0 -448px;}
   .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active{background:$--as-header-tabs__itemactiveBgColor ; color: $--as-header-tabs__itemactiveTextColor;border-right-color: transparent;border-left-color:transparent;border-top-color:transparent;}
   .el-tabs--border-card > .el-tabs__header .el-tabs__item:not(.is-disabled):hover{ background: $--as-header-tabs__itemhoverBgColor;color: $--as-header-tabs__itemhoverTextColor;}

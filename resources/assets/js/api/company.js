@@ -7,8 +7,9 @@ export function getUtypes() {
     })
 }
 
-export function getUnits(page,data=null, pagesize) {
-    if (data) {
+export function getUnits(page,data={}, pagesize=10) {
+    if (Object.keys(data).length > 0) {
+        Object.assign(data, {page, pagesize});
         return axios({
             url: `/unit`,
             method: 'get',
@@ -25,5 +26,29 @@ export function editUnit(id) {
     return axios({
         url: `/unit/${id}/edit`,
         method: 'get'
+    })
+}
+
+export function findUnit(id) {
+    return axios({
+        url: `/unit/${id}/find`,
+        method: 'get'
+    })
+}
+
+export function updateUnit(id, data) {
+    return axios({
+        url: `/unit/${id}`,
+        method: 'put',
+        data: data
+    })
+}
+
+export function storeUnit(data, pagesize) {
+    data.pagesize = pagesize
+    return axios({
+        url: `/unit`,
+        method: 'post',
+        data: data
     })
 }

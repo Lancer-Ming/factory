@@ -3,7 +3,7 @@
 /public/storage
 /storage/*.key
 /public/js/app.js
-/public/css/app.css
+/public/css/*.css
 /public/js/lazy/*.js
 /public/fonts/vendor/*
 /vendor
