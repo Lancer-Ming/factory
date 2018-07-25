@@ -34,8 +34,8 @@
             </el-pagination>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="chose = false">取 消</el-button>
-            <el-button type="primary" @click="chose = false">确 定</el-button>
+            <el-button @click="choseCancel">取 消</el-button>
+            <el-button type="primary" @click="choseCancel">确 定</el-button>
         </div>
     </el-dialog>
 </template>
@@ -78,6 +78,9 @@ import { getUnits } from '../api/company'
             },
             dbclick(row) {
                 console.log(123)
+                this.$emit('dbClickSelection', row)
+            },
+            choseCancel(row){
                 this.$emit('dbClickSelection', row)
             },
             // 请求数据
