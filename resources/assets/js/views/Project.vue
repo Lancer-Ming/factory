@@ -125,32 +125,34 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="施工总承包" :label-width="formLabelWidth">
-                    <el-input auto-complete="off" v-model="form.contract_id"></el-input>
+                    <el-select v-model="form.contract_id" disabled placeholder="">
+                        <el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
                     <el-button plain @click="searchUnitBox('contract_id')">...</el-button>
                 </el-form-item>
                 <el-form-item label="分包单位" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
-                    <el-button plain @click="searchUnitBox">...</el-button>
+                    <el-input auto-complete="off" v-model="form.subcontract_id"></el-input>
+                    <el-button plain @click="searchUnitBox('subcontract_id')">...</el-button>
                 </el-form-item>
                 <el-form-item label="建设单位" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
-                    <el-button plain @click="searchUnitBox">...</el-button>
+                    <el-input auto-complete="off" v-model="form.build_id"></el-input>
+                    <el-button plain @click="searchUnitBox('build_id')">...</el-button>
                 </el-form-item>
                 <el-form-item label="监理单位" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
-                    <el-button plain @click="searchUnitBox">...</el-button>
+                    <el-input auto-complete="off" v-model="form.supervisor_id"></el-input>
+                    <el-button plain @click="searchUnitBox('supervisor_id')">...</el-button>
                 </el-form-item>
                 <el-form-item label="勘察单位" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
-                    <el-button plain @click="searchUnitBox">...</el-button>
+                    <el-input auto-complete="off" v-model="form.servey_id"></el-input>
+                    <el-button plain @click="searchUnitBox('servey_id')">...</el-button>
                 </el-form-item>
                 <el-form-item label="设计单位" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
-                    <el-button plain @click="searchUnitBox">...</el-button>
+                    <el-input auto-complete="off" v-model="form.design_id"></el-input>
+                    <el-button plain @click="searchUnitBox('design_id')">...</el-button>
                 </el-form-item>
                 <el-form-item label="审图单位" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
-                    <el-button plain @click="searchUnitBox">...</el-button>
+                    <el-input auto-complete="off" v-model="form.trail_id"></el-input>
+                    <el-button plain @click="searchUnitBox('trail_id')">...</el-button>
                 </el-form-item>
                 <el-form-item label="安监站" :label-width="formLabelWidth">
                     <el-input auto-complete="off"></el-input>
@@ -371,6 +373,7 @@
                 this.form[this.currentUnitModel] = row.name
                 this.chose = false
             }
+
         },
 
     };
