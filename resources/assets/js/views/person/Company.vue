@@ -5,7 +5,7 @@
             <el-form>
                 <span class="search-label">企业名称：</span><el-input v-model="name" placeholder="请输入内容" size="mini" style="width: 200px;"></el-input>
                 <span class="search-label" style="margin-left: 30px;">法人代表：</span><el-input v-model="leader" placeholder="请输入法人代表" size="mini" style="width: 200px;"></el-input>
-                <el-form-item label="单位类型" label-width="120" style="display: inline-block;width:300px;margin: 0 0 0 30px;">
+                <el-form-item label="单位类型" label-width="120" style="display: inline-block;width:300px;margin: -6px 0 0 30px;">
                         <el-select v-model="utype_id" multiple filterable placeholder="请选择" value-key="item" size="mini">
                             <el-option
                                     v-for="item in options"
@@ -242,7 +242,7 @@
                     <el-input type="textarea" v-model="form.remark"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">保存</el-button>
+                    <el-button type="primary" @click="onSubmit" style="margin:10px 0px 0px 50px;">保存</el-button>
                     <el-button>取消</el-button>
                 </el-form-item>
             </el-form>
