@@ -2,7 +2,7 @@
     <div class="container project" style="height: 100%;">
         <el-row style="border-bottom: 1px solid #eee;padding-bottom: 10px;">
             <el-button round class="pro-btn" @click="handleAdd"><i class="el-icon-circle-plus-outline pro-i"></i>新增项目</el-button>
-            <el-button round class="pro-btn" @click=""><i class="el-icon-remove-outline pro-i"></i>移除</el-button>
+            <el-button round class="pro-btn" @click="handleDeleteSeleted"><i class="el-icon-remove-outline pro-i"></i>移除</el-button>
             <el-button round class="pro-btn" @click=""><i class="el-icon-circle-plus-outline pro-i"></i>添加参建单位</el-button>
             <el-button round class="pro-btn" @click=""><i class="el-icon-refresh pro-i"></i>同步数据</el-button>
         </el-row>
@@ -15,7 +15,7 @@
                                 <i class="el-icon-d-arrow-left tool"></i>
                             </el-row>
                             <el-row class="pro-l-query">
-                                <el-col :span="12"><el-input class="query" size="mini"></el-input></el-col>
+                                <el-col :span="12"><el-input class="query" size="mini" style="width: 100%;"></el-input></el-col>
                                 <el-col :span="3">&nbsp;</el-col>
                                 <el-col :span="9" class="query-text"><i class="el-icon-search"></i>查询</el-col>
                             </el-row>
@@ -38,64 +38,64 @@
                                     </el-row>
                                 </el-tab-pane>
                                 <el-tab-pane label="单位信息" disabled>单位信息</el-tab-pane>
-                                <el-tab-pane label="项目信息" class="clearfix">
-                                    <el-button type="warning" plain icon="el-icon-edit" style="margin-bottom: 20px;" size="mini" @click="handleEdit">保存编辑</el-button>
+                                <el-tab-pane label="项目信息">
+                                    <el-button type="warning" plain icon="el-icon-edit" style="margin-bottom: 20px;" @click="handleEdit">保存编辑</el-button>
                                     <el-form :model="form">
                                         <el-form-item label="项目名" :label-width="formLabelWidth">
-                                            <el-input auto-complete="off"></el-input>
+                                            <el-input v-model="form.id" auto-complete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item label="项目类型" :label-width="formLabelWidth">
-                                            <el-select v-model="form.region" placeholder="请选择项目类型">
+                                            <el-select v-model="form.item_category_id" placeholder="请选择项目类型">
                                                 <el-option v-for="(item,index) in itemcategory" :key="index" :label="item.name" :value="item.name"></el-option>
                                             </el-select>
                                         </el-form-item>
                                         <el-form-item label="资金来源" :label-width="formLabelWidth">
-                                            <el-select v-model="form.region1" placeholder="请选择资金来源">
+                                            <el-select v-model="form.invest_id" placeholder="请选择资金来源">
                                                 <el-option v-for="(item,index) in invest" :key="index" :label="item.name" :value="item.name"></el-option>
                                             </el-select>
                                         </el-form-item>
                                         <el-form-item label="建设方式" :label-width="formLabelWidth">
-                                            <el-select v-model="form.region2" placeholder="请选择建设方式">
+                                            <el-select v-model="form.build_type_id" placeholder="请选择建设方式">
                                                 <el-option v-for="(item,index) in buildType" :key="index" :label="item.name" :value="item.name"></el-option>
                                             </el-select>
                                         </el-form-item>
                                         <el-form-item label="结构形式" :label-width="formLabelWidth">
-                                            <el-select v-model="form.region3" placeholder="请选择结构类型">
+                                            <el-select v-model="form.structural_type_id" placeholder="请选择结构类型">
                                                 <el-option v-for="(item,index) in structuraltype" :key="index" :label="item.name" :value="item.name"></el-option>
                                             </el-select>
                                         </el-form-item>
                                         <el-form-item label="结构层数" :label-width="formLabelWidth">
-                                            <el-input-number v-model="num1" @change="handleChange" :min="1" :max="100"></el-input-number>
+                                            <el-input-number v-model="form.structural_floor" @change="handleChange" :min="1" :max="100"></el-input-number>
                                         </el-form-item>
                                         <el-form-item label="监督登记号" :label-width="formLabelWidth">
-                                            <el-input auto-complete="off"></el-input>
+                                            <el-input v-model="form.item_no" auto-complete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item label="工程号" :label-width="formLabelWidth">
-                                            <el-input auto-complete="off"></el-input>
+                                            <el-input v-model="form.project_no" auto-complete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item label="国家" :label-width="formLabelWidth">
-                                            <el-input auto-complete="off"></el-input>
+                                            <el-input v-model="form.country" auto-complete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item label="所在省市区" :label-width="formLabelWidth">
-                                            <el-cascader  :options="citys"></el-cascader>
+                                            <el-cascader v-model="form.address" :options="citys"></el-cascader>
                                         </el-form-item>
                                         <el-form-item label="详细地址" :label-width="formLabelWidth">
-                                            <el-input auto-complete="off"></el-input>
+                                            <el-input v-model="form.detail" auto-complete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item label="施工许可证号" :label-width="formLabelWidth">
-                                            <el-input auto-complete="off"></el-input>
+                                            <el-input v-model="form.permit_no" auto-complete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item label="建筑面积(㎡)" :label-width="formLabelWidth">
-                                            <el-input auto-complete="off"></el-input>
+                                            <el-input v-model="form.area" auto-complete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item label="投资总金额" :label-width="formLabelWidth">
-                                            <el-input auto-complete="off"></el-input>
+                                            <el-input v-model="form.total_amount" auto-complete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item label="负责人" :label-width="formLabelWidth">
-                                            <el-input auto-complete="off"></el-input>
+                                            <el-input v-model="form.chargeman" auto-complete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item label="负责人电话" :label-width="formLabelWidth">
-                                            <el-input auto-complete="off"></el-input>
+                                            <el-input v-model="form.chargeman_tel" auto-complete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item label="GPS" :label-width="formLabelWidth">
                                             <el-input auto-complete="off" v-model="center.lat+','+center.lng"></el-input>
@@ -130,15 +130,15 @@
                                             </div>
                                         </div>
                                         <el-form-item label="接收时间" :label-width="formLabelWidth">
-                                            <el-date-picker v-model="value1" type="date" placeholder="接收时间">
+                                            <el-date-picker v-model="form.received_at" type="date" placeholder="接收时间">
                                             </el-date-picker>
                                         </el-form-item>
                                         <el-form-item label="开工时间" :label-width="formLabelWidth">
-                                            <el-date-picker v-model="value2" type="date" placeholder="开工时间">
+                                            <el-date-picker v-model="form.started_at" type="date" placeholder="开工时间">
                                             </el-date-picker>
                                         </el-form-item>
                                         <el-form-item label="竣工时间" :label-width="formLabelWidth">
-                                            <el-date-picker v-model="value3" type="date" placeholder="竣工时间">
+                                            <el-date-picker v-model="form.ended_at" type="date" placeholder="竣工时间">
                                             </el-date-picker>
                                         </el-form-item>
                                         <el-form-item label="施工总承包" :label-width="formLabelWidth">
@@ -184,7 +184,7 @@
                                             <el-button plain @click="searchUnitBox('trail_id')">...</el-button>
                                         </el-form-item>
                                         <el-form-item label="安监站" :label-width="formLabelWidth">
-                                            <el-input auto-complete="off"></el-input>
+                                            <el-input v-model="form.safety_station_id" auto-complete="off"></el-input>
                                             <el-button plain>...</el-button>
                                         </el-form-item>
                                     </el-form>
@@ -200,60 +200,60 @@
         <el-dialog title="新增项目" :visible.sync="addform" class="pro-add">
             <el-form :model="form">
                 <el-form-item label="项目名" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
+                    <el-input v-model="form.id" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="项目类型" :label-width="formLabelWidth">
-                    <el-select v-model="form.region" placeholder="请选择项目类型">
+                    <el-select v-model="form.item_category_id" placeholder="请选择项目类型">
                         <el-option v-for="(item,index) in itemcategory" :key="index" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="资金来源" :label-width="formLabelWidth">
-                    <el-select v-model="form.region1" placeholder="请选择资金来源">
+                    <el-select v-model="form.invest_id" placeholder="请选择资金来源">
                         <el-option v-for="(item,index) in invest" :key="index" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="建设方式" :label-width="formLabelWidth">
-                    <el-select v-model="form.region2" placeholder="请选择建设方式">
+                    <el-select v-model="form.build_type_id" placeholder="请选择建设方式">
                         <el-option v-for="(item,index) in buildType" :key="index" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="结构形式" :label-width="formLabelWidth">
-                    <el-select v-model="form.region3" placeholder="请选择结构类型">
+                    <el-select v-model="form.structural_type_id" placeholder="请选择结构类型">
                         <el-option v-for="(item,index) in structuraltype" :key="index" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="结构层数" :label-width="formLabelWidth">
-                    <el-input-number v-model="num1" @change="handleChange" :min="1" :max="100"></el-input-number>
+                    <el-input-number v-model="form.structural_floor" @change="handleChange" :min="1" :max="100"></el-input-number>
                 </el-form-item>
                 <el-form-item label="监督登记号" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
+                    <el-input v-model="form.item_no" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="工程号" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
+                    <el-input v-model="form.project_no" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="国家" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
+                    <el-input v-model="form.country" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="所在省市区" :label-width="formLabelWidth">
-                    <el-cascader  :options="citys"></el-cascader>
+                    <el-cascader v-model="form.address" :options="citys"></el-cascader>
                 </el-form-item>
                 <el-form-item label="详细地址" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
+                    <el-input v-model="form.detail" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="施工许可证号" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
+                    <el-input v-model="form.permit_no" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="建筑面积(㎡)" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
+                    <el-input v-model="form.area" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="投资总金额" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
+                    <el-input v-model="form.total_amount" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="负责人" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
+                    <el-input v-model="form.chargeman" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="负责人电话" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
+                    <el-input v-model="form.chargeman_tel" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="GPS" :label-width="formLabelWidth">
                     <el-input auto-complete="off" v-model="center.lat+','+center.lng"></el-input>
@@ -272,7 +272,7 @@
                             <bm-view style="width: 100%; height:300px;"></bm-view>
                             <bm-marker :position="{lng: center.lng, lat: center.lat}" :dragging="true" animation="BMAP_ANIMATION_BOUNCE">
                             </bm-marker>
-                            <bm-control :offset="{width: '10px', height: '10px'}">
+                            <bm-control offset="{width: '10px', height: '10px'}">
                                 <bm-auto-complete v-model="keyword" :sugStyle="{zIndex: 999999}">
                                     <input type="text" placeholder="请输入搜索关键字" class="serachinput">
                                 </bm-auto-complete>
@@ -288,15 +288,15 @@
                     </div>
                 </div>
                 <el-form-item label="接收时间" :label-width="formLabelWidth">
-                    <el-date-picker v-model="value1" type="date" placeholder="接收时间">
+                    <el-date-picker v-model="form.received_at" type="date" placeholder="接收时间">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="开工时间" :label-width="formLabelWidth">
-                    <el-date-picker v-model="value2" type="date" placeholder="开工时间">
+                    <el-date-picker v-model="form.started_at" type="date" placeholder="开工时间">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="竣工时间" :label-width="formLabelWidth">
-                    <el-date-picker v-model="value3" type="date" placeholder="竣工时间">
+                    <el-date-picker v-model="form.ended_at" type="date" placeholder="竣工时间">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="施工总承包" :label-width="formLabelWidth">
@@ -342,7 +342,7 @@
                     <el-button plain @click="searchUnitBox('trail_id')">...</el-button>
                 </el-form-item>
                 <el-form-item label="安监站" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
+                    <el-input v-model="form.safety_station_id" auto-complete="off"></el-input>
                     <el-button plain>...</el-button>
                 </el-form-item>
             </el-form>
@@ -406,6 +406,7 @@
                 value3: "",
                 chose: false,   // 这个是search-box是否显示
                 form: {
+                    id: '',
                     item_category_id: '',
                     invest_id: '',
                     build_type_id: '',
@@ -414,7 +415,7 @@
                     item_no: '',
                     project_no: '',
                     country: '',
-                    adress: [],
+                    address: [],
                     detail:'',
                     permit_no: '',
                     area: '',
@@ -559,6 +560,7 @@
             confirm: function () {
                 this.showMapComponent = false
                 this.$emit('map-confirm', this.center)
+                $('.gps').toggle()
             },
             /***
              * 取消
@@ -588,11 +590,9 @@
             closeUnitValue(){
                 this.chose = false
             },
-            ensure(){
-
-            },
             handleAdd(){
                 this.form={
+                    id:'',
                     item_category_id: '',
                     invest_id: '',
                     build_type_id: '',
@@ -601,7 +601,7 @@
                     item_no: '',
                     project_no: '',
                     country: '',
-                    adress: [],
+                    address: [],
                     detail:'',
                     permit_no: '',
                     area: '',
@@ -625,10 +625,15 @@
                 this.submitType = 'add'
             },
             handleEdit(){
-                
+                console.log(1111)
             },
             ensure(){
+                let data = this.form
+                data.province = this.form.address[0]
+                data.city = this.form.address[1]
+                data.county = this.form.address[2]
                 storeproject().then(res => {
+                    console.log(res)
                     if(res.data.response_status === 'success') {
                         this.unitData = res.data.data.data
                         this.addform = false
@@ -639,116 +644,12 @@
                         })
                     }
                 })
+            },
+            handleDeleteSeleted(){
+
             }
         },
 
     };
 </script>
-
-<style scoped>
-    .project .pro-btn{
-        padding: 8px 15px;
-    }
-    .pro-btn .pro-i {
-        color: #3a8ee6;
-        display: inline-block;
-        padding-right: 5px;
-    }
-    .clearfix:after{
-        visibility: hidden;
-        display: block;
-        height: 0;
-        font-size: 0;
-        content: "";
-        clear: both;
-    }
-    .clearfix{
-        zoom: 1;
-    }
-    .pro-box{
-        width: 100%;
-        margin: 0 auto;
-    }
-    .pro-box-l,.pro-box-r{
-        width: 100%;
-        overflow: hidden;
-    }
-    .pro-l-tit{
-        width: 100%;
-        margin: 5px auto;
-        color: #2e6da4;
-        background: -webkit-linear-gradient(#f9f5f5, #fff);
-        background: -o-linear-gradient(#f9f5f5, #fff);
-        background: -moz-linear-gradient(#f9f5f5, #fff);
-        background: linear-gradient(#f9f5f5, #fff);
-    }
-    .pro-l-tit i{
-        float: right;
-        margin-top: 2px;
-        margin-right: 5px;
-        color: #2e6da4;
-    }
-    .pro-l-query{
-        width: 100%;
-        margin: 20px auto;
-        padding-bottom: 20px;
-        border-bottom: 1px solid #eee;
-    }
-    .query .el-input__inner{
-        height: 30px;
-    }
-    .query-text{
-        margin-top: 5px;
-    }
-    .query-text i{
-        margin-right: 5px;
-        color: #2e6da4;
-    }
-    .el-input{
-        width: 70%;
-    }
-    .pro-add .el-form-item{
-        float: left;
-        width: 50%;
-    }
-    .el-input.el-input--suffix{
-        width: 100%;
-    }
-    .serachinput{
-        width: 300px;
-        box-sizing: border-box;
-        padding: 9px;
-        border: 1px solid #dddee1;
-        line-height: 20px;
-        font-size: 16px;
-        height: 38px;
-        color: #333;
-        position: relative;
-        border-radius: 4px;
-        -webkit-box-shadow: #666 0px 0px 10px;
-        -moz-box-shadow: #666 0px 0px 10px;
-        box-shadow: #666 0px 0px 10px;
-    }
-    .chose-name i{
-        display: inline-block;
-        margin-right: 5px;
-        margin-left: 5px;
-    }
-    .par-r-name{
-        display: inline-block;
-        margin-right: 10px;
-    }
-    .par-r-name .el-input__inner{
-        float: left;
-    }
-    .pro-search{
-        float: right;
-        margin-right: 30px;
-    }
-    .pro-box-r .el-form-item{
-        float: left;
-        width: 50%;
-    }
-</style>
-
 
