@@ -72,4 +72,12 @@ class UnitsController extends Controller
         $units = Unit::orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
         return successJson($units, '操作成功！');
     }
+
+    public function export(Request $request)
+    {
+        if ($request->has('id') && count($request->id) > 0) {
+            $units = Unit::whereIn('id',$request->id)->orderBy('created_at', 'desc')->with('utypes', 'parent')->get();
+            return successJson($units);
+        }
+    }
 }

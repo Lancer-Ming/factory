@@ -110,7 +110,7 @@
                     >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ decodeAddress(scope.row.province, scope.row.city, scope.row.county)+scope.row.detail }}</el-tag>
+                        <el-tag size="medium">{{ decodeAddress(scope.row.province, scope.row.city, scope.row.county)+(scope.row.detail ? scope.row.detail : '') }}</el-tag>
                     </div>
                 </template>
             </el-table-column>
@@ -248,12 +248,24 @@
             </el-form>
         </el-dialog>
 
+
+        <el-dialog title="导入EXCEL" :visible.sync="excelDialogShow" class="pro-add">
+            <div class="app-container">
+                <upload-excel-component :on-success='handleSuccess' :before-upload="beforeUpload"></upload-excel-component>
+                <el-table :data="excelData" border highlight-current-row style="width: 100%;margin-top:20px;">
+                    <el-table-column v-for='item of excelHeader' :prop="item" :label="item" :key='item'>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </el-dialog>
+
         <search-box :chose="chose" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue"></search-box>
     </div>
 </template>
 
 <script>
-    import { getUtypes, getUnits, editUnit, findUnit, updateUnit, storeUnit, destroyUnit} from '../../api/company'
+    import UploadExcelComponent from '../../components/UploadExcel/index.vue'
+    import { getUtypes, getUnits, editUnit, findUnit, updateUnit, storeUnit, destroyUnit, exportSelection} from '../../api/company'
     import { implode, decodeAddress, formatJson } from '../../utils/common'
     import { citys } from '../../api/json'
     import { status, attrs, exportTemp, tHeader, filterVal } from '../../config/company'
@@ -304,7 +316,12 @@
                 formLabelWidth: "120px",
                 submitType: '',
                 filename: '',
-                autoWidth: true
+                autoWidth: true,
+
+                //excel
+                excelData: [],
+                excelHeader: [],
+                excelDialogShow: false
             }
         },
         created() {
@@ -352,9 +369,6 @@
             },
             handleEdit() {
                 this.submitType = 'edit'
-                findUnit(this.editData.id).then(res => {
-                    this.units.push(res.data.data)
-                })
                 // 如果选中个数等于1的时候才触发编辑
                 if (this.multipleSelection.length === 1) {
                     editUnit(this.multipleSelection[0]).then(res => {
@@ -365,6 +379,10 @@
                         this.$set(this.form, 'utype_id', implode(this.editData.utypes, 'id'))
                         // 显示dialog编辑框
                         this.formShown = true
+
+                        findUnit(this.editData.id).then(res => {
+                            this.units.push(res.data.data)
+                        })
                     })
                 }
             },
@@ -490,7 +508,9 @@
                 this.$set(this.units, 0, {label: row.name, value: row.id})
                 this.$set(this.form, 'parent_id', row.id)
             },
-            importData(){},
+            importData(){
+                this.excelDialogShow = true
+            },
             downloadTmp(){                
                 const list = exportTemp
                 const data = this.formatJson(filterVal, list)
@@ -503,10 +523,72 @@
                 })
                 
             },
-            exportCurrentData(){},
+            exportCurrentData(){
+                if(this.multipleSelection.length > 0) {
+                    exportSelection(this.multipleSelection).then(res => {
+                        if (res.data.response_status === 'success') {
+                            const list = this.formatUnitExportData(res.data.data)
+                            const data = this.formatJson(filterVal, list)
+                            this.filename = 'company-select'
+                            export_json_to_excel({
+                                header: tHeader,
+                                data,
+                                filename: this.filename+Math.random().toString(36).substr(2),
+                                autoWidth: this.autoWidth
+                            })
+                        }
+                    })
+                }
+            },
             exportAllData(){},
             closeUnitValue() {
                 this.chose = false
+            },
+            formatUnitExportData(units) {
+                const result = []
+                units.forEach(item => {
+                    result.push({
+                        id: item.id,
+                        name: item.name,
+                        utypes: implode(item.utypes, 'name').join(','),
+                        parent_id: item.parent.name,
+                        unit_attr_id: attrs.filter(v => {
+                            return v.value === item.unit_attr_id
+                        })[0].label,
+                        status: status[item.status],
+                        address: this.decodeAddress(item.province, item.city, item.county)+(item.detail ? item.detail : ''),
+                        unit_no: item.unit_no,
+                        qualification_no: item.qualification_no,
+                        safety_permit: item.safety_permit,
+                        leader: item.leader,
+                        leader_tel: item.leader_tel,
+                        concact_person: item.concact_person,
+                        concact_tel: item.concact_tel,
+                        email: item.email,
+                        company_site: item.company_site,
+                        fax: item.fax,
+                        main_business:item.main_business,
+                        remark: item.remark,
+                    })
+                })
+                return result
+            },
+            beforeUpload(file) {
+                const isLt1M = file.size / 1024 / 1024 < 1
+
+                if (isLt1M) {
+                    return true
+                }
+
+                this.$message({
+                    message: 'Please do not upload files larger than 1m in size.',
+                    type: 'warning'
+                })
+                return false
+            },
+            handleSuccess({ results, header }) {
+                this.excelData = results
+                this.excelHeader = header
             }
         },
         computed: {
@@ -518,7 +600,8 @@
             }
         },
         components: {
-            SearchBox
+            SearchBox,
+            UploadExcelComponent
         }
     }
 </script>

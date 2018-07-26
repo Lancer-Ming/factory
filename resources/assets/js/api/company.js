@@ -62,3 +62,11 @@ export function destroyUnit(data, page, pagesize) {
         data: data
     })
 }
+
+export function exportSelection(id) {
+    return axios({
+        url: `/unit/export`,
+        method: 'post',
+        data: { id }
+    })
+}
