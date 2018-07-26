@@ -2,7 +2,7 @@
     <div class="container project" style="height: 100%;">
         <el-row style="border-bottom: 1px solid #eee;padding-bottom: 10px;">
             <el-button round class="pro-btn" @click="handleAdd"><i class="el-icon-circle-plus-outline pro-i"></i>新增项目</el-button>
-            <el-button round class="pro-btn" @click=""><i class="el-icon-remove-outline pro-i"></i>移除</el-button>
+            <el-button round class="pro-btn" @click="handleDeleteSeleted"><i class="el-icon-remove-outline pro-i"></i>移除</el-button>
             <el-button round class="pro-btn" @click=""><i class="el-icon-circle-plus-outline pro-i"></i>添加参建单位</el-button>
             <el-button round class="pro-btn" @click=""><i class="el-icon-refresh pro-i"></i>同步数据</el-button>
         </el-row>
@@ -15,7 +15,7 @@
                                 <i class="el-icon-d-arrow-left tool"></i>
                             </el-row>
                             <el-row class="pro-l-query">
-                                <el-col :span="12"><el-input class="query" size="mini"></el-input></el-col>
+                                <el-col :span="12"><el-input class="query" size="mini" style="width: 100%;"></el-input></el-col>
                                 <el-col :span="3">&nbsp;</el-col>
                                 <el-col :span="9" class="query-text"><i class="el-icon-search"></i>查询</el-col>
                             </el-row>
@@ -560,6 +560,7 @@
             confirm: function () {
                 this.showMapComponent = false
                 this.$emit('map-confirm', this.center)
+                $('.gps').toggle()
             },
             /***
              * 取消
@@ -589,7 +590,6 @@
             closeUnitValue(){
                 this.chose = false
             },
-           
             handleAdd(){
                 this.form={
                     id:'',
@@ -628,7 +628,12 @@
                 console.log(1111)
             },
             ensure(){
+                let data = this.form
+                data.province = this.form.address[0]
+                data.city = this.form.address[1]
+                data.county = this.form.address[2]
                 storeproject().then(res => {
+                    console.log(res)
                     if(res.data.response_status === 'success') {
                         this.unitData = res.data.data.data
                         this.addform = false
@@ -639,116 +644,12 @@
                         })
                     }
                 })
+            },
+            handleDeleteSeleted(){
+
             }
         },
 
     };
 </script>
-
-<style scoped>
-    .project .pro-btn{
-        padding: 8px 15px;
-    }
-    .pro-btn .pro-i {
-        color: #3a8ee6;
-        display: inline-block;
-        padding-right: 5px;
-    }
-    .clearfix:after{
-        visibility: hidden;
-        display: block;
-        height: 0;
-        font-size: 0;
-        content: "";
-        clear: both;
-    }
-    .clearfix{
-        zoom: 1;
-    }
-    .pro-box{
-        width: 100%;
-        margin: 0 auto;
-    }
-    .pro-box-l,.pro-box-r{
-        width: 100%;
-        overflow: hidden;
-    }
-    .pro-l-tit{
-        width: 100%;
-        margin: 5px auto;
-        color: #2e6da4;
-        background: -webkit-linear-gradient(#f9f5f5, #fff);
-        background: -o-linear-gradient(#f9f5f5, #fff);
-        background: -moz-linear-gradient(#f9f5f5, #fff);
-        background: linear-gradient(#f9f5f5, #fff);
-    }
-    .pro-l-tit i{
-        float: right;
-        margin-top: 2px;
-        margin-right: 5px;
-        color: #2e6da4;
-    }
-    .pro-l-query{
-        width: 100%;
-        margin: 20px auto;
-        padding-bottom: 20px;
-        border-bottom: 1px solid #eee;
-    }
-    .query .el-input__inner{
-        height: 30px;
-    }
-    .query-text{
-        margin-top: 5px;
-    }
-    .query-text i{
-        margin-right: 5px;
-        color: #2e6da4;
-    }
-    .el-input{
-        width: 70%;
-    }
-    .pro-add .el-form-item{
-        float: left;
-        width: 50%;
-    }
-    .el-input.el-input--suffix{
-        width: 100%;
-    }
-    .serachinput{
-        width: 300px;
-        box-sizing: border-box;
-        padding: 9px;
-        border: 1px solid #dddee1;
-        line-height: 20px;
-        font-size: 16px;
-        height: 38px;
-        color: #333;
-        position: relative;
-        border-radius: 4px;
-        -webkit-box-shadow: #666 0px 0px 10px;
-        -moz-box-shadow: #666 0px 0px 10px;
-        box-shadow: #666 0px 0px 10px;
-    }
-    .chose-name i{
-        display: inline-block;
-        margin-right: 5px;
-        margin-left: 5px;
-    }
-    .par-r-name{
-        display: inline-block;
-        margin-right: 10px;
-    }
-    .par-r-name .el-input__inner{
-        float: left;
-    }
-    .pro-search{
-        float: right;
-        margin-right: 30px;
-    }
-    .pro-box-r .el-form-item{
-        float: left;
-        width: 50%;
-    }
-</style>
-
 
