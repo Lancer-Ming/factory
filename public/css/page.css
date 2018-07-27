@@ -74,12 +74,34 @@ li {
   list-style: none;
 }
 
+body {
+  font-family: "Microsoft Yahei","\5FAE\8F6F\96C5\9ED1", "Hiragino Sans GB", Helvetica, "Helvetica Neue", Tahoma, Arial, sans-serif;
+}
+
+.main-container {
+  background: #EEF1F5;
+}
+
 /*
 * elementUI样式重置
 */
 
 .el-header {
   padding: 0;
+}
+
+.el-table {
+  font-size: 12px;
+}
+
+.el-table--border th:first-child .cell,
+.el-table--border td:first-child .cell {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.el-form-item--mini.el-form-item {
+  margin-bottom: 0px;
 }
 
 /**
@@ -292,6 +314,16 @@ li {
   content: "\F078";
 }
 
+.el-menu {
+  background: #545C64;
+  border-right: 0px none;
+}
+
+.el-menu-item:hover,
+.el-menu-item:focus {
+  background: #434A50;
+}
+
 .aside-container {
   background: #545C64;
   margin-top: -5px;
@@ -306,17 +338,13 @@ li {
   color: #fff;
 }
 
-.aside-container .el-menu {
-  background: none;
-  border-right: 0px none;
-}
-
 .aside-container .el-menu-item {
   color: #fff;
 }
 
 .aside-container .el-menu-item:hover,
-.aside-container .el-menu-item:focus {
+.aside-container .el-menu-item:focus,
+.aside-container .is-highlight {
   background: #434A50;
   color: #fff;
 }
@@ -337,6 +365,27 @@ li {
 
 .aside-container .small-logo {
   color: #fff;
+}
+
+.el-footer {
+  text-align: center;
+  background: #545C64;
+  color: #fff;
+  height: 33px;
+  line-height: 33px;
+}
+
+/*
+* 搜索
+*/
+
+.search-box .search-label {
+  font-weight: bold;
+  color: #606266;
+}
+
+.search-box .el-form-item__label {
+  display: inline;
 }
 
 * {
@@ -697,14 +746,9 @@ li {
   margin-left: 2%;
 }
 
-.company-page .search .search-label {
-  font-weight: bold;
-  color: #606266;
-}
-
-.company-page .search .el-form-item__label {
-  display: inline;
-}
+/*
+* company.css
+*/
 
 .company-page .el-form-item {
   width: 50%;

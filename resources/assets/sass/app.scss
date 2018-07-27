@@ -4,11 +4,17 @@
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 $fa-font-path: "~font-awesome/fonts/";
-//bootstrap
+/**
+** bootstrap.css
+**/
 @import "~bootstrap-sass/assets/stylesheets/_bootstrap";
-//element-ui
+/**
+** element-ui.css
+**/
 @import "~element-ui/packages/theme-chalk/src/index";
-//font-awesome
+/**
+** font-awesome.css
+**/
 @import "~font-awesome/scss/font-awesome";
 
 

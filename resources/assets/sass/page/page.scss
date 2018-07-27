@@ -1,6 +1,7 @@
-@import "var";
-@import "ui-reset";
-@import "common";
+@import "var";  //自定义变量
+@import "ui-reset"; //重置ui
+@import "common"; //公用
+@import 'search';//搜索
 @import 'login';
 @import 'cache';
 @import 'permission';
