@@ -52,3 +52,39 @@ export function storeUnit(data, pagesize) {
         data: data
     })
 }
+
+export function destroyUnit(data, page, pagesize) {
+    data.page = page
+    data.pagesize = pagesize
+    return axios({
+        url: `/unit`,
+        method: 'delete',
+        data: data
+    })
+}
+
+export function exportSelection(id) {
+    return axios({
+        url: `/unit/export`,
+        method: 'post',
+        data: { id }
+    })
+}
+
+export function importExcel(data) {
+    if (typeof data.finalExcelData !== "undefined") {
+        const {finalExcelData, pagesize} = data
+        return axios({
+            url: `/unit/import`,
+            method: 'post',
+            data: {finalExcelData, pagesize}
+        })
+    } else {
+        return axios({
+            url: `/unit/import`,
+            method: 'post',
+            data: data
+        })
+    }
+    
+}

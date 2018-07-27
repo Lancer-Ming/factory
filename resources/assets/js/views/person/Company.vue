@@ -5,7 +5,7 @@
             <el-form>
                 <span class="search-label">企业名称：</span><el-input v-model="name" placeholder="请输入内容" size="mini" style="width: 200px;"></el-input>
                 <span class="search-label" style="margin-left: 30px;">法人代表：</span><el-input v-model="leader" placeholder="请输入法人代表" size="mini" style="width: 200px;"></el-input>
-                <el-form-item label="单位类型" label-width="120" style="display: inline-block;width:300px;margin: 0 0 0 30px;">
+                <el-form-item label="单位类型" label-width="120" style="display: inline-block;width:300px;margin: -6px 0 0 30px;">
                         <el-select v-model="utype_id" multiple filterable placeholder="请选择" value-key="item" size="mini">
                             <el-option
                                     v-for="item in options"
@@ -41,22 +41,22 @@
             <el-button
                     size="mini"
                     icon="el-icon-sort"
-                    @click="">导入
+                    @click="importData">导入
             </el-button>
             <el-button
                     size="mini"
                     icon="el-icon-download"
-                    @click="">模板下载
+                    @click="downloadTmp">模板下载
             </el-button>
             <el-button
                     size="mini"
                     icon="el-icon-download"
-                    @click="">导出当前数据
+                    @click="exportCurrentData">导出当前数据
             </el-button>
             <el-button
                     size="mini"
                     icon="el-icon-download"
-                    @click="">导出全部数据
+                    @click="exportAllData">导出全部数据
             </el-button>
         </el-row>
         <el-table
@@ -110,7 +110,7 @@
                     >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ decodeAddress(scope.row.province, scope.row.city, scope.row.county)+scope.row.detail }}</el-tag>
+                        <el-tag size="medium">{{ decodeAddress(scope.row.province, scope.row.city, scope.row.county)+(scope.row.detail ? scope.row.detail : '') }}</el-tag>
                     </div>
                 </template>
             </el-table-column>
@@ -214,6 +214,9 @@
                 <el-form-item label="安全生产许可证" :label-width="formLabelWidth">
                     <el-input v-model="form.safety_permit"></el-input>
                 </el-form-item>
+                <el-form-item label="邮箱" :label-width="formLabelWidth">
+                    <el-input v-model="form.email"></el-input>
+                </el-form-item>
                 <el-form-item label="联系人" :label-width="formLabelWidth">
                     <el-input v-model="form.concact_person"></el-input>
                 </el-form-item>
@@ -239,23 +242,37 @@
                     <el-input type="textarea" v-model="form.remark"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">保存</el-button>
+                    <el-button type="primary" @click="onSubmit" style="margin:10px 0px 0px 50px;">保存</el-button>
                     <el-button>取消</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
 
-        <search-box :chose="chose" v-on:dbClickSelection="getUnitValue"></search-box>
+
+        <el-dialog title="导入EXCEL" :visible.sync="excelDialogShow" class="pro-add">
+            <div class="app-container">
+                <upload-excel-component :on-success='handleSuccess' :before-upload="beforeUpload"></upload-excel-component>
+                <el-table :data="excelData" border highlight-current-row style="width: 100%;margin-top:20px;">
+                    <el-table-column v-for='item of excelHeader' :prop="item" :label="item" :key='item'>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <el-button type="success" @click="importExcel">上传</el-button>
+        </el-dialog>
+
+        <search-box :chose="chose" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue"></search-box>
     </div>
 </template>
 
 <script>
-    import { getUtypes, getUnits, editUnit, findUnit, updateUnit, storeUnit} from '../../api/company'
-    import { implode, decodeAddress } from '../../utils/common'
+    import UploadExcelComponent from '../../components/UploadExcel/index.vue'
+    import { getUtypes, getUnits, editUnit, findUnit, updateUnit, storeUnit, destroyUnit, exportSelection, importExcel} from '../../api/company'
+    import { implode, decodeAddress, encodeAddress, formatJson } from '../../utils/common'
     import { citys } from '../../api/json'
-    import { status, attrs } from '../../config/company'
+    import { status, attrs, exportTemp, tHeader, filterVal } from '../../config/company'
     import {pagesize, perPagesize } from '../../config/common'
     import SearchBox from '../../components/SearchBox.vue'
+    import { export_json_to_excel } from '../../vendor/Export2Excel'
     //import UploadExcelComponent from '../../components/UploadExcel/index.vue'
     export default {
         data() {
@@ -298,10 +315,21 @@
                 },
                 formShown: false,
                 formLabelWidth: "120px",
-                submitType: ''
+                submitType: '',
+                filename: '',
+                autoWidth: true,
+
+                //excel
+                excelData: [],
+                excelHeader: [],
+                excelDialogShow: false,
+                finalExcelData: [],
+                importExcelDataSwitch: false
             }
         },
         created() {
+            this.$router.replace({path: this.$route.path, query: {page: this.currentPage}})
+
             citys().then(res => {
                 this.addressData = res.data
             })
@@ -339,14 +367,11 @@
                 this.formShown = true
                 this.submitType = 'add'
             },
-            handleDeleteSeleted() {},
             handleSelectionChange(selection) {
                 this.multipleSelection = implode(selection, 'id')
             },
             handleEdit() {
-                findUnit(this.multipleSelection[0]).then(res => {
-                    this.units.push(res.data.data)
-                })
+                this.submitType = 'edit'
                 // 如果选中个数等于1的时候才触发编辑
                 if (this.multipleSelection.length === 1) {
                     editUnit(this.multipleSelection[0]).then(res => {
@@ -357,17 +382,41 @@
                         this.$set(this.form, 'utype_id', implode(this.editData.utypes, 'id'))
                         // 显示dialog编辑框
                         this.formShown = true
+
+                        findUnit(this.editData.id).then(res => {
+                            this.units.push(res.data.data)
+                        })
                     })
                 }
-                this.submitType = 'edit'
             },
-            handleDelete() {},
+            handleDeleteSeleted() {
+                this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    destroyUnit({id: this.multipleSelection}, this.currentPage, this.pagesize).then(res => {
+                        if (res.data.response_status === 'success') {
+                            this.tableData = res.data.data.data
+                            this.$message({
+                                type: 'success',
+                                showClose: true,
+                                message: res.data.msg
+                            })
+                        }
+                    })
+                }).catch(() => {
+                    return
+                })
+            },
             handleSizeChange(pagesize) {
                 this.pagesize = pagesize 
                 this.getTableData(this.searchData)
             },
             handleCurrentChange(currentPage) {
                 this.currentPage = currentPage
+                this.$router.replace({path: this.$route.path, query: {page: this.currentPage}})
                 this.getTableData(this.searchData)
             },
             onSubmit() {
@@ -394,14 +443,13 @@
                 } else {
                     storeUnit(data, this.pagesize).then(res => {
                         if(res.data.response_status === 'success') {
-                            console.log(res)
                             this.tableData = res.data.data.data
                             this.formShown = false
-                                this.$message({
-                                    type: 'success',
-                                    showClose: true,
-                                    message: res.data.msg
-                                })
+                            this.$message({
+                                type: 'success',
+                                showClose: true,
+                                message: res.data.msg
+                            })
                         }
                     })
                 }
@@ -414,6 +462,7 @@
                 this.$refs.table.toggleRowSelection(row)
             },
             dblclick(row) {
+                this.submitType = 'edit'
                 this.$refs.table.clearSelection()
                 this.$refs.table.toggleRowSelection(row, true)
                 findUnit(row.id).then(res => {
@@ -432,12 +481,19 @@
             implode(arr, attr) {
                 return implode(arr, attr);
             },
+            formatJson(filterVal, jsonData) {
+                return formatJson(filterVal, jsonData)
+            },
             decodeAddress(province_code, city_code, county_code) {
                 let resultArr = []
                 resultArr = decodeAddress(this.addressData, province_code, city_code, county_code)
                 return resultArr.join('')
             },
-            
+            encodeAddress(province, city, county) {
+                let resultArr = []
+                resultArr = encodeAddress(this.addressData, province, city, county)
+                return resultArr
+            },
             getTableData(data={}) {
                 getUnits(this.currentPage, data, this.pagesize).then(res => {
                     if (res.data.response_status === "success") {
@@ -457,8 +513,136 @@
             getUnitValue(row) {
                 this.chose = false
                 this.$set(this.units, 0, {label: row.name, value: row.id})
-                // this.units.push({label: row.name, value: row.id})
-                this.form.parent_id = row.id
+                this.$set(this.form, 'parent_id', row.id)
+            },
+            importData(){
+                this.excelDialogShow = true
+            },
+            downloadTmp(){                
+                const list = exportTemp
+                const data = this.formatJson(filterVal, list)
+                this.filename = 'company'
+                export_json_to_excel({
+                    header: tHeader,
+                    data,
+                    filename: this.filename,
+                    autoWidth: this.autoWidth
+                })
+                
+            },
+            exportCurrentData(){
+                if(this.multipleSelection.length > 0) {
+                    exportSelection(this.multipleSelection).then(res => {
+                        if (res.data.response_status === 'success') {
+                            const list = this.formatUnitExportData(res.data.data)
+                            const data = this.formatJson(filterVal, list)
+                            this.filename = 'company-select'
+                            export_json_to_excel({
+                                header: tHeader,
+                                data,
+                                filename: this.filename+Math.random().toString(36).substr(2),
+                                autoWidth: this.autoWidth
+                            })
+                        }
+                    })
+                }
+            },
+            exportAllData(){},
+            closeUnitValue() {
+                this.chose = false
+            },
+            formatUnitExportData(units) {
+                const result = []
+                units.forEach(item => {
+                    result.push({
+                        id: item.id,
+                        name: item.name,
+                        utypes: implode(item.utypes, 'name').join(','),
+                        parent_id: item.parent.name,
+                        unit_attr_id: attrs.filter(v => {
+                            return v.value === item.unit_attr_id
+                        })[0].label,
+                        status: status[item.status],
+                        address: this.decodeAddress(item.province, item.city, item.county)+(item.detail ? item.detail : ''),
+                        unit_no: item.unit_no,
+                        qualification_no: item.qualification_no,
+                        safety_permit: item.safety_permit,
+                        leader: item.leader,
+                        leader_tel: item.leader_tel,
+                        concact_person: item.concact_person,
+                        concact_tel: item.concact_tel,
+                        email: item.email,
+                        company_site: item.company_site,
+                        fax: item.fax,
+                        main_business:item.main_business,
+                        remark: item.remark,
+                    })
+                })
+                return result
+            },
+            beforeUpload(file) {
+                const isLt1M = file.size / 1024 / 1024 < 1
+
+                if (isLt1M) {
+                    return true
+                }
+
+                this.$message({
+                    message: 'Please do not upload files larger than 1m in size.',
+                    type: 'warning'
+                })
+                return false
+            },
+            handleSuccess({ results, header }) {
+                this.excelData = results
+                this.excelHeader = header
+            },
+            importExcel() {
+                this.finalExcelData = this.formatUnitimportData(this.excelData)
+            },
+            formatUnitimportData:function(units) {
+                const result = []
+                units.forEach((item,index) => {
+                    const utypes = item['单位类型'].split(',')
+                    const parent_unit = item['上级机构']
+                    importExcel({utypes, parent_unit}).then(res => {
+                        //打开excel数据处理完毕的开关
+                        if (units.length - 1 === index) {
+                            this.importExcelDataSwitch = true
+                        }
+                        const utype_id = res.data.data.utype_id
+                        const parent_id = res.data.data.parent_id
+
+                        const address = item['单位地址'].split(' ')
+                        const addressCode = this.encodeAddress(address[0], address[1], address[2])
+                        result.push({
+                            id: parseInt(item['Id']),
+                            name: item['单位名称'],
+                            utype_id,
+                            parent_id,
+                            unit_attr_id: attrs.filter(v => {
+                                return v.label === item['单位属性']
+                            })[0].value,
+                            status: status.indexOf(item['单位审核状态']),
+                            province: addressCode[0] || '',
+                            city: addressCode[1] || '',
+                            county: addressCode[2] || '',
+                            unit_no: item['单位机构代码'],
+                            qualification_no: item['资质证书编号'],
+                            safety_permit: item['安全生产许可证'],
+                            leader: item['法人代表'],
+                            leader_tel: item['法人电话'],
+                            concact_person: item['联系人'],
+                            concact_tel: item['联系电话'],
+                            email: item['邮箱'],
+                            company_site: item['企业网址'],
+                            fax: item['传真'],
+                            main_business:item['主营业务'],
+                            remark: item['描述'],
+                        })
+                    })      
+                })
+                return result
             },
         },
         computed: {
@@ -469,8 +653,29 @@
                 return attrs
             }
         },
+        watch: {
+            importExcelDataSwitch(val) {
+                if (val) {
+                    const finalExcelData = this.finalExcelData
+                    const pagesize = this.pagesize
+                    importExcel({finalExcelData, pagesize}).then(res => {
+                        if (res.data.response_status === 'success') {
+                            this.importExcelDataSwitch = false
+                            this.excelDialogShow = false
+                            //总条数
+                            this.total = res.data.data.total
+                            //table显示的数据
+                            this.tableData = res.data.data.data
+                            // 加载loading
+                            this.loading = false
+                        }
+                    })
+                }
+            }
+        },
         components: {
-            SearchBox
+            SearchBox,
+            UploadExcelComponent
         }
     }
 </script>

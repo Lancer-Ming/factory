@@ -14,6 +14,9 @@ export function implode(arr, attr) {
     return result
 }
 
+/**
+ * 对localStorage的封装
+ */
 export function Local() {
     this.set = (key, value='') => {
         localStorage.setItem(key, JSON.stringify(value))
@@ -52,6 +55,9 @@ export function Local() {
 
 // }
 
+/**
+ * 找菜单对应下面的children
+ */
 export class FindChildren {
     constructor(ids) {
         this.ids = ids
@@ -77,6 +83,9 @@ export class FindChildren {
     }
 }
 
+/**
+ * 找所有的父级
+ */
 export class UnfoldAll{
     constructor(){
         this.parents = []
@@ -113,7 +122,13 @@ export class UnfoldAll{
     }
 }
 
-
+/**
+ * 将省市区代号解析为地址
+ * @param {*} addresses 
+ * @param {*} province_code 
+ * @param {*} city_code 
+ * @param {*} county_code 
+ */
 export function decodeAddress(addresses, province_code, city_code, county_code) {
     let result = []
     addresses.forEach(item => {
@@ -134,3 +149,35 @@ export function decodeAddress(addresses, province_code, city_code, county_code) 
 
     return result
 }
+
+export function encodeAddress(addresses, province, city, county) {
+    let result = []
+    addresses.forEach(item => {
+        if (item.label === province) {
+            result.push(item.value)
+            item.children.forEach(citem => {
+                if (citem.label === city) {
+                    result.push(citem.value)
+                    citem.children.forEach(ccitem => {
+                        if (ccitem.label === county) {
+                            result.push(ccitem.value)
+                        }
+                    })
+                }
+            })
+        }
+    })
+
+    return result
+}
+
+/**
+ * 将对象数组，转化为一个二维数组，用于excel的导出
+ * @param {*} filterVal 
+ * @param {*} jsonData 
+ */
+export function formatJson(filterVal, jsonData) {
+    return jsonData.map(v => filterVal.map(j => {
+        return v[j]
+    }))
+  }

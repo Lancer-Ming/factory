@@ -75,6 +75,9 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::get('/unit/{unit}/find', 'UnitsController@find')->name('find');
             Route::put('/unit/{unit}', 'UnitsController@update')->name('update');
             Route::post('/unit', 'UnitsController@store')->name('store');
+            Route::delete('/unit', 'UnitsController@destroy')->name('destroy');
+            Route::post('/unit/export', 'UnitsController@export')->name('export');
+            Route::post('/unit/import', 'UnitsController@import')->name('import');
         });
 
         // 单位类型管理

@@ -42,7 +42,7 @@ class UnitsController extends Controller
 
     public function find(Unit $unit)
     {
-        return successJson(['label' => $unit->name, 'value' => $unit->parent_id]);
+        return successJson(['label' => $unit->parent->name, 'value' => $unit->parent_id]);
     }
 
     public function update(UnitRequest $request, Unit $unit) {
@@ -63,5 +63,45 @@ class UnitsController extends Controller
         $pagesize = $request->has('pagesize') ? $request->pagesize: 10;
         $units = Unit::orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
         return successJson($units, '操作成功！');
+    }
+
+    public function destroy(UnitRequest $request)
+    {
+        Unit::destroy($request->id);
+        $pagesize = $request->has('pagesize') ? $request->pagesize: 10;
+        $units = Unit::orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
+        return successJson($units, '操作成功！');
+    }
+
+    public function export(Request $request)
+    {
+        if ($request->has('id') && count($request->id) > 0) {
+            $units = Unit::whereIn('id',$request->id)->orderBy('created_at', 'desc')->with('utypes', 'parent')->get();
+            return successJson($units);
+        }
+    }
+
+    public function import(Request $request) {
+        if ($request->has('finalExcelData')) {
+            $storeData = $request->finalExcelData;
+            forEach($storeData as $key=> $value) {
+                unset($storeData[$key]['utype_id']);
+                unset($storeData[$key]['id']);
+                $storeData[$key]['created_at'] = date('Y-m-d H:i:s', time());
+                $storeData[$key]['updated_at'] = date('Y-m-d H:i:s', time());
+                $unit = Unit::create($storeData[$key]);
+                $unit->utypes()->attach($value['utype_id']);
+            }
+            $pagesize = $request->has('pagesize') ? $request->pagesize: 10;
+            $units = Unit::orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
+            return successJson($units, '操作成功！');
+        }
+        if ($request->has('utypes') && count($request->utypes) > 0) {
+            $data['utype_id'] = Utype::whereIn('name', $request->utypes)->pluck('id');
+        }
+        if ($request->has('parent_unit') && $request->parent_unit != '') {
+            $data['parent_id'] = Unit::where('name', $request->parent_unit)->first()->id;
+        }
+        return successJson($data);
     }
 }
