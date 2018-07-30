@@ -10,6 +10,15 @@ class Item extends Model
 
     public function itemUnit()
     {
-        return $this->hasOne(ItemUnit::class);
+        return $this->hasMany(ItemUnit::class);
+    }
+
+    public static function getItems()
+    {
+        return self::where($where)->with([
+            'itemUnit' => function($query) {
+                $query->orderBy('created_at', 'desc');
+            }
+        ])->orderBy('created_at', 'desc')->get();
     }
 }
