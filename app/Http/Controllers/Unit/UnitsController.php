@@ -80,4 +80,28 @@ class UnitsController extends Controller
             return successJson($units);
         }
     }
+
+    public function import(Request $request) {
+        if ($request->has('finalExcelData')) {
+            $storeData = $request->finalExcelData;
+            forEach($storeData as $key=> $value) {
+                unset($storeData[$key]['utype_id']);
+                unset($storeData[$key]['id']);
+                $storeData[$key]['created_at'] = date('Y-m-d H:i:s', time());
+                $storeData[$key]['updated_at'] = date('Y-m-d H:i:s', time());
+                $unit = Unit::create($storeData[$key]);
+                $unit->utypes()->attach($value['utype_id']);
+            }
+            $pagesize = $request->has('pagesize') ? $request->pagesize: 10;
+            $units = Unit::orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
+            return successJson($units, '操作成功！');
+        }
+        if ($request->has('utypes') && count($request->utypes) > 0) {
+            $data['utype_id'] = Utype::whereIn('name', $request->utypes)->pluck('id');
+        }
+        if ($request->has('parent_unit') && $request->parent_unit != '') {
+            $data['parent_id'] = Unit::where('name', $request->parent_unit)->first()->id;
+        }
+        return successJson($data);
+    }
 }

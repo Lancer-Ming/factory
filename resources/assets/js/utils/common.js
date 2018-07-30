@@ -150,6 +150,27 @@ export function decodeAddress(addresses, province_code, city_code, county_code) 
     return result
 }
 
+export function encodeAddress(addresses, province, city, county) {
+    let result = []
+    addresses.forEach(item => {
+        if (item.label === province) {
+            result.push(item.value)
+            item.children.forEach(citem => {
+                if (citem.label === city) {
+                    result.push(citem.value)
+                    citem.children.forEach(ccitem => {
+                        if (ccitem.label === county) {
+                            result.push(ccitem.value)
+                        }
+                    })
+                }
+            })
+        }
+    })
+
+    return result
+}
+
 /**
  * 将对象数组，转化为一个二维数组，用于excel的导出
  * @param {*} filterVal 

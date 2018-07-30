@@ -39,7 +39,14 @@ html,body,#app{ height: 100%;}
 #app{ width: 100%;}
 h1, .h1, h2, .h2, h3, .h3{ margin: 0;}
 li{list-style: none}
+
+body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetica, "Helvetica Neue", Tahoma, Arial, sans-serif;}
+.main-container{ background:#EEF1F5 ;}
 /*
 * elementUI样式重置
 */
 .el-header{ padding: 0;}
+//tab
+.el-table{ font-size: 12px;}
+.el-table--border th:first-child .cell, .el-table--border td:first-child .cell{ padding-left: 0; padding-right: 0;}
+.el-form-item--mini.el-form-item{ margin-bottom: 0px;}

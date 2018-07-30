@@ -20,6 +20,4 @@
     <el-main class="main-container">
         <router-view/>
     </el-main>
-    <el-footer>
-    </el-footer>
 </el-container>

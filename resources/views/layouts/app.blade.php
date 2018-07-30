@@ -18,6 +18,9 @@
             @include('layouts._main')
             @yield('content')
         </el-container>
+        <el-footer style="height: auto">
+            2018 © 广州市安拾科技有限公司
+        </el-footer>
     </el-container>
 </div>
 {{--<script src="{{ mix('js/manifest.js') }}"></script>--}}

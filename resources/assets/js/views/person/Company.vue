@@ -257,6 +257,7 @@
                     </el-table-column>
                 </el-table>
             </div>
+            <el-button type="success" @click="importExcel">上传</el-button>
         </el-dialog>
 
         <search-box :chose="chose" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue"></search-box>
@@ -265,8 +266,8 @@
 
 <script>
     import UploadExcelComponent from '../../components/UploadExcel/index.vue'
-    import { getUtypes, getUnits, editUnit, findUnit, updateUnit, storeUnit, destroyUnit, exportSelection} from '../../api/company'
-    import { implode, decodeAddress, formatJson } from '../../utils/common'
+    import { getUtypes, getUnits, editUnit, findUnit, updateUnit, storeUnit, destroyUnit, exportSelection, importExcel} from '../../api/company'
+    import { implode, decodeAddress, encodeAddress, formatJson } from '../../utils/common'
     import { citys } from '../../api/json'
     import { status, attrs, exportTemp, tHeader, filterVal } from '../../config/company'
     import {pagesize, perPagesize } from '../../config/common'
@@ -321,7 +322,9 @@
                 //excel
                 excelData: [],
                 excelHeader: [],
-                excelDialogShow: false
+                excelDialogShow: false,
+                finalExcelData: [],
+                importExcelDataSwitch: false
             }
         },
         created() {
@@ -486,7 +489,11 @@
                 resultArr = decodeAddress(this.addressData, province_code, city_code, county_code)
                 return resultArr.join('')
             },
-            
+            encodeAddress(province, city, county) {
+                let resultArr = []
+                resultArr = encodeAddress(this.addressData, province, city, county)
+                return resultArr
+            },
             getTableData(data={}) {
                 getUnits(this.currentPage, data, this.pagesize).then(res => {
                     if (res.data.response_status === "success") {
@@ -589,7 +596,54 @@
             handleSuccess({ results, header }) {
                 this.excelData = results
                 this.excelHeader = header
-            }
+            },
+            importExcel() {
+                this.finalExcelData = this.formatUnitimportData(this.excelData)
+            },
+            formatUnitimportData:function(units) {
+                const result = []
+                units.forEach((item,index) => {
+                    const utypes = item['单位类型'].split(',')
+                    const parent_unit = item['上级机构']
+                    importExcel({utypes, parent_unit}).then(res => {
+                        //打开excel数据处理完毕的开关
+                        if (units.length - 1 === index) {
+                            this.importExcelDataSwitch = true
+                        }
+                        const utype_id = res.data.data.utype_id
+                        const parent_id = res.data.data.parent_id
+
+                        const address = item['单位地址'].split(' ')
+                        const addressCode = this.encodeAddress(address[0], address[1], address[2])
+                        result.push({
+                            id: parseInt(item['Id']),
+                            name: item['单位名称'],
+                            utype_id,
+                            parent_id,
+                            unit_attr_id: attrs.filter(v => {
+                                return v.label === item['单位属性']
+                            })[0].value,
+                            status: status.indexOf(item['单位审核状态']),
+                            province: addressCode[0] || '',
+                            city: addressCode[1] || '',
+                            county: addressCode[2] || '',
+                            unit_no: item['单位机构代码'],
+                            qualification_no: item['资质证书编号'],
+                            safety_permit: item['安全生产许可证'],
+                            leader: item['法人代表'],
+                            leader_tel: item['法人电话'],
+                            concact_person: item['联系人'],
+                            concact_tel: item['联系电话'],
+                            email: item['邮箱'],
+                            company_site: item['企业网址'],
+                            fax: item['传真'],
+                            main_business:item['主营业务'],
+                            remark: item['描述'],
+                        })
+                    })      
+                })
+                return result
+            },
         },
         computed: {
             status() {
@@ -597,6 +651,26 @@
             },
             attrs() {
                 return attrs
+            }
+        },
+        watch: {
+            importExcelDataSwitch(val) {
+                if (val) {
+                    const finalExcelData = this.finalExcelData
+                    const pagesize = this.pagesize
+                    importExcel({finalExcelData, pagesize}).then(res => {
+                        if (res.data.response_status === 'success') {
+                            this.importExcelDataSwitch = false
+                            this.excelDialogShow = false
+                            //总条数
+                            this.total = res.data.data.total
+                            //table显示的数据
+                            this.tableData = res.data.data.data
+                            // 加载loading
+                            this.loading = false
+                        }
+                    })
+                }
             }
         },
         components: {

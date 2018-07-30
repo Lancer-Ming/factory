@@ -70,3 +70,21 @@ export function exportSelection(id) {
         data: { id }
     })
 }
+
+export function importExcel(data) {
+    if (typeof data.finalExcelData !== "undefined") {
+        const {finalExcelData, pagesize} = data
+        return axios({
+            url: `/unit/import`,
+            method: 'post',
+            data: {finalExcelData, pagesize}
+        })
+    } else {
+        return axios({
+            url: `/unit/import`,
+            method: 'post',
+            data: data
+        })
+    }
+    
+}
