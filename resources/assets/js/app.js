@@ -81,9 +81,10 @@ new Vue({
                 let title = ''
                 this.sidebars.forEach(item => {
                     if (item.name === newTabName) {
-                        title = item.title
+                        title = item.label
                     }
                 })
+
                 this.tabs.push({
                     title,
                     name: newTabName,

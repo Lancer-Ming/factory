@@ -20,16 +20,17 @@ class ProjectsController extends Controller
         };
 
         $items = Item::where($where)->with([
-            'itemUnit' => function($query) {
+            'units' => function($query) {
                 $query->orderBy('created_at', 'desc');
             }
         ])->orderBy('created_at', 'desc')->get();
+
         return successJson($items);
     }
 
     public function store(ItemRequest $request)
     {
-        $item_id = Item::insert([
+        $item = Item::create([
             'item_category_id' => $request->item_category_id,
             'invest_id' => $request->invest_id,
             'build_type_id' => $request->build_type_id,
@@ -55,7 +56,7 @@ class ProjectsController extends Controller
         ]);
 
         ItemUnit::insert([
-            'item_id' => $item_id,
+            'item_id' => $item->id,
             'contract_id' => $request->contract_id,
             'subcontract_id' => $request->subcontract_id,
             'supervisor_id' => $request->supervisor_id,
