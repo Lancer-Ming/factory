@@ -10,7 +10,7 @@ class Item extends Model
 
     public function itemUnit()
     {
-        return $this->hasMany(ItemUnit::class);
+        return $this->hasMany(ItemUnit::class,'contract_id');
     }
 
     public static function getItems()
