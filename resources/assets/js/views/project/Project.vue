@@ -41,7 +41,8 @@
                                 </el-tab-pane>
                                 <el-tab-pane label="单位信息" disabled>单位信息</el-tab-pane>
                                 <el-tab-pane label="项目信息">
-                                    <el-button type="warning" plain icon="el-icon-edit" style="margin-bottom: 20px;" @click="handleEdit">保存编辑</el-button>
+                                    <el-button type="warning" plain icon="el-icon-edit" style="margin-bottom: 20px;" @click="handleEdit">编辑</el-button>
+                                    <el-button type="warning" plain icon="el-icon-check" style="margin-bottom: 20px;" @click="">保存</el-button>
                                     <el-form :model="form">
                                         <el-form-item label="项目名" :label-width="formLabelWidth">
                                             <el-input v-model="form.id" auto-complete="off"></el-input>
@@ -202,7 +203,7 @@
         <el-dialog title="新增项目" :visible.sync="addform" class="pro-add">
             <el-form :model="form">
                 <el-form-item label="项目名" :label-width="formLabelWidth">
-                    <el-input v-model="form.id" auto-complete="off"></el-input>
+                    <el-input v-model="form.name" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="项目类型" :label-width="formLabelWidth">
                     <el-select v-model="form.item_category_id" placeholder="请选择项目类型">
@@ -389,6 +390,8 @@
                 chose: false,
                 addform: false,
                 formLabelWidth: "100px",
+                label:'',
+                editData: {},
                 num1: 1,
                 //分页
                 currentPage4: 4,
@@ -408,7 +411,7 @@
                 value3: "",
                 chose: false,   // 这个是search-box是否显示
                 form: {
-                    id: '',
+                    name: '',
                     item_category_id: '',
                     invest_id: '',
                     build_type_id: '',
@@ -445,7 +448,7 @@
                         label: '坝光片区场平工程(I标段)',
                     },
                         {
-                        label: '坝光片区场平工程(I标段)'
+                        label: '坝光片区场平工程(I标段)',
                     }
                         ]
                 },
@@ -544,7 +547,8 @@
                 console.log('resize')
             },
             handleNodeClick(data) {
-                console.log(data);
+                this.label= data
+                console.log(this.label)
             },
             getClickInfo (e) {
                 this.center.lng = e.point.lng
@@ -594,7 +598,7 @@
             },
             handleAdd(){
                 this.form={
-                    id:'',
+                    name:'',
                     item_category_id: '',
                     invest_id: '',
                     build_type_id: '',
@@ -627,15 +631,22 @@
                 this.submitType = 'add'
             },
             handleEdit(){
-                console.log(1111)
+                this.submitType = 'edit'
+                if (this.label !== "") {
+                    console.log(111)
+                    editproject(this.label.label).then(res => {
+                        console.log(this.label.label)
+                        // this.editData = res.data.data
+                        // this.form = this.editData
+                    })
+                }
             },
             ensure(){
                 let data = this.form
                 data.province = this.form.address[0]
                 data.city = this.form.address[1]
                 data.county = this.form.address[2]
-                storeproject().then(res => {
-                    console.log(res)
+                storeproject(data).then(res => {
                     if(res.data.response_status === 'success') {
                         this.unitData = res.data.data.data
                         this.addform = false

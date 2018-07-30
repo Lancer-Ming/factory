@@ -6,10 +6,12 @@ export function getproject(){
         method: 'get'
     })
 }
-export function storeproject(){
+export function storeproject(data){
+    console.log(data,2)
     return axios({
         url: `/project` ,
-        method: 'post'
+        method: 'post',
+        data: data
     })
 }
 export function editproject(id){
