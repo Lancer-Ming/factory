@@ -5,9 +5,9 @@
             <el-menu class="el-menu-vertical-sidebar" style="color: #fff;"
                     :collapse-transition="false"
                     :collapse="isCollapse"
-                    default-active='false'
                     :unique-opened="true"
                     :default-openeds="currentOpenMenuName"
+                    @select="addTab"
                     @open="openSubMenu"
                     router>
                 <el-submenu v-for="(item,index) in sidebars" :key="index" v-if="item.children.length > 0"
@@ -25,7 +25,7 @@
                                 :index="`/${child.name.split('.').join('/')}`"
                                 v-text="child.label"
                                 :class="{'is-highlight': child.name === tabsValue}"
-                                @click="addTab(child.label, child.name)">
+                                >
                         </el-menu-item>
                     </div>
                 </el-submenu>
@@ -34,7 +34,7 @@
                         :class="{'is-highlight': item.name === tabsValue}"
                         :data-id="item.name">
                     <i :class="`small-logo fa fa-${item.icon}`" style="color: #fff;"></i>
-                    <span slot="title" class="tit-tab" v-text="item.label" @click="addTab(item.label, item.name)"></span>
+                    <span slot="title" class="tit-tab" v-text="item.label"></span>
                 </el-menu-item>
             </el-menu>
         </el-col>

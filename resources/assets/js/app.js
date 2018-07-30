@@ -68,31 +68,37 @@ new Vue({
         switchBar() {
             this.isCollapse = !this.isCollapse
         },
-        addTab(targetName, routerName) {
-            let newTabName = routerName;
-            let path = `/${routerName.split('.').join('/')}`
+        addTab(routerName) {
+            let newTabName = routerName.split('/').join('.').substr(1);
+            let path = routerName
             let isRepeat = false
             this.tabs.forEach((item, index)=> {
-                if (item.title === targetName) {
+                if (item.name === newTabName) {
                     isRepeat = true
                 }
             })
             if (!isRepeat) {
+                let title = ''
+                this.sidebars.forEach(item => {
+                    if (item.name === newTabName) {
+                        title = item.title
+                    }
+                })
                 this.tabs.push({
-                    title: targetName,
+                    title,
                     name: newTabName,
                     path: path
                 })
 
                 new Local().set('tabs', this.tabs)
             }
-            this.activeSideBar = routerName
-            this.tabsValue = newTabName;
-            new Local().set('activeTabs', routerName)
-            new Local().set('activeSideBar', routerName)
+            this.activeSideBar = newTabName
+            this.tabsValue = newTabName
+            new Local().set('activeTabs', newTabName)
+            new Local().set('activeSideBar', newTabName)
 
             // 对tabs的name和header的index进行关联
-            this.recordTabsWithHeader[routerName] = this.activeNavIndex
+            this.recordTabsWithHeader[newTabName] = this.activeNavIndex
             new Local().set('recordTabsWithHeader', this.recordTabsWithHeader)
 
         },

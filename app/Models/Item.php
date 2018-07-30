@@ -15,7 +15,7 @@ class Item extends Model
 
     public static function getItems()
     {
-        return self::where($where)->with([
+        return self::with([
             'itemUnit' => function($query) {
                 $query->orderBy('created_at', 'desc');
             }
