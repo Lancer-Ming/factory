@@ -187,7 +187,7 @@
                                         </el-form-item>
                                         <el-form-item label="安监站" :label-width="formLabelWidth">
                                             <el-input v-model="form.safety_station_id" auto-complete="off"></el-input>
-                                            <el-button plain>...</el-button>
+                                            <el-button plain @click="Safety = true">...</el-button>
                                         </el-form-item>
                                     </el-form>
                                 </el-tab-pane>
@@ -345,12 +345,76 @@
                 </el-form-item>
                 <el-form-item label="安监站" :label-width="formLabelWidth">
                     <el-input v-model="form.safety_station_id" auto-complete="off"></el-input>
-                    <el-button plain>...</el-button>
+                    <el-button plain @click="Safety = true">...</el-button>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="addform = false" style="margin-top:100px;">取 消</el-button>
                 <el-button type="primary" @click="ensure">确 定</el-button>
+            </div>
+        </el-dialog>
+
+        <el-dialog title="弹出选择" :visible.sync="Safety">
+            <div style="width: 60%;margin: -20px 0px 10px 0px;" class="chose-name">
+                名称：<el-input size="mini"></el-input>
+                <i class="el-icon-search"></i><span>查询</span>
+                <i class="el-icon-delete"></i><span>清空</span>
+            </div>
+            <el-table
+                    :data="tableData"
+                    border
+                    style="width: 100%">
+                <el-table-column
+                        prop="date"
+                        type="index"
+                        width="100"
+                        align="center"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="name"
+                        label="名称"
+                        width="300"
+                        align="center"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="address"
+                        label="地址"
+                        align="center"
+                        width="500"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="person"
+                        label="联系人"
+                        align="center"
+                        width="500"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="tell"
+                        label="电话"
+                        align="center"
+                        width="500"
+                >
+                </el-table-column>
+            </el-table>
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage4"
+                    :page-sizes="[100, 200, 300, 400]"
+                    :page-size="100"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="400"
+                    align="center"
+                    style="margin-top: 20px;"
+            >
+            </el-pagination>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="Safety = false">取 消</el-button>
+                <el-button type="primary" @click="Safety = false">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -378,6 +442,31 @@
         },
         data() {
             return {
+                tableData: [
+                    {
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1518 弄',
+                        person: '',
+                        tell: '',
+                },
+                    {
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1518 弄',
+                        person: '',
+                        tell: '',
+                },
+                    {
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1518 弄',
+                        person: '',
+                        tell: '',
+                },
+                    {
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1518 弄',
+                        person: '',
+                        tell: '',
+                }],
                 //地图
                 showMapComponent: this.value,
                 keyword: '',
@@ -389,6 +478,7 @@
                 zoom: 15,
                 chose: false,
                 addform: false,
+                Safety: false,
                 formLabelWidth: "100px",
                 label:'',
                 editData: {},
