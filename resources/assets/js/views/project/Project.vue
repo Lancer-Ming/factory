@@ -419,6 +419,7 @@
         </el-dialog>
 
         <search-box :chose="chose" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue"></search-box>
+
     </div>
 </template>
 
@@ -603,7 +604,7 @@
                 var result = units_ids.filter(val => {
                     return val !== null
                 })
-               
+
                 findUnit(result).then(res => {
                     if (res.data.response_status === 'success') {
                         this.unitData = res.data.data
@@ -626,7 +627,7 @@
              */
             confirm: function () {
                 this.showMapComponent = false
-                // this.$emit('map-confirm', this.center)
+                this.$emit('map-confirm', this.center)
                 $('.gps').toggle()
             },
             /***
@@ -634,7 +635,9 @@
              */
             cancel: function () {
                 this.showMapComponent = false
-                this.$emit('cancel', this.showMapComponent)
+                // this.$emit('cancel', this.showMapComponent)
+
+
             },
             //分页
             handleSizeChange(val) {
