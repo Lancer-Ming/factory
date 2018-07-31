@@ -8,6 +8,7 @@
   background: $--as-header-bgColor;
   //height: 112px;
   overflow: hidden;
+  box-shadow: 0 1px 10px 0 rgba(28, 33, 40, .5);
   //box-shadow: 0 1px 2px 0 $--as-header-shadowcolor;
   //background:#fff url("/static/img/head_bg.png") repeat-x;
 
@@ -109,7 +110,7 @@
   .el-tabs__nav-next, .el-tabs__nav-prev{line-height: $--as-header-tab-height;}
   .el-tabs__content{ display: none}
 }
-.main-container .container{ width: 100%; padding: 0 5px;}
+.main-container .container{ width: 100%;}
 .el-table__header{ width: 100% !important;}
 .ivu-dropdown {
   display: inline-block;
@@ -148,20 +149,36 @@
   background: #1C2128;
   margin-top: -5px;
   //border-right: solid 2px #0084ff;
-  .el-sideclose{ text-align: center; display: block; padding: 10px 0; cursor: pointer;border:0px none; color: #fff;}
-  .el-menu-item{ color: #fff}
-  .el-menu-item:hover, .el-menu-item:focus,.is-highlight{ background: #6a6d71; color: #fff}
-  .el-submenu__title{color: #fff;}
-  .el-submenu__title:hover, .el-submenu__title:focus{ color: #333;
+  }
+.el-sideclose{ text-align: center; display: block; padding: 10px 0; cursor: pointer;border:0px none; color: #fff;}
+.el-menu-item{ color: #fff}
+.el-menu-item:focus{background: #909399; color: #fff}
+.el-menu-item:hover,.el-menu-item.is-highlight{ background: #6a6d71; color: #fff}
+.el-menu-item.is-highlight{box-shadow:0px 0px 10px #999 inset;}
+.el-menu-item.is-active{background: #6a6d71; color: #fff; }
+.el-submenu__title{color: #fff;}
+.el-submenu__title:hover, .el-submenu__title:focus{ color: #333;
     .small-logo{
       color: #333
     }
   }
   .small-logo{ color: #fff;}
+
+
+//
+.el-breadcrumb{
+  border: 1px solid #ddd;
+  border-bottom: 0;
+  //display:inline-block;
+  background-color: #fff; border-top-left-radius: 5px;
+  border-top-right-radius: 5px;line-height: 36px; padding:0 8px;    box-shadow: 0px 0px 3px #ddd;
+
 }
+.el-breadcrumb__item{ float: none;}
+
+// toolsbar
+.toolsbar{}
+.searchBox{background:#fff;}
+.searchBox{ margin-bottom: 15px;border-bottom: 1px solid #eee;padding: 15px 10px 15px;}
 
 
-
-// el-footer
-
-.el-footer{ text-align: center;background: #545C64; color:#fff; height: 33px; line-height: 33px;}
