@@ -70,6 +70,7 @@ new Vue({
             this.isCollapse = !this.isCollapse
         },
         addTab(routerName) {
+            console.log(routerName)
             let newTabName = routerName.split('/').join('.').substr(1);
             let path = routerName
             let isRepeat = false
@@ -81,6 +82,11 @@ new Vue({
             if (!isRepeat) {
                 let title = ''
                 this.sidebars.forEach(item => {
+                    if (item.children.length > 0) {
+                        item.children.forEach(val => {
+                            val.name === newTabName ? title = item.label : ''
+                        })
+                    }
                     if (item.name === newTabName) {
                         title = item.label
                     }

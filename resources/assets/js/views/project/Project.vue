@@ -100,7 +100,7 @@
                                             <el-input v-model="form.chargeman_tel" auto-complete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item label="GPS" :label-width="formLabelWidth">
-                                            <el-input auto-complete="off" v-model="center.lat+','+center.lng"></el-input>
+                                            <el-input auto-complete="off" v-model="form.gps"></el-input>
                                             <el-button type="info" @click="gps">设置GPS</el-button>
                                         </el-form-item>
                                         <div style="padding-top:50px;display: none;" class="gps">
@@ -124,23 +124,23 @@
                                                     <bm-local-search :keyword="keyword" :auto-viewport="true" style="width:0px;height:0px;overflow: hidden;"></bm-local-search>
                                                 </baidu-map>
                                                 <div slot="footer" style="margin-top: 360px;">
-                                                    <Button @click="cancel" type="ghost"
+                                                    <el-button @click="cancel" type="ghost"
                                                             style="width: 60px;height: 36px;">取消
-                                                    </Button>
-                                                    <Button type="primary" style="width: 60px;height: 36px;" @click="confirm">确定</Button>
+                                                    </el-button>
+                                                    <el-button type="primary" style="width: 60px;height: 36px;" @click="confirm">确定</el-button>
                                                 </div>
                                             </div>
                                         </div>
                                         <el-form-item label="接收时间" :label-width="formLabelWidth">
-                                            <el-date-picker v-model="form.received_at" type="date" placeholder="接收时间">
+                                            <el-date-picker v-model="form.received_at" type="date" placeholder="接收时间" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                                             </el-date-picker>
                                         </el-form-item>
                                         <el-form-item label="开工时间" :label-width="formLabelWidth">
-                                            <el-date-picker v-model="form.started_at" type="date" placeholder="开工时间">
+                                            <el-date-picker v-model="form.started_at" type="date" placeholder="开工时间" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                                             </el-date-picker>
                                         </el-form-item>
                                         <el-form-item label="竣工时间" :label-width="formLabelWidth">
-                                            <el-date-picker v-model="form.ended_at" type="date" placeholder="竣工时间">
+                                            <el-date-picker v-model="form.ended_at" type="date" placeholder="竣工时间" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                                             </el-date-picker>
                                         </el-form-item>
                                         <el-form-item label="施工总承包" :label-width="formLabelWidth">
@@ -186,8 +186,10 @@
                                             <el-button plain @click="searchUnitBox('trail_id')">...</el-button>
                                         </el-form-item>
                                         <el-form-item label="安监站" :label-width="formLabelWidth">
-                                            <el-input v-model="form.safety_station_id" auto-complete="off"></el-input>
-                                            <el-button plain>...</el-button>
+                                            <el-select v-model="form.safety_station_id" disabled placeholder="">
+                                                <el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                            </el-select>
+                                            <el-button plain @click="searchUnitBox('safety_station_id')">...</el-button>
                                         </el-form-item>
                                     </el-form>
                                 </el-tab-pane>
@@ -258,7 +260,7 @@
                     <el-input v-model="form.chargeman_tel" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="GPS" :label-width="formLabelWidth">
-                    <el-input auto-complete="off" v-model="center.lat+','+center.lng"></el-input>
+                    <el-input auto-complete="off" v-model="form.gps"></el-input>
                     <el-button type="info" @click="gps">设置GPS</el-button>
                 </el-form-item>
                 <div style="padding-top:50px;display: none;" class="gps">
@@ -282,23 +284,23 @@
                             <bm-local-search :keyword="keyword" :auto-viewport="true" style="width:0px;height:0px;overflow: hidden;"></bm-local-search>
                         </baidu-map>
                         <div slot="footer" style="margin-top: 360px;">
-                            <Button @click="cancel" type="ghost"
+                            <el-button @click="cancel" type="ghost"
                                     style="width: 60px;height: 36px;">取消
-                            </Button>
-                            <Button type="primary" style="width: 60px;height: 36px;" @click="confirm">确定</Button>
+                            </el-button>
+                            <el-button type="primary" style="width: 60px;height: 36px;" @click="confirm">确定</el-button>
                         </div>
                     </div>
                 </div>
                 <el-form-item label="接收时间" :label-width="formLabelWidth">
-                    <el-date-picker v-model="form.received_at" type="date" placeholder="接收时间">
+                    <el-date-picker v-model="form.received_at" type="date" placeholder="接收时间" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="开工时间" :label-width="formLabelWidth">
-                    <el-date-picker v-model="form.started_at" type="date" placeholder="开工时间">
+                    <el-date-picker v-model="form.started_at" type="date" placeholder="开工时间" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="竣工时间" :label-width="formLabelWidth">
-                    <el-date-picker v-model="form.ended_at" type="date" placeholder="竣工时间">
+                    <el-date-picker v-model="form.ended_at" type="date" placeholder="竣工时间" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="施工总承包" :label-width="formLabelWidth">
@@ -344,8 +346,10 @@
                     <el-button plain @click="searchUnitBox('trail_id')">...</el-button>
                 </el-form-item>
                 <el-form-item label="安监站" :label-width="formLabelWidth">
-                    <el-input v-model="form.safety_station_id" auto-complete="off"></el-input>
-                    <el-button plain>...</el-button>
+                    <el-select v-model="form.safety_station_id" disabled placeholder="">
+                        <el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
+                    <el-button plain @click="searchUnitBox('safety_station_id')">...</el-button>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -354,7 +358,72 @@
             </div>
         </el-dialog>
 
-        <search-box :chose="chose" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue"></search-box>
+        <el-dialog title="弹出选择" :visible.sync="Safety">
+            <div style="width: 60%;margin: -20px 0px 10px 0px;" class="chose-name">
+                名称：<el-input size="mini"></el-input>
+                <i class="el-icon-search"></i><span>查询</span>
+                <i class="el-icon-delete"></i><span>清空</span>
+            </div>
+            <el-table
+                    :data="tableData"
+                    border
+                    style="width: 100%">
+                <el-table-column
+                        prop="date"
+                        type="index"
+                        width="100"
+                        align="center"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="name"
+                        label="名称"
+                        width="300"
+                        align="center"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="address"
+                        label="地址"
+                        align="center"
+                        width="500"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="person"
+                        label="联系人"
+                        align="center"
+                        width="500"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="tell"
+                        label="电话"
+                        align="center"
+                        width="500"
+                >
+                </el-table-column>
+            </el-table>
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage4"
+                    :page-sizes="[100, 200, 300, 400]"
+                    :page-size="100"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="400"
+                    align="center"
+                    style="margin-top: 20px;"
+            >
+            </el-pagination>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="Safety = false">取 消</el-button>
+                <el-button type="primary" @click="Safety = false">确 定</el-button>
+            </div>
+        </el-dialog>
+
+        <search-box :chose="chose" :currentUnitModel="currentUnitModel" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue"></search-box>
+
     </div>
 </template>
 
@@ -363,9 +432,8 @@
     import { buildType,invest,itemcategory,structuraltype,citys } from "../../api/json"
     import {BaiduMap, BmControl, BmView, BmAutoComplete, BmLocalSearch, BmMarker} from 'vue-baidu-map'
     import SearchBox from '../../components/SearchBox.vue'
-    import { getproject,storeproject,editproject,showproject,updateproject,destroyproject} from "../../api/project"
+    import { getproject,storeproject,editproject,showproject,updateproject,destroyproject, findUnit} from "../../api/project"
     import { implode } from '../../utils/common'
-    import { findUnit } from '../../api/company'
     export default {
         components: {
             BaiduMap,
@@ -379,6 +447,31 @@
         },
         data() {
             return {
+                tableData: [
+                    {
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1518 弄',
+                        person: '',
+                        tell: '',
+                },
+                    {
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1518 弄',
+                        person: '',
+                        tell: '',
+                },
+                    {
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1518 弄',
+                        person: '',
+                        tell: '',
+                },
+                    {
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1518 弄',
+                        person: '',
+                        tell: '',
+                }],
                 //地图
                 showMapComponent: this.value,
                 keyword: '',
@@ -386,10 +479,11 @@
                     width: '100%',
                     height: this.mapHeight + 'px'
                 },
-                center: {lng: 113.271429, lat: 23.135336},
+                center: {lng: 113.273154, lat: 23.14278},
                 zoom: 15,
                 chose: false,
                 addform: false,
+                Safety: false,
                 formLabelWidth: "100px",
                 label:'',
                 editData: {},
@@ -448,12 +542,11 @@
                     children: 'units',
                     label: 'name'
                 },
-                handleChange(value) {
-                    console.log(value)
+                gpsData: '',
+                defaultGps: {
+                    lng: 113.273154, lat: 23.14278,
                 },
-                gps(){
-                    $('.gps').toggle()
-                }
+                editId: null,
             };
         },
         created(){
@@ -474,7 +567,6 @@
             })
             getproject().then(res=>{
                 if (res.data.response_status === "success") {
-                    console.log(res)
                     this.data = res.data.data
                 }
             })
@@ -499,26 +591,46 @@
                 console.log('resize')
             },
             handleNodeClick(data) {
+                if (this.editData.id === data.id) {
+                    return
+                }
                 this.editData = data
+                this.editId = data.id
                 this.form = this.editData
                 this.$set(this.form, 'contract_id', implode(data.units, 'id')[0])
+                this.$set(this.form, 'subcontract_id', data.units[0]['pivot']['subcontract_id'])
+                this.$set(this.form, 'build_id', data.units[0]['pivot']['build_id'])
+                this.$set(this.form, 'design_id', data.units[0]['pivot']['design_id'])
+                this.$set(this.form, 'servey_id', data.units[0]['pivot']['servey_id'])
+                this.$set(this.form, 'supervisor_id', data.units[0]['pivot']['supervisor_id'])
+                this.$set(this.form, 'trail_id', data.units[0]['pivot']['trail_id'])
+                this.$set(this.form, 'safety_station_id', data.units[0]['pivot']['safety_station_id'])
                 this.$set(this.form, 'address',  [this.editData.province, this.editData.city, this.editData.county])
 
                 // 拿到单位的id
                 let units = this.editData.units[0].pivot
                 delete units.item_id
                 let units_ids = Object.values(units)
+                console.log(units_ids)
                 var result = units_ids.filter(val => {
                     return val !== null
                 })
-               
+
                 findUnit(result).then(res => {
-                    
+                    if (res.data.response_status === 'success') {
+                        this.unitData = res.data.data
+                    }
                 })
+
+                // 初始化gps
+                this.$set(this.center, 'lng', this.editData.gps ? this.editData.gps.split(',')[0] : this.defaultGps.lng)
+                this.$set(this.center, 'lat', this.editData.gps ? this.editData.gps.split(',')[1] : this.defaultGps.lat)
+                this.form.gps = this.center.lng + ',' + this.center.lat
             },
             getClickInfo (e) {
-                this.center.lng = e.point.lng
-                this.center.lat = e.point.lat
+                this.$set(this.center, 'lng', e.point.lng)
+                this.$set(this.center, 'lat', e.point.lat)
+                this.$set(this.form, 'gps', this.center.lng + ',' + this.center.lat)
             },
             syncCenterAndZoom (e) {
                 const {lng, lat} = e.target.getCenter()
@@ -538,8 +650,12 @@
              * 取消
              */
             cancel: function () {
-                this.showMapComponent = false
+                // this.showMapComponent = false
+                this.form.gps = this.gpsData
+                this.center.lng = this.gpsData.split(',')[0]
+                this.center.lat = this.gpsData.split(',')[1]
                 this.$emit('cancel', this.showMapComponent)
+                $('.gps').hide()
             },
             //分页
             handleSizeChange(val) {
@@ -595,6 +711,7 @@
                 this.submitType = 'add'
             },
             handleEdit(){
+                console.log(2222)
                 this.submitType = 'edit'
                 if (this.label !== "") {
                     editproject(this.label.label).then(res => {
@@ -604,7 +721,22 @@
                 }
             },
             editSubmit() {
-
+                let data = this.form
+                data.province = this.form.address[0]
+                data.city = this.form.address[1]
+                data.county = this.form.address[2]
+                delete data.id
+                updateproject(this.editId, data).then(res => {
+                    console.log(res)
+                    if(res.data.response_status === 'success') {
+                        this.data = res.data.data
+                        this.$message({
+                            type: 'success',
+                            showClose: true,
+                            message: res.data.msg
+                        })
+                    }
+                })
             },
             ensure(){
                 let data = this.form
@@ -625,6 +757,13 @@
             },
             handleDeleteSeleted(){
 
+            },
+            handleChange(value) {
+                 console.log(value)
+            },
+            gps(){
+                this.gpsData = this.center.lng + ',' + this.center.lat
+                $('.gps').toggle()
             }
         },
 

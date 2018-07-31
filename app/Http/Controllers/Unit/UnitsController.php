@@ -23,6 +23,7 @@ class UnitsController extends Controller
         };
 
         $pagesize = $request->has('pagesize') ? $request->pagesize: 10;
+
         if ($request->has('utype_id') && count($request->utype_id) > 0) {
             // 先查询出unit的id
             $unit_ids = \DB::table('unit_utype')->whereIn('utype_id', $request->utype_id)->pluck('unit_id')->unique();
@@ -103,5 +104,14 @@ class UnitsController extends Controller
             $data['parent_id'] = Unit::where('name', $request->parent_unit)->first()->id;
         }
         return successJson($data);
+    }
+
+    public function form(Request $request)
+    {
+        $pagesize = $request->has('pagesize') ? $request->pagesize: 10;
+        $utype_id = Utype::where('form_name', $request->form_name)->first()->id;
+        $unit_ids = \DB::table('unit_utype')->where('utype_id', $utype_id)->pluck('unit_id')->unique();
+        $units = Unit::whereIn('id', $unit_ids)->orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
+        return successJson($units);
     }
 }

@@ -65,6 +65,9 @@ Route::middleware(['auth','role','header'])->group(function() {
         Route::as('item.')->group(function() {
             Route::resource('project', 'ProjectsController')->except(['create']);
         });
+        Route::as('item.')->group(function() {
+            Route::post('project/findUnit', 'ProjectsController@findUnit')->name('project.find_unit');
+        });
     });
 
     Route::namespace('Unit')->group(function() {
@@ -78,6 +81,7 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::delete('/unit', 'UnitsController@destroy')->name('destroy');
             Route::post('/unit/export', 'UnitsController@export')->name('export');
             Route::post('/unit/import', 'UnitsController@import')->name('import');
+            Route::post('/unit/form', 'UnitsController@form')->name('form');
         });
 
         // 单位类型管理
