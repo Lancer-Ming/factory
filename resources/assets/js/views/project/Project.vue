@@ -475,7 +475,7 @@
                     width: '100%',
                     height: this.mapHeight + 'px'
                 },
-                center: {lng: 113.271429, lat: 23.135336},
+                center: {lng: 113.273154, lat: 23.14278},
                 zoom: 15,
                 chose: false,
                 addform: false,
@@ -518,7 +518,7 @@
                     total_amount: '',
                     chargeman: '',
                     chargeman_tel: '',
-                    gps: '113.271429,23.135336',
+                    gps: '',
                     received_at: '',
                     started_at: '',
                     ended_at: '',
@@ -538,11 +538,9 @@
                     children: 'units',
                     label: 'name'
                 },
-                handleChange(value) {
-                    console.log(value)
-                },
-                gps(){
-                    $('.gps').toggle()
+                gpsData: '',
+                defaultGps: {
+                    lng: 113.273154, lat: 23.14278,
                 }
             };
         },
@@ -610,11 +608,16 @@
                         this.unitData = res.data.data
                     }
                 })
+
+                // 初始化gps
+                this.$set(this.center, 'lng', this.editData.gps ? this.editData.gps.split(',')[0] : this.defaultGps.lng)
+                this.$set(this.center, 'lat', this.editData.gps ? this.editData.gps.split(',')[1] : this.defaultGps.lat)
+                this.form.gps = this.center.lng + ',' + this.center.lat
             },
             getClickInfo (e) {
-                this.center.lng = e.point.lng
-                this.center.lat = e.point.lat
-                this.form.gps = e.point.lng + ',' + e.point.lat
+                this.$set(this.center, 'lng', e.point.lng)
+                this.$set(this.center, 'lat', e.point.lat)
+                this.$set(this.form, 'gps', this.center.lng + ',' + this.center.lat)
             },
             syncCenterAndZoom (e) {
                 const {lng, lat} = e.target.getCenter()
@@ -634,10 +637,12 @@
              * 取消
              */
             cancel: function () {
-                this.showMapComponent = false
-                // this.$emit('cancel', this.showMapComponent)
-
-
+                // this.showMapComponent = false
+                this.form.gps = this.gpsData
+                this.center.lng = this.gpsData.split(',')[0]
+                this.center.lat = this.gpsData.split(',')[1]
+                this.$emit('cancel', this.showMapComponent)
+                $('.gps').hide()
             },
             //分页
             handleSizeChange(val) {
@@ -693,6 +698,7 @@
                 this.submitType = 'add'
             },
             handleEdit(){
+                console.log(2222)
                 this.submitType = 'edit'
                 if (this.label !== "") {
                     editproject(this.label.label).then(res => {
@@ -738,6 +744,13 @@
             },
             handleDeleteSeleted(){
 
+            },
+            handleChange(value) {
+                 console.log(value)
+            },
+            gps(){
+                this.gpsData = this.center.lng + ',' + this.center.lat
+                $('.gps').toggle()
             }
         },
 
