@@ -138,4 +138,19 @@ class ProjectsController extends Controller
         $items = Item::getItems();
         return successJson($items, '操作成功！');
     }
+
+    public function findUnit(Request $request)
+    {
+        if ($request->has('id') && count($request->id) > 0) {
+            $units = Unit::whereIn('id', $request->id)->select('id', 'name')->get();
+            foreach($units as $key => $unit) {
+                $units[$key]['label'] = $unit['name'];
+                unset($units[$key]['name']);
+                $units[$key]['value'] = $unit['id'];
+                unset($units[$key]['id']);
+            }
+
+            return successJson($units);
+        }
+    }
 }

@@ -100,7 +100,7 @@
                                             <el-input v-model="form.chargeman_tel" auto-complete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item label="GPS" :label-width="formLabelWidth">
-                                            <el-input auto-complete="off" v-model="center.lat+','+center.lng"></el-input>
+                                            <el-input auto-complete="off" v-model="form.gps"></el-input>
                                             <el-button type="info" @click="gps">设置GPS</el-button>
                                         </el-form-item>
                                         <div style="padding-top:50px;display: none;" class="gps">
@@ -124,23 +124,23 @@
                                                     <bm-local-search :keyword="keyword" :auto-viewport="true" style="width:0px;height:0px;overflow: hidden;"></bm-local-search>
                                                 </baidu-map>
                                                 <div slot="footer" style="margin-top: 360px;">
-                                                    <Button @click="cancel" type="ghost"
+                                                    <el-button @click="cancel" type="ghost"
                                                             style="width: 60px;height: 36px;">取消
-                                                    </Button>
-                                                    <Button type="primary" style="width: 60px;height: 36px;" @click="confirm">确定</Button>
+                                                    </el-button>
+                                                    <el-button type="primary" style="width: 60px;height: 36px;" @click="confirm">确定</el-button>
                                                 </div>
                                             </div>
                                         </div>
                                         <el-form-item label="接收时间" :label-width="formLabelWidth">
-                                            <el-date-picker v-model="form.received_at" type="date" placeholder="接收时间">
+                                            <el-date-picker v-model="form.received_at" type="date" placeholder="接收时间" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                                             </el-date-picker>
                                         </el-form-item>
                                         <el-form-item label="开工时间" :label-width="formLabelWidth">
-                                            <el-date-picker v-model="form.started_at" type="date" placeholder="开工时间">
+                                            <el-date-picker v-model="form.started_at" type="date" placeholder="开工时间" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                                             </el-date-picker>
                                         </el-form-item>
                                         <el-form-item label="竣工时间" :label-width="formLabelWidth">
-                                            <el-date-picker v-model="form.ended_at" type="date" placeholder="竣工时间">
+                                            <el-date-picker v-model="form.ended_at" type="date" placeholder="竣工时间" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                                             </el-date-picker>
                                         </el-form-item>
                                         <el-form-item label="施工总承包" :label-width="formLabelWidth">
@@ -258,7 +258,7 @@
                     <el-input v-model="form.chargeman_tel" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="GPS" :label-width="formLabelWidth">
-                    <el-input auto-complete="off" v-model="center.lat+','+center.lng"></el-input>
+                    <el-input auto-complete="off" v-model="form.gps"></el-input>
                     <el-button type="info" @click="gps">设置GPS</el-button>
                 </el-form-item>
                 <div style="padding-top:50px;display: none;" class="gps">
@@ -282,23 +282,23 @@
                             <bm-local-search :keyword="keyword" :auto-viewport="true" style="width:0px;height:0px;overflow: hidden;"></bm-local-search>
                         </baidu-map>
                         <div slot="footer" style="margin-top: 360px;">
-                            <Button @click="cancel" type="ghost"
+                            <el-button @click="cancel" type="ghost"
                                     style="width: 60px;height: 36px;">取消
-                            </Button>
-                            <Button type="primary" style="width: 60px;height: 36px;" @click="confirm">确定</Button>
+                            </el-button>
+                            <el-button type="primary" style="width: 60px;height: 36px;" @click="confirm">确定</el-button>
                         </div>
                     </div>
                 </div>
                 <el-form-item label="接收时间" :label-width="formLabelWidth">
-                    <el-date-picker v-model="form.received_at" type="date" placeholder="接收时间">
+                    <el-date-picker v-model="form.received_at" type="date" placeholder="接收时间" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="开工时间" :label-width="formLabelWidth">
-                    <el-date-picker v-model="form.started_at" type="date" placeholder="开工时间">
+                    <el-date-picker v-model="form.started_at" type="date" placeholder="开工时间" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="竣工时间" :label-width="formLabelWidth">
-                    <el-date-picker v-model="form.ended_at" type="date" placeholder="竣工时间">
+                    <el-date-picker v-model="form.ended_at" type="date" placeholder="竣工时间" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="施工总承包" :label-width="formLabelWidth">
@@ -363,9 +363,8 @@
     import { buildType,invest,itemcategory,structuraltype,citys } from "../../api/json"
     import {BaiduMap, BmControl, BmView, BmAutoComplete, BmLocalSearch, BmMarker} from 'vue-baidu-map'
     import SearchBox from '../../components/SearchBox.vue'
-    import { getproject,storeproject,editproject,showproject,updateproject,destroyproject} from "../../api/project"
+    import { getproject,storeproject,editproject,showproject,updateproject,destroyproject, findUnit } from "../../api/project"
     import { implode } from '../../utils/common'
-    import { findUnit } from '../../api/company'
     export default {
         components: {
             BaiduMap,
@@ -428,7 +427,7 @@
                     total_amount: '',
                     chargeman: '',
                     chargeman_tel: '',
-                    gps: '',
+                    gps: '113.271429,23.135336',
                     received_at: '',
                     started_at: '',
                     ended_at: '',
@@ -499,6 +498,9 @@
                 console.log('resize')
             },
             handleNodeClick(data) {
+                if (this.editData.id === data.id) {
+                    return
+                }
                 this.editData = data
                 this.form = this.editData
                 this.$set(this.form, 'contract_id', implode(data.units, 'id')[0])
@@ -513,12 +515,15 @@
                 })
                
                 findUnit(result).then(res => {
-                    
+                    if (res.data.response_status === 'success') {
+                        this.unitData = res.data.data
+                    }
                 })
             },
             getClickInfo (e) {
                 this.center.lng = e.point.lng
                 this.center.lat = e.point.lat
+                this.form.gps = e.point.lng + ',' + e.point.lat
             },
             syncCenterAndZoom (e) {
                 const {lng, lat} = e.target.getCenter()
@@ -531,7 +536,7 @@
              */
             confirm: function () {
                 this.showMapComponent = false
-                this.$emit('map-confirm', this.center)
+                // this.$emit('map-confirm', this.center)
                 $('.gps').toggle()
             },
             /***
@@ -604,7 +609,22 @@
                 }
             },
             editSubmit() {
-
+                let data = this.form
+                data.province = this.form.address[0]
+                data.city = this.form.address[1]
+                data.county = this.form.address[2]
+                delete data.id
+                updateproject(this.editData.id, this.form).then(res => {
+                    console.log(res)
+                    if(res.data.response_status === 'success') {
+                        this.data = res.data.data
+                        this.$message({
+                            type: 'success',
+                            showClose: true,
+                            message: res.data.msg
+                        })
+                    }
+                })
             },
             ensure(){
                 let data = this.form

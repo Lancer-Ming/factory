@@ -40,3 +40,11 @@ export function destroyproject(data){
         data: data
     })
 }
+
+export function findUnit(id) {
+    return axios({
+        url: `/project/findUnit`,
+        method: 'post',
+        data: { id }
+    })
+}
