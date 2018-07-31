@@ -40,7 +40,12 @@ html,body,#layout-app{ height: 100%;}
 h1, .h1, h2, .h2, h3, .h3{ margin: 0;}
 li{list-style: none}
 label{font-weight: normal}
+//
 
+.mb10 {
+  margin-bottom: 10px !important;
+}
+//
 body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetica, "Helvetica Neue", Tahoma, Arial, sans-serif;}
 
 .container{ padding: 0;}
@@ -65,6 +70,24 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
 //toolbar
 
 .searchBox .el-input{width: 90%;}
+
+//table
+.el-table thead{
+  background-color: #909399;
+  background: linear-gradient(#909399 0px, #909399 100%) repeat-x;
+  background-repeat: repeat-x;
+  color: #fff;
+
+}
+.el-table tr{ background: none;}
+.el-table th{ background: none; font-weight: normal}
+.el-table th, .el-table td{ padding: 0;margin: 0;    border-width: 0 1px 1px 0;    border-style: dotted;    border-color: #ccc;}
+.el-table .cell{padding: 4px; line-height: normal}
+.el-tag{ text-overflow: ellipsis;overflow: hidden; max-width:100%;
+  border:0px none;
+  background: none;
+}
+.el-tag--medium{ height: auto; line-height: normal}
 
 //page
 .el-pagination{ padding:10px 0 0 0;}

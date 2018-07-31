@@ -28,23 +28,10 @@
                             <el-button type="primary" @click="search">搜索</el-button>
                             <el-button>重置</el-button>
                         </el-form-item>
-                        <!--<span class="search-label">企业名称：</span><el-input v-model="name" placeholder="请输入内容" size="mini" style="width: 200px;"></el-input>-->
-                        <!--<span class="search-label" style="margin-left: 30px;">法人代表：</span><el-input v-model="leader" placeholder="请输入法人代表" size="mini" style="width: 200px;"></el-input>-->
-                        <!--<el-form-item label="单位类型" label-width="120">-->
-                        <!--<el-select v-model="utype_id" multiple filterable placeholder="请选择" value-key="item" size="mini">-->
-                        <!--<el-option-->
-                        <!--v-for="item in options"-->
-                        <!--:key="item.value"-->
-                        <!--:label="item.label"-->
-                        <!--:value="item.value">-->
-                        <!--</el-option>-->
-                        <!--</el-select>-->
-                        <!--</el-form-item>-->
-                        <!--<el-button type="info" size="mini" @click="search" icon="el-icon-search">搜索</el-button>-->
                     </el-form>
                 </el-row>
             </div>
-            <el-row class="btnBox" style="padding: 10px;">
+            <el-row class="btnBox">
                 <el-button
                         size="mini"
                         type="primary"
@@ -192,7 +179,7 @@
             </el-table-column>
         </el-table>
 
-        <el-row class="paginate">
+        <el-row class="paginate mb10">
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"

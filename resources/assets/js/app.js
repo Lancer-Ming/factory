@@ -15,7 +15,7 @@ import { MessageBox } from 'element-ui'
 import axios from 'axios'
 import { implode } from "./utils/common.js"
 //
-
+//import i18n from './lang'
 Vue.use(ElementUI)
 Vue.prototype.$ = $
 Vue.prototype.axios = axios
@@ -24,6 +24,7 @@ import { Local } from './utils/common'
 new Vue({
     el: '#layout-app',
     router,
+    //i18n,
     //components: { App },
     //template: '<App/>',
     delimiters: ['${', '}'],

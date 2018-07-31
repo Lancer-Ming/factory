@@ -1,91 +1,104 @@
 <template>
     <div class="container company-page">
-        <div class="search">
-        <el-row>
-            <el-form>
-                <span class="search-label">企业名称：</span><el-input v-model="name" placeholder="请输入内容" size="mini" style="width: 200px;"></el-input>
-                <span class="search-label" style="margin-left: 30px;">法人代表：</span><el-input v-model="leader" placeholder="请输入法人代表" size="mini" style="width: 200px;"></el-input>
-                <el-form-item label="单位类型" label-width="120" style="display: inline-block;width:300px;margin: -6px 0 0 30px;">
-                        <el-select v-model="utype_id" multiple filterable placeholder="请选择" value-key="item" size="mini">
-                            <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                </el-form-item>
-                <el-button type="info" size="mini" @click="search" icon="el-icon-search">搜索</el-button>
-            </el-form>
-        </el-row>
+        <div class="toolsbar">
+            <div class="searchBox">
+                <el-row>
+                    <el-form :inline="true" size="mini">
+                        <el-form-item label="企业名称">
+                            <el-input v-model="name" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item label="法人代表">
+                            <el-input v-model="leader" placeholder="请输入法人代表"></el-input>
+                        </el-form-item>
+                        <el-form-item label="单位类型">
+                            <el-select v-model="utype_id" multiple filterable placeholder="请选择" value-key="item">
+                                <el-option
+                                        v-for="item in options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-button type="info" size="mini" @click="search" icon="el-icon-search">搜索</el-button>
+                    </el-form>
+                </el-row>
+            </div>
+            <el-row class="btnBox">
+                <el-button
+                        size="mini"
+                        type="primary"
+                        icon="el-icon-plus"
+                        @click="handleAdd">新增
+                </el-button>
+                <el-button
+                        size="mini"
+                        type="info"
+                        icon="el-icon-edit"
+                        @click="handleEdit">编辑
+                </el-button>
+                <el-button
+                        size="mini"
+                        type="danger"
+                        icon="el-icon-delete"
+                        @click="handleDeleteSeleted">删除
+                </el-button>
+                <el-button
+                        size="mini"
+                        icon="el-icon-sort"
+                        @click="importData">导入
+                </el-button>
+                <el-button
+                        size="mini"
+                        icon="el-icon-download"
+                        @click="downloadTmp">模板下载
+                </el-button>
+                <el-button
+                        size="mini"
+                        icon="el-icon-download"
+                        @click="exportCurrentData">导出当前数据
+                </el-button>
+                <el-button
+                        size="mini"
+                        icon="el-icon-download"
+                        @click="exportAllData">导出全部数据
+                </el-button>
+            </el-row>
         </div>
-        <el-row style="padding: 10px;">
-            <el-button
-                    size="mini"
-                    type="primary"
-                    icon="el-icon-plus"
-                    @click="handleAdd">新增
-            </el-button>
-            <el-button
-                    size="mini"
-                    type="info"
-                    icon="el-icon-edit"
-                    @click="handleEdit">编辑
-            </el-button>
-            <el-button
-                    size="mini"
-                    type="danger"
-                    icon="el-icon-delete"
-                    @click="handleDeleteSeleted">删除
-            </el-button>
-            <el-button
-                    size="mini"
-                    icon="el-icon-sort"
-                    @click="importData">导入
-            </el-button>
-            <el-button
-                    size="mini"
-                    icon="el-icon-download"
-                    @click="downloadTmp">模板下载
-            </el-button>
-            <el-button
-                    size="mini"
-                    icon="el-icon-download"
-                    @click="exportCurrentData">导出当前数据
-            </el-button>
-            <el-button
-                    size="mini"
-                    icon="el-icon-download"
-                    @click="exportAllData">导出全部数据
-            </el-button>
-        </el-row>
         <el-table
                 :data="tableData"
                 align
                 border
                 v-loading="loading"
                 @selection-change="handleSelectionChange"
-                @row-click = "cellClick"
+                @row-click="cellClick"
                 @row-dblclick="dblclick"
                 ref="table"
                 style="width: 100%">
-
             <el-table-column
+                    align="center"
+                    width="25"
+                    fixed
+            >
+                <template slot-scope="scope">
+                    <span>{{ scope.row.id }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    align="center"
                     type="selection"
-                    >
+            >
             </el-table-column>
             <el-table-column
                     label="编号"
-                    align="center"
-                    >
+            >
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.unit_no }}</span>
+                    <span>{{ scope.row.unit_no }}</span>
                 </template>
             </el-table-column>
             <el-table-column
                     label="企业名称"
-                    width="350"
-                    >
+            >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ scope.row.name }}</el-tag>
@@ -95,8 +108,8 @@
 
             <el-table-column
                     label="单位类型"
-                    align="center"
-                    >
+                    width="100"
+            >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ implode(scope.row.utypes, 'name').join(',') }}</el-tag>
@@ -106,8 +119,7 @@
 
             <el-table-column
                     label="单位地址"
-                    align="center"
-                    >
+            >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ decodeAddress(scope.row.province, scope.row.city, scope.row.county)+(scope.row.detail ? scope.row.detail : '') }}</el-tag>
@@ -118,7 +130,7 @@
             <el-table-column
                     label="法人代表"
                     align="center"
-                    >
+            >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ scope.row.leader }}</el-tag>
@@ -129,7 +141,7 @@
             <el-table-column
                     label="邮箱"
                     align="center"
-                    >
+            >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ scope.row.leader_tel }}</el-tag>
@@ -140,7 +152,7 @@
             <el-table-column
                     label="创建时间"
                     align="center"
-                    >
+            >
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i> <span style="margin-left: 10px">{{ scope.row.created_at }}</span>
                 </template>
@@ -149,7 +161,7 @@
             <el-table-column
                     label="处理状态"
                     align="center"
-                    >
+            >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ status[scope.row.status] }}</el-tag>
@@ -157,20 +169,19 @@
                 </template>
             </el-table-column>
         </el-table>
-        
+        <!--分页-->
         <el-row class="paginate">
             <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[5, 10, 15, 20]"
-                :page-size="10"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="total">
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[5, 10, 15, 20]"
+                    :page-size="10"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total">
             </el-pagination>
         </el-row>
 
-        
 
         <el-dialog title="编辑单位" :visible.sync="formShown" class="pro-add">
             <el-form class="clearfix">
@@ -204,7 +215,7 @@
                 <el-form-item label="详细地址" :label-width="formLabelWidth">
                     <el-input v-model="form.detail"></el-input>
                 </el-form-item>
-                
+
                 <el-form-item label="单位机构代码" :label-width="formLabelWidth">
                     <el-input v-model="form.unit_no"></el-input>
                 </el-form-item>
@@ -266,13 +277,23 @@
 
 <script>
     import UploadExcelComponent from '../../components/UploadExcel/index.vue'
-    import { getUtypes, getUnits, editUnit, findUnit, updateUnit, storeUnit, destroyUnit, exportSelection, importExcel} from '../../api/company'
-    import { implode, decodeAddress, encodeAddress, formatJson } from '../../utils/common'
-    import { citys } from '../../api/json'
-    import { status, attrs, exportTemp, tHeader, filterVal } from '../../config/company'
-    import {pagesize, perPagesize } from '../../config/common'
+    import {
+        getUtypes,
+        getUnits,
+        editUnit,
+        findUnit,
+        updateUnit,
+        storeUnit,
+        destroyUnit,
+        exportSelection,
+        importExcel
+    } from '../../api/company'
+    import {implode, decodeAddress, encodeAddress, formatJson} from '../../utils/common'
+    import {citys} from '../../api/json'
+    import {status, attrs, exportTemp, tHeader, filterVal} from '../../config/company'
+    import {pagesize, perPagesize} from '../../config/common'
     import SearchBox from '../../components/SearchBox.vue'
-    import { export_json_to_excel } from '../../vendor/Export2Excel'
+    import {export_json_to_excel} from '../../vendor/Export2Excel'
     //import UploadExcelComponent from '../../components/UploadExcel/index.vue'
     export default {
         data() {
@@ -340,7 +361,7 @@
             })
 
             this.getTableData()
-            
+
         },
         methods: {
             handleAdd() {
@@ -378,7 +399,7 @@
                         this.editData = res.data.data
                         // 给form对象赋值
                         this.form = this.editData
-                        this.$set(this.form, 'address',  [this.editData.province, this.editData.city, this.editData.county])
+                        this.$set(this.form, 'address', [this.editData.province, this.editData.city, this.editData.county])
                         this.$set(this.form, 'utype_id', implode(this.editData.utypes, 'id'))
                         // 显示dialog编辑框
                         this.formShown = true
@@ -411,7 +432,7 @@
                 })
             },
             handleSizeChange(pagesize) {
-                this.pagesize = pagesize 
+                this.pagesize = pagesize
                 this.getTableData(this.searchData)
             },
             handleCurrentChange(currentPage) {
@@ -425,7 +446,7 @@
                 data.province = this.form.address[0]
                 data.city = this.form.address[1]
                 data.county = this.form.address[2]
-                
+
                 if (this.submitType === 'edit') {
                     updateUnit(this.editData.id, data).then(res => {
                         this.tableData.forEach((item, index) => {
@@ -442,7 +463,7 @@
                     })
                 } else {
                     storeUnit(data, this.pagesize).then(res => {
-                        if(res.data.response_status === 'success') {
+                        if (res.data.response_status === 'success') {
                             this.tableData = res.data.data.data
                             this.formShown = false
                             this.$message({
@@ -471,7 +492,7 @@
                         this.editData = res.data.data
                         // 给form对象赋值
                         this.form = this.editData
-                        this.$set(this.form, 'address',  [this.editData.province, this.editData.city, this.editData.county])
+                        this.$set(this.form, 'address', [this.editData.province, this.editData.city, this.editData.county])
                         this.$set(this.form, 'utype_id', implode(this.editData.utypes, 'id'))
                         // 显示dialog编辑框
                         this.formShown = true
@@ -494,7 +515,7 @@
                 resultArr = encodeAddress(this.addressData, province, city, county)
                 return resultArr
             },
-            getTableData(data={}) {
+            getTableData(data = {}) {
                 getUnits(this.currentPage, data, this.pagesize).then(res => {
                     if (res.data.response_status === "success") {
                         //总条数
@@ -515,10 +536,10 @@
                 this.$set(this.units, 0, {label: row.name, value: row.id})
                 this.$set(this.form, 'parent_id', row.id)
             },
-            importData(){
+            importData() {
                 this.excelDialogShow = true
             },
-            downloadTmp(){                
+            downloadTmp() {
                 const list = exportTemp
                 const data = this.formatJson(filterVal, list)
                 this.filename = 'company'
@@ -528,10 +549,10 @@
                     filename: this.filename,
                     autoWidth: this.autoWidth
                 })
-                
+
             },
-            exportCurrentData(){
-                if(this.multipleSelection.length > 0) {
+            exportCurrentData() {
+                if (this.multipleSelection.length > 0) {
                     exportSelection(this.multipleSelection).then(res => {
                         if (res.data.response_status === 'success') {
                             const list = this.formatUnitExportData(res.data.data)
@@ -540,14 +561,15 @@
                             export_json_to_excel({
                                 header: tHeader,
                                 data,
-                                filename: this.filename+Math.random().toString(36).substr(2),
+                                filename: this.filename + Math.random().toString(36).substr(2),
                                 autoWidth: this.autoWidth
                             })
                         }
                     })
                 }
             },
-            exportAllData(){},
+            exportAllData() {
+            },
             closeUnitValue() {
                 this.chose = false
             },
@@ -563,7 +585,7 @@
                             return v.value === item.unit_attr_id
                         })[0].label,
                         status: status[item.status],
-                        address: this.decodeAddress(item.province, item.city, item.county)+(item.detail ? item.detail : ''),
+                        address: this.decodeAddress(item.province, item.city, item.county) + (item.detail ? item.detail : ''),
                         unit_no: item.unit_no,
                         qualification_no: item.qualification_no,
                         safety_permit: item.safety_permit,
@@ -574,7 +596,7 @@
                         email: item.email,
                         company_site: item.company_site,
                         fax: item.fax,
-                        main_business:item.main_business,
+                        main_business: item.main_business,
                         remark: item.remark,
                     })
                 })
@@ -593,16 +615,16 @@
                 })
                 return false
             },
-            handleSuccess({ results, header }) {
+            handleSuccess({results, header}) {
                 this.excelData = results
                 this.excelHeader = header
             },
             importExcel() {
                 this.finalExcelData = this.formatUnitimportData(this.excelData)
             },
-            formatUnitimportData:function(units) {
+            formatUnitimportData: function (units) {
                 const result = []
-                units.forEach((item,index) => {
+                units.forEach((item, index) => {
                     const utypes = item['单位类型'].split(',')
                     const parent_unit = item['上级机构']
                     importExcel({utypes, parent_unit}).then(res => {
@@ -637,10 +659,10 @@
                             email: item['邮箱'],
                             company_site: item['企业网址'],
                             fax: item['传真'],
-                            main_business:item['主营业务'],
+                            main_business: item['主营业务'],
                             remark: item['描述'],
                         })
-                    })      
+                    })
                 })
                 return result
             },

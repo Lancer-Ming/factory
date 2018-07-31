@@ -1,0 +1,81 @@
+.user-navigation{
+  width: 300px;
+  position: absolute;
+  right: 0;
+  top:0;
+  color: #fff;
+  font-size: 16px;
+  .home {
+    float: left;
+    margin-right: 10px;
+    padding: 17px 10px 0px 10px;
+    i {
+      color: #fff;
+      font-size: 18px;
+      display: inline-block;
+      margin-right: 5px;
+      cursor: pointer;
+    }
+    span {
+      color: #fff;
+    }
+  }
+  .user-h {
+    float: left;
+    .tit-user {
+      width: 35px;
+      height: 35px;
+      margin-right: 10px;
+    }
+  }
+}
+//
+.explanation {
+  padding: 11px 13px;
+  color: #707070;
+  border-radius: 5px;
+  background-color: #f5faff;
+  border: 1px dashed #62b3ff;
+  width:100%;
+  height:auto;
+  //height:calc(100% - 20px) ;
+}
+.explanation .ex_tit {
+  color: #62b3ff;
+  position: relative;
+  line-height: 20px;
+  margin-bottom: 10px;
+}
+.explanation .ex_tit .sc_icon {
+  position: absolute;
+  background-position: -84px -328px;
+  width: 20px;
+  height: 20px;
+  left: 0;
+}
+.explanation .ex_tit h4 {
+  font-weight: normal;
+  padding-left: 30px;
+  font-size: 14px;
+  float: left;
+}
+.explanation .ex_tit span {
+  position: absolute;
+  background-position: 0 -359px;
+  width: 28px;
+  height: 28px;
+  top: -12px;
+  right: -14px;
+  cursor: pointer;
+}
+.explanation ul {
+  overflow: hidden;
+  padding-left: 35px;
+}
+.explanation ul li {
+  line-height: 20px;
+  background: url(/images/arrow.png) 0 8px no-repeat;
+  padding-left: 10px;
+  margin-bottom: 5px;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
+}
