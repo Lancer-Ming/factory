@@ -10,10 +10,10 @@
     <link href="{{ asset('css/page.css') }}" rel="stylesheet">
 </head>
 <body>
-<div id="app">
-    <el-container>
+<div id="layout-app">
+    <el-container class="page-container">
         @include('layouts._header')
-        <el-container>
+        <el-container style="height: 1900px;">
             @include('layouts._sidebar')
             @include('layouts._main')
             @yield('content')

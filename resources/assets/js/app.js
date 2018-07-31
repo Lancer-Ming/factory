@@ -22,7 +22,7 @@ Vue.prototype.axios = axios
 Vue.prototype.message = Message
 import { Local } from './utils/common'
 new Vue({
-    el: '#app',
+    el: '#layout-app',
     router,
     //components: { App },
     //template: '<App/>',

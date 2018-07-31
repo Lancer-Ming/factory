@@ -3,7 +3,7 @@
         <div class="toolsbar">
             <div class="searchBox">
                 <el-row>
-                    <el-form :inline="true" label-width="50px" size="mini">
+                    <el-form :inline="true" size="mini">
                         <el-form-item label="编码">
                             <el-input v-model="unit_no" placeholder="编码"></el-input>
                         </el-form-item>
