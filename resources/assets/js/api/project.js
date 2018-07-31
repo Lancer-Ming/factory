@@ -26,7 +26,8 @@ export function showproject(id){
         method: 'get'
     })
 }
-export function updateproject(id,data){
+export function updateproject(id, data){
+    console.log(data)
     return axios({
         url: `/project/${id}` ,
         method: 'put',
@@ -47,4 +48,15 @@ export function findUnit(id) {
         method: 'post',
         data: { id }
     })
+}
+
+export function unitForm(page,data={}, pagesize=10) {
+    if (Object.keys(data).length > 0) {
+        Object.assign(data, {page, pagesize});
+        return axios({
+            url: `/unit/form`,
+            method: 'post',
+            params: data
+        })
+    }
 }

@@ -81,6 +81,7 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::delete('/unit', 'UnitsController@destroy')->name('destroy');
             Route::post('/unit/export', 'UnitsController@export')->name('export');
             Route::post('/unit/import', 'UnitsController@import')->name('import');
+            Route::post('/unit/form', 'UnitsController@form')->name('form');
         });
 
         // 单位类型管理

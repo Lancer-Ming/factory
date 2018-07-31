@@ -186,8 +186,10 @@
                                             <el-button plain @click="searchUnitBox('trail_id')">...</el-button>
                                         </el-form-item>
                                         <el-form-item label="安监站" :label-width="formLabelWidth">
-                                            <el-input v-model="form.safety_station_id" auto-complete="off"></el-input>
-                                            <el-button plain @click="Safety = true">...</el-button>
+                                            <el-select v-model="form.safety_station_id" disabled placeholder="">
+                                                <el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                            </el-select>
+                                            <el-button plain @click="searchUnitBox('safety_station_id')">...</el-button>
                                         </el-form-item>
                                     </el-form>
                                 </el-tab-pane>
@@ -344,8 +346,10 @@
                     <el-button plain @click="searchUnitBox('trail_id')">...</el-button>
                 </el-form-item>
                 <el-form-item label="安监站" :label-width="formLabelWidth">
-                    <el-input v-model="form.safety_station_id" auto-complete="off"></el-input>
-                    <el-button plain @click="Safety = true">...</el-button>
+                    <el-select v-model="form.safety_station_id" disabled placeholder="">
+                        <el-option v-for="item in unitData" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
+                    <el-button plain @click="searchUnitBox('safety_station_id')">...</el-button>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -418,7 +422,7 @@
             </div>
         </el-dialog>
 
-        <search-box :chose="chose" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue"></search-box>
+        <search-box :chose="chose" :currentUnitModel="currentUnitModel" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue"></search-box>
 
     </div>
 </template>
@@ -428,7 +432,7 @@
     import { buildType,invest,itemcategory,structuraltype,citys } from "../../api/json"
     import {BaiduMap, BmControl, BmView, BmAutoComplete, BmLocalSearch, BmMarker} from 'vue-baidu-map'
     import SearchBox from '../../components/SearchBox.vue'
-    import { getproject,storeproject,editproject,showproject,updateproject,destroyproject, findUnit } from "../../api/project"
+    import { getproject,storeproject,editproject,showproject,updateproject,destroyproject, findUnit} from "../../api/project"
     import { implode } from '../../utils/common'
     export default {
         components: {
@@ -541,7 +545,8 @@
                 gpsData: '',
                 defaultGps: {
                     lng: 113.273154, lat: 23.14278,
-                }
+                },
+                editId: null,
             };
         },
         created(){
@@ -562,7 +567,6 @@
             })
             getproject().then(res=>{
                 if (res.data.response_status === "success") {
-                    console.log(res)
                     this.data = res.data.data
                 }
             })
@@ -591,14 +595,23 @@
                     return
                 }
                 this.editData = data
+                this.editId = data.id
                 this.form = this.editData
                 this.$set(this.form, 'contract_id', implode(data.units, 'id')[0])
+                this.$set(this.form, 'subcontract_id', data.units[0]['pivot']['subcontract_id'])
+                this.$set(this.form, 'build_id', data.units[0]['pivot']['build_id'])
+                this.$set(this.form, 'design_id', data.units[0]['pivot']['design_id'])
+                this.$set(this.form, 'servey_id', data.units[0]['pivot']['servey_id'])
+                this.$set(this.form, 'supervisor_id', data.units[0]['pivot']['supervisor_id'])
+                this.$set(this.form, 'trail_id', data.units[0]['pivot']['trail_id'])
+                this.$set(this.form, 'safety_station_id', data.units[0]['pivot']['safety_station_id'])
                 this.$set(this.form, 'address',  [this.editData.province, this.editData.city, this.editData.county])
 
                 // 拿到单位的id
                 let units = this.editData.units[0].pivot
                 delete units.item_id
                 let units_ids = Object.values(units)
+                console.log(units_ids)
                 var result = units_ids.filter(val => {
                     return val !== null
                 })
@@ -713,7 +726,7 @@
                 data.city = this.form.address[1]
                 data.county = this.form.address[2]
                 delete data.id
-                updateproject(this.editData.id, this.form).then(res => {
+                updateproject(this.editId, data).then(res => {
                     console.log(res)
                     if(res.data.response_status === 'success') {
                         this.data = res.data.data

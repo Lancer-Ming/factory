@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { getUnits } from '../api/company'
+import { unitForm } from '../api/project'
     export default {
         data() {
             return {
@@ -58,6 +58,10 @@ import { getUnits } from '../api/company'
             chose: {
                 type: Boolean,
                 default: false
+            },
+            currentUnitModel: {
+                type: String,
+                default: ''
             },
             form: {
                 type: Object
@@ -82,8 +86,8 @@ import { getUnits } from '../api/company'
                 this.$emit('dbClickSelection', row)
             },
             // 请求数据
-            getTableData(data={}) {
-                getUnits(this.currentPage, data, this.pagesize).then(res => {
+            getTableData(currentPage=this.currentPage) {
+                unitForm(currentPage, {form_name: this.currentUnitModel}, this.pagesize).then(res => {
                     if (res.data.response_status === 'success') {
                         this.tableData = res.data.data.data
                         this.total = res.data.data.total

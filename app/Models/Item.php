@@ -14,7 +14,7 @@ class Item extends Model
     public function units()
     {
         return $this->belongsToMany(Unit::class,'item_units', 'item_id', 'contract_id')
-            ->withPivot('contract_id', 'subcontract_id', 'build_id', 'supervisor_id', 'servey_id', 'design_id', 'trail_id');
+            ->withPivot('contract_id', 'subcontract_id', 'build_id', 'supervisor_id', 'servey_id', 'design_id', 'trail_id', 'safety_station_id');
     }
 
     public static function getItems()

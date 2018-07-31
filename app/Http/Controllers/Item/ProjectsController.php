@@ -90,9 +90,9 @@ class ProjectsController extends Controller
         return successJson($data);
     }
 
-    public function update(ItemRequest $request, Item $item)
+    public function update(ItemRequest $request, Item $project)
     {
-        $item->update([
+        $project->update([
             'item_category_id' => $request->item_category_id,
             'invest_id' => $request->invest_id,
             'build_type_id' => $request->build_type_id,
@@ -117,13 +117,14 @@ class ProjectsController extends Controller
             'name' => $request->name,
         ]);
 
-        $item->ItemUnit()->update([
+        ItemUnit::where('item_id', $project->id)->update([
             'contract_id' => $request->contract_id,
             'subcontract_id' => $request->subcontract_id,
             'supervisor_id' => $request->supervisor_id,
             'servey_id' => $request->servey_id,
             'design_id' => $request->design_id,
             'trail_id' => $request->trail_id,
+            'build_id' => $request->build_id,
             'safety_station_id' => $request->safety_station_id,
         ]);
 
