@@ -19,13 +19,18 @@ class ProjectsController extends Controller
             }
         };
 
-        $items = Item::where($where)->orderBy('created_at', 'desc')->get();
+        $items = Item::where($where)->with([
+            'units' => function($query) {
+                $query->orderBy('created_at', 'desc');
+            }
+        ])->orderBy('created_at', 'desc')->get();
+
         return successJson($items);
     }
 
     public function store(ItemRequest $request)
     {
-        $item_id = Item::insert([
+        $item = Item::create([
             'item_category_id' => $request->item_category_id,
             'invest_id' => $request->invest_id,
             'build_type_id' => $request->build_type_id,
@@ -51,7 +56,7 @@ class ProjectsController extends Controller
         ]);
 
         ItemUnit::insert([
-            'item_id' => $item_id,
+            'item_id' => $item->id,
             'contract_id' => $request->contract_id,
             'subcontract_id' => $request->subcontract_id,
             'supervisor_id' => $request->supervisor_id,
@@ -61,7 +66,9 @@ class ProjectsController extends Controller
             'safety_station_id' => $request->safety_station_id,
         ]);
 
-        return successJson('', '操作成功！');
+        $items = Item::getItems();
+
+        return successJson($items, '操作成功！');
     }
 
     public function edit(Item $item)
@@ -120,12 +127,15 @@ class ProjectsController extends Controller
             'safety_station_id' => $request->safety_station_id,
         ]);
 
-        return successJson('', '操作成功');
+        $items = Item::getItems();
+        return successJson($items, '操作成功');
     }
 
     public function destroy(Item $item)
     {
         $item->delete();
-        return successJson('', '操作成功！');
+
+        $items = Item::getItems();
+        return successJson($items, '操作成功！');
     }
 }

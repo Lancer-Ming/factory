@@ -8,6 +8,7 @@
         </el-row>
         <split-pane v-on:resize="resize" split="vertical" :default-percent='20' :min-percent='10' :max-percent='30' class="projectBox">
             <template slot="paneL">
+                <div class="left-container">
                     <div class="pro-box clearfix">
                         <div class="pro-box-l clearfix">
                             <el-row class="pro-l-tit clearfix">
@@ -24,6 +25,7 @@
                             </el-row>
                         </div>
                     </div>
+                </div>
             </template>
             <template slot="paneR">
                 <div class="right-container">
@@ -39,29 +41,29 @@
                                 </el-tab-pane>
                                 <el-tab-pane label="单位信息" disabled>单位信息</el-tab-pane>
                                 <el-tab-pane label="项目信息">
-                                    <el-button type="warning" plain icon="el-icon-edit" style="margin-bottom: 20px;" @click="handleEdit">保存编辑</el-button>
+                                    <el-button type="warning" plain icon="el-icon-check" style="margin-bottom: 20px;" @click="editSubmit">保存</el-button>
                                     <el-form :model="form">
                                         <el-form-item label="项目名" :label-width="formLabelWidth">
-                                            <el-input v-model="form.id" auto-complete="off"></el-input>
+                                            <el-input v-model="form.name" auto-complete="off"></el-input>
                                         </el-form-item>
                                         <el-form-item label="项目类型" :label-width="formLabelWidth">
                                             <el-select v-model="form.item_category_id" placeholder="请选择项目类型">
-                                                <el-option v-for="(item,index) in itemcategory" :key="index" :label="item.name" :value="item.name"></el-option>
+                                                <el-option v-for="(item,index) in itemcategory" :key="index" :label="item.name" :value="item.id"></el-option>
                                             </el-select>
                                         </el-form-item>
                                         <el-form-item label="资金来源" :label-width="formLabelWidth">
                                             <el-select v-model="form.invest_id" placeholder="请选择资金来源">
-                                                <el-option v-for="(item,index) in invest" :key="index" :label="item.name" :value="item.name"></el-option>
+                                                <el-option v-for="(item,index) in invest" :key="index" :label="item.name" :value="item.id"></el-option>
                                             </el-select>
                                         </el-form-item>
                                         <el-form-item label="建设方式" :label-width="formLabelWidth">
                                             <el-select v-model="form.build_type_id" placeholder="请选择建设方式">
-                                                <el-option v-for="(item,index) in buildType" :key="index" :label="item.name" :value="item.name"></el-option>
+                                                <el-option v-for="(item,index) in buildType" :key="index" :label="item.name" :value="item.id"></el-option>
                                             </el-select>
                                         </el-form-item>
                                         <el-form-item label="结构形式" :label-width="formLabelWidth">
                                             <el-select v-model="form.structural_type_id" placeholder="请选择结构类型">
-                                                <el-option v-for="(item,index) in structuraltype" :key="index" :label="item.name" :value="item.name"></el-option>
+                                                <el-option v-for="(item,index) in structuraltype" :key="index" :label="item.name" :value="item.id"></el-option>
                                             </el-select>
                                         </el-form-item>
                                         <el-form-item label="结构层数" :label-width="formLabelWidth">
@@ -200,26 +202,26 @@
         <el-dialog title="新增项目" :visible.sync="addform" class="pro-add">
             <el-form :model="form">
                 <el-form-item label="项目名" :label-width="formLabelWidth">
-                    <el-input v-model="form.id" auto-complete="off"></el-input>
+                    <el-input v-model="form.name" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="项目类型" :label-width="formLabelWidth">
                     <el-select v-model="form.item_category_id" placeholder="请选择项目类型">
-                        <el-option v-for="(item,index) in itemcategory" :key="index" :label="item.name" :value="item.name"></el-option>
+                        <el-option v-for="(item,index) in itemcategory" :key="index" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="资金来源" :label-width="formLabelWidth">
                     <el-select v-model="form.invest_id" placeholder="请选择资金来源">
-                        <el-option v-for="(item,index) in invest" :key="index" :label="item.name" :value="item.name"></el-option>
+                        <el-option v-for="(item,index) in invest" :key="index" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="建设方式" :label-width="formLabelWidth">
                     <el-select v-model="form.build_type_id" placeholder="请选择建设方式">
-                        <el-option v-for="(item,index) in buildType" :key="index" :label="item.name" :value="item.name"></el-option>
+                        <el-option v-for="(item,index) in buildType" :key="index" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="结构形式" :label-width="formLabelWidth">
                     <el-select v-model="form.structural_type_id" placeholder="请选择结构类型">
-                        <el-option v-for="(item,index) in structuraltype" :key="index" :label="item.name" :value="item.name"></el-option>
+                        <el-option v-for="(item,index) in structuraltype" :key="index" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="结构层数" :label-width="formLabelWidth">
@@ -362,6 +364,8 @@
     import {BaiduMap, BmControl, BmView, BmAutoComplete, BmLocalSearch, BmMarker} from 'vue-baidu-map'
     import SearchBox from '../../components/SearchBox.vue'
     import { getproject,storeproject,editproject,showproject,updateproject,destroyproject} from "../../api/project"
+    import { implode } from '../../utils/common'
+    import { findUnit } from '../../api/company'
     export default {
         components: {
             BaiduMap,
@@ -387,6 +391,8 @@
                 chose: false,
                 addform: false,
                 formLabelWidth: "100px",
+                label:'',
+                editData: {},
                 num1: 1,
                 //分页
                 currentPage4: 4,
@@ -406,7 +412,7 @@
                 value3: "",
                 chose: false,   // 这个是search-box是否显示
                 form: {
-                    id: '',
+                    name: '',
                     item_category_id: '',
                     invest_id: '',
                     build_type_id: '',
@@ -437,60 +443,10 @@
                 },
                 submitType: '',
                 unitData: [],
-                data: [{
-                    label: '坝光片区场平工程(I标段)',
-                    children: [{
-                        label: '坝光片区场平工程(I标段)',
-                    },
-                        {
-                        label: '坝光片区场平工程(I标段)'
-                    }
-                        ]
-                },
-                    {
-                    label: '深圳市城市轨道交通3号线南延线工程主体工程3131标段（备份）',
-                },
-                    {
-                    label: '库坑片区路网完善工程新丹路（龙观快速—泗黎路）段工程',
-                    children: [{
-                        label: '深圳市建泰建筑劳务分包有限公司_黄汉辉(SZJTJZ)'
-                    },
-                        {
-                        label: '中车信息技术有限公司'
-                    },
-                        {
-                            label: '中车信息技术有限公司'
-                        }
-                    ]
-                },
-                    {
-                        label: '布吉河流域综合治理工程“EPC+O”（设计采购施工和管养一体化）',
-                        children: [{
-                            label: '湛江市同得利劳务有限公司'
-                        },
-                            {
-                                label: '中车信息技术有限公司'
-                            },
-                            {
-                                label: '深圳市市政工程总公司'
-                            },
-                            {
-                                label: '深圳市聚豪建筑工程劳务分包有限公司'
-                            },
-                            {
-                                label: '深圳市金润劳务工程有限公司'
-                            },
-                            {
-                                label: '深圳市泰屹恒建筑劳务有限公司'
-                            },
-                            {
-                                label: '广东进业劳务分包有限公司'
-                            }
-                        ]
-                    }],
+                data: [],
                 defaultProps: {
-                    children: 'children',
-                    label: 'label'
+                    children: 'units',
+                    label: 'name'
                 },
                 handleChange(value) {
                     console.log(value)
@@ -518,7 +474,8 @@
             })
             getproject().then(res=>{
                 if (res.data.response_status === "success") {
-                    this.options = res.data.data
+                    console.log(res)
+                    this.data = res.data.data
                 }
             })
         },
@@ -542,7 +499,22 @@
                 console.log('resize')
             },
             handleNodeClick(data) {
-                console.log(data);
+                this.editData = data
+                this.form = this.editData
+                this.$set(this.form, 'contract_id', implode(data.units, 'id')[0])
+                this.$set(this.form, 'address',  [this.editData.province, this.editData.city, this.editData.county])
+
+                // 拿到单位的id
+                let units = this.editData.units[0].pivot
+                delete units.item_id
+                let units_ids = Object.values(units)
+                var result = units_ids.filter(val => {
+                    return val !== null
+                })
+               
+                findUnit(result).then(res => {
+                    
+                })
             },
             getClickInfo (e) {
                 this.center.lng = e.point.lng
@@ -581,8 +553,6 @@
                 this.currentUnitModel = currentUnitModel
             },
             getUnitValue(row) {
-                console.log(row)
-                // this.unitData.push(row)
                 this.$set(this.unitData, 0, {label: row.name, value: row.id})
                 this.form[this.currentUnitModel] = row.id
                 this.chose = false
@@ -592,7 +562,7 @@
             },
             handleAdd(){
                 this.form={
-                    id:'',
+                    name:'',
                     item_category_id: '',
                     invest_id: '',
                     build_type_id: '',
@@ -625,17 +595,25 @@
                 this.submitType = 'add'
             },
             handleEdit(){
-                console.log(1111)
+                this.submitType = 'edit'
+                if (this.label !== "") {
+                    editproject(this.label.label).then(res => {
+                        // this.editData = res.data.data
+                        // this.form = this.editData
+                    })
+                }
+            },
+            editSubmit() {
+
             },
             ensure(){
                 let data = this.form
                 data.province = this.form.address[0]
                 data.city = this.form.address[1]
                 data.county = this.form.address[2]
-                storeproject().then(res => {
-                    console.log(res)
+                storeproject(data).then(res => {
                     if(res.data.response_status === 'success') {
-                        this.unitData = res.data.data.data
+                        this.data = res.data.data
                         this.addform = false
                         this.$message({
                             type: 'success',

@@ -8,8 +8,21 @@ class Item extends Model
 {
     protected $guarded = [];
 
-    public function itemUnit()
+    /**项目与单位的对应关系
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function units()
     {
-        return $this->hasOne(ItemUnit::class);
+        return $this->belongsToMany(Unit::class,'item_units', 'item_id', 'contract_id')
+            ->withPivot('contract_id', 'subcontract_id', 'build_id', 'supervisor_id', 'servey_id', 'design_id', 'trail_id');
+    }
+
+    public static function getItems()
+    {
+        return self::with([
+            'units' => function($query) {
+                $query->orderBy('created_at', 'desc');
+            }
+        ])->orderBy('created_at', 'desc')->get();
     }
 }
