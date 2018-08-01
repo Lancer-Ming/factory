@@ -73,7 +73,11 @@ import { unitForm } from '../api/project'
         },
         methods: {
             unitSearch() {
-                getTableData(this.currentPage, this.name)
+                this.getTableData(this.currentPage, this.name)
+            },
+            clearSearch() {
+                this.name = ''
+                this.getTableData(this.currentPage)
             },
             handleSizeChange(pagesize) {
                 this.pagesize = pagesize
