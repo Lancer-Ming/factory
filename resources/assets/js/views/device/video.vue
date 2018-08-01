@@ -15,14 +15,14 @@
                         <el-col :span="9" class="query-text"><el-button type="warning" icon="el-icon-search" plain size="mini">查询</el-button></el-col>
                     </el-row>
                     <el-row>
-                        <el-tree :data="data" :highlight-current="true"></el-tree>
+                        <el-tree :data="data" :props="defaultProps" :highlight-current="true" @node-click="handleNodeClick"></el-tree>
                     </el-row>
                 </div>
             </template>
             <template slot="paneR">
                 <div class="right-container">
                     <el-row style="background: rgba(233,242,255,.5);padding: 5px 20px;">
-                        <el-button type="primary" plain size="mini" icon="el-icon-circle-plus-outline" class="v-btn">添加摄像头</el-button>
+                        <el-button type="primary" plain size="mini" icon="el-icon-circle-plus-outline" class="v-btn" @click="addCamera = true">添加摄像头</el-button>
                         <el-button type="primary" plain size="mini" icon="el-icon-sort" class="v-btn">复制添加摄像头</el-button>
                         <el-button type="primary" plain size="mini" icon="el-icon-delete" class="v-btn">删除摄像头</el-button>
                     </el-row>
@@ -88,16 +88,70 @@
                 </div>
             </template>
         </split-pane>
+
+        <el-dialog title="添加摄像头" :visible.sync="addCamera" class="addCamera">
+            <el-form :model="form">
+                <el-form-item label="*摄像头名称" :label-width="formLabelWidth">
+                    <el-input v-model="form.name" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="*设备序列号" :label-width="formLabelWidth">
+                    <el-input v-model="form.name" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="*设备通道号" :label-width="formLabelWidth">
+                    <el-input v-model="form.name" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="*萤石云AppKey" :label-width="formLabelWidth">
+                    <el-input v-model="form.name" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="*萤石云Secret" :label-width="formLabelWidth" style="width: 100%;">
+                    <el-input v-model="form.name" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="*萤石云AccessToken" :label-width="formLabelWidth" style="width: 100%;">
+                    <el-input v-model="form.name" auto-complete="off" style="width: 78%"></el-input>
+                    <el-button type="warning" plain>获取AccessToken</el-button>
+                </el-form-item>
+                <el-form-item label="*EZOPEN直播源" :label-width="formLabelWidth" style="width: 100%;">
+                    <el-input v-model="form.name" disabled auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="*HLS播放地址" :label-width="formLabelWidth" style="width: 100%;">
+                    <el-input v-model="form.name" disabled auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div class="attention">
+                <h3>注意事项:</h3>
+                <p>
+                    （1）这里的摄像头配置信息，来自于莹石云开放平台“https://open.ys7.com”；<br />
+                    （2）项目端摄像头需要先在萤石云平台上进行注册、配置；<br />
+                    （3）本功能仅支持海康的摄像头；<br />
+                </p>
+            </div>
+            <div slot="footer" class="dialog-footer" style="text-align: center;">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="warning" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
+        </el-dialog>
+
     </div>
 </template>
 <script>
     import splitPane from 'vue-splitpane'
+    import { getproject} from "../../api/project"
     export default {
         components: {
             splitPane,
         },
         data() {
             return {
+                addCamera: false,
+                form:{},
+                formLabelWidth: '150px',
+                unitData: [],
+                data: [],
+                editData: {},
+                defaultProps: {
+                    children: 'units',
+                    label: 'name'
+                },
                 tableData3: [{
                     name: '坝光环境3号球机',
                     number: 'C20322236',
@@ -120,59 +174,66 @@
                     hls: 'http://hls.open.ys7.com/openlive/82d2e511fb2d472c815e6026a334399d.m3u8'
                 }],
                 multipleSelection: [],
-                data: [{
-                    label: '坝光片区场平工程(I标段)',
-                    children: [{
-                        label: '坝光片区场平工程(I标段)',
-                    },
-                        {
-                            label: '坝光片区场平工程(I标段)'
-                        }
-                    ]
-                },
-                    {
-                        label: '深圳市城市轨道交通3号线南延线工程主体工程3131标段（备份）',
-                    },
-                    {
-                        label: '库坑片区路网完善工程新丹路（龙观快速—泗黎路）段工程',
-                        children: [{
-                            label: '深圳市建泰建筑劳务分包有限公司_黄汉辉(SZJTJZ)'
-                        },
-                            {
-                                label: '中车信息技术有限公司'
-                            },
-                            {
-                                label: '中车信息技术有限公司'
-                            }
-                        ]
-                    },
-                    {
-                        label: '布吉河流域综合治理工程“EPC+O”（设计采购施工和管养一体化）',
-                        children: [{
-                            label: '湛江市同得利劳务有限公司'
-                        },
-                            {
-                                label: '中车信息技术有限公司'
-                            },
-                            {
-                                label: '深圳市市政工程总公司'
-                            },
-                            {
-                                label: '深圳市聚豪建筑工程劳务分包有限公司'
-                            },
-                            {
-                                label: '深圳市金润劳务工程有限公司'
-                            },
-                            {
-                                label: '深圳市泰屹恒建筑劳务有限公司'
-                            },
-                            {
-                                label: '广东进业劳务分包有限公司'
-                            }
-                        ]
-                    }],
+                // data: [{
+                //     label: '坝光片区场平工程(I标段)',
+                //     children: [{
+                //         label: '坝光片区场平工程(I标段)',
+                //     },
+                //         {
+                //             label: '坝光片区场平工程(I标段)'
+                //         }
+                //     ]
+                // },
+                //     {
+                //         label: '深圳市城市轨道交通3号线南延线工程主体工程3131标段（备份）',
+                //     },
+                //     {
+                //         label: '库坑片区路网完善工程新丹路（龙观快速—泗黎路）段工程',
+                //         children: [{
+                //             label: '深圳市建泰建筑劳务分包有限公司_黄汉辉(SZJTJZ)'
+                //         },
+                //             {
+                //                 label: '中车信息技术有限公司'
+                //             },
+                //             {
+                //                 label: '中车信息技术有限公司'
+                //             }
+                //         ]
+                //     },
+                //     {
+                //         label: '布吉河流域综合治理工程“EPC+O”（设计采购施工和管养一体化）',
+                //         children: [{
+                //             label: '湛江市同得利劳务有限公司'
+                //         },
+                //             {
+                //                 label: '中车信息技术有限公司'
+                //             },
+                //             {
+                //                 label: '深圳市市政工程总公司'
+                //             },
+                //             {
+                //                 label: '深圳市聚豪建筑工程劳务分包有限公司'
+                //             },
+                //             {
+                //                 label: '深圳市金润劳务工程有限公司'
+                //             },
+                //             {
+                //                 label: '深圳市泰屹恒建筑劳务有限公司'
+                //             },
+                //             {
+                //                 label: '广东进业劳务分包有限公司'
+                //             }
+                //         ]
+                //     }],
                 }
             },
+        created(){
+            getproject().then(res=>{
+                if (res.data.response_status === "success") {
+                    this.data = res.data.data
+                }
+            })
+        },
         methods:{
             resize() {
                 console.log('resize')
@@ -188,6 +249,22 @@
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
+            },
+            handleNodeClick(data) {
+                if (this.editData.id === data.id) {
+                    return
+                }
+                // this.editData = data
+                // this.editId = data.id
+                // this.form = this.editData
+                // let units = this.editData.units[0].pivot
+                // delete units.item_id
+                // let units_ids = Object.values(units)
+                // console.log(units_ids)
+                // var result = units_ids.filter(val => {
+                //     return val !== null
+                // })
+
             }
         }
     }
@@ -214,5 +291,22 @@
     }
     .v-btn{
         border-radius: 15px;
+    }
+    .addCamera .el-form-item{
+        float: left;
+        width: 50%;
+    }
+    .attention{
+        width: 100%;
+        margin: 50% auto 20px auto;
+        background: #fff9ec;
+        color: #ff9c24;
+        display: block;
+        padding: 10px 10px;
+    }
+    .attention p{
+        line-height: 30px;
+        font-size: 14px;
+        margin-top: 5px;
     }
 </style>

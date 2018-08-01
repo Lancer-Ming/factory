@@ -41,7 +41,6 @@
                                 </el-tab-pane>
                                 <el-tab-pane label="单位信息" disabled>单位信息</el-tab-pane>
                                 <el-tab-pane label="项目信息">
-                                    <el-button type="warning" plain icon="el-icon-check" style="margin-bottom: 20px;" @click="editSubmit">保存</el-button>
                                     <el-form :model="form">
                                         <el-form-item label="项目名" :label-width="formLabelWidth">
                                             <el-input v-model="form.name" auto-complete="off"></el-input>
@@ -123,11 +122,10 @@
                                                     </bm-control>
                                                     <bm-local-search :keyword="keyword" :auto-viewport="true" style="width:0px;height:0px;overflow: hidden;"></bm-local-search>
                                                 </baidu-map>
-                                                <div slot="footer" style="margin-top: 360px;">
-                                                    <el-button @click="cancel" type="ghost"
-                                                            style="width: 60px;height: 36px;">取消
+                                                <div slot="footer" style="margin: 360px 0px 20px 0px;">
+                                                    <el-button @click="cancel" style="width: 70px;height: 38px;">取消
                                                     </el-button>
-                                                    <el-button type="primary" style="width: 60px;height: 36px;" @click="confirm">确定</el-button>
+                                                    <el-button type="primary" style="width: 70px;height: 38px;" @click="confirm">确定</el-button>
                                                 </div>
                                             </div>
                                         </div>
@@ -191,6 +189,7 @@
                                             </el-select>
                                             <el-button plain @click="searchUnitBox('safety_station_id')">...</el-button>
                                         </el-form-item>
+                                        <el-button type="warning" plain icon="el-icon-check" style="margin:20px auto;display: block;text-align: center;" @click="editSubmit">保存</el-button>
                                     </el-form>
                                 </el-tab-pane>
                             </el-tabs>
@@ -226,7 +225,7 @@
                         <el-option v-for="(item,index) in structuraltype" :key="index" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="结构层数" :label-width="formLabelWidth">
+                <el-form-item label="结构层数" :label-width="formLabelWidth" class="stru">
                     <el-input-number v-model="form.structural_floor" @change="handleChange" :min="1" :max="100"></el-input-number>
                 </el-form-item>
                 <el-form-item label="监督登记号" :label-width="formLabelWidth">
@@ -283,11 +282,9 @@
                             </bm-control>
                             <bm-local-search :keyword="keyword" :auto-viewport="true" style="width:0px;height:0px;overflow: hidden;"></bm-local-search>
                         </baidu-map>
-                        <div slot="footer" style="margin-top: 360px;">
-                            <el-button @click="cancel" type="ghost"
-                                    style="width: 60px;height: 36px;">取消
-                            </el-button>
-                            <el-button type="primary" style="width: 60px;height: 36px;" @click="confirm">确定</el-button>
+                        <div slot="footer" style="margin: 360px 0px 20px 0px;">
+                            <el-button @click="cancel" style="width: 70px;height: 38px;">取消</el-button>
+                            <el-button type="primary" style="width: 70px;height: 38px;" @click="confirm">确定</el-button>
                         </div>
                     </div>
                 </div>
