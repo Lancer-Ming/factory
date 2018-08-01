@@ -108,10 +108,15 @@ class UnitsController extends Controller
 
     public function form(Request $request)
     {
+        $where = function($query) use ($request) {
+            if ($request->has('name') && trim($request->name) != '') {
+                $query->where('name', 'like', '%'.$request->name.'%');
+            }
+        };
         $pagesize = $request->has('pagesize') ? $request->pagesize: 10;
         $utype_id = Utype::where('form_name', $request->form_name)->first()->id;
         $unit_ids = \DB::table('unit_utype')->where('utype_id', $utype_id)->pluck('unit_id')->unique();
-        $units = Unit::whereIn('id', $unit_ids)->orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
+        $units = Unit::whereIn('id', $unit_ids)->where($where)->orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
         return successJson($units);
     }
 }

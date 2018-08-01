@@ -94,6 +94,14 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::resource('utype', 'UtypesController')->except(['show']);
         });
     });
+
+
+    Route::namespace('Divice')->group(function() {
+        // 视频设备管理
+        Route::as('divice.')->group(function() {
+            Route::resource('video_divice', 'VideoDiviceController');
+        });
+    });
 });
 
 
