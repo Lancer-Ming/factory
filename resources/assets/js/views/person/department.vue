@@ -81,7 +81,9 @@
                 @row-click="cellClick"
                 @row-dblclick="dblclick"
                 ref="table"
-                style="width: 100%">
+                style="width: 100%"
+                size="mini"
+        >
 
             <el-table-column
                     align="center"

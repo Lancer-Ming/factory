@@ -72,17 +72,22 @@
                 align
                 border
                 stripe
+                :default-sort = "{prop: 'rowid', order: 'ascending',prop:'created_at',order: 'ascending'}"
                 v-loading="loading"
                 @selection-change="handleSelectionChange"
                 @row-click="cellClick"
                 @row-dblclick="dblclick"
                 ref="table"
                 style="width: 100%"
+                size="mini"
         >
             <el-table-column
+                    prop="rowid"
                     align="center"
-                    width="25"
+                    width="40"
                     fixed
+                    sortable
+                    label="#"
             >
                 <template slot-scope="scope">
                     <span>{{ scope.row.id }}</span>
@@ -97,6 +102,8 @@
             <el-table-column
                     label="编号"
                     width="80"
+                    sortable
+                    prop="unit_no"
             >
                 <template slot-scope="scope">
                     <span>{{ scope.row.unit_no }}</span>
@@ -275,6 +282,8 @@
                     label="更新时间"
                     align="center"
                     width="165"
+                    sortable
+                    prop="updated_at"
             >
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i> <span style="margin-left: 10px">{{ scope.row.updated_at }}</span>
@@ -284,6 +293,9 @@
                     label="创建时间"
                     align="center"
                     width="165"
+                    sortable
+                    prop="created_at"
+                    fixed="right"
             >
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i> <span style="margin-left: 10px">{{ scope.row.created_at }}</span>
