@@ -85,22 +85,24 @@
 
             <el-table-column
                     align="center"
-                    width="25px"
+                    width="25"
             >
                 <template slot-scope="scope">
                     <span>{{ scope.row.id }}</span>
                 </template>
             </el-table-column>
             <el-table-column
+                    align="center"
                     type="selection"
+                    width="30"
             >
             </el-table-column>
             <el-table-column
                     label="编号"
-                    align="center"
+                    width="80"
             >
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.unit_no }}</span>
+                    <span>{{ scope.row.unit_no }}</span>
                 </template>
             </el-table-column>
             <el-table-column
