@@ -16,9 +16,9 @@
                                 <i class="el-icon-d-arrow-left tool"></i>
                             </el-row>
                             <el-row class="pro-l-query">
-                                <el-col :span="12"><el-input class="query" size="mini" style="width: 100%;"></el-input></el-col>
+                                <el-col :span="12"><el-input v-model="unitSearchValue" class="query" size="mini" style="width: 100%;"></el-input></el-col>
                                 <el-col :span="3">&nbsp;</el-col>
-                                <el-col :span="9" class="query-text"><i class="el-icon-search"></i>查询</el-col>
+                                <el-button :span="9" type="mini" class="query-text" @click="unitSearch"><i class="el-icon-search"></i>查询</el-button>
                             </el-row>
                             <el-row>
                                 <el-tree :data="data" :props="defaultProps" :highlight-current="true" @node-click="handleNodeClick"></el-tree>
@@ -447,31 +447,8 @@
         },
         data() {
             return {
-                tableData: [
-                    {
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1518 弄',
-                        person: '',
-                        tell: '',
-                },
-                    {
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1518 弄',
-                        person: '',
-                        tell: '',
-                },
-                    {
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1518 弄',
-                        person: '',
-                        tell: '',
-                },
-                    {
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1518 弄',
-                        person: '',
-                        tell: '',
-                }],
+                tableData: [],
+                unitSearchValue: '',
                 //地图
                 showMapComponent: this.value,
                 keyword: '',
@@ -588,7 +565,6 @@
         },
         methods: {
             resize() {
-                console.log('resize')
             },
             handleNodeClick(data) {
                 if (this.editData.id === data.id) {
@@ -611,11 +587,10 @@
                 let units = this.editData.units[0].pivot
                 delete units.item_id
                 let units_ids = Object.values(units)
-                console.log(units_ids)
                 var result = units_ids.filter(val => {
                     return val !== null
                 })
-
+                this.editData['units_ids'] = result
                 findUnit(result).then(res => {
                     if (res.data.response_status === 'success') {
                         this.unitData = res.data.data
@@ -727,7 +702,6 @@
                 data.county = this.form.address[2]
                 delete data.id
                 updateproject(this.editId, data).then(res => {
-                    console.log(res)
                     if(res.data.response_status === 'success') {
                         this.data = res.data.data
                         this.$message({
@@ -756,14 +730,36 @@
                 })
             },
             handleDeleteSeleted(){
-
+                this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    destroyproject(this.editId, this.editData.units_ids).then(res => {
+                        this.data = res.data.data
+                        this.$message({
+                            type: 'success',
+                            showClose: true,
+                            message: res.data.msg
+                        })
+                    })
+                }).catch(() => {
+                    return
+                })
             },
             handleChange(value) {
-                 console.log(value)
             },
             gps(){
                 this.gpsData = this.center.lng + ',' + this.center.lat
                 $('.gps').toggle()
+            },
+            unitSearch() {
+                getproject({name: this.unitSearchValue}).then(res => {
+                    if (res.data.response_status === "success") {
+                        this.data = res.data.data
+                    }
+                })
             }
         },
 

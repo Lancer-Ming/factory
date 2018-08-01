@@ -1,9 +1,10 @@
 import axios from '../utils/request'
 
-export function getproject(){
+export function getproject(data=null){
     return axios({
         url: `/project` ,
-        method: 'get'
+        method: 'get',
+        params: data
     })
 }
 export function storeproject(data){
@@ -34,11 +35,11 @@ export function updateproject(id, data){
         data: data
     })
 }
-export function destroyproject(data){
+export function destroyproject(id, data){
     return axios({
-        url: `/project` ,
+        url: `/project/${id}` ,
         method: 'delete',
-        data: data
+        data: {unit_ids: data}
     })
 }
 
