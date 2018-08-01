@@ -70,7 +70,7 @@
   margin-right: 5px;
   color: #2e6da4;
 }
-.el-input{
+.project .el-input{
   width: 70%;
 }
 .pro-add .el-form-item{
@@ -114,4 +114,9 @@
 .pro-box-r .el-form-item{
   float: left;
   width: 50%;
+}
+.el-input-number {
+  .el-input {
+    width: 100%;
+  }
 }
