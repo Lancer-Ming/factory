@@ -23,7 +23,20 @@ class ProjectsController extends Controller
             'units' => function($query) {
                 $query->orderBy('created_at', 'desc');
             }
-        ])->orderBy('created_at', 'desc')->get();
+        ])->orderBy('created_at', 'desc')->get()->toArray();
+
+        $unit_ids = Unit::where($where)->pluck('id');
+        $item_ids = \DB::table('item_units')->whereIn('contract_id', $unit_ids)->pluck('item_id');
+        $items2 = Item::whereIn('id', $item_ids)->with([
+            'units' => function($query) {
+                $query->orderBy('created_at', 'desc');
+            }
+        ])->orderBy('created_at', 'desc')->get()->toArray();
+
+        if (count($items2) > 0) {
+            $result = array_unique(array_merge($items, $items2));
+            return successJson($result);
+        }
 
         return successJson($items);
     }
@@ -132,10 +145,12 @@ class ProjectsController extends Controller
         return successJson($items, '操作成功');
     }
 
-    public function destroy(Item $item)
+    public function destroy(Request $request, Item $project)
     {
-        $item->delete();
-
+        // 删除项目
+        $project->delete();
+        // 删除项目关联
+        $project->units()->sync($request->unit_ids);
         $items = Item::getItems();
         return successJson($items, '操作成功！');
     }
