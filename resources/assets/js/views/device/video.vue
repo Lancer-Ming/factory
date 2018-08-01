@@ -136,6 +136,7 @@
 <script>
     import splitPane from 'vue-splitpane'
     import { getproject} from "../../api/project"
+    import { addDevice,addDeviceTolocal } from "../../api/videoDevice"
     export default {
         components: {
             splitPane,
@@ -143,13 +144,26 @@
         data() {
             return {
                 addCamera: false,
-                form:{},
+                form:{
+                    id: '',
+                    d_name: '',
+                    serial: '',
+                    validate_code: '',
+                    ezopen: '',
+                    hls_address: '',
+                    accessToken: '',
+                    deviceSerial: '',
+                    validateCode: ''
+                },
                 formLabelWidth: '150px',
                 unitData: [],
                 data: [],
                 editData: {},
+                accessToken: '',
+                deviceSerial: '',
+                validateCode: '',
                 defaultProps: {
-                    children: 'units',
+                    children: 'children',
                     label: 'name'
                 },
                 tableData3: [{
@@ -174,57 +188,6 @@
                     hls: 'http://hls.open.ys7.com/openlive/82d2e511fb2d472c815e6026a334399d.m3u8'
                 }],
                 multipleSelection: [],
-                // data: [{
-                //     label: '坝光片区场平工程(I标段)',
-                //     children: [{
-                //         label: '坝光片区场平工程(I标段)',
-                //     },
-                //         {
-                //             label: '坝光片区场平工程(I标段)'
-                //         }
-                //     ]
-                // },
-                //     {
-                //         label: '深圳市城市轨道交通3号线南延线工程主体工程3131标段（备份）',
-                //     },
-                //     {
-                //         label: '库坑片区路网完善工程新丹路（龙观快速—泗黎路）段工程',
-                //         children: [{
-                //             label: '深圳市建泰建筑劳务分包有限公司_黄汉辉(SZJTJZ)'
-                //         },
-                //             {
-                //                 label: '中车信息技术有限公司'
-                //             },
-                //             {
-                //                 label: '中车信息技术有限公司'
-                //             }
-                //         ]
-                //     },
-                //     {
-                //         label: '布吉河流域综合治理工程“EPC+O”（设计采购施工和管养一体化）',
-                //         children: [{
-                //             label: '湛江市同得利劳务有限公司'
-                //         },
-                //             {
-                //                 label: '中车信息技术有限公司'
-                //             },
-                //             {
-                //                 label: '深圳市市政工程总公司'
-                //             },
-                //             {
-                //                 label: '深圳市聚豪建筑工程劳务分包有限公司'
-                //             },
-                //             {
-                //                 label: '深圳市金润劳务工程有限公司'
-                //             },
-                //             {
-                //                 label: '深圳市泰屹恒建筑劳务有限公司'
-                //             },
-                //             {
-                //                 label: '广东进业劳务分包有限公司'
-                //             }
-                //         ]
-                //     }],
                 }
             },
         created(){
@@ -264,8 +227,7 @@
                 // var result = units_ids.filter(val => {
                 //     return val !== null
                 // })
-
-            }
+            },
         }
     }
 </script>
