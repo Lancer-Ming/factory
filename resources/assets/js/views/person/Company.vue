@@ -72,7 +72,7 @@
                 align
                 border
                 stripe
-                :default-sort = "{prop: 'rowid', order: 'ascending',prop:'created_at',order: 'ascending'}"
+                :default-sort = "{prop: 'id', order: 'ascending'}"
                 v-loading="loading"
                 @selection-change="handleSelectionChange"
                 @row-click="cellClick"
@@ -82,7 +82,7 @@
                 size="mini"
         >
             <el-table-column
-                    prop="rowid"
+                    prop="id"
                     align="center"
                     width="40"
                     fixed
