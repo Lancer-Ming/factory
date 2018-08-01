@@ -3,8 +3,8 @@
         <el-form :model="form">
             <div style="width: 60%;margin: -20px 0px 10px 0px;" class="chose-name">
                 名称：<el-input v-model="name"></el-input>
-                <i class="el-icon-search"></i><span>查询</span>
-                <i class="el-icon-delete"></i><span>清空</span>
+                <span class="search-btn" @click="unitSearch"><i class="el-icon-search"></i>查询</span>
+                <span class="search-btn" @click="clearSearch"><i class="el-icon-delete"></i>清空</span>
             </div>
             <el-table 
             :data="tableData" 
@@ -72,6 +72,9 @@ import { unitForm } from '../api/project'
 
         },
         methods: {
+            unitSearch() {
+                getTableData(this.currentPage, this.name)
+            },
             handleSizeChange(pagesize) {
                 this.pagesize = pagesize
                 this.getTableData()
@@ -86,8 +89,8 @@ import { unitForm } from '../api/project'
                 this.$emit('dbClickSelection', row)
             },
             // 请求数据
-            getTableData(currentPage=this.currentPage) {
-                unitForm(currentPage, {form_name: this.currentUnitModel}, this.pagesize).then(res => {
+            getTableData(currentPage=this.currentPage, name="") {
+                unitForm(currentPage, {form_name: this.currentUnitModel, name}, this.pagesize).then(res => {
                     if (res.data.response_status === 'success') {
                         this.tableData = res.data.data.data
                         this.total = res.data.data.total
@@ -115,5 +118,8 @@ import { unitForm } from '../api/project'
     }
     .el-input {
         width: 50%;
+    }
+    .search-btn {
+        cursor: pointer;
     }
 </style>
