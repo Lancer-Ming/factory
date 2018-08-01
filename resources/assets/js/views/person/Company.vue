@@ -97,6 +97,7 @@
                     align="center"
                     type="selection"
                     width="30"
+                    fixed
             >
             </el-table-column>
             <el-table-column
@@ -107,6 +108,17 @@
             >
                 <template slot-scope="scope">
                     <span>{{ scope.row.unit_no }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    label="统一社会信用代码"
+                    align="center"
+                    width="150"
+            >
+                <template slot-scope="scope">
+                    <div slot="reference" class="name-wrapper">
+                        <span>{{ scope.row.unit_no }}</span>
+                    </div>
                 </template>
             </el-table-column>
             <el-table-column
@@ -130,7 +142,16 @@
                     </div>
                 </template>
             </el-table-column>
-
+            <el-table-column
+                    label="上级机构"
+                    align="center"
+            >
+                <template slot-scope="scope">
+                    <div slot="reference" class="name-wrapper">
+                        <span>{{ scope.row.parent_id }}</span>
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column
                     label="单位地址"
                     width="250"
@@ -216,6 +237,18 @@
                 </div>
             </template>
         </el-table-column>
+
+
+            <el-table-column
+                label="业务区域"
+                align="center"
+        >
+            <template slot-scope="scope">
+                <div slot="reference" class="name-wrapper">
+                    <span>{{ scope.row.region }}</span>
+                </div>
+            </template>
+        </el-table-column>
             <el-table-column
                     label="资质等级"
                     align="center"
@@ -269,7 +302,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    label="处理状态"
+                    label="单位状态"
                     align="center"
             >
                 <template slot-scope="scope">
@@ -308,9 +341,10 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
-                    :page-sizes="[5, 10, 15, 20]"
-                    :page-size="10"
-                    layout="total, sizes, prev, pager, next, jumper"
+                    :page-sizes="[10, 20, 30, 40]"
+                    :page-size="30"
+                    :pager-count="11"
+                    layout="total, sizes, prev, pager, next, jumper,slot,->"
                     :total="total">
             </el-pagination>
         </el-row>
