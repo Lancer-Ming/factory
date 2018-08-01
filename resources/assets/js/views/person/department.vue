@@ -1,36 +1,6 @@
 <template>
     <div class="container department-page">
         <div class="toolsbar">
-            <div class="searchBox">
-                <el-row>
-                    <el-form :inline="true" size="mini">
-                        <el-form-item label="编码">
-                            <el-input v-model="unit_no" placeholder="编码"></el-input>
-                        </el-form-item>
-                        <el-form-item label="部门名称">
-                            <el-input v-model="name" placeholder="部门名称"></el-input>
-                        </el-form-item>
-                        <el-form-item label="状态">
-                            <el-select v-model="form.status_id" placeholder="请选择单位状态">
-                                <el-option
-                                        v-for="(item,index) in d_status"
-                                        :key="index"
-                                        :label="item"
-                                        :value="index"
-                                >
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="单位名称">
-                            <el-input v-model="name" placeholder="单位名称"></el-input>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button type="primary" @click="search">搜索</el-button>
-                            <el-button>重置</el-button>
-                        </el-form-item>
-                    </el-form>
-                </el-row>
-            </div>
             <el-row class="btnBox">
                 <el-button
                         size="mini"
@@ -71,6 +41,36 @@
                         @click="">导出全部数据
                 </el-button>
             </el-row>
+            <div class="searchBox">
+                <el-row>
+                    <el-form :inline="true" size="mini">
+                        <el-form-item label="编码">
+                            <el-input v-model="unit_no" placeholder="编码"></el-input>
+                        </el-form-item>
+                        <el-form-item label="部门名称">
+                            <el-input v-model="name" placeholder="部门名称"></el-input>
+                        </el-form-item>
+                        <el-form-item label="状态">
+                            <el-select v-model="form.status_id" placeholder="请选择单位状态">
+                                <el-option
+                                        v-for="(item,index) in d_status"
+                                        :key="index"
+                                        :label="item"
+                                        :value="index"
+                                >
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="单位名称">
+                            <el-input v-model="name" placeholder="单位名称"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="search">搜索</el-button>
+                            <el-button>重置</el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-row>
+            </div>
         </div>
         <el-table
                 :data="tableData"

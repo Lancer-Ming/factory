@@ -13,7 +13,7 @@
 <div id="layout-app">
     <el-container class="page-container">
         @include('layouts._header')
-        <el-container style="height: 1900px;">
+        <el-container class="section-container">
             @include('layouts._sidebar')
             @include('layouts._main')
             @yield('content')

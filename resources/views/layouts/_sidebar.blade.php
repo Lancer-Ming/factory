@@ -1,4 +1,4 @@
-<el-aside width="auto" v-if="sidebars.length > 0" class="aside-container">
+<el-aside width="auto" v-if="sidebars.length > 0" class="aside-wrapper">
     <el-row>
         <el-col :span="24">
             <span class="el-sideclose fa fa-bars take" @click="switchBar"></span>

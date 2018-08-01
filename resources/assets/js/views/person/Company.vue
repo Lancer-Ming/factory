@@ -1,29 +1,6 @@
 <template>
-    <div class="container company-page">
+    <div class="container content-container company-page">
         <div class="toolsbar">
-            <div class="searchBox">
-                <el-row>
-                    <el-form :inline="true" size="mini">
-                        <el-form-item label="企业名称">
-                            <el-input v-model="name" placeholder="请输入内容"></el-input>
-                        </el-form-item>
-                        <el-form-item label="法人代表">
-                            <el-input v-model="leader" placeholder="请输入法人代表"></el-input>
-                        </el-form-item>
-                        <el-form-item label="单位类型">
-                            <el-select v-model="utype_id" multiple filterable placeholder="请选择" value-key="item">
-                                <el-option
-                                        v-for="item in options"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-button type="info" size="mini" @click="search" icon="el-icon-search">搜索</el-button>
-                    </el-form>
-                </el-row>
-            </div>
             <el-row class="btnBox">
                 <el-button
                         size="mini"
@@ -33,7 +10,8 @@
                 </el-button>
                 <el-button
                         size="mini"
-                        type="info"
+                        type="primary"
+                        plain
                         icon="el-icon-edit"
                         @click="handleEdit">编辑
                 </el-button>
@@ -64,17 +42,43 @@
                         @click="exportAllData">导出全部数据
                 </el-button>
             </el-row>
+            <div class="searchBox">
+                <el-row>
+                    <el-form :inline="true" size="mini">
+                        <el-form-item label="企业名称">
+                            <el-input v-model="name" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item label="法人代表">
+                            <el-input v-model="leader" placeholder="请输入法人代表"></el-input>
+                        </el-form-item>
+                        <el-form-item label="单位类型">
+                            <el-select v-model="utype_id" multiple filterable placeholder="请选择" value-key="item">
+                                <el-option
+                                        v-for="item in options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-button type="primary" plain size="mini" @click="search" icon="el-icon-search">搜索</el-button>
+                        <el-button>重置</el-button>
+                    </el-form>
+                </el-row>
+            </div>
         </div>
         <el-table
                 :data="tableData"
                 align
                 border
+                stripe
                 v-loading="loading"
                 @selection-change="handleSelectionChange"
                 @row-click="cellClick"
                 @row-dblclick="dblclick"
                 ref="table"
-                style="width: 100%">
+                style="width: 100%"
+        >
             <el-table-column
                     align="center"
                     width="25"
@@ -87,6 +91,7 @@
             <el-table-column
                     align="center"
                     type="selection"
+                    width="30"
             >
             </el-table-column>
             <el-table-column
@@ -101,7 +106,7 @@
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ scope.row.name }}</el-tag>
+                        <span>{{ scope.row.name }}</span>
                     </div>
                 </template>
             </el-table-column>
@@ -112,17 +117,18 @@
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ implode(scope.row.utypes, 'name').join(',') }}</el-tag>
+                        <span>{{ implode(scope.row.utypes, 'name').join(',') }}</span>
                     </div>
                 </template>
             </el-table-column>
 
             <el-table-column
                     label="单位地址"
+                    width="250"
             >
                 <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ decodeAddress(scope.row.province, scope.row.city, scope.row.county)+(scope.row.detail ? scope.row.detail : '') }}</el-tag>
+                    <div slot="reference" class=" name-wrapper">
+                        <span class="text-els">{{ decodeAddress(scope.row.province, scope.row.city, scope.row.county)+(scope.row.detail ? scope.row.detail : '') }}</span>
                     </div>
                 </template>
             </el-table-column>
@@ -133,7 +139,7 @@
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ scope.row.leader }}</el-tag>
+                        <span>{{ scope.row.leader }}</span>
                     </div>
                 </template>
             </el-table-column>
@@ -144,7 +150,7 @@
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ scope.row.leader_tel }}</el-tag>
+                        <span>{{ scope.row.leader_tel }}</span>
                     </div>
                 </template>
             </el-table-column>
@@ -164,7 +170,7 @@
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ status[scope.row.status] }}</el-tag>
+                        <span>{{ status[scope.row.status] }}</span>
                     </div>
                 </template>
             </el-table-column>

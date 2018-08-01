@@ -35,11 +35,16 @@ button, input, select, textarea {
   border-color: #dddee1;
 }
 html,body,#layout-app{ height: 100%;}
-.page-container{ height: 100%;}
 #layout-app{ width: 100%;background:#f2f2f2 ;}
+.page-container{ height: 100%;}
+.section-container{height: 100%;}
+.main-container{height: 100%;}
+.main-wrapper{height: 100%;}
+//.view-container{height: calc(100% - 37px);}
+.content-container{height: 100%;}
 h1, .h1, h2, .h2, h3, .h3{ margin: 0;}
 li{list-style: none}
-label{font-weight: normal}
+label{font-weight: normal; margin: 0px; padding: 0;}
 //
 
 .mb10 {
@@ -54,15 +59,14 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
 */
 .el-header{ padding: 0;}
 //tab
-.el-table{ font-size: 12px;}
-.el-table--border th:first-child .cell, .el-table--border td:first-child .cell{ padding-left: 0; padding-right: 0;}
-.el-form-item--mini.el-form-item{ margin-bottom: 0px;}
+
 
 //main
 //.el-container{ }
 .el-main{ padding:6px 9px}
 .view-container{
-  box-shadow: 0px 0px 3px #ddd;border: 1px solid #f2f2f2; margin-top: -1px;height: 90%;
+  //background: #ddd;
+  box-shadow: 0px 0px 3px #ddd;border: 1px solid #f2f2f2; margin-top: -1px;
   //min-height: 700px;
 }
 .view-container .container {}
@@ -70,24 +74,47 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
 //toolbar
 
 .searchBox .el-input{width: 90%;}
+.el-form-item--mini.el-form-item{margin-bottom: 0px;}
 
 //table
-.el-table thead{
-  background-color: #909399;
-  background: linear-gradient(#909399 0px, #909399 100%) repeat-x;
+.el-table--group, .el-table--border{ border: 1px solid #d4d4d4;}
+.el-table{ font-size: 12px; background: none;}
+.el-table--border th:first-child .cell, .el-table--border td:first-child .cell{ padding-left: 0; padding-right: 0;}
+//.el-form-item--mini.el-form-item{ margin-bottom: 0px;}
+.el-table thead{color: $--table-thead-color;}
+.el-table thead tr{
+  background-color: $--table-thead-bg;
+  background: linear-gradient($--table-thead-bg 0px, $--table-thead-bg 100%) repeat-x;
   background-repeat: repeat-x;
-  color: #fff;
-
 }
-.el-table tr{ background: none;}
 .el-table th{ background: none; font-weight: normal}
-.el-table th, .el-table td{ padding: 0;margin: 0;    border-width: 0 1px 1px 0;    border-style: dotted;    border-color: #ccc;}
-.el-table .cell{padding: 4px; line-height: normal}
-.el-tag{ text-overflow: ellipsis;overflow: hidden; max-width:100%;
-  border:0px none;
-  background: none;
+.el-table th, .el-table td{ padding: 0;}
+//.el-table .cell{padding: 4px; line-height: normal}
+.el-tag,.text-els{ text-overflow: ellipsis;overflow: hidden; max-width:100%;}
+.text-els{ display:inline-block;white-space: nowrap;}
+//
+.el-table-column--selection .cell{ padding: 0;}
+//
+.el-tag--medium{
+  margin:5px 0;
+  vertical-align: middle;
 }
-.el-tag--medium{ height: auto; line-height: normal}
+
+.el-table--border th, .el-table--border td{
+   border-right: 1px dotted #ccc;
+ }
+.el-table th.is-leaf, .el-table td {
+  border-bottom: 1px dotted #ccc;
+}
+.el-table tr{ background:#FAFAFA;}
+//.el-table .el-table__row{ background-color:#ddd;}
+.el-table .el-table__row--striped{ background:transparent;}
+.el-table--striped .el-table__body tr.el-table__row--striped td{ background:transparent;}
+
+//移上去的颜色
+.el-table__body tr.hover-row > td, .el-table__body tr.hover-row.current-row > td, .el-table__body tr.hover-row.el-table__row--striped > td, .el-table__body tr.hover-row.el-table__row--striped.current-row > td{
+  background-color: $--table-hovercolor;
+}
 
 //page
 .el-pagination{ padding:10px 0 0 0;}
