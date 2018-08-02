@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Device extends Model
 {
     protected $guarded = [];
-    protected $table = 'divices';
+    protected $table = 'devices';
 
     public function ys()
     {

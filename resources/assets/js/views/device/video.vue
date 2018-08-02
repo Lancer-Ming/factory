@@ -32,7 +32,7 @@
                     </el-row>
                     <el-table
                             ref="multipleTable"
-                            :data="tableData3"
+                            :data="tableData"
                             tooltip-effect="dark"
                             style="width: 100%;margin-top: 30px;"
                             @selection-change="handleSelectionChange"
@@ -50,35 +50,35 @@
                                 >
                         </el-table-column>
                         <el-table-column
-                                prop="name"
+                                prop="d_name"
                                 label="摄像头名称"
                                 width="150"
                                 align="center"
                                 >
                         </el-table-column>
                         <el-table-column
-                                prop="number"
+                                prop="serial"
                                 label="设备序列号"
                                 width="120"
                                 align="center"
                                 >
                         </el-table-column>
                         <el-table-column
-                                prop="v_number"
+                                prop="channel_no"
                                 label="设备通道号"
                                 width="100"
                                 align="center"
                                 >
                         </el-table-column>
                         <el-table-column
-                                prop="address"
+                                prop="ezopen"
                                 label="直播源地址（EZOPEN协议，流畅）"
                                 width="450"
                                 align="center"
                                 >
                         </el-table-column>
                         <el-table-column
-                                prop="hls"
+                                prop="hls_address"
                                 label="HLS播放地址（流畅）"
                                 width="600"
                                 align="center"
@@ -133,7 +133,7 @@
                 </el-form-item>
                 <el-form-item label="*萤石云AccessToken" :label-width="formLabelWidth" style="width: 100%;">
                     <el-input v-model="form.access_token" auto-complete="off" style="width: 78%" size="mini"></el-input>
-                    <el-button type="warning" plain size="mini">获取AccessToken</el-button>
+                    <el-button type="warning" plain size="mini" @click="getAccessToken">获取AccessToken</el-button>
                 </el-form-item>
                 <el-form-item label="*EZOPEN直播源" :label-width="formLabelWidth" style="width: 100%;">
                     <el-input v-model="form.ezopen" disabled auto-complete="off" size="mini"></el-input>
@@ -161,7 +161,7 @@
 <script>
     import splitPane from 'vue-splitpane'
     import { getproject} from "../../api/project"
-    import { addDevice,addDeviceTolocal } from "../../api/videoDevice"
+    import { addDevice,addDeviceTolocal,getAccessToken } from "../../api/videoDevice"
     export default {
         components: {
             splitPane,
@@ -180,18 +180,18 @@
                     chargeman_tel: '',
                     ezopen: '',
                     hls_address: '',
-                    appkey: '',
-                    secret: '',
+                    appkey: '456a2fecfbc449cbae2433b79714ea37',
+                    secret: 'e633406f986aca6a5a60e6e01a4abb20',
                     access_token: '',
                     username: '',
                     password: '',
                     phone: '',
                     expiretime: '',
+                    item_id: null,
                 },
                 formLabelWidth: '150px',
                 unitData: [],
                 data: [],
-                editData: {},
                 accessToken: '',
                 deviceSerial: '',
                 validateCode: '',
@@ -200,7 +200,7 @@
                     children: 'children',
                     label: 'name'
                 },
-                tableData3: [{
+                tableData: [{
                     name: '坝光环境3号球机',
                     number: 'C20322236',
                     v_number: '1',
@@ -248,19 +248,7 @@
                 this.multipleSelection = val;
             },
             handleNodeClick(data) {
-                if (this.editData.id === data.id) {
-                    return
-                }
-                // this.editData = data
-                // this.editId = data.id
-                // this.form = this.editData
-                // let units = this.editData.units[0].pivot
-                // delete units.item_id
-                // let units_ids = Object.values(units)
-                // console.log(units_ids)
-                // var result = units_ids.filter(val => {
-                //     return val !== null
-                // })
+                this.form.item_id = data.id
             },
             handleAdd(){
                 this.from={
@@ -287,9 +275,26 @@
             },
             confirm(){
                 let data = this.form
-                console.log(data)
+                addDevice(data).then(res=>{
+                    if(res.data.response_status === 'success') {
+                        this.addCamera = false
+                        this.tableData = res.data.data
+                    }
+                })
                 addDeviceTolocal(data).then(res=>{
-                    console.log(res)
+                    if(res.data.response_status === 'success') {
+                        this.addCamera = false
+                        this.tableData = res.data.data
+                    }
+                })
+            },
+            getAccessToken(){
+                let appKey = this.form.appkey
+                let appSecret = this.form.secret
+                getAccessToken({appKey,appSecret}).then(res=>{
+                    if(res.data.response_status === 'success') {
+                        console.log(res)
+                    }
                 })
             }
         }

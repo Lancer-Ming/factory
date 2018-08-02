@@ -28,7 +28,7 @@ class VideoDeviceController extends Controller
         $ysData = $request->only('appkey', 'secret', 'access_token', 'username', 'password', 'phone');
         $ys = Ys::create($ysData);
 
-        $videoDeviceData = $request->only('d_name', 'serial', 'validate_code', 'item_id');
+        $videoDeviceData = $request->only('d_name', 'serial', 'channel_no','validate_code','install_at', 'chargeman','chargeman_tel','ezopen','hls_address','created_at','updated_at','item_id');
         $videoDeviceData['ys_id'] = $ys->id;
         Device::create($videoDeviceData);
 

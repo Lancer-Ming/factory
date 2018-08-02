@@ -18,3 +18,12 @@ export function addDeviceTolocal(data) {
         data: data
     })
 }
+
+export function getAccessToken(data){
+    return axios({
+        url: `${apiUrl}/api/lapp/token/get`,
+        method: 'post',
+        data: data
+    })
+
+}
