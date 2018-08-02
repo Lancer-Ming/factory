@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddItemIdToDivicesTable extends Migration
+class AddItemIdToDevicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddItemIdToDivicesTable extends Migration
      */
     public function up()
     {
-        Schema::table('divices', function (Blueprint $table) {
+        Schema::table('devices', function (Blueprint $table) {
             $table->unsignedInteger('item_id')->index()->comment('关联项目id');
         });
     }
@@ -25,7 +25,7 @@ class AddItemIdToDivicesTable extends Migration
      */
     public function down()
     {
-        Schema::table('divices', function (Blueprint $table) {
+        Schema::table('devices', function (Blueprint $table) {
             $table->dropColumn('item_id');
         });
     }
