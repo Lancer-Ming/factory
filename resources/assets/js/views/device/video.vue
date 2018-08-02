@@ -22,7 +22,7 @@
             <template slot="paneR">
                 <div class="right-container">
                     <el-row style="background: rgba(233,242,255,.5);padding: 5px 20px;">
-                        <el-button type="primary" plain size="mini" icon="el-icon-circle-plus-outline" class="v-btn" @click="addCamera = true">添加摄像头</el-button>
+                        <el-button type="primary" plain size="mini" icon="el-icon-circle-plus-outline" class="v-btn" @click="handleAdd">添加摄像头</el-button>
                         <el-button type="primary" plain size="mini" icon="el-icon-sort" class="v-btn">复制添加摄像头</el-button>
                         <el-button type="primary" plain size="mini" icon="el-icon-delete" class="v-btn">删除摄像头</el-button>
                     </el-row>
@@ -152,7 +152,7 @@
             </div>
             <div slot="footer" class="dialog-footer" style="text-align: center;">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="warning" @click="dialogFormVisible = false">确 定</el-button>
+                <el-button type="warning" @click="confirm">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -195,6 +195,7 @@
                 accessToken: '',
                 deviceSerial: '',
                 validateCode: '',
+                submitType: '',
                 defaultProps: {
                     children: 'children',
                     label: 'name'
@@ -261,6 +262,36 @@
                 //     return val !== null
                 // })
             },
+            handleAdd(){
+                this.from={
+                    id: '',
+                    d_name: '',
+                    serial: '',
+                    channel_no: '',
+                    validate_code: '',
+                    install_at: '',
+                    chargeman: '',
+                    chargeman_tel: '',
+                    ezopen: '',
+                    hls_address: '',
+                    appkey: '',
+                    secret: '',
+                    access_token: '',
+                    username: '',
+                    password: '',
+                    phone: '',
+                    expiretime: ''
+                }
+                this.addCamera = true
+                this.submitType= 'add'
+            },
+            confirm(){
+                let data = this.form
+                console.log(data)
+                addDeviceTolocal(data).then(res=>{
+                    console.log(res)
+                })
+            }
         }
     }
 </script>

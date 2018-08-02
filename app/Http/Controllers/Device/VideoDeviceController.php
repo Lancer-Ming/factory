@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Device;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Device;
+use App\Models\Ys;
 
 class VideoDeviceController extends Controller
 {
