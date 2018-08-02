@@ -22,7 +22,7 @@ class UnitsController extends Controller
             }
         };
 
-        $pagesize = $request->has('pagesize') ? $request->pagesize: 10;
+        $pagesize = $request->has('pagesize') ? $request->pagesize: 30;
 
         if ($request->has('utype_id') && count($request->utype_id) > 0) {
             // 先查询出unit的id

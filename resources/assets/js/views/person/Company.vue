@@ -105,7 +105,6 @@
             <el-table-column
 
                     label="单位机构代码"
-                    align="center"
                     width="150"
             >
                 <template slot-scope="scope">
@@ -267,7 +266,7 @@
             <el-table-column
 
                     label="资质证书编号"
-                    align="center"
+                    width="150"
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
@@ -352,7 +351,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
-                    :page-sizes="[10, 20, 30, 40]"
+                    :page-sizes="[30, 60, 90, 120]"
                     :page-size="30"
                     :pager-count="11"
                     layout="total, sizes, prev, pager, next, jumper,slot,->"

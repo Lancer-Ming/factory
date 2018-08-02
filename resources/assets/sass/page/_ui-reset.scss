@@ -90,6 +90,7 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
 .el-table th{ background: none; font-weight: normal}
 .el-table th, .el-table td{ padding: 0;}
 //.el-table .cell{padding: 4px; line-height: normal}
+.el-table th > .cell{ line-height: normal;}
 .el-tag,.text-els,.el-tree-node__label{ text-overflow: ellipsis;overflow: hidden; max-width:100%;}
 .text-els{ display:inline-block;white-space: nowrap;}
 //
@@ -115,7 +116,7 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
 .el-table__body tr.hover-row > td, .el-table__body tr.hover-row.current-row > td, .el-table__body tr.hover-row.el-table__row--striped > td, .el-table__body tr.hover-row.el-table__row--striped.current-row > td{
   background-color: $--table-hovercolor;
 }
-
+.el-table__empty-block{ background: #fff;}
 //page
 .el-pagination{ padding:10px 0 0 0;}
 // el-footer
@@ -125,4 +126,8 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
 //dialog
 .el-dialog__body{ padding-bottom: 0;}
 .dialog-footer{ text-align: center}
+
+//
+
+.splitter-pane{ overflow: hidden}
 

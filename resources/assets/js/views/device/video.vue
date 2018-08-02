@@ -1,6 +1,6 @@
 <template>
     <div class="container" style="position: relative;height: 100%;">
-        <split-pane v-on:resize="resize" split="vertical" :default-percent='20' :min-percent='10' :max-percent='30' class="projectBox" style="background: #fff">
+        <split-pane v-on:resize="resize" split="vertical" :default-percent='20' :min-percent='10' class="projectBox" style="background: #fff;">
             <template slot="paneL">
                 <div class="left-container">
                    <div class="video-tit">
