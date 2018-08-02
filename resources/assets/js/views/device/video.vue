@@ -14,7 +14,7 @@
                         <el-col :span="2">&nbsp;</el-col>
                         <el-col :span="9" class="query-text"><el-button type="warning" icon="el-icon-search" plain size="mini">查询</el-button></el-col>
                     </el-row>
-                    <el-row>
+                    <el-row class="text-els">
                         <el-tree :data="data" :props="defaultProps" :highlight-current="true" @node-click="handleNodeClick"></el-tree>
                     </el-row>
                 </div>
@@ -323,6 +323,7 @@
     .left-container{
         height: 100%;
         width: 100%;
+
     }
     .right-container{
         height: 100%;
