@@ -11,6 +11,7 @@ class YsController extends Controller
     {
         $url = $request->url;
         $data = $request->data;
-        curl_post($url, $data);
+        $result = curl_post($url, $data);
+        return $result;
     }
 }

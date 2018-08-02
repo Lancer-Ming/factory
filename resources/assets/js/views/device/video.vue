@@ -133,7 +133,7 @@
                 </el-form-item>
                 <el-form-item label="*萤石云AccessToken" :label-width="formLabelWidth" style="width: 100%;">
                     <el-input v-model="form.access_token" auto-complete="off" style="width: 78%" size="mini"></el-input>
-                    <el-button type="warning" plain size="mini" @click="getAccessToken">获取AccessToken</el-button>
+                    <el-button type="warning" plain size="mini" @click="getAccessToken" v-show="tokenBtnVisible">获取AccessToken</el-button>
                 </el-form-item>
                 <el-form-item label="*EZOPEN直播源" :label-width="formLabelWidth" style="width: 100%;">
                     <el-input v-model="form.ezopen" disabled auto-complete="off" size="mini"></el-input>
@@ -169,6 +169,7 @@
         data() {
             return {
                 addCamera: false,
+                tokenBtnVisible: true,
                 form:{
                     id: '',
                     d_name: '',
@@ -292,10 +293,20 @@
                 let appKey = this.form.appkey
                 let appSecret = this.form.secret
                 getAccessToken({appKey,appSecret}).then(res=>{
-                    if(res.data.response_status === 'success') {
-                        console.log(res)
+                    console.log(res)
+                    if(res.data.code === "200"){
+                        console.log(111)
+                        this.$set(this.form,"access_token",res.data.data.accessToken)
+                        this.$set(this.form,"expiretime",res.data.data.expireTime)
+                        this.$message({
+                            type: 'success',
+                            showClose: true,
+                            message: res.data.msg
+                        })
+                        this.tokenBtnVisible = false
                     }
                 })
+
             }
         }
     }
