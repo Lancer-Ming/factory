@@ -268,7 +268,6 @@
     .left-container{
         height: 100%;
         width: 100%;
-        overflow: hidden;
     }
     .right-container{
         height: 100%;
