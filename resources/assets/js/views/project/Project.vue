@@ -1,11 +1,13 @@
 <template>
-    <div class="container project" style="height: 100%;">
-        <el-row style="border-bottom: 1px solid #eee;padding-bottom: 10px;">
-            <el-button round class="pro-btn" @click="handleAdd"><i class="el-icon-circle-plus-outline pro-i"></i>新增项目</el-button>
-            <el-button round class="pro-btn" @click="handleDeleteSeleted"><i class="el-icon-remove-outline pro-i"></i>移除</el-button>
-            <el-button round class="pro-btn" @click=""><i class="el-icon-circle-plus-outline pro-i"></i>添加参建单位</el-button>
-            <el-button round class="pro-btn" @click=""><i class="el-icon-refresh pro-i"></i>同步数据</el-button>
-        </el-row>
+    <div class="container content-container project">
+        <div class="toolsbar">
+            <el-row class="btnBox">
+                <el-button size="mini" round  @click="handleAdd"><i class="el-icon-circle-plus-outline pro-i"></i>新增项目</el-button>
+                <el-button size="mini" round  @click="handleDeleteSeleted"><i class="el-icon-remove-outline pro-i"></i>移除</el-button>
+                <el-button size="mini" round  @click=""><i class="el-icon-circle-plus-outline pro-i"></i>添加参建单位</el-button>
+                <el-button size="mini" round  @click=""><i class="el-icon-refresh pro-i"></i>同步数据</el-button>
+            </el-row>
+        </div>
         <split-pane v-on:resize="resize" split="vertical" :default-percent='20' :min-percent='10' :max-percent='30' class="projectBox">
             <template slot="paneL">
                 <div class="left-container">

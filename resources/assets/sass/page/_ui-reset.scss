@@ -37,10 +37,10 @@ button, input, select, textarea {
 html,body,#layout-app{ height: 100%;}
 #layout-app{ width: 100%;background:#f2f2f2 ;}
 .page-container{ height: 100%;}
-.section-container{height: 100%;}
-.main-container{height: 100%;}
-.main-wrapper{height: 100%;}
-//.view-container{height: calc(100% - 37px);}
+//.section-container{height: 100%;}
+//.main-container{height: 100%;}
+//.main-wrapper{height: 100%;}
+.view-container{height: calc(100% - 37px);}
 .content-container{height: 100%;}
 h1, .h1, h2, .h2, h3, .h3{ margin: 0;}
 li{list-style: none}
@@ -121,4 +121,8 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
 // el-footer
 
 .el-footer{ text-align: center;background: #1C2128; color:#fff; height: 33px; line-height: 33px;}
+
+//dialog
+.el-dialog__body{ padding-bottom: 0;}
+.dialog-footer{ text-align: center}
 

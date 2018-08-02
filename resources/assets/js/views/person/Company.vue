@@ -84,11 +84,13 @@
             <el-table-column
                     prop="id"
                     align="center"
-                    width="40"
+                    width="60"
                     fixed
                     sortable
                     label="#"
             >
+                <!--:filters="[{text:'1',value:'1'},{text:'2',value:'2'}]"-->
+                <!--:filter-method="filterHandler"-->
                 <template slot-scope="scope">
                     <span>{{ scope.row.id }}</span>
                 </template>
@@ -101,17 +103,8 @@
             >
             </el-table-column>
             <el-table-column
-                    label="编号"
-                    width="80"
-                    sortable
-                    prop="unit_no"
-            >
-                <template slot-scope="scope">
-                    <span>{{ scope.row.unit_no }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="统一社会信用代码"
+
+                    label="单位机构代码"
                     align="center"
                     width="150"
             >
@@ -122,6 +115,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+
                     label="企业名称"
                     width="200"
             >
@@ -133,6 +127,7 @@
             </el-table-column>
 
             <el-table-column
+                    prop="utypes"
                     label="单位类型"
                     width="100"
             >
@@ -143,6 +138,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+
                     label="上级机构"
                     align="center"
             >
@@ -164,6 +160,7 @@
             </el-table-column>
 
             <el-table-column
+
                 label="法人代表"
                 align="center"
         >
@@ -174,6 +171,7 @@
             </template>
         </el-table-column>
             <el-table-column
+
                     label="法人联系电话"
                     align="center"
                     width="100"
@@ -185,6 +183,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+
                     label="联系人"
                     align="center"
             >
@@ -195,6 +194,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+
                     label="联系人电话"
                     align="center"
                     width="100"
@@ -206,6 +206,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+
                     label="邮箱"
                     align="center"
                     width="140"
@@ -217,6 +218,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+
                     label="企业网址"
                     align="center"
                     width="100"
@@ -228,6 +230,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+
                 label="传真"
                 align="center"
         >
@@ -240,6 +243,7 @@
 
 
             <el-table-column
+
                 label="业务区域"
                 align="center"
         >
@@ -250,6 +254,7 @@
             </template>
         </el-table-column>
             <el-table-column
+
                     label="资质等级"
                     align="center"
             >
@@ -260,17 +265,18 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="资质等级编号"
-                align="center"
-                    width="100"
-        >
-            <template slot-scope="scope">
-                <div slot="reference" class="name-wrapper">
-                    <span>{{ scope.row.qualification_no }}</span>
-                </div>
-            </template>
-        </el-table-column>
+
+                    label="资质证书编号"
+                    align="center"
+            >
+                <template slot-scope="scope">
+                    <div slot="reference" class="name-wrapper">
+                        <span>{{ scope.row.qualification_no }}</span>
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column
+
                 label="安全生产许可证"
                 align="center"
                     width="110"
@@ -282,6 +288,7 @@
             </template>
         </el-table-column>
             <el-table-column
+
                     label="主营业务"
                     align="center"
             >
@@ -292,6 +299,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+
                     label="备注"
                     align="center"
             >
@@ -302,6 +310,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+
                     label="单位状态"
                     align="center"
             >
@@ -312,6 +321,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+
                     label="更新时间"
                     align="center"
                     width="165"
@@ -323,6 +333,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+
                     label="创建时间"
                     align="center"
                     width="165"
@@ -350,7 +361,7 @@
         </el-row>
 
 
-        <el-dialog title="编辑单位" :visible.sync="formShown" class="pro-add">
+        <el-dialog title="编辑单位" :visible.sync="formShown" class="pro-add" v-el-drag-dialog @dragDialog="handleDrag">
             <el-form class="clearfix">
                 <el-form-item label="单位名称" :label-width="formLabelWidth">
                     <el-input v-model="form.name"></el-input>
@@ -419,11 +430,11 @@
                 <el-form-item label="描述" :label-width="formLabelWidth">
                     <el-input type="textarea" v-model="form.remark"></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmit" style="margin:10px 0px 0px 50px;">保存</el-button>
-                    <el-button>取消</el-button>
-                </el-form-item>
             </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="onSubmit" style="margin:10px 0px 0px 50px;">保存</el-button>
+                <el-button>取消</el-button>
+            </div>
         </el-dialog>
 
 
@@ -443,6 +454,7 @@
 </template>
 
 <script>
+    import elDragDialog from '../../directive/el-dragDialog'
     import UploadExcelComponent from '../../components/UploadExcel/index.vue'
     import {
         getUtypes,
@@ -461,11 +473,11 @@
     import {pagesize, perPagesize} from '../../config/common'
     import SearchBox from '../../components/SearchBox.vue'
     import {export_json_to_excel} from '../../vendor/Export2Excel'
-    //import UploadExcelComponent from '../../components/UploadExcel/index.vue'
     export default {
+        name:'company',
+        directives: { elDragDialog },
         data() {
             return {
-                //UploadExcelComponent,
                 tableData: [],
                 multipleSelection: [],
                 options: [],
@@ -531,6 +543,14 @@
 
         },
         methods: {
+            handleDrag() {
+                this.$refs.select
+            },
+            // filterHandler(value, row, column) {
+            //     const property = column['property'];
+            //     return row[property] === value;
+            //
+            // },
             handleAdd() {
                 this.form = {
                     name: '',
