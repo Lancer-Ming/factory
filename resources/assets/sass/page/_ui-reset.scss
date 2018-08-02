@@ -90,7 +90,7 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
 .el-table th{ background: none; font-weight: normal}
 .el-table th, .el-table td{ padding: 0;}
 //.el-table .cell{padding: 4px; line-height: normal}
-.el-tag,.text-els{ text-overflow: ellipsis;overflow: hidden; max-width:100%;}
+.el-tag,.text-els,.el-tree-node__label{ text-overflow: ellipsis;overflow: hidden; max-width:100%;}
 .text-els{ display:inline-block;white-space: nowrap;}
 //
 .el-table-column--selection .cell{ padding: 0;}
