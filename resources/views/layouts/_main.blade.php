@@ -1,6 +1,6 @@
-<el-container>
-    <el-main class="main-container">
-        <el-breadcrumb separator-class="el-icon-arrow-right" class="mb10">
+<el-container class="main-container">
+    <el-main class="main-wrapper">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/' }">安拾科技管理平台</el-breadcrumb-item>
         </el-breadcrumb>
         {{--<div class="explanation mb10" id="explanation">--}}

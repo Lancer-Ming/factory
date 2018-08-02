@@ -111,7 +111,7 @@
   .el-tabs__content{ display: none}
 }
 .main-container .container{ width: 100%;}
-.el-table__header{ width: 100% !important;}
+//.el-table__header{ width: 100% !important;}
 .ivu-dropdown {
   display: inline-block;
 }
@@ -145,7 +145,7 @@
 //el-menu-vertical-sidebar
 .el-menu{ background: #1C2128;    border-right:0px none;} //为侧边栏ul背景，必须设置背景
 .el-menu-item:hover, .el-menu-item:focus{background: #434A50; }
-.aside-container{
+.aside-wrapper{
   background: #1C2128;
   margin-top: -5px;
   //border-right: solid 2px #0084ff;
@@ -168,7 +168,6 @@
 //
 .el-breadcrumb{
   border: 1px solid #ddd;
-  border-bottom: 0;
   //display:inline-block;
   background-color: #fff; border-top-left-radius: 5px;
   border-top-right-radius: 5px;line-height: 36px; padding:0 8px;    box-shadow: 0px 0px 3px #ddd;
@@ -177,12 +176,23 @@
 .el-breadcrumb__item{ float: none;}
 
 // toolsbar
-.toolsbar{}
-.searchBox{background:#fff;}
-.searchBox{ margin-bottom: 15px;border-bottom: 1px solid #eee;padding: 15px 10px 15px;}
-.btnBox{ padding: 0px 10px 15px;}
+.toolsbar{
+  //padding-top:5px;
+  button{
+  }
+  .el-button{
+    padding:0 10px;
+    border-radius: 10px;
+    line-height: 24px;
+  }
+  //.el-button [class*="el-icon-"] + span{
+  //  line-height: 24px;
+  //}
+}
+.btnBox{ padding:5px 5px; background: #F2F2F2;}
+.searchBox{background:#fff;padding:10px 5px; margin-bottom: 10px;border-bottom: 1px solid #d4d4d4}
 
-
+//
 //
 .el-pagination{margin-bottom: 10px;}
 
