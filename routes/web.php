@@ -102,6 +102,13 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::resource('video_device', 'VideoDeviceController');
         });
     });
+
+    // 萤石api
+    Route::namespace('Ys')->group(function() {
+        Route::as('ys.')->group(function() {
+            Route::post('access_token/get', 'YsController@accessToken');
+        });
+    });
 });
 
 

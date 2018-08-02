@@ -28,7 +28,7 @@ class VideoDeviceRequest extends FormRequest
             'appkey' => 'required',
             'channel_no' => 'required',
             'secret' => 'required',
-
+            'validate_code' => 'required'
         ];
     }
 }
