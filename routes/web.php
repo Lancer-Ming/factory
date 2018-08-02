@@ -96,10 +96,10 @@ Route::middleware(['auth','role','header'])->group(function() {
     });
 
 
-    Route::namespace('Divice')->group(function() {
+    Route::namespace('Device')->group(function() {
         // 视频设备管理
-        Route::as('divice.')->group(function() {
-            Route::resource('video_divice', 'VideoDiviceController');
+        Route::as('device.')->group(function() {
+            Route::resource('video_device', 'VideoDeviceController');
         });
     });
 });

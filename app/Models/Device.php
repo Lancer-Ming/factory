@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Divice extends Model
+class Device extends Model
 {
     protected $guarded = [];
+    protected $table = 'divices';
 
     public function ys()
     {

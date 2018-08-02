@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Divice;
+namespace App\Http\Controllers\Device;
 
-use App\Models\Divice;
-use App\Models\Ys;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Device;
 
-class VideoDiviceController extends Controller
+class VideoDeviceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $where = function($query) use ($request) {
             if ($request->has('d_name') && trim($request->d_name != '')) {
@@ -18,9 +17,9 @@ class VideoDiviceController extends Controller
         };
 
         $pagesize = $request->has('pagesize') ? $request->pagesize: 10;
-        $videoDivices = Divice::where($where)->with('ys_id')->paginate($pagesize);
+        $videoDevices = Device::where($where)->with('ys_id')->paginate($pagesize);
 
-        return successJson($videoDivices);
+        return successJson($videoDevices);
     }
 
     public function store(Request $request)
@@ -28,12 +27,12 @@ class VideoDiviceController extends Controller
         $ysData = $request->only('appkey', 'secret', 'access_token', 'username', 'password', 'phone');
         $ys = Ys::create($ysData);
 
-        $videoDiviceData = $request->only('d_name', 'serial', 'validate_code', 'item_id');
-        $videoDiviceData['ys_id'] = $ys->id;
-        Divice::create($videoDiviceData);
+        $videoDeviceData = $request->only('d_name', 'serial', 'validate_code', 'item_id');
+        $videoDeviceData['ys_id'] = $ys->id;
+        Device::create($videoDeviceData);
 
-        $videoDivices = Divice::with('ys')->get();
+        $videoDevices = Device::with('ys')->get();
 
-        return successJson($videoDivices);
+        return successJson($videoDevices);
     }
 }
