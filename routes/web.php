@@ -104,9 +104,14 @@ Route::middleware(['auth','role','header'])->group(function() {
     });
 
     // 萤石api
-    Route::namespace('Ys')->group(function() {
-        Route::as('ys.')->group(function() {
-            Route::post('access_token/get', 'YsController@accessToken');
+    Route::namespace('Ys')->as('ys.')->group(function() {
+        Route::as('api.')->prefix('api')->group(function() {
+            Route::post('/access_token/get', 'YsController@accessToken')->name('access_token');
+            Route::post('/video_device/add','YsController@accessToken')->name('video_device');
+        });
+
+        Route::as('user.')->prefix('user')->group(function() {
+            Route::post('/access_token/get', 'YsUsersController@accessToken')->name('access_token');
         });
     });
 });

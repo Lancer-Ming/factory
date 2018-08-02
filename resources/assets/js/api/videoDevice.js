@@ -22,9 +22,16 @@ export function addDeviceTolocal(data) {
 export function getAccessToken(data){
     let url = 'https://open.ys7.com/api/lapp/token/get'
     return axios({
-        url: 'access_token/get',
+        url: 'api/access_token/get',
         method: 'post',
         data: { url, data }
     })
+}
 
+export function autoGetAccessToken(data) {
+    return axios({
+        url: '/user/access_token/get',
+        method: 'post',
+        data: data
+    })
 }

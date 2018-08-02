@@ -25,7 +25,7 @@ class VideoDeviceController extends Controller
 
     public function store(Request $request)
     {
-        $ysData = $request->only('appkey', 'secret', 'access_token', 'username', 'password', 'phone');
+        $ysData = $request->only('appkey', 'secret', 'access_token', 'username', 'password', 'phone', 'expiretime');
         $ys = Ys::create($ysData);
 
         $videoDeviceData = $request->only('d_name', 'serial', 'channel_no','validate_code','install_at', 'chargeman','chargeman_tel','ezopen','hls_address','created_at','updated_at','item_id');

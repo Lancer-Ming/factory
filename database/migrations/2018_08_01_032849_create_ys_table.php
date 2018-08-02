@@ -21,7 +21,7 @@ class CreateYsTable extends Migration
             $table->string('username')->nullable()->comment('萤石云账号');
             $table->string('password')->nullable()->comment('萤石云密码');
             $table->string('phone')->nullable()->comment('手机号');
-            $table->unsignedInteger('expiretime')->nullable()->comment('有效期时间戳');
+            $table->bigInteger('expiretime')->nullable()->comment('有效期时间戳');
             $table->timestamps();
         });
     }

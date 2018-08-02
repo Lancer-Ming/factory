@@ -132,7 +132,7 @@
                     <el-input v-model="form.secret" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
                 <el-form-item label="*萤石云AccessToken" :label-width="formLabelWidth" style="width: 100%;">
-                    <el-input v-model="form.access_token" auto-complete="off" style="width: 78%" size="mini"></el-input>
+                    <el-input v-model="form.access_token" auto-complete="off" style="width: 78%" size="mini" :readonly="true" @focus="autoGetAccessToken"></el-input>
                     <el-button type="warning" plain size="mini" @click="getAccessToken" v-show="tokenBtnVisible">获取AccessToken</el-button>
                 </el-form-item>
                 <el-form-item label="*EZOPEN直播源" :label-width="formLabelWidth" style="width: 100%;">
@@ -161,7 +161,7 @@
 <script>
     import splitPane from 'vue-splitpane'
     import { getproject} from "../../api/project"
-    import { addDevice,addDeviceTolocal,getAccessToken } from "../../api/videoDevice"
+    import { addDevice,addDeviceTolocal,getAccessToken, autoGetAccessToken } from "../../api/videoDevice"
     export default {
         components: {
             splitPane,
@@ -169,7 +169,7 @@
         data() {
             return {
                 addCamera: false,
-                tokenBtnVisible: true,
+                tokenBtnVisible: false,
                 form:{
                     id: '',
                     d_name: '',
@@ -181,8 +181,8 @@
                     chargeman_tel: '',
                     ezopen: '',
                     hls_address: '',
-                    appkey: '456a2fecfbc449cbae2433b79714ea37',
-                    secret: 'e633406f986aca6a5a60e6e01a4abb20',
+                    appkey: '',
+                    secret: '',
                     access_token: '',
                     username: '',
                     password: '',
@@ -201,27 +201,7 @@
                     children: 'children',
                     label: 'name'
                 },
-                tableData: [{
-                    name: '坝光环境3号球机',
-                    number: 'C20322236',
-                    v_number: '1',
-                    address: 'ezopen://open.ys7.com/C20322236/1.live',
-                    hls: 'http://hls.open.ys7.com/openlive/6778c087ad564b2ab7b13016c17ec7c3.m3u8'
-                },
-                    {
-                    name: '坝光环境1号球机',
-                    number: 'C14837868',
-                    v_number: '1',
-                    address: 'ezopen://open.ys7.com/C14837868/1.live',
-                    hls: 'http://hls.open.ys7.com/openlive/b8735bbf5c0c4db8942b176644230b04.m3u8'
-                },
-                    {
-                    name: '坝光环境2号球机',
-                    number: 'C20322513',
-                    v_number: '1',
-                    address: 'ezopen://open.ys7.com/C20322513/1.live',
-                    hls: 'http://hls.open.ys7.com/openlive/82d2e511fb2d472c815e6026a334399d.m3u8'
-                }],
+                tableData: [],
                 multipleSelection: [],
                 }
             },
@@ -293,9 +273,7 @@
                 let appKey = this.form.appkey
                 let appSecret = this.form.secret
                 getAccessToken({appKey,appSecret}).then(res=>{
-                    console.log(res)
                     if(res.data.code === "200"){
-                        console.log(111)
                         this.$set(this.form,"access_token",res.data.data.accessToken)
                         this.$set(this.form,"expiretime",res.data.data.expireTime)
                         this.$message({
@@ -307,6 +285,36 @@
                     }
                 })
 
+            },
+            autoGetAccessToken() {
+                if (this.form.access_token || this.tokenBtnVisible) {
+                    return
+                }
+                let appKey = this.form.appkey
+                let appSecret = this.form.secret
+                autoGetAccessToken({appKey,appSecret}).then(res => {
+                    if (res.data.data.status === 1) {
+                        this.tokenBtnVisible = false
+                        this.$set(this.form,"access_token",res.data.data.accessToken)
+                        this.$set(this.form,"expiretime",res.data.data.expireTime)
+                        this.$message({
+                            type: 'success',
+                            showClose: true,
+                            message: '操作成功！'
+                        })
+                    } else {
+                        this.tokenBtnVisible = true
+                    }
+                }).catch(error => {
+                    this.$message({
+                        type: 'error',
+                        showClose: true,
+                        message: 'AppKey或者是Secret填写错误'
+                    })
+                })
+            },
+            test() {
+                console.log(13)
             }
         }
     }
