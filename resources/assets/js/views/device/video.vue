@@ -1,5 +1,5 @@
 <template>
-    <div class="container" style="position: relative;height: 100%;">
+    <div class="container video" style="position: relative;height: 100%;">
         <split-pane v-on:resize="resize" split="vertical" :default-percent='20' :min-percent='10' class="projectBox" style="background: #fff;">
             <template slot="paneL">
                 <div class="left-container">
@@ -91,54 +91,72 @@
 
         <el-dialog title="添加摄像头" :visible.sync="addCamera" class="addCamera">
             <el-form :model="form">
-                <el-form-item label="*摄像头名称" :label-width="formLabelWidth">
-                    <el-input v-model="form.d_name" auto-complete="off" size="mini"></el-input>
+
+                <el-form-item label="摄像头名称" :label-width="formLabelWidth">
+                    <span style="float: left;position: absolute;top: 2px;left: -93px;color: red;">*</span>
+                    <el-tooltip class="item" effect="dark" content="60个合法字符以内" placement="top">
+                        <el-input v-model="form.d_name" auto-complete="off" size="mini"></el-input>
+                    </el-tooltip>
                 </el-form-item>
-                <el-form-item label="*设备序列号" :label-width="formLabelWidth">
+                <el-form-item label="设备序列号" :label-width="formLabelWidth">
+                    <span style="float: left;position: absolute;top: 2px;left: -93px;color: red;">*</span>
                     <el-input v-model="form.serial" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="*设备通道号" :label-width="formLabelWidth">
+                <el-form-item label="设备通道号" :label-width="formLabelWidth">
+                    <span style="float: left;position: absolute;top: 2px;left: -93px;color: red;">*</span>
                     <el-input v-model="form.channel_no" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="*设备验证码" :label-width="formLabelWidth">
+                <el-form-item label="设备验证码" :label-width="formLabelWidth">
+                    <span style="float: left;position: absolute;top: 2px;left: -93px;color: red;">*</span>
                     <el-input v-model="form.validate_code" placeholder="设备机身上的六位大写字母" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="*安装日期" :label-width="formLabelWidth">
+                <el-form-item label="安装日期" :label-width="formLabelWidth">
                     <el-date-picker v-model="form.install_at" size="mini" type="date" placeholder="安装日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="*负责人" :label-width="formLabelWidth">
+                <el-form-item label="负责人" :label-width="formLabelWidth">
                     <el-input v-model="form.chargeman" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="*负责人手机号" :label-width="formLabelWidth">
+                <el-form-item label="负责人手机号" :label-width="formLabelWidth">
                     <el-input v-model="form.chargeman_tel" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="*萤石云账号" :label-width="formLabelWidth">
+                <el-form-item label="萤石云账号" :label-width="formLabelWidth">
                     <el-input v-model="form.username" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="*萤石云密码" :label-width="formLabelWidth">
+                <el-form-item label="萤石云密码" :label-width="formLabelWidth">
                     <el-input v-model="form.password" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="*手机号" :label-width="formLabelWidth">
+                <el-form-item label="手机号" :label-width="formLabelWidth">
+                    <span style="float: left;position: absolute;top: 2px;left: -65px;color: red;">*</span>
                     <el-input v-model="form.phone" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="*有效期时间戳" :label-width="formLabelWidth">
-                    <el-input v-model="form.expiretime" auto-complete="off" size="mini"></el-input>
+                <el-form-item label="有效期时间戳" :label-width="formLabelWidth">
+                    <span style="float: left;position: absolute;top: 2px;left: -110px;color: red;">*</span>
+                    <el-input v-model="form.expiretime" auto-complete="off" size="mini" :readonly="true"></el-input>
                 </el-form-item>
-                <el-form-item label="*萤石云AppKey" :label-width="formLabelWidth">
-                    <el-input v-model="form.appkey" auto-complete="off" size="mini"></el-input>
+                <el-form-item label="萤石云AppKey" :label-width="formLabelWidth">
+                    <span style="float: left;position: absolute;top: 2px;left: -115px;color: red;">*</span>
+                    <el-tooltip class="item" effect="dark" content="请输入萤石云我的应用下的应用秘钥AppKey" placement="top">
+                        <el-input v-model="form.appkey" auto-complete="off" size="mini"></el-input>
+                    </el-tooltip>
                 </el-form-item>
-                <el-form-item label="*萤石云Secret" :label-width="formLabelWidth" style="width: 100%;">
-                    <el-input v-model="form.secret" auto-complete="off" size="mini"></el-input>
+                <el-form-item label="萤石云Secret" :label-width="formLabelWidth" style="width: 100%;">
+                    <span style="float: left;position: absolute;top: 2px;left: -105px;color: red;">*</span>
+                    <el-tooltip class="item" effect="dark" content="请输入萤石云我的应用下的应用秘钥Secret" placement="top">
+                        <el-input v-model="form.secret" auto-complete="off" size="mini"></el-input>
+                    </el-tooltip>
                 </el-form-item>
-                <el-form-item label="*萤石云AccessToken" :label-width="formLabelWidth" style="width: 100%;">
-                    <el-input v-model="form.access_token" auto-complete="off" style="width: 78%" size="mini" :readonly="true" @focus="autoGetAccessToken"></el-input>
-                    <el-button type="warning" plain size="mini" @click="getAccessToken" v-show="tokenBtnVisible">获取AccessToken</el-button>
+                <el-form-item label="萤石云AccessToken" :label-width="formLabelWidth" style="width: 100%;">
+                    <span style="float: left;position: absolute;top: 2px;left: -150px;color: red;">*</span>
+                    <el-tooltip class="item" effect="dark" content="请输入萤石云我的应用下的应用秘钥AccessToken" placement="top">
+                        <el-input v-model="form.access_token" auto-complete="off" style="width: 78%" size="mini" :readonly="true" @focus="autoGetAccessToken"></el-input>
+                    </el-tooltip>
+                        <el-button type="warning" plain size="mini" @click="getAccessToken" v-show="tokenBtnVisible">获取AccessToken</el-button>
                 </el-form-item>
-                <el-form-item label="*EZOPEN直播源" :label-width="formLabelWidth" style="width: 100%;">
+                <el-form-item label="EZOPEN直播源" :label-width="formLabelWidth" style="width: 100%;">
                     <el-input v-model="form.ezopen" disabled auto-complete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="*HLS播放地址" :label-width="formLabelWidth" style="width: 100%;">
+                <el-form-item label="HLS播放地址" :label-width="formLabelWidth" style="width: 100%;">
                     <el-input v-model="form.hls_address" disabled auto-complete="off" size="mini"></el-input>
                 </el-form-item>
             </el-form>
