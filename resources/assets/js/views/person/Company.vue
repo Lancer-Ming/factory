@@ -143,7 +143,7 @@
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.parent_id }}</span>
+                        <span>{{scope.row.parent_id}}</span>
                     </div>
                 </template>
             </el-table-column>
