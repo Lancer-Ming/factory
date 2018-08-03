@@ -23,8 +23,8 @@
                 <div class="right-container">
                     <el-row style="background: rgba(233,242,255,.5);padding: 5px 20px;">
                         <el-button type="primary" plain size="mini" icon="el-icon-circle-plus-outline" class="v-btn" @click="handleAdd">添加摄像头</el-button>
-                        <el-button type="primary" plain size="mini" icon="el-icon-sort" class="v-btn">复制添加摄像头</el-button>
-                        <el-button type="primary" plain size="mini" icon="el-icon-delete" class="v-btn">删除摄像头</el-button>
+                        <el-button type="primary" plain size="mini" icon="el-icon-sort" class="v-btn" @click="">复制添加摄像头</el-button>
+                        <el-button type="primary" plain size="mini" icon="el-icon-delete" class="v-btn" @click="">删除摄像头</el-button>
                     </el-row>
                     <el-row style="margin: 20px 0px 0px 20px;">
                         摄像头名称：<el-input size="mini" style="width: 30%;"></el-input>
@@ -256,12 +256,6 @@
             },
             confirm(){
                 let data = this.form
-                addDevice(data).then(res=>{
-                    if(res.data.response_status === 'success') {
-                        this.addCamera = false
-                        this.tableData = res.data.data
-                    }
-                })
                 addDeviceTolocal(data).then(res=>{
                     if(res.data.response_status === 'success') {
                         this.addCamera = false
