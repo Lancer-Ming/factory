@@ -666,7 +666,9 @@
                 this.getTableData(this.searchData)
             },
             cellClick(row) {
-                this.$refs.table.toggleRowSelection(row)
+                // this.$refs.table.toggleRowSelection(row)
+                this.$refs.table.clearSelection()
+                this.$refs.table.toggleRowSelection(row, true)
             },
             dblclick(row) {
                 this.submitType = 'edit'

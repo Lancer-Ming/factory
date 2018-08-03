@@ -15,7 +15,7 @@
                         <el-col :span="9" class="query-text"><el-button type="warning" icon="el-icon-search" plain size="mini">查询</el-button></el-col>
                     </el-row>
                     <el-row>
-                        <li v-for="(item,index) in data" :key="index" v-text="item.label" @click="handleNodeClick(item)"class="text-els" :class="{ 'item-list': activeItemId === item.id }" style="cursor: pointer;"></li>
+                        <li v-for="(item,index) in data" :key="index" v-text="item.label" @click="handleNodeClick(item)" class="text-els" :class="{ 'item-list': activeItemId === item.id }" style="cursor: pointer;"></li>
                         <!--<el-tree :data="data" show-checkbox check-on-click-node :props="defaultProps" :highlight-current="true" node-key="id" @node-click="handleNodeClick" ref="tree"></el-tree>-->
                     </el-row>
                 </div>
@@ -25,7 +25,7 @@
                     <el-row style="background: rgba(233,242,255,.5);padding: 5px 20px;">
                         <el-button type="primary" plain size="mini" icon="el-icon-circle-plus-outline" class="v-btn" @click="handleAdd">添加摄像头</el-button>
                         <el-button type="primary" plain size="mini" icon="el-icon-sort" class="v-btn" @click="">复制添加摄像头</el-button>
-                        <el-button type="primary" plain size="mini" icon="el-icon-delete" class="v-btn" @click="">删除摄像头</el-button>
+                        <el-button type="primary" plain size="mini" icon="el-icon-delete" class="v-btn" @click="destroyDevice">删除摄像头</el-button>
                     </el-row>
                     <el-row style="margin: 20px 0px 0px 20px;">
                         摄像头名称：<el-input size="mini" style="width: 30%;"></el-input>
@@ -37,6 +37,7 @@
                             tooltip-effect="dark"
                             style="width: 100%;margin-top: 30px;"
                             @selection-change="handleSelectionChange"
+                            @row-click="cellClick"
                     >
                         <el-table-column
                                 type="index"
@@ -193,8 +194,9 @@
 <script>
     import splitPane from 'vue-splitpane'
     import { getproject} from "../../api/project"
-    import { addDeviceTolocal, getAccessToken, autoGetAccessToken, showDivice, addDevice } from "../../api/videoDevice"
+    import { addDeviceTolocal, getAccessToken, autoGetAccessToken, showDivice, addDevice, destroyDevice, destroyDeviceToLocal } from "../../api/videoDevice"
     import { perPagesize } from '../../config/common'
+    import { implode } from '../../utils/common'
     export default {
         components: {
             splitPane,
@@ -208,7 +210,7 @@
                     id: '',
                     d_name: '',
                     serial: '',
-                    channel_no: '',
+                    channel_no: null,
                     validate_code: '',
                     install_at: '',
                     chargeman: '',
@@ -227,16 +229,13 @@
                 formLabelWidth: '150px',
                 unitData: [],
                 data: [],
-                accessToken: '',
-                deviceSerial: '',
-                validateCode: '',
                 submitType: '',
                 defaultProps: {
                     children: 'id',
                     label: 'label'
                 },
                 tableData: [],
-                multipleSelection: [],
+                multipleSelection: {},
                 // 分页
                 loading: true,
                 currentPage: 1,
@@ -257,6 +256,7 @@
                     this.data = data
                     this.getDevices(this.data[0].id, this.d_name)
                     this.activeItemId = this.data[0].id
+                    this.form.item_id = this.activeItemId
                 }
             })
         },
@@ -265,28 +265,22 @@
                 console.log('resize')
             },
             toggleSelection(rows) {
-                if (rows) {
-                    rows.forEach(row => {
-                        this.$refs.multipleTable.toggleRowSelection(row);
-                    });
-                } else {
-                    this.$refs.multipleTable.clearSelection();
-                }
+                this.$refs.table.clearSelection()
+                this.$refs.table.toggleRowSelection(row, true)
             },
             handleSelectionChange(val) {
-                this.multipleSelection = val;
+                this.multipleSelection = val[0];
             },
             handleNodeClick(data) {
                 this.activeItemId = data.id
                 this.form.item_id = data.id
                 let showData = {
                     item_id: data.id,
-
                 }
                 this.getDevices(data.id, this.d_name)
             },
             handleAdd(){
-                this.from={
+                this.form={
                     id: '',
                     d_name: '',
                     serial: '',
@@ -303,14 +297,15 @@
                     username: '',
                     password: '',
                     phone: '',
-                    expiretime: ''
+                    expiretime: '',
+                    item_id: this.form.item_id
                 }
                 this.addCamera = true
                 this.submitType= 'add'
             },
             confirm(){
                 let data = this.form
-                addDevice({accessToken: data.access_token, deviceSerial: serial, deviceName: d_name}).then(res => {
+                addDevice({accessToken: data.access_token, deviceSerial: data.serial, validateCode: data.validate_code}).then(res => {
                     if(res.data.code === "200"){
                         addDeviceTolocal(data).then(res=>{
                             if(res.data.response_status === 'success') {
@@ -321,7 +316,7 @@
                                     showClose: true,
                                     message: res.data.msg
                                 })
-                                this.addCamera = true
+                                this.addCamera = false
                             }
                         })
                     }
@@ -382,6 +377,34 @@
             handleCurrentChange(currentPage) {
                 this.getTableData(currentPage)
             },
+            // 表格
+            cellClick(row) {
+                this.$refs.multipleTable.toggleRowSelection(row)
+            },
+            implode(arr, attr) {
+                return implode(arr, attr);
+            },
+            // 删除摄像头
+            destroyDevice() {
+                this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    destroyDevice({accessToken: this.multipleSelection.ys.access_token,deviceSerial:this.multipleSelection.serial}).then(res => {
+                        if(res.data.code === "200"){
+                            destroyDeviceToLocal(this.multipleSelection.id).then(res => {
+                                if (res.data.response_status === 'success') {
+                                    this.tableData = res.data.data.data
+                                }
+                            })
+                        }
+                    })
+                }).catch(() => {
+                    return
+                })
+            }
         },
         computed: {
             perPagesize() {

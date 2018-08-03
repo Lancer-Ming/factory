@@ -19,11 +19,27 @@ export function getAccessToken(data){
 }
 
 export function addDevice(data){
-    let url = `${apiUrl}/api/lapp/token/get`
+    let url = `${apiUrl}/api/lapp/device/add`
     return axios({
         url: '/api/ys/post',
         method: 'post',
         data: { url, data }
+    })
+}
+
+export function destroyDevice(data){
+    let url = `${apiUrl}/api/lapp/device/delete`
+    return axios({
+        url: '/api/ys/post',
+        method: 'post',
+        data: { url, data }
+    })
+}
+
+export function destroyDeviceToLocal(id) {
+    return axios({
+        url: `/video_device/${id}`,
+        method: 'post'
     })
 }
 
