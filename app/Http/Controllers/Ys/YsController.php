@@ -14,4 +14,10 @@ class YsController extends Controller
         $result = curl_post($url, $data);
         return $result;
     }
+
+    public function videoDeviceAdd(Request $request)
+    {
+        $result = curl_post($request->url, $request->data);
+        return $result;
+    }
 }

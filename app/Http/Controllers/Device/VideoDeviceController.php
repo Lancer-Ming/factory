@@ -18,7 +18,7 @@ class VideoDeviceController extends Controller
         };
 
         $pagesize = $request->has('pagesize') ? $request->pagesize: 10;
-        $videoDevices = Device::where($where)->with('ys_id')->paginate($pagesize);
+        $videoDevices = Device::where('item_id', $request->item_id)->where($where)->with('ys')->paginate($pagesize);
 
         return successJson($videoDevices);
     }

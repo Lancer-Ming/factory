@@ -10,12 +10,12 @@
                    </div>
                     <el-row class="vide-l-query">
                         <el-col :span="2">&nbsp;</el-col>
-                        <el-col :span="11"><el-input size="mini" style="width: 100%;margin-top: 5px;"></el-input></el-col>
+                        <el-col :span="11"><el-input size="mini" v-model="d_name" style="width: 100%;margin-top: 5px;"></el-input></el-col>
                         <el-col :span="2">&nbsp;</el-col>
                         <el-col :span="9" class="query-text"><el-button type="warning" icon="el-icon-search" plain size="mini">查询</el-button></el-col>
                     </el-row>
                     <el-row>
-                        <el-tree :data="data" :props="defaultProps" :highlight-current="true" @node-click="handleNodeClick"></el-tree>
+                        <el-tree :data="data" show-checkbox check-on-click-node :props="defaultProps" :highlight-current="true" node-key="id" @node-click="handleNodeClick" ref="tree"></el-tree>
                     </el-row>
                 </div>
             </template>
@@ -85,6 +85,19 @@
                                 >
                         </el-table-column>
                     </el-table>
+
+                    <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage"
+                        :page-sizes="perPagesize"
+                        :page-size="pagesize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="total"
+                        align="center"
+                        style="margin-top: 20px;"
+                        >
+                    </el-pagination>
                 </div>
             </template>
         </split-pane>
@@ -161,7 +174,8 @@
 <script>
     import splitPane from 'vue-splitpane'
     import { getproject} from "../../api/project"
-    import { addDeviceTolocal, getAccessToken, autoGetAccessToken } from "../../api/videoDevice"
+    import { addDeviceTolocal, getAccessToken, autoGetAccessToken, showDivice, addDevice } from "../../api/videoDevice"
+    import { perPagesize } from '../../config/common'
     export default {
         components: {
             splitPane,
@@ -198,17 +212,31 @@
                 validateCode: '',
                 submitType: '',
                 defaultProps: {
-                    children: 'children',
-                    label: 'name'
+                    children: 'id',
+                    label: 'label'
                 },
                 tableData: [],
                 multipleSelection: [],
-                }
-            },
+                // 分页
+                loading: true,
+                currentPage: 1,
+                pagesize: 10,
+                name: '',
+                total: null,
+                // 模糊查询
+                d_name: ''
+            }
+        },
         created(){
             getproject().then(res=>{
                 if (res.data.response_status === "success") {
-                    this.data = res.data.data
+                    let data = []
+                    res.data.data.forEach(item => {
+                        data.push({label: item.name, id: item.id})
+                    })
+                    this.data = data
+                    this.getDevices(this.data[0].id, this.d_name)
+                    this.$refs.tree.setCheckedKeys[this.data[0].id]  
                 }
             })
         },
@@ -230,6 +258,11 @@
             },
             handleNodeClick(data) {
                 this.form.item_id = data.id
+                let showData = {
+                    item_id: data.id,
+
+                }
+                this.getDevices(data.id, this.d_name)
             },
             handleAdd(){
                 this.from={
@@ -256,6 +289,9 @@
             },
             confirm(){
                 let data = this.form
+                addDevice({accessToken: data.access_token, deviceSerial: serial, deviceName: d_name}).then(res => {
+
+                })
                 addDeviceTolocal(data).then(res=>{
                     if(res.data.response_status === 'success') {
                         this.addCamera = false
@@ -303,8 +339,25 @@
                     this.tokenBtnVisible = true
                 })
             },
-            test() {
-                console.log(13)
+            getDevices(item_id, d_name=null) {
+                showDivice({page: this.currentPage, pagesize: this.pagesize, item_id, d_name }).then(res => {
+                    if (res.data.response_status === 'success') {
+                        this.tableData = res.data.data.data
+                    }
+                })
+            },
+            // 分页
+            handleSizeChange(pagesize) {
+                this.pagesize = pagesize
+                this.getTableData()
+            },
+            handleCurrentChange(currentPage) {
+                this.getTableData(currentPage)
+            },
+        },
+        computed: {
+            perPagesize() {
+                return perPagesize
             }
         }
     }
