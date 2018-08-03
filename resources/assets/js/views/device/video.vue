@@ -15,7 +15,8 @@
                         <el-col :span="9" class="query-text"><el-button type="warning" icon="el-icon-search" plain size="mini">查询</el-button></el-col>
                     </el-row>
                     <el-row>
-                        <el-tree :data="data" show-checkbox check-on-click-node :props="defaultProps" :highlight-current="true" node-key="id" @node-click="handleNodeClick" ref="tree"></el-tree>
+                        <li v-for="(item,index) in data" :key="index" v-text="item.label" @click="handleNodeClick(item)"class="text-els" :class="{ 'item-list': activeItemId === item.id }" style="cursor: pointer;"></li>
+                        <!--<el-tree :data="data" show-checkbox check-on-click-node :props="defaultProps" :highlight-current="true" node-key="id" @node-click="handleNodeClick" ref="tree"></el-tree>-->
                     </el-row>
                 </div>
             </template>
@@ -200,6 +201,7 @@
         },
         data() {
             return {
+                activeItemId: null,
                 addCamera: false,
                 tokenBtnVisible: false,
                 form:{
@@ -254,7 +256,7 @@
                     })
                     this.data = data
                     this.getDevices(this.data[0].id, this.d_name)
-                    this.$refs.tree.setCheckedKeys[this.data[0].id]  
+                    this.activeItemId = this.data[0].id
                 }
             })
         },
@@ -275,6 +277,7 @@
                 this.multipleSelection = val;
             },
             handleNodeClick(data) {
+                this.activeItemId = data.id
                 this.form.item_id = data.id
                 let showData = {
                     item_id: data.id,
@@ -419,5 +422,12 @@
         line-height: 30px;
         font-size: 14px;
         margin-top: 5px;
+    }
+    .left-container li{
+        display: block;
+        padding: 10px 10px;
+    }
+    .item-list{
+        background: #eee;
     }
 </style>
