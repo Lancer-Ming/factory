@@ -161,7 +161,7 @@
 <script>
     import splitPane from 'vue-splitpane'
     import { getproject} from "../../api/project"
-    import { addDevice,addDeviceTolocal,getAccessToken, autoGetAccessToken } from "../../api/videoDevice"
+    import { addDeviceTolocal, getAccessToken, autoGetAccessToken } from "../../api/videoDevice"
     export default {
         components: {
             splitPane,
@@ -306,11 +306,7 @@
                         this.tokenBtnVisible = true
                     }
                 }).catch(error => {
-                    this.$message({
-                        type: 'error',
-                        showClose: true,
-                        message: 'AppKey或者是Secret填写错误'
-                    })
+                    this.tokenBtnVisible = true
                 })
             },
             test() {
