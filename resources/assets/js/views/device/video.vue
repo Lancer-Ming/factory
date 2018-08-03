@@ -308,12 +308,19 @@
             confirm(){
                 let data = this.form
                 addDevice({accessToken: data.access_token, deviceSerial: serial, deviceName: d_name}).then(res => {
-
-                })
-                addDeviceTolocal(data).then(res=>{
-                    if(res.data.response_status === 'success') {
-                        this.addCamera = false
-                        this.tableData = res.data.data
+                    if(res.data.code === "200"){
+                        addDeviceTolocal(data).then(res=>{
+                            if(res.data.response_status === 'success') {
+                                this.addCamera = false
+                                this.tableData = res.data.data
+                                this.$message({
+                                    type: 'success',
+                                    showClose: true,
+                                    message: res.data.msg
+                                })
+                                this.addCamera = true
+                            }
+                        })
                     }
                 })
             },
