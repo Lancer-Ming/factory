@@ -142,7 +142,6 @@
                     <el-input v-model="form.password" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号" :label-width="formLabelWidth">
-                    <span style="float: left;position: absolute;top: 2px;left: -65px;color: red;">*</span>
                     <el-input v-model="form.phone" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
                 <el-form-item label="有效期时间戳" :label-width="formLabelWidth">
@@ -167,12 +166,6 @@
                         <el-input v-model="form.access_token" auto-complete="off" style="width: 78%" size="mini" :readonly="true" @focus="autoGetAccessToken"></el-input>
                     </el-tooltip>
                         <el-button type="warning" plain size="mini" @click="getAccessToken" v-show="tokenBtnVisible">获取AccessToken</el-button>
-                </el-form-item>
-                <el-form-item label="EZOPEN直播源" :label-width="formLabelWidth" style="width: 100%;">
-                    <el-input v-model="form.ezopen" disabled auto-complete="off" size="mini"></el-input>
-                </el-form-item>
-                <el-form-item label="HLS播放地址" :label-width="formLabelWidth" style="width: 100%;">
-                    <el-input v-model="form.hls_address" disabled auto-complete="off" size="mini"></el-input>
                 </el-form-item>
             </el-form>
             <div class="attention">
