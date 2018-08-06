@@ -39,7 +39,7 @@ export function destroyDevice(data){
 export function destroyDeviceToLocal(id) {
     return axios({
         url: `/video_device/${id}`,
-        method: 'post'
+        method: 'delete'
     })
 }
 

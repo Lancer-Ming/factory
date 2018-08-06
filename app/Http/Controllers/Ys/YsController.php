@@ -11,14 +11,14 @@ class YsController extends Controller
     public function post(Request $request)
     {
         $params = $request->data;
-        if ($this->accessTokenIsValid()) {
-            $ys = Ys::where('access_token', $request->accessToken)->first();
+        if (array_key_exists('accessToken', $params) && $this->accessTokenIsValid($params['accessToken'])) {
+            $ys = Ys::where('access_token', $params['accessToken'])->first();
             $data = [
                 'appKey' => $ys->appkey,
-                'secret' => $ys->secret
+                'appSecret' => $ys->secret
             ];
             $response = curl_post('https://open.ys7.com/api/lapp/token/get', $data);
-            $access_token = $response['data']['accessToken'];
+            $access_token = json_decode($response, true)['data']['accessToken'];
             $params['accessToken'] = $access_token;
         }
         $result = curl_post($request->url, $params);
