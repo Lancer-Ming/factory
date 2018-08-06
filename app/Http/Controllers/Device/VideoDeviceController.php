@@ -50,8 +50,8 @@ class VideoDeviceController extends Controller
         return successJson($videoDevices, '操作成功！');
     }
 
-    public function destroy(Device $device) {
-        $device->delete();
+    public function destroy(Device $video_device) {
+        $video_device->delete();
 
         $videoDevices = Device::with('ys')->get();
         return successJson($videoDevices, '操作成功！');

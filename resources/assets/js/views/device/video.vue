@@ -24,7 +24,7 @@
                 <div class="right-container">
                     <el-row style="background: rgba(233,242,255,.5);padding: 5px 20px;">
                         <el-button type="primary" plain size="mini" icon="el-icon-circle-plus-outline" class="v-btn" @click="handleAdd">添加摄像头</el-button>
-                        <el-button type="primary" plain size="mini" icon="el-icon-sort" class="v-btn" @click="">复制添加摄像头</el-button>
+                        <el-button type="primary" plain size="mini" icon="el-icon-sort" class="v-btn" @click="copySelectForm">复制添加摄像头</el-button>
                         <el-button type="primary" plain size="mini" icon="el-icon-delete" class="v-btn" @click="destroyDevice">删除摄像头</el-button>
                     </el-row>
                     <el-row style="margin: 20px 0px 0px 20px;">
@@ -393,17 +393,50 @@
                     center: true
                 }).then(() => {
                     destroyDevice({accessToken: this.multipleSelection.ys.access_token,deviceSerial:this.multipleSelection.serial}).then(res => {
+                        console.log(res)
                         if(res.data.code === "200"){
                             destroyDeviceToLocal(this.multipleSelection.id).then(res => {
                                 if (res.data.response_status === 'success') {
                                     this.tableData = res.data.data.data
+                                    this.$message({
+                                        type: 'success',
+                                        showClose: true,
+                                        message: res.data.msg
+                                    })
                                 }
+                            })
+                        } else {
+                            this.$message({
+                                type: 'error',
+                                showClose: true,
+                                message: res.data.msg
                             })
                         }
                     })
                 }).catch(() => {
                     return
                 })
+            },
+            copySelectForm() {
+                this.form={
+                    d_name: this.multipleSelection.d_name,
+                    serial: this.multipleSelection.serial,
+                    channel_no: this.multipleSelection.channel_no,
+                    validate_code: this.multipleSelection.validate_code,
+                    install_at: this.multipleSelection.updated_at,
+                    chargeman: this.multipleSelection.chargeman,
+                    chargeman_tel: this.multipleSelection.chargeman_tel,
+                    appkey: this.multipleSelection.ys.appkey,
+                    secret: this.multipleSelection.ys.secret,
+                    access_token: this.multipleSelection.ys.access_token,
+                    username: this.multipleSelection.ys.username,
+                    password: this.multipleSelection.ys.password,
+                    phone: this.multipleSelection.ys.phone,
+                    expiretime: this.multipleSelection.ys.expiretime,
+                    item_id: this.form.item_id
+                }
+                this.addCamera = true
+                this.submitType= 'add'
             }
         },
         computed: {
