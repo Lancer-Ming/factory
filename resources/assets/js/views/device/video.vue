@@ -25,7 +25,7 @@
                     <el-row style="background: rgba(233,242,255,.5);padding: 5px 20px;">
                         <el-button type="primary" plain size="mini" icon="el-icon-circle-plus-outline" class="v-btn" @click="handleAdd">添加摄像头</el-button>
                         <el-button type="primary" plain size="mini" icon="el-icon-sort" class="v-btn" @click="copySelectForm">复制添加摄像头</el-button>
-                        <el-button type="primary" plain size="mini" icon="el-icon-delete" class="v-btn" @click="destroyDevice">删除摄像头</el-button>
+                        <el-button type="primary" plain size="mini" icon="el-icon-success" class="v-btn" @click="handleBroadcast">开通直播/获取地址</el-button>
                     </el-row>
                     <el-row style="margin: 20px 0px 0px 20px;">
                         摄像头名称：<el-input size="mini" style="width: 30%;"></el-input>
@@ -85,6 +85,23 @@
                                 width="600"
                                 align="center"
                                 >
+                        </el-table-column>
+                        <el-table-column
+                                prop="rtmp_address"
+                                label="rtmpHd播放地址（流畅）"
+                                width="600"
+                                align="center"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                                fixed="right"
+                                label="操作"
+                                width="100"
+                                align="center"
+                        >
+                            <template slot-scope="scope">
+                                <el-button type="danger" size="mini" icon="el-icon-delete" @click="destroyDevice(scope.row)">删除</el-button>
+                            </template>
                         </el-table-column>
                     </el-table>
 
@@ -187,7 +204,7 @@
 <script>
     import splitPane from 'vue-splitpane'
     import { getproject} from "../../api/project"
-    import { addDeviceTolocal, getAccessToken, autoGetAccessToken, showDivice, addDevice, destroyDevice, destroyDeviceToLocal } from "../../api/videoDevice"
+    import { addDeviceTolocal, getAccessToken, autoGetAccessToken, showDivice, addDevice, destroyDevice, destroyDeviceToLocal,openBroadcast,getBroadcastAddress } from "../../api/videoDevice"
     import { perPagesize } from '../../config/common'
     import { implode } from '../../utils/common'
     export default {
@@ -210,6 +227,7 @@
                     chargeman_tel: '',
                     ezopen: '',
                     hls_address: '',
+                    rtmp_address: '',
                     appkey: '',
                     secret: '',
                     access_token: '',
@@ -257,12 +275,8 @@
             resize() {
                 console.log('resize')
             },
-            toggleSelection(rows) {
-                this.$refs.table.clearSelection()
-                this.$refs.table.toggleRowSelection(row, true)
-            },
             handleSelectionChange(val) {
-                this.multipleSelection = val[0];
+                this.multipleSelection = val;
             },
             handleNodeClick(data) {
                 this.activeItemId = data.id
@@ -284,6 +298,7 @@
                     chargeman_tel: '',
                     ezopen: '',
                     hls_address: '',
+                    rtmp_address: '',
                     appkey: '',
                     secret: '',
                     access_token: '',
@@ -384,17 +399,18 @@
                 return implode(arr, attr);
             },
             // 删除摄像头
-            destroyDevice() {
+            destroyDevice(row) {
+                console.log(row)
                 this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning',
                     center: true
                 }).then(() => {
-                    destroyDevice({accessToken: this.multipleSelection.ys.access_token,deviceSerial:this.multipleSelection.serial}).then(res => {
+                    destroyDevice({accessToken: row.ys.access_token,deviceSerial:row.serial}).then(res => {
                         console.log(res)
                         if(res.data.code === "200"){
-                            destroyDeviceToLocal(this.multipleSelection.id).then(res => {
+                            destroyDeviceToLocal(row.id).then(res => {
                                 if (res.data.response_status === 'success') {
                                     this.tableData = res.data.data.data
                                     this.$message({
@@ -414,6 +430,37 @@
                     })
                 }).catch(() => {
                     return
+                })
+            },
+            handleBroadcast(){
+                let arr = this.multipleSelection
+                let resault = []
+                arr.forEach(function(item){
+                    resault.push(`${item.serial}:${item.channel_no}`)
+                });
+                let source = resault.toString()
+
+                this.$confirm('此操作将开通直播，是否继续?','提示',{
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'success',
+                    center: true
+                }).then(() => {
+                    openBroadcast({accessToken: this.multipleSelection[0].ys.access_token,source}).then(res=>{
+                        console.log(res)
+                        if(res.data.code === "200"){
+                            getBroadcastAddress({accessToken: this.multipleSelection[0].ys.access_token,source}).then(res => {
+                                if(res.data.response_status === 'success'){
+                                    this.tableData = res.data.data.data
+                                    this.$message({
+                                        type: 'success',
+                                        showClose: true,
+                                        message: res.data.msg
+                                    })
+                                }
+                            })
+                        }
+                    })
                 })
             },
             copySelectForm() {
