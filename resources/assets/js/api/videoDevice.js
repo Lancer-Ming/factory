@@ -58,3 +58,22 @@ export function showDivice(data) {
         params: data
     })
 }
+
+
+export function openBroadcast(data){
+    let url = `${apiUrl}/api/lapp/live/video/open`
+    return axios({
+        url: '/api/ys/post',
+        method: 'post',
+        data: { url, data }
+    })
+}
+
+export function getBroadcastAddress(data){
+    let url = `${apiUrl}/api/lapp/live/address/get`
+    return axios({
+        url: '/api/ys/post',
+        method: 'post',
+        data: { url, data }
+    })
+}
