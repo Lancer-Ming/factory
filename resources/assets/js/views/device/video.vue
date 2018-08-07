@@ -312,6 +312,12 @@
                                 this.addCamera = false
                             }
                         })
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            showClose: true,
+                            message: res.data.msg
+                        })
                     }
                 })
             },
