@@ -72,14 +72,14 @@
                 align
                 border
                 stripe
+                style="width: 100%"
+                size="mini"
                 :default-sort = "{prop: 'id', order: 'ascending'}"
                 v-loading="loading"
                 @selection-change="handleSelectionChange"
                 @row-click="cellClick"
                 @row-dblclick="dblclick"
                 ref="table"
-                style="width: 100%"
-                size="mini"
         >
             <el-table-column
                     prop="id"
@@ -89,8 +89,6 @@
                     sortable
                     label="#"
             >
-                <!--:filters="[{text:'1',value:'1'},{text:'2',value:'2'}]"-->
-                <!--:filter-method="filterHandler"-->
                 <template slot-scope="scope">
                     <span>{{ scope.row.id }}</span>
                 </template>

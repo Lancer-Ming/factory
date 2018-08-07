@@ -1,6 +1,7 @@
 <template>
-    <div class="container">
-        <el-row style="padding: 10px;">
+    <div class="container Role-page">
+        <div class="toolsbar">
+        <el-row class="btnBox">
             <el-button
                     size="mini"
                     type="primary"
@@ -10,54 +11,77 @@
                     type="danger"
                     @click="handleDeleteSeleted">删除</el-button>
         </el-row>
+        </div>
+        <!--<div class="searchBox">-->
+        <!--</div>-->
         <el-table
                 :data="tableData"
+                align
+                border
+                stripe
+                style="width: 100%"
+                size="mini"
+                :default-sort = "{prop: 'id', order: 'ascending'}"
                 @selection-change="handleSelectionChange"
-                style="width: 100%">
+        >
+            <!--v-loading="loading"-->
 
             <el-table-column
-                    type="selection"
-                    width="55">
+                    prop="id"
+                    align="center"
+                    width="60"
+                    fixed
+                    sortable
+                    label="#"
+            >
+                <template slot-scope="scope">
+                    <span>{{ scope.row.id }}</span>
+                </template>
             </el-table-column>
             <el-table-column
-                    label="编号"
+                    type="selection"
                     align="center"
-                    width="100">
-                <template slot-scope="scope">
-                    <!--<i class="el-icon-time"></i>-->
-                    <span style="margin-left: 10px">{{ scope.row.id }}</span>
-                </template>
+                  >
             </el-table-column>
             <el-table-column
                     label="用户组名"
                     align="center"
-                    width="300">
+                   >
                 <template slot-scope="scope">
                     <el-tag size="medium">{{ scope.row.name }}</el-tag>
                 </template>
             </el-table-column>
 
             <el-table-column
-                    label="创建时间"
+                    label="更新时间"
                     align="center"
-                    width="300">
+                    >
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
-                    <span style="margin-left: 10px">{{ scope.row.created_at }}</span>
+                    <span>{{ scope.row.created_at }}</span>
                 </template>
             </el-table-column>
-
+            <el-table-column
+                    label="创建时间"
+                    align="center"
+            >
+                <template slot-scope="scope">
+                    <i class="el-icon-time"></i>
+                    <span>{{ scope.row.created_at }}</span>
+                </template>
+            </el-table-column>
             <el-table-column label="操作" align="center" width="500">
                 <template slot-scope="scope">
                     <el-button
                             size="mini"
-                            type="info"
+                            type="primary"
                             @click="handleEdit(scope.$index, scope.row)">编辑
                     </el-button>
                     <el-button
                             size="mini"
                             type="primary"
-                            @click="handleEditPermission(scope.$index, scope.row)">编辑权限
+                            plain
+                            @click="handleEditPermission(scope.$index, scope.row)">权限设置
                     </el-button>
                     <el-button
                             size="mini"
@@ -91,6 +115,7 @@
             return {
                 tableData: [],
                 showForm: false,
+                //loading: true,
                 formType: '',
                 form: {
                     name
@@ -106,6 +131,7 @@
             getRoles().then(res => {
                 if (res.data.response_status === "success") {
                         this.tableData = res.data.data.data
+                        loading: false
                 }
             })
         },

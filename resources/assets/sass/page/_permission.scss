@@ -1,5 +1,29 @@
-.permission-page {
-    .el-button--danger {
-        margin-left: 2%;
+//.permission-page {
+//    .el-button--danger {
+//        margin-left: 2%;
+//    }
+//}
+.permission_menu{
+  .el-tree-node__content > .el-tree-node__expand-icon{background: none; width: auto; height: auto}
+  .el-icon-caret-right:before{ content: "\E62B"; }
+  .el-tree-node__expand-icon.expanded{transform: rotate(0deg);}
+  .el-tree-node__expand-icon.expanded:before{content: "\E621";}
+  background: none;
+  .el-tree-node.is-expanded > .el-tree-node__children{
+    padding-left: 20px;
+  }
+  padding:0px 5px 0;
+  .el-tree-node__content{
+    display: block;
+    width: 100%;
+    border: 1px solid #ccc;
+    background: #fafafa;
+    border-radius: 3px;
+    margin: 5px 0;
+    padding-left: 0 !important;
+    .permission_buttons{
+      float: right;
+      padding-right: 10px;
     }
+  }
 }
