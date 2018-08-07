@@ -103,11 +103,19 @@ Route::middleware(['auth','role','header'])->group(function() {
         });
     });
 
+    //监控管理
+    Route::namespace('Video')->as('video.')->group(function() {
+        //实时视频
+        Route::as('current.')->group(function() {
+            Route::get('/video/current', 'CurrentController@index')->name('index');
+        });
+    });
+
     // 萤石api
     Route::namespace('Ys')->as('ys.')->group(function() {
         Route::as('api.')->prefix('api')->group(function() {
-            Route::post('/access_token/get', 'YsController@accessToken')->name('access_token');
-            Route::post('/video_device/add','YsController@accessToken')->name('video_device');
+            Route::post('/ys/post', 'YsController@post')->name('post');
+            Route::post('/ys/get','YsController@get')->name('get');
         });
 
         Route::as('user.')->prefix('user')->group(function() {
