@@ -7,12 +7,12 @@
                 </el-row>
                 <el-row class="current-query">
                     <el-col :span="2">&nbsp;</el-col>
-                    <el-col :span="11"><el-input size="mini"  style="width: 100%;margin-top: 5px;"></el-input></el-col>
+                    <el-col :span="11"><el-input size="mini"  v-model="filterText" style="width: 100%;margin-top: 5px;"></el-input></el-col>
                     <el-col :span="2">&nbsp;</el-col>
-                    <el-col :span="9" class="query-text"><el-button type="warning" icon="el-icon-search" plain size="mini">查询</el-button></el-col>
+                    <el-col :span="9" class="query-text"></el-col>
                 </el-row>
                 <el-row>
-                    <el-tree :data="data" :props="defaultProps" :highlight-current="true" @node-click="handleNodeClick"></el-tree>
+                    <el-tree ref="tree" :filter-node-method="filterNode" :data="data" :props="defaultProps" :highlight-current="true" @node-click="handleNodeClick"></el-tree>
                 </el-row>
             </div>
             <div class="current-right clearfix">
@@ -30,19 +30,20 @@
 </template>
 
 <script>
-    import { getproject } from "../../api/project"
+    import { getItemWithDevice } from "../../api/current"
     export default {
         data(){
             return{
-               data: [],
+                filterText: '',
+                data: [],
                 defaultProps: {
-                    children: 'units',
-                    label: 'name'
+                    children: 'devices',
+                    label: 'd_name'
                 }
             }
         },
         created(){
-            getproject().then(res=>{
+            getItemWithDevice().then(res=>{
                 if (res.data.response_status === "success") {
                     this.data = res.data.data
                 }
@@ -51,8 +52,18 @@
         methods:{
             handleNodeClick(){
 
+            },
+            filterNode(value, data) {
+                console.log(value,data)
+                if (!value) return true;
+                return data.d_name.indexOf(value) !== -1;
             }
-        }
+        },
+        watch: {
+            filterText(val) {
+                this.$refs.tree.filter(val);
+            }
+        },
     }
 </script>
 

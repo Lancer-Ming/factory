@@ -17,6 +17,11 @@ class Item extends Model
             ->withPivot('contract_id', 'subcontract_id', 'build_id', 'supervisor_id', 'servey_id', 'design_id', 'trail_id', 'safety_station_id');
     }
 
+    public function devices()
+    {
+        return $this->hasMany(Device::class);
+    }
+
     public static function getItems()
     {
         return self::with([
