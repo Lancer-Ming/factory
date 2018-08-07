@@ -73,21 +73,14 @@
                                 >
                         </el-table-column>
                         <el-table-column
-                                prop="ezopen"
-                                label="直播源地址（EZOPEN协议，流畅）"
-                                width="450"
-                                align="center"
-                                >
-                        </el-table-column>
-                        <el-table-column
-                                prop="hls_address"
+                                prop="hls"
                                 label="HLS播放地址（流畅）"
                                 width="600"
                                 align="center"
                                 >
                         </el-table-column>
                         <el-table-column
-                                prop="rtmp_address"
+                                prop="rtmp"
                                 label="rtmpHd播放地址（流畅）"
                                 width="600"
                                 align="center"
@@ -204,7 +197,7 @@
 <script>
     import splitPane from 'vue-splitpane'
     import { getproject} from "../../api/project"
-    import { addDeviceTolocal, getAccessToken, autoGetAccessToken, showDivice, addDevice, destroyDevice, destroyDeviceToLocal,openBroadcast,getBroadcastAddress } from "../../api/videoDevice"
+    import { addDeviceTolocal, getAccessToken, autoGetAccessToken, showDivice, addDevice, destroyDevice, destroyDeviceToLocal,openBroadcast,getBroadcastAddress, updateBroadcastAddress } from "../../api/videoDevice"
     import { perPagesize } from '../../config/common'
     import { implode } from '../../utils/common'
     export default {
@@ -315,10 +308,11 @@
                 let data = this.form
                 addDevice({accessToken: data.access_token, deviceSerial: data.serial, validateCode: data.validate_code}).then(res => {
                     if(res.data.code === "200"){
+                        data.pagesize = this.pagesize
                         addDeviceTolocal(data).then(res=>{
                             if(res.data.response_status === 'success') {
                                 this.addCamera = false
-                                this.tableData = res.data.data
+                                this.tableData = res.data.data.data
                                 this.$message({
                                     type: 'success',
                                     showClose: true,
@@ -408,9 +402,8 @@
                     center: true
                 }).then(() => {
                     destroyDevice({accessToken: row.ys.access_token,deviceSerial:row.serial}).then(res => {
-                        console.log(res)
                         if(res.data.code === "200"){
-                            destroyDeviceToLocal(row.id).then(res => {
+                            destroyDeviceToLocal(row.id, {pagesize: this.pagesize, item_id: this.activeItemId}).then(res => {
                                 if (res.data.response_status === 'success') {
                                     this.tableData = res.data.data.data
                                     this.$message({
@@ -447,15 +440,20 @@
                     center: true
                 }).then(() => {
                     openBroadcast({accessToken: this.multipleSelection[0].ys.access_token,source}).then(res=>{
-                        console.log(res)
                         if(res.data.code === "200"){
-                            getBroadcastAddress({accessToken: this.multipleSelection[0].ys.access_token,source}).then(res => {
-                                if(res.data.response_status === 'success'){
-                                    this.tableData = res.data.data.data
-                                    this.$message({
-                                        type: 'success',
-                                        showClose: true,
-                                        message: res.data.msg
+                            getBroadcastAddress({accessToken: this.multipleSelection[0].ys.access_token,source}).then(r => {
+                                if(r.data.code === "200"){
+                                    r.data.item_id = this.activeItemId
+                                    r.data.pagesize = this.pagesize
+                                    updateBroadcastAddress(r.data).then(response => {
+                                        if(res.data.response_status === 'success'){
+                                            this.tableData = response.data.data.data
+                                            this.$message({
+                                                type: 'success',
+                                                showClose: true,
+                                                message: response.data.msg
+                                            })
+                                        }
                                     })
                                 }
                             })

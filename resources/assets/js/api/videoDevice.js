@@ -36,10 +36,11 @@ export function destroyDevice(data){
     })
 }
 
-export function destroyDeviceToLocal(id) {
+export function destroyDeviceToLocal(id, data) {
     return axios({
         url: `/video_device/${id}`,
-        method: 'delete'
+        method: 'delete',
+        data: { data }
     })
 }
 
@@ -75,5 +76,13 @@ export function getBroadcastAddress(data){
         url: '/api/ys/post',
         method: 'post',
         data: { url, data }
+    })
+}
+
+export function updateBroadcastAddress(data) {
+    return axios({
+        url: `/video_device/address`,
+        method: 'post',
+        data: { data }
     })
 }
