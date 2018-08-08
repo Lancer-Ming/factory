@@ -19,17 +19,6 @@
   display: inline-block;
   padding-right: 5px;
 }
-.clearfix:after{
-  visibility: hidden;
-  display: block;
-  height: 0;
-  font-size: 0;
-  content: "";
-  clear: both;
-}
-.clearfix{
-  zoom: 1;
-}
 .pro-box{
   width: 100%;
   margin: 0 auto;
@@ -71,11 +60,11 @@
   color: #2e6da4;
 }
 .project .el-input{
-  width: 70%;
+  //width: 70%;
 }
 .pro-add .el-form-item{
-  float: left;
-  width: 50%;
+  //float: left;
+  //width: 50%;
 }
 .el-input.el-input--suffix{
   width: 100%;

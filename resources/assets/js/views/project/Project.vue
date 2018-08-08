@@ -203,7 +203,7 @@
 
 
         <el-dialog title="新增项目" :visible.sync="addform" class="pro-add">
-            <el-form :model="form">
+            <el-form :model="form" size="mini">
                 <el-form-item label="项目名" :label-width="formLabelWidth">
                     <el-input v-model="form.name" auto-complete="off"></el-input>
                 </el-form-item>
@@ -352,7 +352,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="addform = false" style="margin-top:100px;">取 消</el-button>
+                <el-button @click="addform = false">取 消</el-button>
                 <el-button type="primary" @click="ensure">确 定</el-button>
             </div>
         </el-dialog>

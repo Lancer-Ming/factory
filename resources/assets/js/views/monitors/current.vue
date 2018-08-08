@@ -12,7 +12,7 @@
                     <el-col :span="9" class="query-text"></el-col>
                 </el-row>
                 <el-row>
-                    <el-tree ref="tree" :filter-node-method="filterNode" :data="data" :props="defaultProps" :highlight-current="true" @node-click="handleNodeClick"></el-tree>
+                    <el-tree ref="tree" :filter-node-method="filterNode" :data="data" :props="defaultProps" highlight-current node-key="id" :expand-on-click-node="false" @node-click="handleNodeClick"></el-tree>
                 </el-row>
             </div>
             <div class="current-right clearfix">
@@ -23,22 +23,16 @@
                             <source :src="currentAddressObject.hlsHd" type="application/x-mpegURL" />
                         </video>
                     </el-col>
-                    <!-- <el-col :span="12">222222</el-col>
-                    <el-col :span="12">333333</el-col>
-                    <el-col :span="12">444444</el-col> -->
               </el-row>
 
               <el-row v-if="currentAddressArray.length > 0" style="background: #000; height:100%;">
-                  <el-col :span="12" v-for="address in currentAddressArray" :key="address.id">
-                        <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 710px;height: 400px;">
+                  <el-col :span="12" v-for="address in currentAddressArray" :key="address.id" style="height: 50%">
+                        <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width:100%;height:100%;">
                             <!-- <source :src="currentAddress.hlsHd" type="" /> -->
                             <div></div>
                             <source :src="address.hlsHd" type="application/x-mpegURL" />
                         </video>
                     </el-col>
-                    <!-- <el-col :span="12">222222</el-col>
-                    <el-col :span="12">333333</el-col>
-                    <el-col :span="12">444444</el-col> -->
               </el-row>
 
             </div>
@@ -59,19 +53,26 @@
                     label: 'd_name'
                 },
                 currentAddressObject: {},
-                currentAddressArray: []
+                currentAddressArray: [],
+                currentTreeId:null,
             }
         },
         created(){
             getItemWithDevice().then(res=>{
                 if (res.data.response_status === "success") {
                     this.data = res.data.data
-                    this.handleNodeClick(this.data[0])
+                    this.$nextTick(function(){
+                        this.$refs.tree.setCurrentKey(this.data[0].id)
+                        this.handleNodeClick(this.data[0])
+                    })
                 }
             })
         },
         methods:{
             handleNodeClick(data){
+                if(this.currentTreeId === data.id){
+                    return
+                }
                 if (typeof data.devices === 'undefined') {
                     this.currentAddressArray = []
                     this.currentAddressObject = {
@@ -81,6 +82,7 @@
                         rtmpHd: data.rtmpHd
                     }
                 } else {
+                    this.currentTreeId = data.id
                     data.devices.forEach(item => {
                         this.currentAddressArray.push({
                             hls: typeof  item.hls !== 'undefined' ? item.hls : '',
@@ -90,6 +92,7 @@
                         })
                     })
                 }
+
                 
             },
             filterNode(value, data) {

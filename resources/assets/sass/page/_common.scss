@@ -190,10 +190,21 @@
   //}
 }
 .btnBox{ padding:5px 5px; background: #F2F2F2;}
-.searchBox{background:#fff;padding:10px 5px; margin-bottom: 10px;border-bottom: 1px solid #d4d4d4}
+.searchBox{background:#fff;padding:15px 5px 0px; margin-bottom: 10px;border-bottom: 1px solid #d4d4d4}
 
 //
-//
 .el-pagination{margin-bottom: 10px;}
+
+//
+.el-dialog__body:after{
+  display: block;
+  visibility: hidden;
+  font-size: 0;
+  height: 0;
+  content: "";
+  clear: both;
+}
+.el-dialog .el-dialog__header{ background:#d3dce6;}
+.el-dialog .el-form-item{ float: left; width: 50%;}
 
 

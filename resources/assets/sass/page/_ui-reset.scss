@@ -75,7 +75,7 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
 //toolbar
 
 .searchBox .el-input{width: 90%;}
-.el-form-item--mini.el-form-item{margin-bottom: 0px;}
+.el-form-item--mini.el-form-item{margin-bottom: 15px;}
 
 //table
 .el-table--group, .el-table--border{ border: 1px solid #d4d4d4;}
@@ -135,7 +135,7 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
 .splitter-pane{ overflow: hidden}
 
 //tree
-.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content,.el-tree .el-tree-node__content:hover{    background-color:#f0f7ff;}
+.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content,.el-tree .el-tree-node__content:hover{    background-color:#E0ECFF;}
 .el-tree-node__content > .el-tree-node__expand-icon{
   background: url(/static/img/tree_icons.png) no-repeat -128px 0; width: 16px; height: 18px;
   transform: none;
@@ -152,3 +152,6 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
   top: 0; width: 16px; height: 18px;background: url(/static/img/tree_ico.png) center no-repeat;
 }
 
+//splitter-pane
+
+.splitter-pane{ overflow: auto}
