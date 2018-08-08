@@ -35,6 +35,8 @@ class VideoDeviceController extends Controller
 
         $videoDeviceData = $request->only('d_name', 'serial', 'channel_no', 'validate_code', 'install_at', 'chargeman', 'chargeman_tel', 'hls', 'hlsHd','rtmp','rtmpHd','created_at', 'updated_at', 'item_id');
         $videoDeviceData['ys_id'] = $ys->id;
+        $videoDeviceData['ezopen'] = "ezopen://open.ys7.com/{$videoDeviceData['serial']}/{$videoDeviceData['channel_no']}.hd.live";
+        $videoDeviceData['ezopen_rec'] = "ezopen://open.ys7.com/{$videoDeviceData['serial']}/{$videoDeviceData['channel_no']}.rec";
 
         $videoDeviceData['channel_no'] = (int)$videoDeviceData['channel_no'];
         Device::create($videoDeviceData);
@@ -59,7 +61,7 @@ class VideoDeviceController extends Controller
         foreach($datas as $data) {
             Device::where('serial', $data['deviceSerial'])->update(['hls'=> $data['hls'], 'hlsHd'=> $data['hlsHd'], 'rtmp'=> $data['rtmp'], 'rtmpHd' => $data['rtmpHd']]);
         }
-        $pagesize = $request->has('pagesize') ? $request->pagesize : 10;
+        $pagesize = $request->data['pagesize'] ? $request->pagesize : 10;
         $videoDevices = Device::where('item_id', $request->data['item_id'])->with('ys')->paginate($pagesize);
         return successJson($videoDevices, '操作成功！');
     }

@@ -28,7 +28,7 @@
                     <el-col :span="12">444444</el-col> -->
               </el-row>
 
-              <el-row v-if="currentAddressArray.length > 0" style="background: #000">
+              <el-row v-if="currentAddressArray.length > 0" style="background: #000; height:100%;">
                   <el-col :span="12" v-for="address in currentAddressArray" :key="address.id">
                         <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 710px;height: 400px;">
                             <!-- <source :src="currentAddress.hlsHd" type="" /> -->
@@ -66,12 +66,12 @@
             getItemWithDevice().then(res=>{
                 if (res.data.response_status === "success") {
                     this.data = res.data.data
+                    this.handleNodeClick(this.data[0])
                 }
             })
         },
         methods:{
             handleNodeClick(data){
-                console.log(data)
                 if (typeof data.devices === 'undefined') {
                     this.currentAddressArray = []
                     this.currentAddressObject = {

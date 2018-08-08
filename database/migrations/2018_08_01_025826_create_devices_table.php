@@ -23,6 +23,8 @@ class CreateDevicesTable extends Migration
             $table->timestamp('install_at')->nullable()->comment('安装日期');
             $table->string('chargeman')->nullable()->comment('负责人');
             $table->string('chargeman_tel')->nullable()->comment('负责人手机号');
+            $table->string('ezopen')->nullable()->comment('ezopen播放源');
+            $table->string('ezopen_rec')->nullable()->comment('ezopen_rec回放源');
             $table->string('hls')->nullable()->comment('HLS播放地址');
             $table->string('hlsHd')->nullable()->comment('HLS播放地址(高清)');
             $table->string('rtmp')->nullable()->comment('RTMP播放地址');

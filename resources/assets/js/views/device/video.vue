@@ -289,7 +289,6 @@
                     install_at: '',
                     chargeman: '',
                     chargeman_tel: '',
-                    ezopen: '',
                     hls_address: '',
                     rtmp_address: '',
                     appkey: '',
@@ -427,6 +426,14 @@
             },
             handleBroadcast(){
                 let arr = this.multipleSelection
+                if (arr.length === 0) {
+                    this.$message({
+                        type: 'warning',
+                        showClose: true,
+                        message: '请勾选后再做尝试！'
+                    })                   
+                    return
+                }
                 let resault = []
                 arr.forEach(function(item){
                     resault.push(`${item.serial}:${item.channel_no}`)
@@ -446,7 +453,8 @@
                                     r.data.item_id = this.activeItemId
                                     r.data.pagesize = this.pagesize
                                     updateBroadcastAddress(r.data).then(response => {
-                                        if(res.data.response_status === 'success'){
+                                        console.log(response)
+                                        if(response.data.response_status === 'success'){
                                             this.tableData = response.data.data.data
                                             this.$message({
                                                 type: 'success',
