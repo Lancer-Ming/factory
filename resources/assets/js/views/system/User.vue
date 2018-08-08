@@ -1,40 +1,54 @@
 <template>
     <div class="container">
-        <el-row style="padding: 10px;">
-            <el-button
-                    size="mini"
-                    type="primary"
-                    @click="handleAdd">新增
-            </el-button>
-            <el-button
-                    size="mini"
-                    type="danger"
-                    @click="handleDeleteSeleted">删除
-            </el-button>
-        </el-row>
+        <div class="toolsbar">
+            <el-row class="btnBox">
+                <el-button
+                        size="mini"
+                        type="primary"
+                        @click="handleAdd">新增
+                </el-button>
+                <el-button
+                        size="mini"
+                        type="danger"
+                        @click="handleDeleteSeleted">删除
+                </el-button>
+            </el-row>
+            <!--<div class="searchBox">-->
+            <!--</div>-->
+        </div>
         <el-table
                 :data="tableData"
                 align
                 border
-                @selection-change="handleSelectionChange"
-                style="width: 100%">
+                stripe
+                style="width: 100%"
+                size="mini"
+                :default-sort="{prop: 'id', order: 'ascending'}"
 
+                @selection-change="handleSelectionChange"
+        >
+            <!--v-loading="loading"-->
             <el-table-column
-                    type="selection"
-                    width="55">
+                    prop="id"
+                    align="center"
+                    width="60"
+                    fixed
+                    sortable
+                    label="#"
+            >
+                <template slot-scope="scope">
+                    <span>{{ scope.row.id }}</span>
+                </template>
             </el-table-column>
             <el-table-column
-                    label="编号"
+                    type="selection"
                     align="center"
-                    width="100">
-                <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.id }}</span>
-                </template>
+            >
             </el-table-column>
             <el-table-column
                     label="用户名"
                     align="center"
-                    width="100">
+            >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ scope.row.username }}</el-tag>
@@ -45,7 +59,7 @@
             <el-table-column
                     label="真实姓名"
                     align="center"
-                    width="100">
+            >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ scope.row.realname }}</el-tag>
@@ -56,7 +70,7 @@
             <el-table-column
                     label="所属用户组"
                     align="center"
-                    width="300">
+            >
                 <template slot-scope="scope">
                     <el-tag size="medium">{{ implode(scope.row.roles, 'name').join(',') }}</el-tag>
                 </template>
@@ -65,18 +79,33 @@
             <el-table-column
                     label="邮箱"
                     align="center"
-                    width="200">
+            >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ scope.row.email }}</el-tag>
                     </div>
                 </template>
             </el-table-column>
-
+            <el-table-column
+                    label="最后登录时间"
+                    align="center"
+            >
+                <template slot-scope="scope">
+                    <i class="el-icon-time"></i> <span>{{ scope.row.logined_at }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    label="更新时间"
+                    align="center"
+            >
+                <template slot-scope="scope">
+                    <i class="el-icon-time"></i> <span>{{ scope.row.created_at }}</span>
+                </template>
+            </el-table-column>
             <el-table-column
                     label="创建时间"
                     align="center"
-                    width="300">
+            >
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i> <span style="margin-left: 10px">{{ scope.row.created_at }}</span>
                 </template>
@@ -86,7 +115,7 @@
                 <template slot-scope="scope">
                     <el-button
                             size="mini"
-                            type="info"
+                            type="primary"
                             @click="handleEdit(scope.$index, scope.row)">编辑
                     </el-button>
                     <el-button
@@ -136,12 +165,14 @@
 <script>
     import {getUsers, getRoles, updateUser, addUser, destroyUser} from "../../api/user.js";
     import {implode} from "../../utils/common.js";
+
     export default {
         data() {
             return {
                 tableData: [],
                 showForm: false,
                 formType: '',
+                //loading: true,
                 form: {
                     username: "",
                     realname: "",
@@ -164,6 +195,7 @@
                 getRoles().then(res => {
                     if (res.data.response_status === "success") {
                         this.options = res.data.data;
+
                     }
                 })
         },

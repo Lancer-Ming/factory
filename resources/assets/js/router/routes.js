@@ -19,6 +19,11 @@ export default [
         component: () => import('../views/demo/export')
     },
     {
+        path: '/cxjf/index',
+        name: 'cxjf.index',
+        component: () => import('../views/demo/cxjf')
+    },
+    {
         path: '/demo/excel/selected/index',
         name: 'demo.excel.selected.index',
         component: () => import('../views/demo/selected')

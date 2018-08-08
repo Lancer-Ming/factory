@@ -40,8 +40,9 @@ html,body,#layout-app{ height: 100%;}
 //.section-container{height: 100%;}
 //.main-container{height: 100%;}
 //.main-wrapper{height: 100%;}
-.view-container{height: calc(100% - 37px);}
-.content-container{height: 100%;}
+.main-wrapper{}
+.view-container{height: calc(100% - 38px);overflow: auto}
+.view-container .container{height: 100%;}
 h1, .h1, h2, .h2, h3, .h3{ margin: 0;}
 li{list-style: none}
 label{font-weight: normal; margin: 0px; padding: 0;}
@@ -132,4 +133,22 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
 //
 
 .splitter-pane{ overflow: hidden}
+
+//tree
+.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content,.el-tree .el-tree-node__content:hover{    background-color:#f0f7ff;}
+.el-tree-node__content > .el-tree-node__expand-icon{
+  background: url(/static/img/tree_icons.png) no-repeat -128px 0; width: 16px; height: 18px;
+  transform: none;
+}
+.el-icon-caret-right{background-position: -128px 0; }
+.el-tree-node__expand-icon.expanded{transform: rotate(0deg); background-position: -144px 0;}
+.el-tree-node__expand-icon.is-leaf{ background-position: -192px 0;}
+.el-icon-caret-right:before{content: ""}
+.el-tree-node__expand-icon.expanded:before{content: "";}
+.el-tree-node__label{ position: relative; display: block; width: 100%; padding-left: 16px;}
+.el-tree-node__label:after{
+  content: "";
+  display: block; position: absolute; left: 0;
+  top: 0; width: 16px; height: 18px;background: url(/static/img/tree_ico.png) center no-repeat;
+}
 

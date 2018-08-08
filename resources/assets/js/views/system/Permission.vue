@@ -1,17 +1,33 @@
 <template>
     <div class="container permission-page">
-        <el-button type="danger" class="el-icon-plus" @click="handleAdd({id: 0})"></el-button>
+        <div class="toolsbar">
+            <div class="btnBox">
+                <el-button type="primary" class="el-icon-plus" @click="handleAdd({id: 0})" style="padding: 5px 8px;">新增顶级菜单</el-button>
+            </div>
+            <div class="searchBox">
+                <el-input
+                        placeholder="输入关键字进行过滤"
+                        size="mini"
+                        style="width: 100%"
+                        v-model="filterText">
+                </el-input>
+            </div>
+        </div>
         <el-tree
                 :data="treeData"
                 node-key="id"
                 :expand-on-click-node="false"
-                :default-expand-all="true"
+                default-expand-all
                 @node-drag-end="handleDragEnd"
-                draggable>
+                draggable
+                class="permission_menu"
+                :filter-node-method="filterNode"
+                ref="tree2"
+        >
 
             <span class="custom-tree-node" slot-scope="{ node, data }">
             <span>{{ node.label }}</span>
-                <span>
+                <span class="permission_buttons">
                     <i class="el-icon-plus" @click="handleAdd(data)" v-if="data.is_category > 0"></i>
                     <i class="el-icon-edit" @click="handleEdit(data)"></i>
                     <i class="el-icon-delete" @click="handleDelete(data)"></i>
@@ -21,7 +37,7 @@
 
         <el-dialog title="编辑菜单权限" :visible.sync="showForm" width="22%">
             <el-form :model="form">
-                 <el-form-item label="上级菜单" :label-width="formLabelWidth">
+                <el-form-item label="上级菜单" :label-width="formLabelWidth">
                     <el-select v-model="form.parent_id" placeholder="请选择" value-key="item" disabled>
                         <el-option
                                 v-for="item in options"
@@ -31,7 +47,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-            
+
                 <el-form-item label="权限路由名" :label-width="formLabelWidth">
                     <el-input v-model="form.name" auto-complete="off" style="width:200px;" size="mini"></el-input>
                 </el-form-item>
@@ -59,10 +75,24 @@
 
 
 <script>
-    import { getPermissions, editPermissions, updatePermissions, addPermissions, deletePermissions, sortPermissions } from '../../api/permission'
+    import {
+        getPermissions,
+        editPermissions,
+        updatePermissions,
+        addPermissions,
+        deletePermissions,
+        sortPermissions
+    } from '../../api/permission'
+
     export default {
+        watch: {
+            filterText(val) {
+                this.$refs.tree2.filter(val);
+            }
+        },
         data() {
             return {
+                filterText: '',
                 treeData: [],
                 options: [],
                 defaultProps: {
@@ -91,6 +121,10 @@
             })
         },
         methods: {
+            filterNode(value, data) {
+                if (!value) return true;
+                return data.label.indexOf(value) !== -1;
+            },
             submitForm() {
                 if (this.formType === 'edit') {
                     updatePermissions(this.id, this.form).then(res => {
@@ -102,7 +136,7 @@
                     })
                 }
             },
-            
+
             handleEdit(data) {
                 this.formType = 'edit'
                 editPermissions(data.id).then(res => {
@@ -152,7 +186,7 @@
             },
             handleDragEnd() {
                 let data = JSON.stringify(this.treeData)
-                sortPermissions(data).then(res=> {
+                sortPermissions(data).then(res => {
                     if (res.data.response_status === "success") {
                         this.successCallback(res)
                     }

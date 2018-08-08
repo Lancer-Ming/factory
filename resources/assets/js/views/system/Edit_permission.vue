@@ -1,25 +1,46 @@
 <template>
-    <div class="container" style="border: 1px solid #eee">
+    <div class="container content-container Editpermission-page">
+        <div class="toolsbar">
+            <el-row class="btnBox">
+                <router-link :to="`/system/role/index`">
+                <el-button
+                        size="mini"
+                        type="primary"
+                        plain
+                        icon="el-icon-back"
+                        >返回
+                </el-button>
+                </router-link>
+                <el-button
+                        size="mini"
+                        type="primary"
+                        icon="el-icon-edit"
+                        @click="submit">保存修改
+                </el-button>
+            </el-row>
+        </div>
+        <div>
         <div :class="`edit-nav check-all-${header.id}`" v-for="(header,index) in edit_header">
-                <div class="edit_firstmenu">  
+                <div class="edit_firstmenu">
                     <el-checkbox v-model="permission_id" @change="handleCheckAllChange(header)" :label="header.id" :key="index">{{header.label}}</el-checkbox>
                 </div>
                 <div :class="`edit_box clearfix check-${item.id}`" v-for="(item,index) in header.children">
                     <div class="edit-secondmenu clearfix">
-                            <el-checkbox v-model="permission_id" @change="handleCheck(item)" :label="item.id" :key="index" style="color: #3a5aaa;">{{item.label}}</el-checkbox>
+                            <el-checkbox v-model="permission_id" @change="handleCheck(item)" :label="item.id" :key="index">{{item.label}}</el-checkbox>
                     </div>
                     <div class="edit_box2" v-for="(child,child_index) in item.children">
                         <div class="edit-threemenu clearfix">
-                                <el-checkbox v-model="permission_id" @change="handleCheck(child)" :label="child.id" :key="child_index" style="color: #7f47a3;">{{child.label}}</el-checkbox>
+                                <el-checkbox v-model="permission_id" @change="handleCheck(child)" :label="child.id" :key="child_index">{{child.label}}</el-checkbox>
                         </div>
                         <div class="edit-fourmenu" v-if="child.children.length > 0">
-                                <el-checkbox  v-model="permission_id" @change="handleCheck(children)" :label="children.id" v-for="(children,children_index) in child.children" :key="children_index" style="color: #aa5f3a;">{{children.label}}</el-checkbox>
+                                <el-checkbox  v-model="permission_id" @change="handleCheck(children)" :label="children.id" v-for="(children,children_index) in child.children" :key="children_index">{{children.label}}</el-checkbox>
                         </div>
                     </div>
                 </div>
         </div>
         <div class="keep">
-            <el-button type="info" @click="submit">保存修改</el-button>
+            <el-button type="primary" icon="el-icon-edit" @click="submit">保存修改</el-button>
+        </div>
         </div>
     </div>
 </template>
@@ -35,7 +56,8 @@
                 edit_header: [],
                 permission_id: [],
                 checked: false,
-                role_id: null
+                role_id: null,
+                loading: true,
             }
         },
         created() {
@@ -49,7 +71,7 @@
         methods: {
             handleCheckAllChange(object) {
                 let ids = []
-                console.log(object)
+                //console.log(object)
                 let findChildren = new FindChildren(ids)
                 ids = findChildren.childRecursion(object)
                 if(this.permission_id.indexOf(object.id) > -1) {
@@ -59,7 +81,7 @@
                         return ids.indexOf(item) === -1
                     })
                 }
-               
+
             },
             handleCheck(object) {
                 this.checkRelation(object)
@@ -94,9 +116,9 @@
                             showClose: true,
                             message: res.data.msg
                         })
-                       
+
                         this.$router.push({path: '/system/role/index'})
-                       
+
                     }
                 })
             }
