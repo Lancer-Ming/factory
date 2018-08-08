@@ -18,7 +18,7 @@
             <div class="current-right clearfix">
                 <el-row v-if="currentAddressArray.length === 0">
                     <el-col>
-                        <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 1000px;height: 1000px;">
+                        <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 99%;height: 99%;">
                             <!-- <source :src="currentAddress.hlsHd" type="" /> -->
                             <source :src="currentAddressObject.hlsHd" type="application/x-mpegURL" />
                         </video>
@@ -28,10 +28,11 @@
                     <el-col :span="12">444444</el-col> -->
               </el-row>
 
-              <el-row v-if="currentAddressArray.length > 0">
-                  <el-col v-for="address in currentAddressArray" :key="address.id">
-                        <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 1000px;height: 1000px;">
+              <el-row v-if="currentAddressArray.length > 0" style="background: #000">
+                  <el-col :span="12" v-for="address in currentAddressArray" :key="address.id">
+                        <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 710px;height: 400px;">
                             <!-- <source :src="currentAddress.hlsHd" type="" /> -->
+                            <div></div>
                             <source :src="address.hlsHd" type="application/x-mpegURL" />
                         </video>
                     </el-col>
@@ -39,6 +40,7 @@
                     <el-col :span="12">333333</el-col>
                     <el-col :span="12">444444</el-col> -->
               </el-row>
+
             </div>
         </div>
     </div>
@@ -71,6 +73,7 @@
             handleNodeClick(data){
                 console.log(data)
                 if (typeof data.devices === 'undefined') {
+                    this.currentAddressArray = []
                     this.currentAddressObject = {
                         hls: data.hls,
                         hlsHd: data.hlsHd,
