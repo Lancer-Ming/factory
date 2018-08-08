@@ -16,14 +16,29 @@
                 </el-row>
             </div>
             <div class="current-right clearfix">
-                <el-row style="width: 100%;height: 50%;">
-                    <el-col :span="12">111111</el-col>
-                    <el-col :span="12">222222</el-col>
-                </el-row>
-                <el-row>
+                <el-row v-if="currentAddressArray.length === 0">
+                    <el-col>
+                        <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 1000px;height: 1000px;">
+                            <!-- <source :src="currentAddress.hlsHd" type="" /> -->
+                            <source :src="currentAddressObject.hlsHd" type="application/x-mpegURL" />
+                        </video>
+                    </el-col>
+                    <!-- <el-col :span="12">222222</el-col>
                     <el-col :span="12">333333</el-col>
-                    <el-col :span="12">444444</el-col>
-                </el-row>
+                    <el-col :span="12">444444</el-col> -->
+              </el-row>
+
+              <el-row v-if="currentAddressArray.length > 0">
+                  <el-col v-for="address in currentAddressArray" :key="address.id">
+                        <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 1000px;height: 1000px;">
+                            <!-- <source :src="currentAddress.hlsHd" type="" /> -->
+                            <source :src="address.hlsHd" type="application/x-mpegURL" />
+                        </video>
+                    </el-col>
+                    <!-- <el-col :span="12">222222</el-col>
+                    <el-col :span="12">333333</el-col>
+                    <el-col :span="12">444444</el-col> -->
+              </el-row>
             </div>
         </div>
     </div>
@@ -31,6 +46,7 @@
 
 <script>
     import { getItemWithDevice } from "../../api/current"
+    import { implode } from '../../utils/common'
     export default {
         data(){
             return{
@@ -39,7 +55,9 @@
                 defaultProps: {
                     children: 'devices',
                     label: 'd_name'
-                }
+                },
+                currentAddressObject: {},
+                currentAddressArray: []
             }
         },
         created(){
@@ -50,11 +68,28 @@
             })
         },
         methods:{
-            handleNodeClick(){
-
+            handleNodeClick(data){
+                console.log(data)
+                if (typeof data.devices === 'undefined') {
+                    this.currentAddressObject = {
+                        hls: data.hls,
+                        hlsHd: data.hlsHd,
+                        rtmp: data.rtmp,
+                        rtmpHd: data.rtmpHd
+                    }
+                } else {
+                    data.devices.forEach(item => {
+                        this.currentAddressArray.push({
+                            hls: typeof  item.hls !== 'undefined' ? item.hls : '',
+                            hlsHd: typeof item.hlsHd !== 'undefined' ? item.hlsHd : '',
+                            rtmp: typeof item.rtmp !== 'undefined' ? item.rtmp : '',
+                            rtmpHd: typeof item.rtmpHd !== 'undefined' ? item.rtmpHd : ''
+                        })
+                    })
+                }
+                
             },
             filterNode(value, data) {
-                console.log(value,data)
                 if (!value) return true;
                 return data.d_name.indexOf(value) !== -1;
             }
@@ -64,6 +99,23 @@
                 this.$refs.tree.filter(val);
             }
         },
+        implode() {
+
+        },
+        updated() {
+            this.$nextTick(() => {
+                let player = new EZUIPlayer('myPlayer');
+                player.on('error', function(){
+                    console.log('error');
+                });
+                player.on('play', function(){
+                    console.log('play');
+                });
+                player.on('pause', function(){
+                    console.log('pause');
+                });
+            })
+        }
     }
 </script>
 
