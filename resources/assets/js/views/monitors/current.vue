@@ -18,7 +18,7 @@
             <div class="current-right clearfix">
                 <el-row v-if="currentAddressArray.length === 0">
                     <el-col>
-                        <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 99%;height: 99%;">
+                        <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 99%;height: 99%;" :data-id="currentTreeId">
                             <!-- <source :src="currentAddress.hlsHd" type="" /> -->
                             <source :src="currentAddressObject.hlsHd" type="application/x-mpegURL" />
                         </video>
@@ -26,8 +26,8 @@
               </el-row>
 
               <el-row v-if="currentAddressArray.length > 0" style="background: #000; height:100%;">
-                  <el-col :span="12" v-for="address in currentAddressArray" :key="address.id" style="height: 50%">
-                        <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width:100%;height:100%;">
+                  <el-col :span="12" v-for="address in currentAddressArray" :key="address.id" style="height: 50%" data-id="3">
+                        <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width:100%;height:100%;" :data-id="currentTreeId">
                             <!-- <source :src="currentAddress.hlsHd" type="" /> -->
                             <div></div>
                             <source :src="address.hlsHd" type="application/x-mpegURL" />
@@ -69,12 +69,19 @@
             })
         },
         methods:{
-            handleNodeClick(data){
-                if(this.currentTreeId === data.id){
+            handleNodeClick(data, id){
+                console.log(data.$treeNodeId)
+                if(this.currentTreeId === data.$treeNodeId){
                     return
                 }
+                this.currentTreeId = data.$treeNodeId
                 if (typeof data.devices === 'undefined') {
                     this.currentAddressArray = []
+                    if (this.currentAddressObject.hlsHd || this.currentAddressObject.hls) {
+                        this.$nextTick(() => {
+                            $(`[data-id=${this.currentTreeId}]`).attr('src', '')
+                        })
+                    }
                     this.currentAddressObject = {
                         hls: data.hls,
                         hlsHd: data.hlsHd,
@@ -82,7 +89,13 @@
                         rtmpHd: data.rtmpHd
                     }
                 } else {
-                    this.currentTreeId = data.id
+                    if (data.devices.length === 0) {
+                        this.currentAddressArray = [] 
+                        this.$nextTick(() => {
+                            $(`[data-id=${this.currentTreeId}]`).attr('src', '')
+                        })
+                        return
+                    }
                     data.devices.forEach(item => {
                         this.currentAddressArray.push({
                             hls: typeof  item.hls !== 'undefined' ? item.hls : '',
@@ -91,6 +104,7 @@
                             rtmpHd: typeof item.rtmpHd !== 'undefined' ? item.rtmpHd : ''
                         })
                     })
+                    this.currentAddressObject = {}
                 }
 
                 
@@ -110,16 +124,7 @@
         },
         updated() {
             this.$nextTick(() => {
-                let player = new EZUIPlayer('myPlayer');
-                player.on('error', function(){
-                    console.log('error');
-                });
-                player.on('play', function(){
-                    console.log('play');
-                });
-                player.on('pause', function(){
-                    console.log('pause');
-                });
+                let player1 = new EZUIPlayer('myPlayer');
             })
         }
     }

@@ -25,7 +25,7 @@
 </div>
 {{--<script src="{{ mix('js/manifest.js') }}"></script>--}}
 {{--<script src="{{ mix('js/vendor.js') }}"></script>--}}
-<script src="https://open.ys7.com/sdk/js/1.3/ezuikit.js"></script>
+<script src="{{ asset('js/ezuikit.js') }}"></script>
 <script src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>
