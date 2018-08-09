@@ -18,20 +18,23 @@
             <div class="current-right clearfix">
                 <el-row v-if="currentAddressArray.length === 0">
                     <el-col>
-                        <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 99%;height: 99%;">
-                            <!-- <source :src="currentAddress.hlsHd" type="" /> -->
-                            <source :src="currentAddressObject.hlsHd" type="application/x-mpegURL" />
-                        </video>
+                        <!--<video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 99%;height: 99%;">-->
+                            <!--&lt;!&ndash; <source :src="currentAddress.hlsHd" type="" /> &ndash;&gt;-->
+                            <!--<source :src="currentAddressObject.hlsHd" type="application/x-mpegURL" />-->
+                        <!--</video>-->
+                        <div class="video" style="width: 1000px;height: 600px;"></div>
                     </el-col>
               </el-row>
 
               <el-row v-if="currentAddressArray.length > 0" style="background: #000; height:100%;">
                   <el-col :span="12" v-for="address in currentAddressArray" :key="address.id" style="height: 50%">
-                        <video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width:100%;height:100%;">
-                            <!-- <source :src="currentAddress.hlsHd" type="" /> -->
-                            <div></div>
-                            <source :src="address.hlsHd" type="application/x-mpegURL" />
-                        </video>
+                        <!--<video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width:100%;height:100%;">-->
+                            <!--&lt;!&ndash; <source :src="currentAddress.hlsHd" type="" /> &ndash;&gt;-->
+                            <!--<div></div>-->
+                            <!--<source :src="address.hlsHd" type="application/x-mpegURL" />-->
+                        <!--</video>-->
+                      <div class="video" style="width: 1000px;height: 600px;"></div>
+
                     </el-col>
               </el-row>
 
@@ -110,7 +113,14 @@
         },
         updated() {
             this.$nextTick(() => {
-                let player = new EZUIPlayer('myPlayer');
+                let videoObject = {
+                    container: '.video',//“#”代表容器的ID，“.”或“”代表容器的class
+                    variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
+                    poster:'pic/wdm.jpg',//封面图片
+                    video:'http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4'//视频地址
+                };
+                let player=new ckplayer(videoObject);
+                //let player = new EZUIPlayer('myPlayer');
                 player.on('error', function(){
                     console.log('error');
                 });
