@@ -68,17 +68,10 @@
                 }
             })
         },
-<<<<<<< HEAD
         methods:{
             handleNodeClick(data){
                 console.log(data)
                 if(this.currentTreeId === data.$treeNodeId){
-=======
-        methods: {
-            handleNodeClick(data, id) {
-                console.log(data.$treeNodeId)
-                if (this.currentTreeId === data.$treeNodeId) {
->>>>>>> d9d0ad283c116b79247c243f6c85c3d1c7919984
                     return
                 }
                 this.currentTreeId = data.$treeNodeId
