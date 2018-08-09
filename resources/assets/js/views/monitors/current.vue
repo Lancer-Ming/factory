@@ -69,16 +69,18 @@
             })
         },
         methods:{
-            handleNodeClick(data, id){
-                console.log(data.$treeNodeId)
+            handleNodeClick(data){
+                console.log(data)
                 if(this.currentTreeId === data.$treeNodeId){
                     return
                 }
                 this.currentTreeId = data.$treeNodeId
+                // 如果点击的是设备
                 if (typeof data.devices === 'undefined') {
                     this.currentAddressArray = []
                     if (this.currentAddressObject.hlsHd || this.currentAddressObject.hls) {
                         this.$nextTick(() => {
+                            console.log(1)
                             $(`[data-id=${this.currentTreeId}]`).attr('src', '')
                         })
                     }
@@ -89,9 +91,11 @@
                         rtmpHd: data.rtmpHd
                     }
                 } else {
+                    // 如果点击的是项目
                     if (data.devices.length === 0) {
                         this.currentAddressArray = [] 
                         this.$nextTick(() => {
+                            console.log(2)
                             $(`[data-id=${this.currentTreeId}]`).attr('src', '')
                         })
                         return
@@ -126,7 +130,7 @@
             this.$nextTick(() => {
                 let player1 = new EZUIPlayer('myPlayer');
             })
-        }
+        },
     }
 </script>
 
