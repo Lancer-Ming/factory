@@ -447,13 +447,28 @@
                     center: true
                 }).then(() => {
                     openBroadcast({accessToken: this.multipleSelection[0].ys.access_token,source}).then(res=>{
-                        if(res.data.code === "200"){
+                        if (res.data.code !== '200') {
+                            this.$message({
+                                type: 'warning',
+                                showClose: true,
+                                message: res.data.msg,
+                            })
+                            return
+                        }
+                        // 判断是否所有设备都开通成功
+                        let isAllSuccess = true
+                        const errorDevice = []
+                        res.data.data.forEach(item => {
+                            item.ret !== '200' ? isAllSuccess = false : ''
+                            errorDevice.push({deviceSerial: item.deviceSerial, desc: item.desc})
+                        })
+
+                        if(res.data.code === "200" && isAllSuccess){
                             getBroadcastAddress({accessToken: this.multipleSelection[0].ys.access_token,source}).then(r => {
                                 if(r.data.code === "200"){
                                     r.data.item_id = this.activeItemId
                                     r.data.pagesize = this.pagesize
                                     updateBroadcastAddress(r.data).then(response => {
-                                        console.log(response)
                                         if(response.data.response_status === 'success'){
                                             this.tableData = response.data.data.data
                                             this.$message({
@@ -464,6 +479,17 @@
                                         }
                                     })
                                 }
+                            })
+                        } else {
+                            let html = ''
+                            errorDevice.forEach(item => {
+                                html += `<li style="list-style: none;">序列号号为${item.deviceSerial}的设备，${item.desc}</li>`
+                            })
+                            this.$message({
+                                type: 'warning',
+                                showClose: true,
+                                message: html,
+                                dangerouslyUseHTMLString: true
                             })
                         }
                     })
