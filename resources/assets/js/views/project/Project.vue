@@ -2,10 +2,13 @@
     <div class="container content-container project">
         <div class="toolsbar">
             <el-row class="btnBox">
-                <el-button size="mini" round  @click="handleAdd"><i class="el-icon-circle-plus-outline pro-i"></i>新增项目</el-button>
-                <el-button size="mini" round  @click="handleDeleteSeleted"><i class="el-icon-remove-outline pro-i"></i>移除</el-button>
-                <el-button size="mini" round  @click=""><i class="el-icon-circle-plus-outline pro-i"></i>添加参建单位</el-button>
-                <el-button size="mini" round  @click=""><i class="el-icon-refresh pro-i"></i>同步数据</el-button>
+                <el-button size="mini" round @click="handleAdd"><i class="el-icon-circle-plus-outline pro-i"></i>新增项目
+                </el-button>
+                <el-button size="mini" round @click="handleDeleteSeleted"><i class="el-icon-remove-outline pro-i"></i>移除
+                </el-button>
+                <el-button size="mini" round @click=""><i class="el-icon-circle-plus-outline pro-i"></i>添加参建单位
+                </el-button>
+                <el-button size="mini" round @click=""><i class="el-icon-refresh pro-i"></i>同步数据</el-button>
             </el-row>
         </div>
         <split-pane v-on:resize="resize" split="vertical" :default-percent='20' :min-percent='10' :max-percent='30' class="projectBox">
@@ -18,9 +21,12 @@
                                 <i class="el-icon-d-arrow-left tool"></i>
                             </el-row>
                             <el-row class="pro-l-query">
-                                <el-col :span="12"><el-input v-model="unitSearchValue" class="query" size="mini" style="width: 100%;"></el-input></el-col>
-                                <el-col :span="3">&nbsp;</el-col>
-                                <el-button :span="9" type="mini" class="query-text" @click="unitSearch"><i class="el-icon-search"></i>查询</el-button>
+                                <el-form :inline="true" size="mini">
+                                    <el-form-item label="">
+                                        <el-input v-model="unitSearchValue" class="query" size="mini" placeholder="请输入内容"></el-input>
+                                    </el-form-item>
+                                    <el-button type="primary" plain size="mini" @click="unitSearch" icon="el-icon-search">搜索</el-button>
+                                </el-form>
                             </el-row>
                             <el-row>
                                 <el-tree :data="data" :props="defaultProps" :highlight-current="true" @node-click="handleNodeClick"></el-tree>
@@ -36,8 +42,10 @@
                             <el-tabs type="border-card">
                                 <el-tab-pane label="用户">
                                     <el-row>
-                                        姓名：<el-input size="mini" style="width: 20%;margin-right: 30px;"></el-input>
-                                        工号：<el-input size="mini" style="width: 20%;"></el-input>
+                                        姓名：
+                                        <el-input size="mini" style="width: 20%;margin-right: 30px;"></el-input>
+                                        工号：
+                                        <el-input size="mini" style="width: 20%;"></el-input>
                                         <el-button type="warning" plain class="pro-search" size="mini" icon="el-icon-search">搜索</el-button>
                                     </el-row>
                                 </el-tab-pane>
@@ -203,7 +211,7 @@
 
 
         <el-dialog title="新增项目" :visible.sync="addform" class="pro-add">
-            <el-form :model="form" size="mini">
+            <el-form :model="form" size="mini" class="">
                 <el-form-item label="项目名" :label-width="formLabelWidth">
                     <el-input v-model="form.name" auto-complete="off"></el-input>
                 </el-form-item>
@@ -264,7 +272,7 @@
                     <el-input auto-complete="off" v-model="form.gps"></el-input>
                     <el-button type="info" @click="gps">设置GPS</el-button>
                 </el-form-item>
-                <div style="padding-top:50px;display: none;" class="gps">
+                <div style="padding-top:10px;display: none; float: left; width: 100%" class="gps">
                     <div @on-cancel="cancel" v-model="showMapComponent" width="400" :closable="false" :mask-closable="false">
                         <baidu-map v-bind:style="mapStyle" class="bm-view" ak="你的密钥"
                                 :center="center"
@@ -284,7 +292,7 @@
                             </bm-control>
                             <bm-local-search :keyword="keyword" :auto-viewport="true" style="width:0px;height:0px;overflow: hidden;"></bm-local-search>
                         </baidu-map>
-                        <div slot="footer" style="margin: 360px 0px 20px 0px;">
+                        <div slot="footer" style="margin: 10px 0px 20px 0px;">
                             <el-button @click="cancel" style="width: 70px;height: 38px;">取消</el-button>
                             <el-button type="primary" style="width: 70px;height: 38px;" @click="confirm">确定</el-button>
                         </div>
@@ -359,9 +367,9 @@
 
         <el-dialog title="弹出选择" :visible.sync="Safety">
             <div style="width: 60%;margin: -20px 0px 10px 0px;" class="chose-name">
-                名称：<el-input size="mini"></el-input>
-                <i class="el-icon-search"></i><span>查询</span>
-                <i class="el-icon-delete"></i><span>清空</span>
+                名称：
+                <el-input size="mini"></el-input>
+                <i class="el-icon-search"></i><span>查询</span> <i class="el-icon-delete"></i><span>清空</span>
             </div>
             <el-table
                     :data="tableData"
@@ -428,11 +436,20 @@
 
 <script>
     import splitPane from 'vue-splitpane'
-    import { buildType,invest,itemcategory,structuraltype,citys } from "../../api/json"
+    import {buildType, invest, itemcategory, structuraltype, citys} from "../../api/json"
     import {BaiduMap, BmControl, BmView, BmAutoComplete, BmLocalSearch, BmMarker} from 'vue-baidu-map'
     import SearchBox from '../../components/SearchBox.vue'
-    import { getproject,storeproject,editproject,showproject,updateproject,destroyproject, findUnit} from "../../api/project"
-    import { implode } from '../../utils/common'
+    import {
+        getproject,
+        storeproject,
+        editproject,
+        showproject,
+        updateproject,
+        destroyproject,
+        findUnit
+    } from "../../api/project"
+    import {implode} from '../../utils/common'
+
     export default {
         components: {
             BaiduMap,
@@ -461,7 +478,7 @@
                 addform: false,
                 Safety: false,
                 formLabelWidth: "100px",
-                label:'',
+                label: '',
                 editData: {},
                 num1: 1,
                 //分页
@@ -469,14 +486,14 @@
                 //建设方式
                 buildType: [],
                 //资金来源
-                invest:[],
+                invest: [],
                 //项目类型
                 itemcategory: [],
                 //结构形式
-                structuraltype:[],
+                structuraltype: [],
                 currentUnitModel: '',    // 当前选择的单位input 的name
                 //省市区
-                citys:[],
+                citys: [],
                 value1: "",
                 value2: "",
                 value3: "",
@@ -492,7 +509,7 @@
                     project_no: '',
                     country: '',
                     address: [],
-                    detail:'',
+                    detail: '',
                     permit_no: '',
                     area: '',
                     total_amount: '',
@@ -525,23 +542,23 @@
                 editId: null,
             };
         },
-        created(){
-            buildType().then(res=>{
+        created() {
+            buildType().then(res => {
                 this.buildType = res.data.buildtype
             })
-            invest().then(res=>{
+            invest().then(res => {
                 this.invest = res.data.invest
             })
-            itemcategory().then(res=>{
+            itemcategory().then(res => {
                 this.itemcategory = res.data.itemcategory
             })
-            structuraltype().then(res=>{
+            structuraltype().then(res => {
                 this.structuraltype = res.data.structuraltype
             })
-            citys().then(res=>{
+            citys().then(res => {
                 this.citys = res.data
             })
-            getproject().then(res=>{
+            getproject().then(res => {
                 if (res.data.response_status === "success") {
                     this.data = res.data.data
                 }
@@ -580,7 +597,7 @@
                 this.$set(this.form, 'supervisor_id', data.units[0]['pivot']['supervisor_id'])
                 this.$set(this.form, 'trail_id', data.units[0]['pivot']['trail_id'])
                 this.$set(this.form, 'safety_station_id', data.units[0]['pivot']['safety_station_id'])
-                this.$set(this.form, 'address',  [this.editData.province, this.editData.city, this.editData.county])
+                this.$set(this.form, 'address', [this.editData.province, this.editData.city, this.editData.county])
 
                 // 拿到单位的id
                 let units = this.editData.units[0].pivot
@@ -601,12 +618,12 @@
                 this.$set(this.center, 'lat', this.editData.gps ? this.editData.gps.split(',')[1] : this.defaultGps.lat)
                 this.form.gps = this.center.lng + ',' + this.center.lat
             },
-            getClickInfo (e) {
+            getClickInfo(e) {
                 this.$set(this.center, 'lng', e.point.lng)
                 this.$set(this.center, 'lat', e.point.lat)
                 this.$set(this.form, 'gps', this.center.lng + ',' + this.center.lat)
             },
-            syncCenterAndZoom (e) {
+            syncCenterAndZoom(e) {
                 const {lng, lat} = e.target.getCenter()
                 this.center.lng = lng
                 this.center.lat = lat
@@ -647,12 +664,12 @@
                 this.form[this.currentUnitModel] = row.id
                 this.chose = false
             },
-            closeUnitValue(){
+            closeUnitValue() {
                 this.chose = false
             },
-            handleAdd(){
-                this.form={
-                    name:'',
+            handleAdd() {
+                this.form = {
+                    name: '',
                     item_category_id: '',
                     invest_id: '',
                     build_type_id: '',
@@ -662,7 +679,7 @@
                     project_no: '',
                     country: '',
                     address: [],
-                    detail:'',
+                    detail: '',
                     permit_no: '',
                     area: '',
                     total_amount: '',
@@ -684,7 +701,7 @@
                 this.addform = true
                 this.submitType = 'add'
             },
-            handleEdit(){
+            handleEdit() {
                 console.log(2222)
                 this.submitType = 'edit'
                 if (this.label !== "") {
@@ -701,7 +718,7 @@
                 data.county = this.form.address[2]
                 delete data.id
                 updateproject(this.editId, data).then(res => {
-                    if(res.data.response_status === 'success') {
+                    if (res.data.response_status === 'success') {
                         this.data = res.data.data
                         this.$message({
                             type: 'success',
@@ -711,13 +728,13 @@
                     }
                 })
             },
-            ensure(){
+            ensure() {
                 let data = this.form
                 data.province = this.form.address[0]
                 data.city = this.form.address[1]
                 data.county = this.form.address[2]
                 storeproject(data).then(res => {
-                    if(res.data.response_status === 'success') {
+                    if (res.data.response_status === 'success') {
                         this.data = res.data.data
                         this.addform = false
                         this.$message({
@@ -728,7 +745,7 @@
                     }
                 })
             },
-            handleDeleteSeleted(){
+            handleDeleteSeleted() {
                 this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -749,7 +766,7 @@
             },
             handleChange(value) {
             },
-            gps(){
+            gps() {
                 this.gpsData = this.center.lng + ',' + this.center.lat
                 $('.gps').toggle()
             },

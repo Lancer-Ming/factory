@@ -7,7 +7,9 @@
                 </el-row>
                 <el-row class="current-query">
                     <el-col :span="2">&nbsp;</el-col>
-                    <el-col :span="11"><el-input size="mini"  v-model="filterText" style="width: 100%;margin-top: 5px;"></el-input></el-col>
+                    <el-col :span="11">
+                        <el-input size="mini" v-model="filterText" style="width: 100%;margin-top: 5px;"></el-input>
+                    </el-col>
                     <el-col :span="2">&nbsp;</el-col>
                     <el-col :span="9" class="query-text"></el-col>
                 </el-row>
@@ -18,37 +20,32 @@
             <div class="current-right clearfix">
                 <el-row v-if="currentAddressArray.length === 0">
                     <el-col>
-                        <!--<video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 99%;height: 99%;">-->
-                            <!--&lt;!&ndash; <source :src="currentAddress.hlsHd" type="" /> &ndash;&gt;-->
-                            <!--<source :src="currentAddressObject.hlsHd" type="application/x-mpegURL" />-->
-                        <!--</video>-->
                         <div class="video" style="width: 1000px;height: 600px;"></div>
-                    </el-col>
-              </el-row>
-
-              <el-row v-if="currentAddressArray.length > 0" style="background: #000; height:100%;">
-                  <el-col :span="12" v-for="address in currentAddressArray" :key="address.id" style="height: 50%">
-                        <!--<video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width:100%;height:100%;">-->
-                            <!--&lt;!&ndash; <source :src="currentAddress.hlsHd" type="" /> &ndash;&gt;-->
-                            <!--<div></div>-->
-                            <!--<source :src="address.hlsHd" type="application/x-mpegURL" />-->
+                        <!--<video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 99%;height: 99%;" :data-id="currentTreeId">-->
+                            <!--<source :src="currentAddressObject.hlsHd" type="application/x-mpegURL"/>-->
                         <!--</video>-->
-                      <div class="video" style="width: 1000px;height: 600px;"></div>
-
                     </el-col>
-              </el-row>
-
+                </el-row>
+                <el-row v-if="currentAddressArray.length > 0" style="background: #000; height:100%;">
+                        <el-col :span="12" v-for="address in currentAddressArray" :key="address.id" style="height: 50%">
+                            <div class="video" style="width: 1000px;height: 600px;"></div>
+                            <!--<video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width:100%;height:100%;" :data-id="currentTreeId">-->
+                                <!--<source :src="address.hlsHd" type="application/x-mpegURL"/>-->
+                            <!--</video>-->
+                        </el-col>
+                </el-row>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { getItemWithDevice } from "../../api/current"
-    import { implode } from '../../utils/common'
+    import {getItemWithDevice} from "../../api/current"
+    import {implode} from '../../utils/common'
+
     export default {
-        data(){
-            return{
+        data() {
+            return {
                 filterText: '',
                 data: [],
                 defaultProps: {
@@ -57,27 +54,34 @@
                 },
                 currentAddressObject: {},
                 currentAddressArray: [],
-                currentTreeId:null,
+                currentTreeId: null,
             }
         },
-        created(){
-            getItemWithDevice().then(res=>{
+        created() {
+            getItemWithDevice().then(res => {
                 if (res.data.response_status === "success") {
                     this.data = res.data.data
-                    this.$nextTick(function(){
+                    this.$nextTick(function () {
                         this.$refs.tree.setCurrentKey(this.data[0].id)
                         this.handleNodeClick(this.data[0])
                     })
                 }
             })
         },
-        methods:{
-            handleNodeClick(data){
-                if(this.currentTreeId === data.id){
+        methods: {
+            handleNodeClick(data, id) {
+                console.log(data.$treeNodeId)
+                if (this.currentTreeId === data.$treeNodeId) {
                     return
                 }
+                this.currentTreeId = data.$treeNodeId
                 if (typeof data.devices === 'undefined') {
                     this.currentAddressArray = []
+                    if (this.currentAddressObject.hlsHd || this.currentAddressObject.hls) {
+                        this.$nextTick(() => {
+                            $(`[data-id=${this.currentTreeId}]`).attr('src', '')
+                        })
+                    }
                     this.currentAddressObject = {
                         hls: data.hls,
                         hlsHd: data.hlsHd,
@@ -85,7 +89,13 @@
                         rtmpHd: data.rtmpHd
                     }
                 } else {
-                    this.currentTreeId = data.id
+                    if (data.devices.length === 0) {
+                        this.currentAddressArray = []
+                        this.$nextTick(() => {
+                            $(`[data-id=${this.currentTreeId}]`).attr('src', '')
+                        })
+                        return
+                    }
                     data.devices.forEach(item => {
                         this.currentAddressArray.push({
                             hls: typeof  item.hls !== 'undefined' ? item.hls : '',
@@ -94,9 +104,10 @@
                             rtmpHd: typeof item.rtmpHd !== 'undefined' ? item.rtmpHd : ''
                         })
                     })
+                    this.currentAddressObject = {}
                 }
 
-                
+
             },
             filterNode(value, data) {
                 if (!value) return true;
@@ -121,42 +132,47 @@
                 };
                 let player=new ckplayer(videoObject);
                 //let player = new EZUIPlayer('myPlayer');
-                player.on('error', function(){
-                    console.log('error');
-                });
-                player.on('play', function(){
-                    console.log('play');
-                });
-                player.on('pause', function(){
-                    console.log('pause');
-                });
+                // player.on('error', function () {
+                //     console.log('error');
+                // });
+                // player.on('play', function () {
+                //     console.log('play');
+                // });
+                // player.on('pause', function () {
+                //     console.log('pause');
+                // });
+                //let player1 = new EZUIPlayer('myPlayer');
             })
         }
     }
 </script>
 
 <style>
-    .current-box{
+    .current-box {
         width: 100%;
         margin: 0 auto;
         height: 100%;
     }
-    .current-left{
+
+    .current-left {
         width: 20%;
         height: 100%;
         float: left;
     }
-    .current-right{
+
+    .current-right {
         width: 80%;
         float: left;
         height: 100%;
     }
-    .current-tit{
-        width:100%;
+
+    .current-tit {
+        width: 100%;
         padding: 10px 5px;
         background: #E0ECFF;
     }
-    .current-query{
+
+    .current-query {
         width: 100%;
         margin: 20px auto;
         padding-bottom: 20px;
