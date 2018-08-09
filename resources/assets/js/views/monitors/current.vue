@@ -127,8 +127,9 @@
                 let videoObject = {
                     container: '.video',//“#”代表容器的ID，“.”或“”代表容器的class
                     variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
-                    poster:'pic/wdm.jpg',//封面图片
-                    video:'http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4'//视频地址
+                    //poster:'pic/wdm.jpg',//封面图片
+                    video:'http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4',//视频地址
+                    autoplay:true,
                 };
                 let player=new ckplayer(videoObject);
                 //let player = new EZUIPlayer('myPlayer');
