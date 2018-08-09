@@ -98,28 +98,28 @@ export default [
         component: () => import('../views/project/train') // 2.4 培训管理 项目管理 2.1-2.4 end
     },
     {
-        path: '/divice/attendance/index',
-        name: 'divice.attendance.index',
+        path: '/device/attendance/index',
+        name: 'device.attendance.index',
         component: () => import('../views/device/attendance') // 3.1 考勤设备管理
     },
     {
-        path: '/divice/crane/index',
-        name: 'divice.crane.index',
+        path: '/device/crane/index',
+        name: 'device.crane.index',
         component: () => import('../views/device/crane') //3.2  塔机设备管理
     },
     {
-        path: '/divice/elevator/index',
-        name: 'divice.elevator.index',
+        path: '/device/elevator/index',
+        name: 'device.elevator.index',
         component: () => import('../views/device/elevator') //3.3 升降机设备管理
     },
     {
-        path: '/divice/dust/index',
-        name: 'divice.dust.index',
+        path: '/device/dust/index',
+        name: 'device.dust.index',
         component: () => import('../views/device/dust') //3.4 扬尘噪音设备管理
     },
     {
-        path: '/divice/video/index',
-        name: 'divice.video.index',
+        path: '/device/video/index',
+        name: 'device.video.index',
         component: () => import('../views/device/video')  //3.5 视频设备管理 -----设备管理 3.1-3.5 end
     },
     {

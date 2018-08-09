@@ -18,6 +18,7 @@
                 node-key="id"
                 :expand-on-click-node="false"
                 default-expand-all
+                highlight-current
                 @node-drag-end="handleDragEnd"
                 draggable
                 class="permission_menu"
@@ -35,10 +36,10 @@
             </span>
         </el-tree>
 
-        <el-dialog title="编辑菜单权限" :visible.sync="showForm" width="22%">
+        <el-dialog title="编辑菜单权限" :visible.sync="showForm" width="25%">
             <el-form :model="form">
                 <el-form-item label="上级菜单" :label-width="formLabelWidth">
-                    <el-select v-model="form.parent_id" placeholder="请选择" value-key="item" disabled>
+                    <el-select v-model="form.parent_id" placeholder="请选择" value-key="item" disabled size="mini">
                         <el-option
                                 v-for="item in options"
                                 :key="item.id"
@@ -49,15 +50,15 @@
                 </el-form-item>
 
                 <el-form-item label="权限路由名" :label-width="formLabelWidth">
-                    <el-input v-model="form.name" auto-complete="off" style="width:200px;" size="mini"></el-input>
+                    <el-input v-model="form.name" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
 
                 <el-form-item label="权限菜单名" :label-width="formLabelWidth">
-                    <el-input v-model="form.label" auto-complete="off" style="width:200px;" size="mini"></el-input>
+                    <el-input v-model="form.label" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
 
                 <el-form-item label="图标icon" :label-width="formLabelWidth">
-                    <el-input v-model="form.icon" auto-complete="off" style="width:250px;" size="mini"></el-input>
+                    <el-input v-model="form.icon" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
 
                 <el-form-item label="是否为菜单" :label-width="formLabelWidth">
