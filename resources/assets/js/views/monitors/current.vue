@@ -18,20 +18,14 @@
                 </el-row>
             </div>
             <div class="current-right clearfix">
-                <el-row v-if="currentAddressArray.length === 0" class="video-row">
-                    <el-col>
+                <el-row v-if="currentAddressArray.length === 0" class="video-row" style="height: 100%;">
+                    <el-col style="height: 100%;">
                         <div class="video" style="width:100%;height:100%;"></div>
-                        <!--<video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 99%;height: 99%;" :data-id="currentTreeId">-->
-                            <!--<source :src="currentAddressObject.hlsHd" type="application/x-mpegURL"/>-->
-                        <!--</video>-->
                     </el-col>
                 </el-row>
                 <el-row v-if="currentAddressArray.length > 0" style="background: #000; height:100%;" class="video-row-all">
                         <el-col :span="12" v-for="(address, index) in currentAddressArray" :key="address.id" style="height: 50%">
-                            <div :class="`video${index}`" style="width: 1000px;height: 600px;"></div>
-                            <!--<video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width:100%;height:100%;" :data-id="currentTreeId">-->
-                                <!--<source :src="address.hlsHd" type="application/x-mpegURL"/>-->
-                            <!--</video>-->
+                            <div :class="`video${index}`" style="width: 100%;height: 100%;"></div>
                         </el-col>
                 </el-row>
             </div>
