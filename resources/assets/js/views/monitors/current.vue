@@ -18,15 +18,15 @@
                 </el-row>
             </div>
             <div class="current-right clearfix">
-                <el-row v-if="currentAddressArray.length === 0">
+                <el-row v-if="currentAddressArray.length === 0" class="video-row">
                     <el-col>
-                        <div class="video" style="width: 1000px;height: 600px;"></div>
+                        <div class="video" style="width:100%;height:100%;"></div>
                         <!--<video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width: 99%;height: 99%;" :data-id="currentTreeId">-->
                             <!--<source :src="currentAddressObject.hlsHd" type="application/x-mpegURL"/>-->
                         <!--</video>-->
                     </el-col>
                 </el-row>
-                <el-row v-if="currentAddressArray.length > 0" style="background: #000; height:100%;">
+                <el-row v-if="currentAddressArray.length > 0" style="background: #000; height:100%;" class="video-row-all">
                         <el-col :span="12" v-for="address in currentAddressArray" :key="address.id" style="height: 50%">
                             <div class="video" style="width: 1000px;height: 600px;"></div>
                             <!--<video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width:100%;height:100%;" :data-id="currentTreeId">-->
@@ -68,17 +68,10 @@
                 }
             })
         },
-<<<<<<< HEAD
         methods:{
             handleNodeClick(data){
                 console.log(data)
                 if(this.currentTreeId === data.$treeNodeId){
-=======
-        methods: {
-            handleNodeClick(data, id) {
-                console.log(data.$treeNodeId)
-                if (this.currentTreeId === data.$treeNodeId) {
->>>>>>> d9d0ad283c116b79247c243f6c85c3d1c7919984
                     return
                 }
                 this.currentTreeId = data.$treeNodeId
@@ -136,10 +129,12 @@
         updated() {
             this.$nextTick(() => {
                 let videoObject = {
+                    logo:'null',
                     container: '.video',//“#”代表容器的ID，“.”或“”代表容器的class
                     variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
                     //poster:'pic/wdm.jpg',//封面图片
-                    video:'http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4',//视频地址
+                    live:true,
+                    video:'http://hls.open.ys7.com/openlive/5869e1cfd547475e83a01042d8ec7c2c.hd.m3u8',//视频地址
                     autoplay:true,
                 };
                 let player=new ckplayer(videoObject);
