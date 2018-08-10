@@ -27,8 +27,8 @@
                     </el-col>
                 </el-row>
                 <el-row v-if="currentAddressArray.length > 0" style="background: #000; height:100%;" class="video-row-all">
-                        <el-col :span="12" v-for="address in currentAddressArray" :key="address.id" style="height: 50%">
-                            <div class="video" style="width: 1000px;height: 600px;"></div>
+                        <el-col :span="12" v-for="(address, index) in currentAddressArray" :key="address.id" style="height: 50%">
+                            <div :class="`video${index}`" style="width: 1000px;height: 600px;"></div>
                             <!--<video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay style="width:100%;height:100%;" :data-id="currentTreeId">-->
                                 <!--<source :src="address.hlsHd" type="application/x-mpegURL"/>-->
                             <!--</video>-->
@@ -127,28 +127,16 @@
 
         },
         updated() {
-            this.$nextTick(() => {
-                let videoObject = {
+            this.currentAddressArray.forEach((value, index)=> {
+                new ckplayer({
                     logo:'null',
-                    container: '.video',//“#”代表容器的ID，“.”或“”代表容器的class
-                    variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
+                    container : `.video${index}`,//“#”代表容器的ID，“.”或“”代表容器的class
+                    variable : 'player',//该属性必需设置，值等于下面的new chplayer()的对象
                     //poster:'pic/wdm.jpg',//封面图片
-                    live:true,
-                    video:'http://hls.open.ys7.com/openlive/5869e1cfd547475e83a01042d8ec7c2c.hd.m3u8',//视频地址
-                    autoplay:true,
-                };
-                let player=new ckplayer(videoObject);
-                //let player = new EZUIPlayer('myPlayer');
-                // player.on('error', function () {
-                //     console.log('error');
-                // });
-                // player.on('play', function () {
-                //     console.log('play');
-                // });
-                // player.on('pause', function () {
-                //     console.log('pause');
-                // });
-                //let player1 = new EZUIPlayer('myPlayer');
+                    live: true,
+                    video: value.hlsHd,//视频地址
+                    autoplay :true,
+                }) 
             })
         },
     }
