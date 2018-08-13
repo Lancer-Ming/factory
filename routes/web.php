@@ -105,7 +105,8 @@ Route::middleware(['auth','role','header'])->group(function() {
 
         // 塔机设备管理
         Route::as('device.')->group(function() {
-            Route::resource('crane', 'CraneController');
+            Route::delete('crane', 'CraneController@destroy')->name('crane.destroy');
+            Route::resource('crane', 'CraneController')->except(['create', 'show', 'destroy']);
         });
     });
 
