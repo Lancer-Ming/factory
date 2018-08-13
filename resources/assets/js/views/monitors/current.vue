@@ -115,23 +115,41 @@
         watch: {
             filterText(val) {
                 this.$refs.tree.filter(val);
-            }
+            },
+            // value:function(){
+            //     if(this.currentAddressArray){
+            //         console.log(111)
+            //     }
+            // }
         },
         implode() {
 
         },
         updated() {
-            this.currentAddressArray.forEach((value, index)=> {
+            if(this.currentAddressArray.length > 0){
+                this.currentAddressArray.forEach((value, index)=> {
+                    new ckplayer({
+                        logo:'null',
+                        container : `.video${index}`,//“#”代表容器的ID，“.”或“”代表容器的class
+                        variable : 'player',//该属性必需设置，值等于下面的new chplayer()的对象
+                        //poster:'pic/wdm.jpg',//封面图片
+                        live: true,
+                        video: value.hlsHd,//视频地址
+                        autoplay :true,
+                    })
+                })
+            }
+            else{
                 new ckplayer({
                     logo:'null',
-                    container : `.video${index}`,//“#”代表容器的ID，“.”或“”代表容器的class
+                    container : "video",//“#”代表容器的ID，“.”或“”代表容器的class
                     variable : 'player',//该属性必需设置，值等于下面的new chplayer()的对象
                     //poster:'pic/wdm.jpg',//封面图片
                     live: true,
-                    video: value.hlsHd,//视频地址
+                    video: this.currentAddressObject.hlsHd,//视频地址
                     autoplay :true,
-                }) 
-            })
+                })
+            }
         },
     }
 </script>
