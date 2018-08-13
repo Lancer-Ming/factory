@@ -9,36 +9,39 @@
 
 </head>
 <body>
-test
-<script src="/js/jquery.min.js"></script>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 <script>
-
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
-    var url = '{{ route('system.user.update', ['user'=> 7]) }}';
+    var url = 'http://factory.test/crane';
     var data = {
-        username: '1234',
-        realname: '1234',
-        sex: 1,
-        email: '123456789@qq.com',
-        role_id: '3',
-        password: '123123'
+        item_id: 2,
+        right_unit_id: 1,
+        produce_unit_id: 1,
+        is_monitor: 1,
+        driver: 1,
+        record_no: '123',
+        floor_no: '1#',
+        model: '123',
+        left_no: '12321312',
+        parameters: "a: {a:1}",
+        left_at: '2018-02-12 23:22:11',
+        install_unit_id: parseInt('1'),
+        sn: '123',
+        GPRS: '32323232',
+        validity_month: 10,
+        model: 10,
+        paid_at: '2018-02-12 23:22:11',
+        installed_at: '2018-02-12 23:22:11',
+        function_config: 'a: {a:1}',
+        identify: 'a: {a:1}',
     };
-    var method = 'PATCH';
-    $.ajax({
-        url: url,
-        method: method,
-        data: data,
-        success: function(res) {
-            console.log(res)
-        },
-        error: function(error) {
-            console.log(error)
-        }
+    $.post(url, data, function(res) {
+        console.log(res)
     });
 </script>
 </body>

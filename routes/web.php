@@ -102,6 +102,11 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::post('video_device/address', 'VideoDeviceController@address');
             Route::resource('video_device', 'VideoDeviceController');
         });
+
+        // 塔机设备管理
+        Route::as('device.')->group(function() {
+            Route::resource('crane', 'CraneController');
+        });
     });
 
     //监控管理
