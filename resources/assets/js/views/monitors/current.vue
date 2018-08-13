@@ -18,7 +18,7 @@
                 </el-row>
             </div>
             <div class="current-right clearfix">
-                <el-row v-if="currentAddressArray.length === 0" class="video-row" style="height: 100%;">
+                <el-row v-if="typeof currentAddressObject !== 'undefined' && currentAddressObject.hlsHd" class="video-row" style="height: 100%;">
                     <el-col style="height: 100%;">
                         <div class="video" style="width:100%;height:100%;"></div>
                     </el-col>
@@ -84,8 +84,8 @@
                         rtmp: data.rtmp,
                         rtmpHd: data.rtmpHd
                     }
-                } else {
-                    // 如果点击的是项目
+                } else {  // 如果点击的是项目
+                
                     if (data.devices.length === 0) {
                         this.currentAddressArray = []
                         this.$nextTick(() => {
@@ -115,12 +115,7 @@
         watch: {
             filterText(val) {
                 this.$refs.tree.filter(val);
-            },
-            // value:function(){
-            //     if(this.currentAddressArray){
-            //         console.log(111)
-            //     }
-            // }
+            }
         },
         implode() {
 
