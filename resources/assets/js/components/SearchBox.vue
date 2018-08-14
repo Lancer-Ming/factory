@@ -63,6 +63,10 @@ import { unitForm } from '../api/project'
                 type: String,
                 default: ''
             },
+            requestName:{
+                type: String,
+                default: ''
+            },
             form: {
                 type: Object
             },
@@ -94,6 +98,7 @@ import { unitForm } from '../api/project'
             },
             // 请求数据
             getTableData(currentPage=this.currentPage, name="") {
+                this.requestName === 'item' ? 'item' : 'unit'
                 unitForm(currentPage, {form_name: this.currentUnitModel, name}, this.pagesize).then(res => {
                     if (res.data.response_status === 'success') {
                         this.tableData = res.data.data.data

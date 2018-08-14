@@ -61,3 +61,19 @@ export function unitForm(page,data={}, pagesize=10) {
         })
     }
 }
+
+export function item(id){
+    return axios({
+        url: `/project/findItem`,
+        method: 'post',
+        data: { id }
+    })
+}
+
+export function unit(id){
+    return axios({
+        url: `/project/findUnit`,
+        method: 'post',
+        data: { id }
+    })
+}

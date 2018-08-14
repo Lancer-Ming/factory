@@ -9,7 +9,7 @@
         <el-row style="margin-top: 20px;">
             <el-form :model="form" size="mini" class="crane-head">
                 <el-form-item label="项目名称" :label-width="formLabelW">
-                    <el-input  auto-complete="off"></el-input>
+                    <el-input auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="产权单位" :label-width="formLabelW">
                     <el-input  auto-complete="off"></el-input>
@@ -155,40 +155,101 @@
 
         <el-dialog title="新增塔机信息" :visible.sync="craneAdd">
             <el-form :model="form">
-                <el-form-item label="备案编号" :label-width="formLabelWidth">
-                    <el-input v-model="form.number" auto-complete="off"></el-input>
-                </el-form-item>
                 <el-form-item label="所在项目" :label-width="formLabelWidth">
-                    <el-select v-model="form.region" placeholder="请选择活动区域">
-                        <el-option label="区域一" value="shanghai"></el-option>
+                    <el-select v-model="form.item_id" placeholder="请选择所在项目" disabled>
+                        <el-option label="" value=""></el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="楼号" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
+                    <el-button plain @click="searchUnitBox('item')">...</el-button>
                 </el-form-item>
                 <el-form-item label="产权单位" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
+                    <el-select v-model="form.right_unit_id" placeholder="请选择产权单位" disabled>
+                        <el-option label="" value=""></el-option>
+                    </el-select>
+                    <el-button plain @click="searchUnitBox('unit')">...</el-button>
                 </el-form-item>
-                <el-form-item label="塔吊出产日期" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="塔吊型号" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="塔吊生产日期" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="塔吊生产厂商" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="塔吊出产编号" :label-width="formLabelWidth">
-                    <el-input auto-complete="off"></el-input>
+                <el-form-item label="生产厂商单位" :label-width="formLabelWidth">
+                    <el-select v-model="form.produce_unit_id" placeholder="请选择生产产商" disabled>
+                        <el-option label="" value=""></el-option>
+                    </el-select>
+                    <el-button plain @click="searchUnitBox('unit')">...</el-button>
                 </el-form-item>
                 <el-form-item label="是否监控" :label-width="formLabelWidth">
                     <el-switch
-                            v-model="value"
+                            v-model="form.is_monitor"
                     >
                     </el-switch>
+                </el-form-item>
+                <el-form-item label="司机" :label-width="formLabelWidth">
+                    <el-input v-model="form.driver" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="备案编号" :label-width="formLabelWidth">
+                    <el-input v-model="form.record_no" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="楼号" :label-width="formLabelWidth">
+                    <el-input v-model="form.floor_no" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="塔吊型号" :label-width="formLabelWidth">
+                    <el-input v-model="form.c_model" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="塔吊出厂编号" :label-width="formLabelWidth">
+                    <el-input v-model="form.left_no" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="塔吊参数" :label-width="formLabelWidth">
+                    <el-input v-model="form.parameters" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="出厂日期" :label-width="formLabelWidth">
+                    <el-date-picker
+                            v-model="form.left_at"
+                            type="date"
+                            placeholder="选择出厂日期">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="安装单位" :label-width="formLabelWidth">
+                    <el-input v-model="form.install_unit_id" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="塔机ID" :label-width="formLabelWidth">
+                    <el-input v-model="form.crane_id" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="黑匣子SN" :label-width="formLabelWidth">
+                    <el-input v-model="form.sn" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="黑匣子GPRS" :label-width="formLabelWidth">
+                    <el-input v-model="form.GPRS" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="有效日期" :label-width="formLabelWidth">
+                    <el-input v-model="form.validity_month" auto-complete="off" readonly placeholder="10"></el-input>
+                </el-form-item>
+                <el-form-item label="黑匣子型号" :label-width="formLabelWidth">
+                    <el-input v-model="form.model" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="续费日期" :label-width="formLabelWidth">
+                    <el-date-picker
+                            v-model="form.paid_at"
+                            type="date"
+                            placeholder="选择缴费日期">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="安装日期" :label-width="formLabelWidth">
+                    <el-date-picker
+                            v-model="form.installed_at"
+                            type="date"
+                            placeholder="选择安装日期">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="功能配置" :label-width="formLabelWidth">
+                    <el-checkbox v-model="form.function_config"></el-checkbox>
+                </el-form-item>
+                <el-form-item label="身份识别" :label-width="formLabelWidth">
+                    <el-checkbox v-model="form.identify"></el-checkbox>
+                </el-form-item>
+                <el-form-item label="高度" :label-width="formLabelWidth">
+                    <el-checkbox v-model="form.height"></el-checkbox>
+                </el-form-item>
+                <el-form-item label="幅度" :label-width="formLabelWidth">
+                    <el-checkbox v-model="form.range"></el-checkbox>
+                </el-form-item>
+                <el-form-item label="回转" :label-width="formLabelWidth">
+                    <el-checkbox v-model="form.rotation"></el-checkbox>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -197,15 +258,44 @@
             </div>
         </el-dialog>
 
+        <search-box :chose="chose" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue" :requestName="requestName"></search-box>
     </div>
 </template>
 
 <script>
+    import SearchBox from '../../components/SearchBox.vue'
     export default {
+        components:{
+            SearchBox
+        },
         data() {
             return {
                 form:{
-                    name: ''
+                    id: '',
+                    item_id: '',
+                    right_unit_id: '',
+                    produce_unit_id: '',
+                    is_monitor: true,
+                    driver: '',
+                    record_no: '',
+                    floor_no: '',
+                    c_model: '',
+                    left_no: '',
+                    parameters: '',
+                    left_at: '',
+                    install_unit_id: '',
+                    crane_id: '',
+                    sn: '',
+                    GPRS: '',
+                    validity_month: '',
+                    model:　'',
+                    paid_at: '',
+                    installed_at: '',
+                    function_config: true,
+                    identify: true,
+                    height: true,
+                    range: true,
+                    rotation: true
                 },
                 formLabelW: '75px',
                 formLabelWidth: '120px',
@@ -232,7 +322,8 @@
                 checked1: false,
                 checked2: true,
                 craneAdd: false,
-                value: true,
+                chose: false,
+                requestName: '',
             }
         },
         methods: {
@@ -247,13 +338,48 @@
             },
             handleAdd(){
                 this.form = {
-                    name: ''
+                    id: '',
+                    item_id: '',
+                    right_unit_id: '',
+                    produce_unit_id: '',
+                    is_monitor: true,
+                    driver: '',
+                    record_no: '',
+                    floor_no: '',
+                    c_model: '',
+                    left_no: '',
+                    parameters: '',
+                    left_at: '',
+                    install_unit_id: '',
+                    crane_id: '',
+                    sn: '',
+                    GPRS: '',
+                    validity_month: '',
+                    model:　'',
+                    paid_at: '',
+                    installed_at: '',
+                    function_config: true,
+                    identify: true,
+                    height: true,
+                    range: true,
+                    rotation: true
                 }
                 this.craneAdd = true
                 this.submitType = 'add'
+            },
+            searchUnitBox(requestName) {
+                this.chose = true
+                this.requestName = requestName
+            },
+            getUnitValue(){
+                this.chose = false
+                this.$set(this.units, 0, {label: row.name, value: row.id})
+                this.$set(this.form, 'parent_id', row.id)
+            },
+            closeUnitValue(){
+                this.chose = false
             }
-
-        },
+        }
     }
 
 </script>

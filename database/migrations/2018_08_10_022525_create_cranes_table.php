@@ -22,7 +22,7 @@ class CreateCranesTable extends Migration
             $table->unsignedInteger('driver')->index()->nullable()->comment('司机');
             $table->string('record_no')->nullable()->comment('备案编号');
             $table->string('floor_no')->nullable()->comment('楼号');
-            $table->string('model')->nullable()->comment('塔吊型号');
+            $table->string('c_model')->nullable()->comment('塔吊型号');
             $table->string('left_no')->nullable()->comment('塔吊出厂编号');
             $table->text('parameters')->nullable()->comment('塔吊参数');
             $table->timestamp('left_at')->nullable()->comment('出厂日期');
