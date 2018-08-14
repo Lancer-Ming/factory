@@ -101,7 +101,7 @@ class ProjectsController extends Controller
             }
         };
         $pagesize = $request->has('pagesize') ? $request->pagesize: 10;
-        $items = Item::where($where)->select('name', 'id')->orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
+        $items = Item::where($where)->select('name', 'id')->orderBy('created_at', 'desc')->paginate($pagesize);
         return successJson($items);
     }
 }

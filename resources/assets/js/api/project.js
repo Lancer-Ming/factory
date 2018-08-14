@@ -57,29 +57,36 @@ export function unitForm(page,data={}, pagesize=10) {
         return axios({
             url: `/unit/form`,
             method: 'post',
-            params: data
+            data: data
         })
     }
 
     return axios({
         url: `/unit/form`,
         method: 'post',
-        params: {page, pagesize}
+        data: {page, pagesize}
     })
 }
 
-export function item(id){
-    return axios({
-        url: `/project/findItem`,
-        method: 'post',
-        data: { id }
-    })
+export function itemForm(page,data={},pagesize=10) {
+    if (Object.keys(data).length > 0) {
+        Object.assign(data, {page, pagesize});
+        return axios({
+            url: `/project/form`,
+            method: 'post',
+            data: data
+        })
+    }
 }
 
-export function unit(id){
-    return axios({
-        url: `/project/findUnit`,
-        method: 'post',
-        data: { id }
-    })
+export function unittypeForm(page,data={},pagesize=10){
+    if (Object.keys(data).length > 0) {
+        Object.assign(data, {page, pagesize});
+        return axios({
+            url: `/project/form`,
+            method: 'post',
+            data: data
+        })
+    }
 }
+

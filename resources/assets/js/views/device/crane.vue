@@ -157,7 +157,7 @@
             <el-form :model="form">
                 <el-form-item label="所在项目" :label-width="formLabelWidth">
                     <el-select v-model="form.item_id" placeholder="请选择所在项目" disabled>
-                        <el-option label="" value=""></el-option>
+                        <el-option v-for="(item,index) in items" :label="item.label" :key="index" :value="item.value"></el-option>
                     </el-select>
                     <el-button plain @click="searchUnitBox('item')">...</el-button>
                 </el-form-item>
@@ -297,6 +297,7 @@
                     range: true,
                     rotation: true
                 },
+                items: [],
                 formLabelW: '75px',
                 formLabelWidth: '120px',
                 tableData: [{
@@ -371,10 +372,10 @@
                 this.chose = true
                 this.requestName = requestName
             },
-            getUnitValue(){
+            getUnitValue(row){
                 this.chose = false
-                this.$set(this.units, 0, {label: row.name, value: row.id})
-                this.$set(this.form, 'parent_id', row.id)
+                this.$set(this.items, 0, {label: row.name, value: row.id})
+                this.$set(this.form, 'item_id', row.id)
             },
             closeUnitValue(){
                 this.chose = false
