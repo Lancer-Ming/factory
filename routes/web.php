@@ -67,6 +67,7 @@ Route::middleware(['auth','role','header'])->group(function() {
         });
         Route::as('item.')->group(function() {
             Route::post('project/findUnit', 'ProjectsController@findUnit')->name('project.find_unit');
+            Route::post('project/form', 'ProjectsController@form')->name('project.form');
         });
     });
 
@@ -105,7 +106,8 @@ Route::middleware(['auth','role','header'])->group(function() {
 
         // 塔机设备管理
         Route::as('device.')->group(function() {
-            Route::resource('crane', 'CraneController');
+            Route::delete('crane', 'CraneController@destroy')->name('crane.destroy');
+            Route::resource('crane', 'CraneController')->except(['create', 'show', 'destroy']);
         });
     });
 

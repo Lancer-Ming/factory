@@ -60,6 +60,12 @@ export function unitForm(page,data={}, pagesize=10) {
             params: data
         })
     }
+
+    return axios({
+        url: `/unit/form`,
+        method: 'post',
+        params: {page, pagesize}
+    })
 }
 
 export function item(id){

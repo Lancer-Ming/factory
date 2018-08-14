@@ -36,9 +36,9 @@ import axios from '../../utils/request'
 
         created() {
             axios({
-                url: `/crane/5`,
-                method: 'patch',
-                data: this.data
+                url: `/crane`,
+                method: 'delete',
+                data: {id: [5, 6]}
             }).then(res => {
                 console.log(res)
             })

@@ -39,11 +39,11 @@ class CraneController extends Controller
         return successJson($this->returnCrane($request->pagesize));
     }
 
-    public function destroy(Request $request, Crane $crane)
+    public function destroy(Request $request)
     {
-        $crane->delete();
+        Crane::destroy($request->id);
 
-        $crane->blackBoxes()->sync();
+        BlackBox::whereIn('crane_id', $request->id)->delete();
 
         return successJson($this->returnCrane($request->pagesize));
     }

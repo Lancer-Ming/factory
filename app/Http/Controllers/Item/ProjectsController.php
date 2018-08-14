@@ -92,4 +92,16 @@ class ProjectsController extends Controller
             return successJson($units);
         }
     }
+
+    public function form(Request $request)
+    {
+        $where = function($query) use ($request) {
+            if ($request->has('name') && trim($request->name) != '') {
+                $query->where('name', 'like', '%'.$request->name.'%');
+            }
+        };
+        $pagesize = $request->has('pagesize') ? $request->pagesize: 10;
+        $items = Item::where($where)->select('name', 'id')->orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
+        return successJson($items);
+    }
 }
