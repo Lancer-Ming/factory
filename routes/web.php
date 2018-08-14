@@ -67,6 +67,7 @@ Route::middleware(['auth','role','header'])->group(function() {
         });
         Route::as('item.')->group(function() {
             Route::post('project/findUnit', 'ProjectsController@findUnit')->name('project.find_unit');
+            Route::post('project/form', 'ProjectsController@form')->name('project.form');
         });
     });
 
