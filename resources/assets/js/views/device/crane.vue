@@ -162,16 +162,16 @@
                     <el-button plain @click="searchUnitBox('item')">...</el-button>
                 </el-form-item>
                 <el-form-item label="产权单位" :label-width="formLabelWidth">
-                    <el-select v-model="form.right_unit_id" placeholder="请选择产权单位" disabled>
-                        <el-option label="" value=""></el-option>
+                    <el-select v-model="form.right_id" placeholder="请选择产权单位" disabled>
+                        <el-option v-for="(item,index) in units" :label="item.label" :key="index" :value="item.value"></el-option>
                     </el-select>
-                    <el-button plain @click="searchUnitBox('unit')">...</el-button>
+                    <el-button plain @click="searchUnitBox('unit','right_id')">...</el-button>
                 </el-form-item>
                 <el-form-item label="生产厂商单位" :label-width="formLabelWidth">
-                    <el-select v-model="form.produce_unit_id" placeholder="请选择生产产商" disabled>
-                        <el-option label="" value=""></el-option>
+                    <el-select v-model="form.crane_produce_id" placeholder="请选择生产产商" disabled>
+                        <el-option v-for="(item,index) in units" :label="item.label" :key="index" :value="item.value"></el-option>
                     </el-select>
-                    <el-button plain @click="searchUnitBox('unit')">...</el-button>
+                    <el-button plain @click="searchUnitBox('unit','crane_produce_id')">...</el-button>
                 </el-form-item>
                 <el-form-item label="是否监控" :label-width="formLabelWidth">
                     <el-switch
@@ -208,7 +208,7 @@
                     <el-input v-model="form.install_unit_id" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="塔机ID" :label-width="formLabelWidth">
-                    <el-input v-model="form.crane_id" auto-complete="off"></el-input>
+                    <el-input v-model="form.crane_pr_id" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="黑匣子SN" :label-width="formLabelWidth">
                     <el-input v-model="form.sn" auto-complete="off"></el-input>
@@ -258,7 +258,7 @@
             </div>
         </el-dialog>
 
-        <search-box :chose="chose" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue" :requestName="requestName"></search-box>
+        <search-box :chose="chose" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue" :requestName="requestName" :currentUnitModel="currentUnitModel"></search-box>
     </div>
 </template>
 
@@ -273,8 +273,8 @@
                 form:{
                     id: '',
                     item_id: '',
-                    right_unit_id: '',
-                    produce_unit_id: '',
+                    right_id: '',
+                    crane_produce_id: '',
                     is_monitor: true,
                     driver: '',
                     record_no: '',
@@ -298,6 +298,8 @@
                     rotation: true
                 },
                 items: [],
+                units: [],
+                currentUnitModel: "",
                 formLabelW: '75px',
                 formLabelWidth: '120px',
                 tableData: [{
@@ -341,8 +343,8 @@
                 this.form = {
                     id: '',
                     item_id: '',
-                    right_unit_id: '',
-                    produce_unit_id: '',
+                    right_id: '',
+                    crane_produce_id: '',
                     is_monitor: true,
                     driver: '',
                     record_no: '',
@@ -368,14 +370,20 @@
                 this.craneAdd = true
                 this.submitType = 'add'
             },
-            searchUnitBox(requestName) {
+            searchUnitBox(requestName,currentUnitModel) {
                 this.chose = true
                 this.requestName = requestName
+                this.currentUnitModel = currentUnitModel
             },
             getUnitValue(row){
                 this.chose = false
-                this.$set(this.items, 0, {label: row.name, value: row.id})
-                this.$set(this.form, 'item_id', row.id)
+                if(this.requestName === 'item'){
+                    this.$set(this.items, 0, {label: row.name, value: row.id})
+                    this.$set(this.form, 'item_id', row.id)
+                }else{
+                    this.$set(this.units, 0, {label: row.name, value: row.id})
+                    this.form[this.currentUnitModel] = row.id
+                }
             },
             closeUnitValue(){
                 this.chose = false
