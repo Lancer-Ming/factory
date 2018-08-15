@@ -142,6 +142,10 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
   flex-direction:column;
   > .el-dialog__body{
   overflow:auto;
+  padding:20px 15px 0px;
+  }
+  > .el-dialog__footer{
+    padding: 10px 20px;
   }
 }
 //.el-dialog__wrapper{ overflow: hidden;max-height: 100%;}

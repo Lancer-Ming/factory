@@ -153,7 +153,7 @@
         </el-row>
 
 
-        <el-dialog title="新增塔机信息" :visible.sync="craneAdd">
+        <el-dialog title="新增塔机信息" :visible.sync="craneAdd" v-dialogDrag>
             <el-form :model="form">
                 <el-form-item label="所在项目" :label-width="formLabelWidth">
                     <el-select v-model="form.item_id" placeholder="请选择所在项目" disabled>
