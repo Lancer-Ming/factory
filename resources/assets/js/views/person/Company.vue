@@ -356,9 +356,13 @@
                     :total="total">
             </el-pagination>
         </el-row>
-
-
-        <el-dialog title="编辑单位" :visible.sync="formShown" class="pro-add" v-el-drag-dialog @dragDialog="handleDrag">
+        <!--
+        测试预留，误删！
+        <el-dialog title="编辑单位" :visible.sync="formShown" class="pro-add" v-dialogDrag :close-on-click-modal="false"  fullscreen="true" ref="dialog__wrapper" @dragDialog="handleDrag">
+            <div class="line" v-dialogDragWidth="$refs.dialog__wrapper">
+        -->
+        <el-dialog title="编辑单位" :visible.sync="formShown" v-dialogDrag class="pro-add" @dragDialog="handleDrag">
+            <div class="line">
             <el-form class="clearfix">
                 <el-form-item label="单位名称" :label-width="formLabelWidth">
                     <el-input v-model="form.name"></el-input>
@@ -428,9 +432,10 @@
                     <el-input type="textarea" v-model="form.remark"></el-input>
                 </el-form-item>
             </el-form>
+            </div>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="onSubmit" style="margin:10px 0px 0px 50px;">保存</el-button>
-                <el-button>取消</el-button>
+                <el-button @click="formShown = false">取 消</el-button>
+                <el-button type="primary" @click="onSubmit">保存</el-button>
             </div>
         </el-dialog>
 
@@ -451,7 +456,7 @@
 </template>
 
 <script>
-    import elDragDialog from '../../directive/el-dragDialog'
+    //import elDragDialog from '../../directive/el-dragDialog'
     import UploadExcelComponent from '../../components/UploadExcel/index.vue'
     import {
         getUtypes,
@@ -472,7 +477,7 @@
     import {export_json_to_excel} from '../../vendor/Export2Excel'
     export default {
         name:'company',
-        directives: { elDragDialog },
+        //directives: { elDragDialog },
         data() {
             return {
                 tableData: [],

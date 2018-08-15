@@ -36,7 +36,7 @@
             </span>
         </el-tree>
 
-        <el-dialog title="编辑菜单权限" :visible.sync="showForm" width="25%">
+        <el-dialog title="编辑菜单权限" :visible.sync="showForm" class="Permission_dialog">
             <el-form :model="form">
                 <el-form-item label="上级菜单" :label-width="formLabelWidth">
                     <el-select v-model="form.parent_id" placeholder="请选择" value-key="item" disabled size="mini">
@@ -61,7 +61,7 @@
                     <el-input v-model="form.icon" auto-complete="off" size="mini"></el-input>
                 </el-form-item>
 
-                <el-form-item label="是否为菜单" :label-width="formLabelWidth">
+                <el-form-item label="是否为菜单" :label-width="formLabelWidth" class="formLabelWidth_full">
                     <el-radio v-model="form.is_category" :label="1">是</el-radio>
                     <el-radio v-model="form.is_category" :label="0">否</el-radio>
                 </el-form-item>
