@@ -46,9 +46,9 @@ class CraneController extends Controller
                 $query->where('sn', 'like', '%'.$request->sn.'%');
             };
             $crane_id = BlackBox::where($blackbox_where)->first()->crane_id;
-            $cranes = Crane::where($crane_where)->where('id', $crane_id)->orderBy('created_at', 'desc')->paginate($pagesize);
+            $cranes = Crane::where($crane_where)->where('id', $crane_id)->orderBy('created_at', 'desc')->with('items',  'blackBoxes')->paginate($pagesize);
         } else {
-            $cranes = Crane::where($crane_where)->orderBy('created_at', 'desc')->paginate($pagesize);
+            $cranes = Crane::where($crane_where)->orderBy('created_at', 'desc')->with('items', 'blackBoxes')->paginate($pagesize);
         }
 
 
