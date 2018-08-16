@@ -5,11 +5,57 @@ namespace App\Http\Controllers\Device;
 use App\Http\Requests\CraneRequest;
 use App\Models\BlackBox;
 use App\Models\Crane;
+use App\Models\Item;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class CraneController extends Controller
 {
+    public function index(Request $request)
+    {
+        $pagesize = $request->has('pagesize') ? $request->pagesize: 30;
+
+        $crane_where = function($query) use ($request) {
+            // 备案编号
+            if ($request->has('record_no') && trim($request->record_no) != '') {
+                $query->where('record_no', 'like', '%'.$request->record_no.'%');
+            }
+
+            // 项目名称
+            if ($request->has('item_name') && trim($request->item_name) != '') {
+                $item_id = Item::where('name', 'like', '%'.$request->item_name.'%')->first()->id;
+                $query->where('item_id', $item_id);
+            }
+
+            // 产权单位
+            if ($request->has('right_name') && trim($request->right_name) != '') {
+                $right_id = Unit::where('name', 'like', '%'.$request->right_name.'%')->first()->id;
+                $query->where('right_id', $right_id);
+            }
+
+            // 是否在线
+            if ($request->has('is_online') && trim($request->is_online) != '') {
+                $query->where('is_online', (int) $request->is_online);
+            }
+        };
+
+        // 黑匣子 SN
+        if ($request->has('sn') && trim($request->sn) != '') {
+            $blackbox_where = function($query) use ($request) {
+                $query->where('sn', 'like', '%'.$request->sn.'%');
+            };
+            $crane_id = BlackBox::where($blackbox_where)->first()->crane_id;
+            $cranes = Crane::where($crane_where)->where('id', $crane_id)->orderBy('created_at', 'desc')->paginate($pagesize);
+        } else {
+            $cranes = Crane::where($crane_where)->orderBy('created_at', 'desc')->paginate($pagesize);
+        }
+
+
+
+        return successJson($cranes);
+    }
+
     public function store(CraneRequest $request)
     {
         // 将 crane 表添加数据
