@@ -25,6 +25,9 @@ class CreateCranesTable extends Migration
             $table->string('c_model')->nullable()->comment('塔吊型号');
             $table->string('left_no')->nullable()->comment('塔吊出厂编号');
             $table->text('parameters')->nullable()->comment('塔吊参数');
+            $table->string('SIM_card')->nullable()->comment('SIM卡号');
+            $table->string('arrears_reminding')->nullable()->comment('欠费提醒');
+            $table->unsignedInteger('is_online')->index()->nullable()->comment('是否在线');
             $table->timestamp('left_at')->nullable()->comment('出厂日期');
             $table->timestamps();
         });
