@@ -127,7 +127,45 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
 .el-footer{ text-align: center;background: #1C2128; color:#fff; height: 33px; line-height: 33px;}
 
 //dialog
+.el-dialog__body:after{
+  display: block;
+  visibility: hidden;
+  font-size: 0;
+  height: 0;
+  content: "";
+  clear: both;
+}
+.el-dialog .el-form-item{ float: left; width: 50%;}
 
+.el-dialog .el-dialog__header{
+  background:#d3dce6; padding: 0 0 0 8px; height:30px;line-height: 30px;
+  position: relative;
+  .el-dialog__title{font-weight: 700; font-size: 14px; color: #333;}
+  .el-dialog__headerbtn{
+    opacity: .6;
+    width: 16px; height: 16px;
+    top: 50%;
+    right: 8px;
+    margin-top: -8px;
+    background: url("/static/img/dialog_tools.png") -16px 0 no-repeat;
+    i{
+      vertical-align: top;
+    }
+    i:before{content: ""}
+    &:hover{
+      background-color: #e6e6e6;
+      border-radius: 3px;
+      opacity: 1;
+    }
+  }
+  .el-dialog_btn__fullscreen{
+    padding: 0;
+    border: none;
+    background: url("/static/img/dialog_tools.png") 0 -16px no-repeat;
+    background-color:none !important;
+    right: 24px;
+  }
+}
 .el-dialog {
   position:absolute;
   top:50%;
@@ -140,6 +178,24 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
   max-width:calc(100% - 30px);
   display:flex;
   flex-direction:column;
+  &.isFullScreen{
+    left: 0;
+    top: 0;
+    max-width: 100%;
+    max-height: 100%;
+    transform:none;
+    width: 100% !important;
+    height: 100% !important;
+    //.el-dialog__header{cursor: move}
+    .el-dialog_btn__fullscreen{
+      background-position:center -16px;
+    }
+    .el-dialog__footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    }
+  }
   > .el-dialog__body{
   overflow:auto;
   padding:20px 15px 0px;
