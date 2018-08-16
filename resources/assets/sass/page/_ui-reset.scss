@@ -127,8 +127,50 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
 .el-footer{ text-align: center;background: #1C2128; color:#fff; height: 33px; line-height: 33px;}
 
 //dialog
-.el-dialog__body{ padding-bottom: 0;}
-.dialog-footer{ text-align: center}
+
+.el-dialog {
+  position:absolute;
+  top:50%;
+  left:50%;
+  //right: 0;
+  //bottom:0;
+  margin: 0 !important;
+  transform:translate(-50%, -50%);
+  max-height:calc(100% - 30px);
+  max-width:calc(100% - 30px);
+  display:flex;
+  flex-direction:column;
+  > .el-dialog__body{
+  overflow:auto;
+  padding:20px 15px 0px;
+  }
+  > .el-dialog__footer{
+    padding: 10px 20px;
+  }
+}
+//.el-dialog__wrapper{ overflow: hidden;max-height: 100%;}
+//.el-dialog__wrapper .el-dialog{
+//
+//  position:absolute;
+//
+//  top:50%;
+//
+//  left:50%;
+//  //right: 0;
+//  //bottom:0;
+//  margin: 0 !important;
+//
+//  transform:translate(-50%, -50%);
+//  //max-height: 100%;
+//  max-height:calc(100% - 30px);
+//
+//  max-width:calc(100% - 30px);
+//  overflow: hidden !important;
+//
+//
+//}
+//.el-dialog__body{ padding:20px 15px 50px; overflow: auto; max-height: 90%;}
+//.el-dialog__footer{ background:#fff;text-align: center; position: absolute; bottom: 0px; padding:10px 0; overflow: hidden; width: 100%; height:auto;}
 
 //
 
@@ -155,3 +197,4 @@ body{font-family: "Microsoft Yahei","微软雅黑", "Hiragino Sans GB", Helvetic
 //splitter-pane
 
 .splitter-pane{ overflow: auto}
+

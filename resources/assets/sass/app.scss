@@ -2,7 +2,7 @@
 @import "variables";
 //载入各框架字体库文件
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-$--font-path: '~element-ui/lib/theme-chalk/fonts';
+//$--font-path: '~element-ui/lib/theme-chalk/fonts';
 $fa-font-path: "~font-awesome/fonts/";
 /**
 ** bootstrap.css
@@ -11,7 +11,8 @@ $fa-font-path: "~font-awesome/fonts/";
 /**
 ** element-ui.css
 **/
-@import "~element-ui/packages/theme-chalk/src/index";
+//@import "~element-ui/packages/theme-chalk/src/index";
+@import '~element-ui/lib/theme-chalk/index.css';
 /**
 ** font-awesome.css
 **/
