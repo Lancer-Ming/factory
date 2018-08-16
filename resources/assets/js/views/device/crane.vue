@@ -153,7 +153,7 @@
         </el-row>
 
 
-        <el-dialog title="新增塔机信息" :visible.sync="craneAdd">
+        <el-dialog title="新增塔机信息" :visible.sync="craneAdd" v-dialogDrag>
             <el-form :model="form" size="mini">
 
                 <h4 style="margin-left:45%;font-weight: bold;">塔机信息</h4>

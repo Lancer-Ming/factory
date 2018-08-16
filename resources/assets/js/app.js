@@ -14,13 +14,17 @@ import { Message } from 'element-ui'
 import { MessageBox } from 'element-ui'
 import axios from 'axios'
 import { implode } from "./utils/common.js"
+
+
 //
 //import i18n from './lang'
 Vue.use(ElementUI)
 Vue.prototype.$ = $
 Vue.prototype.axios = axios
 Vue.prototype.message = Message
+
 import { Local } from './utils/common'
+import './directives/'
 new Vue({
     el: '#layout-app',
     router,
@@ -70,7 +74,7 @@ new Vue({
             this.isCollapse = !this.isCollapse
         },
         addTab(routerName) {
-            console.log(routerName)
+            //console.log(routerName)
             let newTabName = routerName.split('/').join('.').substr(1);
             let path = routerName
             let isRepeat = false
