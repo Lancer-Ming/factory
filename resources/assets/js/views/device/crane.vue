@@ -49,14 +49,14 @@
             </el-table-column>
             <el-table-column
                     fixed
-                    prop="SN"
+                    prop="sn"
                     label="SN"
                     width="100"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="number"
+                    prop="record_no"
                     label="备案编号"
                     width="120"
                     align="center"
@@ -70,21 +70,21 @@
             >
             </el-table-column>
             <el-table-column
-                    prop="project"
+                    prop="item_id"
                     label="所在项目"
                     width="300"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="tell"
+                    prop="SIM_card"
                     label="SIM卡号"
                     width="200"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="remind"
+                    prop="arrears_reminding"
                     label="欠费提醒"
                     width="300"
                     align="center"
@@ -98,7 +98,7 @@
             >
             </el-table-column>
             <el-table-column
-                    prop="collision"
+                    prop="function_config.collision"
                     label="防碰撞"
                     width="60"
                     align="center"
@@ -108,7 +108,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    prop="online"
+                    prop="is_online"
                     label="是否在线"
                     width="100"
                     align="center"
@@ -118,7 +118,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    prop="state"
+                    prop="is_monitor"
                     label="监控状态"
                     width="120"
                     align="center"
@@ -590,16 +590,16 @@
                 data.parameters = JSON.stringify(data.parameters)
                 data.function_config =  JSON.stringify(data.function_config)
                 data.identify =  JSON.stringify(data.identify)
-                storecrane(data).then(res =>{
+                storecrane(data,this.page).then(res =>{
                     if (res.data.response_status === 'success') {
-                        console.log(res)
-                        // this.data = res.data.data
-                        // this.addform = false
-                        // this.$message({
-                        //     type: 'success',
-                        //     showClose: true,
-                        //     message: res.data.msg
-                        // })
+                        this.data = res.data.data.data
+                        console.log(data)
+                        this.craneAdd = false
+                        this.$message({
+                            type: 'success',
+                            showClose: true,
+                            message: res.data.msg
+                        })
                     }
                 })
             }

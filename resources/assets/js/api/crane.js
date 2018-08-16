@@ -7,7 +7,8 @@ export function getcrane(data=null){
         data: data
     })
 }
-export function storecrane(data){
+export function storecrane(data,pagesize){
+    data.pagesize = pagesize
     return axios({
         url: `/crane`,
         method: 'post',
@@ -22,18 +23,19 @@ export function editcrane(id){
     })
 }
 
-export function updatecrane(id,data){
+export function updatecrane(id,data,page,pagesize){
+    data.pagesize = pagesize
     return axios({
-        url: `/crane/${id}`,
+        url: `/crane/${id}?page=${page}`,
         method: 'patch',
         data: data
     })
 }
 
-export function destroycrane(id){
+export function destroycrane(id,page,pagesize){
     return axios({
-        url: `crane/${id}`,
+        url: `crane/${id}?page=${page}`,
         method: 'delete',
-        data: { id }
+        data: { id,pagesize }
     })
 }
