@@ -61,26 +61,32 @@ Vue.directive('dialogDrag', {
             };
         }
         dialogHeaderEl.onmousedown = moveDown;
+        let dialog_btn__fullscreen = el.querySelector(".el-dialog_btn__fullscreen");
         //双击头部效果
-        dialogHeaderEl.ondblclick = (e) => {
+        dialog_btn__fullscreen.onclick = (e) => {
             if (isFullScreen == false) {
                 nowHight = dragDom.clientHeight;
                 nowWidth = dragDom.clientWidth;
                 nowMarginTop = dragDom.style.marginTop;
+                dragDom.classList.add("isFullScreen");
                 dragDom.style.left = 0;
                 dragDom.style.top = 0;
-                dragDom.style.height = "100VH";
-                dragDom.style.width = "100VW";
-                dragDom.style.marginTop = 0;
+                // dragDom.style.height = "100VH";
+                // dragDom.style.width = "100VW";
+                // dragDom.style.marginTop = 0;
+                // dragDom.style.transform = "none";
                 isFullScreen = true;
                 dialogHeaderEl.style.cursor = 'initial';
                 dialogHeaderEl.onmousedown = null;
             } else {
+                dragDom.classList.remove("isFullScreen");
+                dragDom.style.left = 50 +'%';
+                dragDom.style.top = 50 +'%';
                 dragDom.style.height = "auto";
                 dragDom.style.width = nowWidth + 'px';
                 dragDom.style.marginTop = nowMarginTop;
                 isFullScreen = false;
-                dialogHeaderEl.style.cursor = 'move';
+                //dialogHeaderEl.style.cursor = 'move';
                 dialogHeaderEl.onmousedown = moveDown;
             }
         }
@@ -88,6 +94,7 @@ Vue.directive('dialogDrag', {
 
         //拉伸
         let resizeEl=document.createElement("div");
+
         dragDom.appendChild(resizeEl);
         //在弹窗右下角加上一个10-10px的控制块
         resizeEl.style.cursor = 'se-resize';
@@ -99,6 +106,8 @@ Vue.directive('dialogDrag', {
         //鼠标拉伸弹窗
         resizeEl.onmousedown = (e) => {
 
+
+            //close-on-click-modal = false;
             // 记录初始x位置
             const clientX = e.clientX;
             // 鼠标按下，计算当前元素距离可视区的距离
@@ -106,6 +115,11 @@ Vue.directive('dialogDrag', {
             const disY = e.clientY - resizeEl.offsetTop;
 
             document.onmousemove = function (e) {
+                let dragModal= document.querySelector(".v-modal");
+                //console.log(dragModal);
+                dragModal.onclick = (e) => {
+                    console.log(e);
+                }
                 e.preventDefault(); // 移动时禁用默认事件
 
                 // 通过事件委托，计算移动的距离
@@ -116,32 +130,6 @@ Vue.directive('dialogDrag', {
                 dragDom.style.height = y > minHeight ? `${y}px` : minHeight + 'px';
             };
             //拉伸结束
-            document.onmouseup = function (e) {
-                document.onmousemove = null;
-                document.onmouseup = null;
-            };
-        }
-    }
-})
-
-// v-dialogDragWidth: 弹窗宽度拖大 拖小
-Vue.directive('dialogDragWidth', {
-    bind(el, binding, vnode, oldVnode) {
-        const dragDom = binding.value.$el.querySelector('.el-dialog');
-
-        el.onmousedown = (e) => {
-
-            // 鼠标按下，计算当前元素距离可视区的距离
-            const disX = e.clientX - el.offsetLeft;
-
-            document.onmousemove = function (e) {
-                e.preventDefault(); // 移动时禁用默认事件
-
-                // 通过事件委托，计算移动的距离
-                const l = e.clientX - disX;
-                dragDom.style.width = `${l}px`;
-            };
-
             document.onmouseup = function (e) {
                 document.onmousemove = null;
                 document.onmouseup = null;

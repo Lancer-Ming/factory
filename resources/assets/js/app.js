@@ -22,7 +22,7 @@ Vue.use(ElementUI)
 Vue.prototype.$ = $
 Vue.prototype.axios = axios
 Vue.prototype.message = Message
-
+//Vue.prototype.isfullscreen  = !isfullscreen
 import { Local } from './utils/common'
 import './directives/'
 new Vue({

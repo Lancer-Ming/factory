@@ -74,7 +74,7 @@
                 stripe
                 style="width: 100%"
                 size="mini"
-                :default-sort = "{prop: 'id', order: 'ascending'}"
+                :default-sort="{prop: 'id', order: 'ascending'}"
                 v-loading="loading"
                 @selection-change="handleSelectionChange"
                 @row-click="cellClick"
@@ -158,15 +158,15 @@
 
             <el-table-column
 
-                label="法人代表"
-                align="center"
-        >
-            <template slot-scope="scope">
-                <div slot="reference" class="name-wrapper">
-                    <span>{{ scope.row.leader }}</span>
-                </div>
-            </template>
-        </el-table-column>
+                    label="法人代表"
+                    align="center"
+            >
+                <template slot-scope="scope">
+                    <div slot="reference" class="name-wrapper">
+                        <span>{{ scope.row.leader }}</span>
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column
 
                     label="法人联系电话"
@@ -228,28 +228,28 @@
             </el-table-column>
             <el-table-column
 
-                label="传真"
-                align="center"
-        >
-            <template slot-scope="scope">
-                <div slot="reference" class="name-wrapper">
-                    <span>{{ scope.row.fax }}</span>
-                </div>
-            </template>
-        </el-table-column>
+                    label="传真"
+                    align="center"
+            >
+                <template slot-scope="scope">
+                    <div slot="reference" class="name-wrapper">
+                        <span>{{ scope.row.fax }}</span>
+                    </div>
+                </template>
+            </el-table-column>
 
 
             <el-table-column
 
-                label="业务区域"
-                align="center"
-        >
-            <template slot-scope="scope">
-                <div slot="reference" class="name-wrapper">
-                    <span>{{ scope.row.region }}</span>
-                </div>
-            </template>
-        </el-table-column>
+                    label="业务区域"
+                    align="center"
+            >
+                <template slot-scope="scope">
+                    <div slot="reference" class="name-wrapper">
+                        <span>{{ scope.row.region }}</span>
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column
 
                     label="资质等级"
@@ -274,16 +274,16 @@
             </el-table-column>
             <el-table-column
 
-                label="安全生产许可证"
-                align="center"
+                    label="安全生产许可证"
+                    align="center"
                     width="110"
-        >
-            <template slot-scope="scope">
-                <div slot="reference" class="name-wrapper">
-                    <span>{{ scope.row.safety_permit }}</span>
-                </div>
-            </template>
-        </el-table-column>
+            >
+                <template slot-scope="scope">
+                    <div slot="reference" class="name-wrapper">
+                        <span>{{ scope.row.safety_permit }}</span>
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column
 
                     label="主营业务"
@@ -361,77 +361,82 @@
         <el-dialog title="编辑单位" :visible.sync="formShown" class="pro-add" v-dialogDrag :close-on-click-modal="false"  fullscreen="true" ref="dialog__wrapper" @dragDialog="handleDrag">
             <div class="line" v-dialogDragWidth="$refs.dialog__wrapper">
         -->
-        <el-dialog title="编辑单位" :visible.sync="formShown" v-dialogDrag class="pro-add" @dragDialog="handleDrag">
+        <el-dialog title="编辑单位" :visible.sync="formShown" v-dialogDrag :close-on-click-modal="false" class="pro-add" @dragDialog="handleDrag">
+            <div slot="title">
+                <span class="el-dialog__title">编辑单位</span>
+                <button class="el-dialog__headerbtn el-dialog_btn__fullscreen">
+                </button>
+            </div>
             <div class="line">
-            <el-form class="clearfix">
-                <el-form-item label="单位名称" :label-width="formLabelWidth">
-                    <el-input v-model="form.name"></el-input>
-                </el-form-item>
-                <el-form-item label="单位类型" :label-width="formLabelWidth">
-                    <el-select v-model="form.utype_id" placeholder="请选择单位类型" multiple>
-                        <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="上级机构" :label-width="formLabelWidth">
-                    <el-select v-model="form.parent_id" placeholder="请选择上级机构" disabled>
-                        <el-option v-for="(item,index) in units" :key="index" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                    <el-button plain @click="searchUnitBox">...</el-button>
-                </el-form-item>
-                <el-form-item label="单位属性" :label-width="formLabelWidth">
-                    <el-select v-model="form.unit_attr_id" placeholder="">
-                        <el-option v-for="(item,index) in attrs" :key="index" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="单位审核状态" :label-width="formLabelWidth">
-                    <el-select v-model="form.status" placeholder="请选择">
-                        <el-option v-for="(item,index) in status" :key="index" :label="item" :value="index"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="所在省市区" :label-width="formLabelWidth">
-                    <el-cascader v-model="form.address" :options="addressData"></el-cascader>
-                </el-form-item>
-                <el-form-item label="详细地址" :label-width="formLabelWidth">
-                    <el-input v-model="form.detail"></el-input>
-                </el-form-item>
+                <el-form class="clearfix">
+                    <el-form-item label="单位名称" :label-width="formLabelWidth">
+                        <el-input v-model="form.name" size="mini"></el-input>
+                    </el-form-item>
+                    <el-form-item label="单位类型" :label-width="formLabelWidth">
+                        <el-select v-model="form.utype_id" placeholder="请选择单位类型" multiple>
+                            <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="上级机构" :label-width="formLabelWidth">
+                        <el-select v-model="form.parent_id" placeholder="请选择上级机构" disabled>
+                            <el-option v-for="(item,index) in units" :key="index" :label="item.label" :value="item.value"></el-option>
+                        </el-select>
+                        <el-button plain @click="searchUnitBox">...</el-button>
+                    </el-form-item>
+                    <el-form-item label="单位属性" :label-width="formLabelWidth">
+                        <el-select v-model="form.unit_attr_id" placeholder="">
+                            <el-option v-for="(item,index) in attrs" :key="index" :label="item.label" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="单位审核状态" :label-width="formLabelWidth">
+                        <el-select v-model="form.status" placeholder="请选择">
+                            <el-option v-for="(item,index) in status" :key="index" :label="item" :value="index"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="所在省市区" :label-width="formLabelWidth">
+                        <el-cascader v-model="form.address" :options="addressData"></el-cascader>
+                    </el-form-item>
+                    <el-form-item label="详细地址" :label-width="formLabelWidth">
+                        <el-input v-model="form.detail"></el-input>
+                    </el-form-item>
 
-                <el-form-item label="单位机构代码" :label-width="formLabelWidth">
-                    <el-input v-model="form.unit_no"></el-input>
-                </el-form-item>
-                <el-form-item label="资质证书编号" :label-width="formLabelWidth">
-                    <el-input v-model="form.qualification_no"></el-input>
-                </el-form-item>
-                <el-form-item label="安全生产许可证" :label-width="formLabelWidth">
-                    <el-input v-model="form.safety_permit"></el-input>
-                </el-form-item>
-                <el-form-item label="邮箱" :label-width="formLabelWidth">
-                    <el-input v-model="form.email"></el-input>
-                </el-form-item>
-                <el-form-item label="联系人" :label-width="formLabelWidth">
-                    <el-input v-model="form.concact_person"></el-input>
-                </el-form-item>
-                <el-form-item label="联系电话" :label-width="formLabelWidth">
-                    <el-input v-model="form.concact_tel"></el-input>
-                </el-form-item>
-                <el-form-item label="法人代表" :label-width="formLabelWidth">
-                    <el-input v-model="form.leader"></el-input>
-                </el-form-item>
-                <el-form-item label="法人电话" :label-width="formLabelWidth">
-                    <el-input v-model="form.leader_tel"></el-input>
-                </el-form-item>
-                <el-form-item label="企业网址" :label-width="formLabelWidth">
-                    <el-input v-model="form.company_site"></el-input>
-                </el-form-item>
-                <el-form-item label="传真" :label-width="formLabelWidth">
-                    <el-input v-model="form.fax"></el-input>
-                </el-form-item>
-                <el-form-item label="主营业务" :label-width="formLabelWidth">
-                    <el-input type="textarea" v-model="form.main_business"></el-input>
-                </el-form-item>
-                <el-form-item label="描述" :label-width="formLabelWidth">
-                    <el-input type="textarea" v-model="form.remark"></el-input>
-                </el-form-item>
-            </el-form>
+                    <el-form-item label="单位机构代码" :label-width="formLabelWidth">
+                        <el-input v-model="form.unit_no"></el-input>
+                    </el-form-item>
+                    <el-form-item label="资质证书编号" :label-width="formLabelWidth">
+                        <el-input v-model="form.qualification_no"></el-input>
+                    </el-form-item>
+                    <el-form-item label="安全生产许可证" :label-width="formLabelWidth">
+                        <el-input v-model="form.safety_permit"></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮箱" :label-width="formLabelWidth">
+                        <el-input v-model="form.email"></el-input>
+                    </el-form-item>
+                    <el-form-item label="联系人" :label-width="formLabelWidth">
+                        <el-input v-model="form.concact_person"></el-input>
+                    </el-form-item>
+                    <el-form-item label="联系电话" :label-width="formLabelWidth">
+                        <el-input v-model="form.concact_tel"></el-input>
+                    </el-form-item>
+                    <el-form-item label="法人代表" :label-width="formLabelWidth">
+                        <el-input v-model="form.leader"></el-input>
+                    </el-form-item>
+                    <el-form-item label="法人电话" :label-width="formLabelWidth">
+                        <el-input v-model="form.leader_tel"></el-input>
+                    </el-form-item>
+                    <el-form-item label="企业网址" :label-width="formLabelWidth">
+                        <el-input v-model="form.company_site"></el-input>
+                    </el-form-item>
+                    <el-form-item label="传真" :label-width="formLabelWidth">
+                        <el-input v-model="form.fax"></el-input>
+                    </el-form-item>
+                    <el-form-item label="主营业务" :label-width="formLabelWidth">
+                        <el-input type="textarea" v-model="form.main_business"></el-input>
+                    </el-form-item>
+                    <el-form-item label="描述" :label-width="formLabelWidth">
+                        <el-input type="textarea" v-model="form.remark"></el-input>
+                    </el-form-item>
+                </el-form>
             </div>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="formShown = false">取 消</el-button>
@@ -475,8 +480,9 @@
     import {pagesize, perPagesize} from '../../config/common'
     import SearchBox from '../../components/SearchBox.vue'
     import {export_json_to_excel} from '../../vendor/Export2Excel'
+
     export default {
-        name:'company',
+        name: 'company',
         //directives: { elDragDialog },
         data() {
             return {
@@ -554,6 +560,7 @@
             //
             // },
             handleAdd() {
+
                 this.form = {
                     name: '',
                     unit_attr_id: null,
