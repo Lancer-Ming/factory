@@ -13,4 +13,9 @@ class Crane extends Model
     {
         return $this->hasOne(BlackBox::class);
     }
+
+    public function items()
+    {
+        return $this->belongsTo(Item::class, 'item_id');
+    }
 }

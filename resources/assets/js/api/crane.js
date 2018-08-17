@@ -1,11 +1,18 @@
 import axios from '../utils/request'
 
-export function getcrane(data=null){
-    return axios({
-        url: `/crane`,
-        method: 'post',
-        data: data
-    })
+export function getcrane(page,data={},pagesize=10){
+    if (Object.keys(data).length > 0) {
+        Object.assign(data, {page, pagesize});
+        return axios({
+            url: `/crane`,
+            method: 'get',
+            params: data
+        })
+    }
+        return axios({
+            url: `/crane?page=${page}&pagesize=${pagesize}`,
+            method: 'get',
+        })
 }
 export function storecrane(data,pagesize){
     data.pagesize = pagesize
