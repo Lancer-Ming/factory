@@ -7,31 +7,32 @@
             <el-button type="warning" plain icon="el-icon-download" size="mini" style="border-radius: 8px;">下载</el-button>
         </el-row>
         <el-row style="margin-top: 20px;">
-            <el-form :model="form" size="mini" class="crane-head">
+            <el-form :model="query" size="mini" class="crane-head">
                 <el-form-item label="项目名称" :label-width="formLabelW">
-                    <el-input auto-complete="off"></el-input>
+                    <el-input v-model="query.item_name" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="产权单位" :label-width="formLabelW">
-                    <el-input  auto-complete="off"></el-input>
+                    <el-input v-model="query.right_name" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="备案编号" :label-width="formLabelW">
-                    <el-input  auto-complete="off"></el-input>
+                    <el-input v-model="query.record_no" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="黑匣子SN" :label-width="formLabelW">
-                    <el-input  auto-complete="off"></el-input>
+                    <el-input v-model="query.sn" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="是否在线" :label-width="formLabelW">
-                    <el-select v-model="form.region" placeholder="请选择活动区域">
+                    <el-select v-model="form.is_online" placeholder="请选择活动区域">
                         <el-option label="是" value="shanghai"></el-option>
                         <el-option label="否" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-button type="primary" plain size="mini" style="float: left">查询</el-button>
+                <el-button type="primary" plain size="mini" style="float: left" @click="search">查询</el-button>
                 <el-button size="mini" style="float: left">清空</el-button>
             </el-form>
         </el-row>
         <el-table class="crane-tab"
                 :data="tableData"
+                v-loading="loading"
                 border
                 stripe
                 style="width: 100%;">
@@ -49,7 +50,7 @@
             </el-table-column>
             <el-table-column
                     fixed
-                    prop="sn"
+                    prop="black_boxes.sn"
                     label="SN"
                     width="100"
                     align="center"
@@ -63,14 +64,14 @@
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="floor_no"
                     label="塔机名称"
                     width="120"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="item_id"
+                    prop="items.name"
                     label="所在项目"
                     width="300"
                     align="center"
@@ -91,16 +92,16 @@
             >
             </el-table-column>
             <el-table-column
-                    prop="data"
+                    prop="created_at"
                     label="最近上线时间"
                     width="200"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="function_config.collision"
+                    prop="black_boxes.function_config.collision"
                     label="防碰撞"
-                    width="60"
+                    width="120"
                     align="center"
             >
                 <template slot-scope="scope">
@@ -136,21 +137,18 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-row>
             <el-row style="margin-top: 20px;">
                 <el-pagination
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
                         :current-page="currentPage"
-                        :page-sizes="[100, 200, 300, 400]"
-                        :page-size="100"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total="400"
-                        align="center"
-                >
+                        :page-sizes="[30, 60, 90, 120]"
+                        :page-size="30"
+                        :pager-count="11"
+                        layout="total, sizes, prev, pager, next, jumper,slot,->"
+                        :total="total">
                 </el-pagination>
             </el-row>
-        </el-row>
 
 
         <el-dialog title="新增塔机信息" :visible.sync="craneAdd" v-dialogDrag>
@@ -341,7 +339,7 @@
                         >
                         </el-table-column>
                         <el-table-column
-                                prop="data"
+                                prop="date"
                                 label="发证日期"
                                 width="150"
                                 align="center"
@@ -378,10 +376,20 @@
         },
         data() {
             return {
+                query: {
+                    record_no: '',
+                    item_name: '',
+                    sn: '',
+                    right_name: '',
+                    is_online: '',
+                },
                 form:{
                     id: '',
                     item_id: '',
                     right_id: '',
+                    SIM_card: '',
+                    arrears_reminding: '',
+                    is_online: '',
                     crane_produce_id: '',
                     is_monitor: true,
                     driver: '',
@@ -435,31 +443,16 @@
                 formLabel: '70px',
                 formLabelW: '75px',
                 formLabelWidth: '120px',
-                tableData: [{
-                    SN: 104666,
-                    name: '#1',
-                    project: '中铁隧道集团科技大厦',
-                    tell: 1064687974918,
-                    remind: '[续费或更换卡号]剩余9个月',
-                    data: '2018-08-13 13:00:46',
-                    state: '监控中',
-                },
-                    {
-                        SN: 104666,
-                        name: '#1',
-                        project: '中铁隧道集团科技大厦',
-                        tell: 1064687974918,
-                        remind: '[续费或更换卡号]剩余9个月',
-                        data: '2018-08-13 13:00:46',
-                        state: '监控中',
-                    }
-                ],
-                currentPage: 4,
+                currentPage: 1,
+                loading: true,
                 checked1: false,
                 checked2: true,
                 craneAdd: false,
                 chose: false,
                 requestName: '',
+                tableData: [],
+                searchData: {},
+                total: null,
                 option: [{
                     value: '选项1',
                     label: '平臂'
@@ -480,18 +473,15 @@
                     name: '',
                     Opera_type: '',
                     number: '',
-                    data: '',
+                    date: '',
                     validity: ''
                 }]
             }
         },
-        // created(){
-        //     getcrane().then(res =>{
-        //         if(res.data.response_status === 'success'){
-        //             console.log(res)
-        //         }
-        //     })
-        // },
+        created(){
+            this.$router.replace({path: this.$route.path, query: {page: this.currentPage}})
+            this.getTableData()
+        },
         methods: {
             handleClick(row) {
                 console.log(row);
@@ -505,53 +495,56 @@
             handleAdd(){
                 this.form={
                     id: '',
-                        item_id: '',
-                        right_id: '',
-                        crane_produce_id: '',
-                        is_monitor: true,
-                        driver: '',
-                        record_no: '',
-                        floor_no: '',
-                        c_model: '',
-                        left_no: '',
-                        parameters: {
+                    item_id: '',
+                    right_id: '',
+                    crane_produce_id: '',
+                    SIM_card: '',
+                    arrears_reminding: '',
+                    is_online: '',
+                    is_monitor: true,
+                    driver: '',
+                    record_no: '',
+                    floor_no: '',
+                    c_model: '',
+                    left_no: '',
+                    parameters: {
                         lifting_weight: '',
-                            rated_torque: '',
-                            tower_crane: '',
-                            top_tower: '',
-                            forearm_length: '',
-                            posterior_length: '',
-                            localX: '',
-                            localY: '',
-                            tower_type: '',
-                            multiple_rate: '',
-                            remarks: ''
+                        rated_torque: '',
+                        tower_crane: '',
+                        top_tower: '',
+                        forearm_length: '',
+                        posterior_length: '',
+                        localX: '',
+                        localY: '',
+                        tower_type: '',
+                        multiple_rate: '',
+                        remarks: ''
                     },
                     left_at: '',
-                        install_unit_id: '',
-                        crane_id: '',
-                        sn: '',
-                        GPRS: '',
-                        validity_month: '',
-                        model:　'',
-                        paid_at: '',
-                        installed_at: '',
-                        function_config: {
-                            weight: '',
-                            range: '',
-                            rotation: '',
-                            height: '',
-                            wind: '',
-                            angle: '',
-                            collision: '',
-                            control: '',
-                            gps: ''
+                    install_unit_id: '',
+                    crane_id: '',
+                    sn: '',
+                    GPRS: '',
+                    validity_month: '',
+                    model:　'',
+                    paid_at: '',
+                    installed_at: '',
+                    function_config: {
+                        weight: '',
+                        range: '',
+                        rotation: '',
+                        height: '',
+                        wind: '',
+                        angle: '',
+                        collision: '',
+                        control: '',
+                        gps: ''
                         },
-                        identify: {
-                            identification: '',
-                            card: '',
-                            fingerprint: '',
-                            recognition: ''
+                    identify: {
+                        identification: '',
+                        card: '',
+                        fingerprint: '',
+                        recognition: ''
                         }
                 }
                 this.craneAdd = true
@@ -600,6 +593,18 @@
                             showClose: true,
                             message: res.data.msg
                         })
+                    }
+                })
+            },
+            search(){
+                this.getTableData(this.query)
+            },
+            getTableData(data = {}){
+                getcrane(this.currentPage,data,this.pagesize).then(res =>{
+                    if(res.data.response_status === "success"){
+                        this.tableData = res.data.data.data
+                        this.total = res.data.data.total
+                        this.loading = false
                     }
                 })
             }
