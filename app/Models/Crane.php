@@ -18,4 +18,13 @@ class Crane extends Model
     {
         return $this->belongsTo(Item::class, 'item_id');
     }
+
+    public function right_unit()
+    {
+        return $this->belongsTo(Unit::class, 'right_id');
+    }
+    public function produce_unit()
+    {
+        return $this->belongsTo(Unit::class, 'crane_produce_id');
+    }
 }
