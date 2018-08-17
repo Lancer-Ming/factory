@@ -151,13 +151,13 @@
             </el-row>
 
 
-        <el-dialog :visible.sync="craneAdd" v-dialogDrag>
+        <el-dialog v-dialogDrag :visible.sync="craneAdd">
+            <div slot="title">
+                <span class="el-dialog__title">新增塔机信息</span>
+                <button class="el-dialog_btn__fullscreen">
+                </button>
+            </div>
             <el-form :model="form" size="mini">
-                <div slot="title">
-                    <span class="el-dialog__title">新增塔机信息</span>
-                    <button class="el-dialog_btn__fullscreen">
-                    </button>
-                </div>
                 <h4 style="margin-left:45%;font-weight: bold;">塔机信息</h4>
                 <el-form-item label="所在项目" :label-width="formLabelWidth">
                     <el-select v-model="form.item_id" placeholder="请选择所在项目" disabled>

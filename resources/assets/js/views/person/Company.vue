@@ -361,7 +361,7 @@
         <el-dialog title="编辑单位" :visible.sync="formShown" class="pro-add" v-dialogDrag :close-on-click-modal="false"  fullscreen="true" ref="dialog__wrapper" @dragDialog="handleDrag">
             <div class="line" v-dialogDragWidth="$refs.dialog__wrapper">
         -->
-        <el-dialog :visible.sync="formShown" v-dialogDrag  class="pro-add" @dragDialog="handleDrag">
+        <el-dialog :visible.sync="formShown" v-dialogDrag  class="pro-add">
             <div slot="title">
                 <span class="el-dialog__title">编辑单位</span>
                 <button class="el-dialog_btn__fullscreen">
@@ -551,9 +551,9 @@
 
         },
         methods: {
-            handleDrag() {
-                this.$refs.select
-            },
+            // handleDrag() {
+            //     this.$refs.select
+            // },
             // filterHandler(value, row, column) {
             //     const property = column['property'];
             //     return row[property] === value;

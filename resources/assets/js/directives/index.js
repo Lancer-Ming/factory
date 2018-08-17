@@ -64,6 +64,7 @@ Vue.directive('dialogDrag', {
             };
         }
         dialogHeaderEl.onmousedown = moveDown;
+
         //双击头部效果
         dialogFullBtn.onclick = (e) => {
             if (isFullScreen == false) {
