@@ -2,8 +2,8 @@
     <div class="container crane">
         <el-row style="margin-top: 20px;">
             <el-button type="primary"  icon="el-icon-plus" size="mini" style="border-radius: 8px;" @click="handleAdd">新增</el-button>
-            <el-button type="primary" plain icon="el-icon-edit" size="mini" style="border-radius: 8px;">编辑</el-button>
-            <el-button type="danger" icon="el-icon-delete" size="mini" style="border-radius: 8px;">删除</el-button>
+            <el-button type="primary" plain icon="el-icon-edit" size="mini" style="border-radius: 8px;" @click="handleEdit">编辑</el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" style="border-radius: 8px;" @click="handleDelete">删除</el-button>
             <el-button type="warning" plain icon="el-icon-download" size="mini" style="border-radius: 8px;">下载</el-button>
         </el-row>
         <el-row style="margin-top: 20px;">
@@ -35,7 +35,9 @@
                 v-loading="loading"
                 border
                 stripe
-                style="width: 100%;">
+                style="width: 100%;"
+                @selection-change="handleSelectionChange"
+        >
             <el-table-column
                     prop="id"
                     align="center"
@@ -47,6 +49,13 @@
                 <template slot-scope="scope">
                     <span>{{ scope.row.id }}</span>
                 </template>
+            </el-table-column>
+            <el-table-column
+                    align="center"
+                    type="selection"
+                    width="30"
+                    fixed
+            >
             </el-table-column>
             <el-table-column
                     fixed
@@ -143,7 +152,7 @@
                         @current-change="handleCurrentChange"
                         :current-page="currentPage"
                         :page-sizes="[30, 60, 90, 120]"
-                        :page-size="30"
+                        :page-size="pagesize"
                         :pager-count="11"
                         layout="total, sizes, prev, pager, next, jumper,slot,->"
                         :total="total">
@@ -158,7 +167,7 @@
                 </button>
             </div>
             <el-form :model="form" size="mini">
-                <h4 style="margin-left:45%;font-weight: bold;">塔机信息</h4>
+                <h4 style="display: block;margin: 30px auto;text-align: center;font-weight: bold;">塔机信息</h4>
                 <el-form-item label="所在项目" :label-width="formLabelWidth">
                     <el-select v-model="form.item_id" placeholder="请选择所在项目" disabled>
                         <el-option v-for="(item,index) in items" :label="item.label" :key="index" :value="item.value"></el-option>
@@ -204,7 +213,7 @@
                     </el-switch>
                 </el-form-item>
 
-                <h4 style="margin:30px 0px 20px 45%;font-weight: bold;">黑匣子信息</h4>
+                <h4 style="display: block;margin: 30px auto;text-align: center;font-weight: bold;">黑匣子信息</h4>
                 <el-form-item label="黑匣子SN" :label-width="formLabelWidth">
                     <el-input v-model="form.sn" auto-complete="off"></el-input>
                 </el-form-item>
@@ -253,7 +262,7 @@
                     <el-checkbox style="width: 200px;margin-left: 30px;" v-model="form.identify.recognition">人脸识别</el-checkbox>
                 </el-form-item>
 
-                <h4 style="margin:30px 0px 20px 45%;font-weight: bold;">塔机参数</h4>
+                <h4 style="display: block;margin: 30px auto;text-align: center;font-weight: bold;">塔机参数</h4>
                 <el-form-item label="最大吊重" :label-width="formLabelWidth">
                     <el-input v-model="form.parameters.lifting_weight" auto-complete="off"></el-input>
                 </el-form-item>
@@ -307,7 +316,7 @@
                     </el-input>
                 </el-form-item>
 
-                <h4 style="margin:30px 0px 20px 45%;font-weight: bold;">司机证书</h4>
+                <h4 style="display: block;margin: 30px auto;text-align: center;font-weight: bold;">司机证书</h4>
                 <div style="width: 800px;border: 1px solid #eee;margin-left: 50px;">
                     <el-form-item label="司机" :label-width="formLabel" style="margin-top: 20px;">
                         <el-select v-model="form.driver" placeholder="" disabled>
@@ -374,6 +383,9 @@
 <script>
     import SearchBox from '../../components/SearchBox.vue'
     import { getcrane,editcrane,updatecrane,destroycrane,storecrane } from '../../api/crane'
+    import { implode} from "../../utils/common";
+    import {pagesize, perPagesize} from '../../config/common'
+
     export default {
         components:{
             SearchBox
@@ -391,9 +403,6 @@
                     id: '',
                     item_id: '',
                     right_id: '',
-                    SIM_card: '',
-                    arrears_reminding: '',
-                    is_online: '',
                     crane_produce_id: '',
                     is_monitor: true,
                     driver: '',
@@ -456,6 +465,12 @@
                 requestName: '',
                 tableData: [],
                 searchData: {},
+                multipleSelection: [],
+                submitType: '',
+                editData: {},
+                currentPage: 1, //当前页数
+                pagesize: pagesize,
+                perPagesize: perPagesize,
                 total: null,
                 option: [{
                     value: '选项1',
@@ -587,21 +602,31 @@
                 data.parameters = JSON.stringify(data.parameters)
                 data.function_config =  JSON.stringify(data.function_config)
                 data.identify =  JSON.stringify(data.identify)
-                storecrane(data,this.page).then(res =>{
-                    if (res.data.response_status === 'success') {
-                        this.data = res.data.data.data
-                        console.log(data)
+
+                if (this.submitType === 'edit') {
+                    updatecrane(this.editData.id, data,this.currentPage, this.pagesize).then(res => {
+                        console.log(res)
+                        this.tableData = res.data.data.data
                         this.craneAdd = false
                         this.$message({
                             type: 'success',
                             showClose: true,
                             message: res.data.msg
                         })
-                    }
-                })
-            },
-            search(){
-                this.getTableData(this.query)
+                    })
+                } else {
+                    storecrane(data, this.pagesize).then(res => {
+                        if (res.data.response_status === 'success') {
+                            this.tableData = res.data.data.data
+                            this.craneAdd = false
+                            this.$message({
+                                type: 'success',
+                                showClose: true,
+                                message: res.data.msg
+                            })
+                        }
+                    })
+                }
             },
             getTableData(data = {}){
                 getcrane(this.currentPage,data,this.pagesize).then(res =>{
@@ -611,7 +636,82 @@
                         this.loading = false
                     }
                 })
-            }
+            },
+            handleSelectionChange(selection) {
+                this.multipleSelection = implode(selection, 'id')
+            },
+            handleEdit(){
+                this.submitType = 'edit'
+                if(this.multipleSelection.length ===1){
+                    editcrane(this.multipleSelection[0]).then(res => {
+                        this.editData = res.data.data
+                        this.items.push({
+                            label: this.editData.items.name,
+                            value: this.editData.items.id
+                        })
+                        this.units.push({
+                            label:this.editData.right_unit.name,
+                            value:this.editData.right_unit.id
+                        })
+                        this.units.push({
+                            label:this.editData.produce_unit.name,
+                            value:this.editData.produce_unit.id
+                        })
+                        console.log(this.editData)
+                        let Parameters= JSON.parse(this.editData.parameters)
+                        let Function_config = JSON.parse(this.editData.black_boxes.function_config)
+                        let Identify = JSON.parse(this.editData.black_boxes.identify)
+                        this.form.id = this.editData.id
+                        this.form.item_id = this.editData.item_id
+                        this.form.right_id = this.editData.right_id
+                        this.form.crane_produce_id = this.editData.crane_produce_id
+                        this.form.is_monitor = this.editData.is_monitor
+                        this.form.driver = this.editData.driver
+                        this.form.record_no = this.editData.record_no
+                        this.form.floor_no = this.editData.floor_no
+                        this.form.c_model = this.editData.c_model
+                        this.form.left_no = this.editData.left_no
+                        this.form.parameters.lifting_weight = Parameters.lifting_weight
+                        this.form.parameters.rated_torque = Parameters.rated_torque
+                        this.form.parameters.tower_crane = Parameters.tower_crane
+                        this.form.parameters.top_tower = Parameters.top_tower
+                        this.form.parameters.forearm_length = Parameters.forearm_length
+                        this.form.parameters.posterior_length = Parameters.posterior_length
+                        this.form.parameters.localX = Parameters.localX
+                        this.form.parameters.localY = Parameters.localY
+                        this.form.parameters.tower_type = Parameters.tower_type
+                        this.form.parameters.multiple_rate = Parameters.multiple_rate
+                        this.form.parameters.remarks = Parameters.remarks
+                        this.form.left_at = this.editData.left_at
+                        this.form.install_unit_id = this.editData.black_boxes.installed_at
+                        this.form.crane_id = this.editData.black_boxes.crane_id
+                        this.form.sn = this.editData.black_boxes.sn
+                        this.form.GPRS = this.editData.black_boxes.GPRS
+                        this.form.validity_month = this.editData.black_boxes.validity_month
+                        this.form.model = this.editData.black_boxes.model
+                        this.form.paid_at = this.editData.black_boxes.paid_at
+                        this.form.installed_at = this.editData.black_boxes.installed_at
+                        this.form.function_config.weight = Function_config.weight
+                        this.form.function_config.range = Function_config.range
+                        this.form.function_config.rotation = Function_config.rotation
+                        this.form.function_config.height = Function_config.height
+                        this.form.function_config.wind = Function_config.wind
+                        this.form.function_config.angle = Function_config.angle
+                        this.form.function_config.collision = Function_config.collision
+                        this.form.function_config.control = Function_config.control
+                        this.form.function_config.gps = Function_config.gps
+                        this.form.identify.identification = Identify.identification
+                        this.form.identify.card = Identify.card
+                        this.form.identify.fingerprint = Identify.fingerprint
+                        this.form.identify.recognition = Identify.recognition
+                        this.craneAdd = true
+                    })
+
+                }
+            },
+            search(){
+                this.getTableData(this.query)
+            },
         }
     }
 

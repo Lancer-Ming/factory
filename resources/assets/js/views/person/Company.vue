@@ -46,13 +46,13 @@
                 <el-row>
                     <el-form :inline="true" size="mini">
                         <el-form-item label="企业名称">
-                            <el-input v-model="name" placeholder="请输入内容"></el-input>
+                            <el-input v-model="query.name" placeholder="请输入内容"></el-input>
                         </el-form-item>
                         <el-form-item label="法人代表">
-                            <el-input v-model="leader" placeholder="请输入法人代表"></el-input>
+                            <el-input v-model="query.leader" placeholder="请输入法人代表"></el-input>
                         </el-form-item>
                         <el-form-item label="单位类型">
-                            <el-select v-model="utype_id" multiple filterable placeholder="请选择" value-key="item">
+                            <el-select v-model="query.utype_id" multiple filterable placeholder="请选择" value-key="item">
                                 <el-option
                                         v-for="item in options"
                                         :key="item.value"
@@ -454,8 +454,8 @@
                 </el-table>
             </div>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="formShown = false">取 消</el-button>
-                <el-button type="primary" @click="onSubmit">保存</el-button>
+                <el-button @click="excelDialogShow = false">取 消</el-button>
+                <el-button type="primary" @click="importExcel">保存</el-button>
             </div>
         </el-dialog>
 
@@ -489,6 +489,9 @@
         //directives: { elDragDialog },
         data() {
             return {
+                query: {
+                    leader: '', name: '', utype_id: null
+                },
                 tableData: [],
                 multipleSelection: [],
                 options: [],
@@ -566,7 +569,6 @@
             //
             // },
             handleAdd() {
-
                 this.form = {
                     name: '',
                     unit_attr_id: null,
@@ -678,8 +680,13 @@
                 }
             },
             search() {
-                this.searchData = {leader: this.leader, name: this.name, utype_id: this.utype_id}
-                this.getTableData(this.searchData)
+                this.getTableData(this.query)
+            },
+            reset() {
+                for (var item in this.query) {
+                    this.$set(this.query, item, '')
+                }
+                this.getTableData(this.query)
             },
             reset(){
                 for(var item in this.form){
@@ -851,7 +858,6 @@
                         const address = item['单位地址'].split(' ')
                         const addressCode = this.encodeAddress(address[0], address[1], address[2])
                         result.push({
-                            id: parseInt(item['Id']),
                             name: item['单位名称'],
                             utype_id,
                             parent_id,
@@ -896,13 +902,20 @@
                     importExcel({finalExcelData, pagesize}).then(res => {
                         if (res.data.response_status === 'success') {
                             this.importExcelDataSwitch = false
-                            this.excelDialogShow = false
                             //总条数
                             this.total = res.data.data.total
                             //table显示的数据
                             this.tableData = res.data.data.data
                             // 加载loading
                             this.loading = false
+
+                            this.excelData = []
+                            this.$message({
+                                type: 'success',
+                                showClose: true,
+                                message: '操作成功！'
+                            })
+                            this.excelDialogShow = false
                         }
                     })
                 }

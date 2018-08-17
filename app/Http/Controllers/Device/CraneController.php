@@ -65,12 +65,12 @@ class CraneController extends Controller
         $request->merge(['crane_id'=> $crane->id]);
         BlackBox::create($request->all());
 
-        return successJson($this->returnCrane($request->pagesize));
+        return successJson($this->returnCrane($request->pagesize), '操作成功！');
     }
 
     public function edit(Crane $crane)
     {
-        $crane->fill(['blackBoxes' => $crane->blackBoxes]);
+        $crane->fill(['blackBoxes' => $crane->blackBoxes, 'items' => $crane->items, 'right_unit' => $crane->right_unit,'produce_unit' => $crane->produce_unit]);
 
         return successJson($crane);
     }
@@ -82,7 +82,7 @@ class CraneController extends Controller
         $crane->blackBoxes()->update($request->only(['install_unit_id', 'crane_id', 'sn', 'GPRS', 'validity_month', 'model', 'paid_at', 'installed_at',
             'function_config', 'identify']));
 
-        return successJson($this->returnCrane($request->pagesize));
+        return successJson($this->returnCrane($request->pagesize), '操作成功！');
     }
 
     public function destroy(Request $request)
@@ -91,11 +91,11 @@ class CraneController extends Controller
 
         BlackBox::whereIn('crane_id', $request->id)->delete();
 
-        return successJson($this->returnCrane($request->pagesize));
+        return successJson($this->returnCrane($request->pagesize), '操作成功！');
     }
 
     protected function returnCrane($pagesize=10)
     {
-        return Crane::with('blackBoxes')->paginate($pagesize);
+        return Crane::with('blackBoxes', 'items')->orderBy('created_at', 'desc')->paginate($pagesize);
     }
 }

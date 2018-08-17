@@ -18,6 +18,13 @@ axios.interceptors.response.use(
 
         // 422 表单或者其他的规则不符
         if (error.response.status == 422) {
+            if (error.response.data.response_status) {
+                Message({
+                    message: error.response.data.msg,
+                    type: 'warning',
+                })
+            }
+
             let errors = error.response.data.errors
             const arr = Object.values(errors)
             let html = ''
