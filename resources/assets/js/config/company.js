@@ -13,13 +13,12 @@ export const attrs = [
     {label: '单位', value: 1},
 ]
 
-export const tHeader = ['Id', '单位名称', '单位类型', '上级机构', '单位属性', '单位审核状态', '单位地址', '单位机构代码','资质证书编号','安全生产许可证','法人代表','法人电话','联系人','联系电话','邮箱','企业网址','传真','主营业务','描述']
+export const tHeader = ['单位名称', '单位类型', '上级机构', '单位属性', '单位审核状态', '单位地址', '单位机构代码','资质证书编号','安全生产许可证','法人代表','法人电话','联系人','联系电话','邮箱','企业网址','传真','主营业务','描述']
 
-export const filterVal = ['id','name','utypes','parent_id','unit_attr_id','status','address','unit_no','qualification_no','safety_permit','leader','leader_tel','concact_person','concact_tel','email','company_site','fax','main_business','remark']
+export const filterVal = ['name','utypes','parent_id','unit_attr_id','status','address','unit_no','qualification_no','safety_permit','leader','leader_tel','concact_person','concact_tel','email','company_site','fax','main_business','remark']
 
 export const exportTemp = [
     {
-        id: 1,
         name: '南通二建',
         utypes: '施工单位',
         parent_id: '南通一建',
@@ -40,7 +39,6 @@ export const exportTemp = [
         remark:'暂无',
     },
     {
-        id: 2,
         name: '南通二建',
         utypes: '施工单位',
         parent_id: '南通一建',
