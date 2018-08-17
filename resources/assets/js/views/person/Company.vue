@@ -62,7 +62,7 @@
                             </el-select>
                         </el-form-item>
                         <el-button type="primary" plain size="mini" @click="search" icon="el-icon-search">搜索</el-button>
-                        <el-button>重置</el-button>
+                        <el-button native-type="reset" @click="reset">清空</el-button>
                     </el-form>
                 </el-row>
             </div>
@@ -361,14 +361,14 @@
         <el-dialog title="编辑单位" :visible.sync="formShown" class="pro-add" v-dialogDrag :close-on-click-modal="false"  fullscreen="true" ref="dialog__wrapper" @dragDialog="handleDrag">
             <div class="line" v-dialogDragWidth="$refs.dialog__wrapper">
         -->
-        <el-dialog :visible.sync="formShown" v-dialogDrag  class="pro-add">
+        <el-dialog :visible.sync="formShown" v-dialogDrag :close-on-click-modal="false" class="pro-add">
             <div slot="title">
                 <span class="el-dialog__title">编辑单位</span>
                 <button class="el-dialog_btn__fullscreen">
                 </button>
             </div>
             <div class="line">
-                <el-form class="clearfix">
+                <el-form class="clearfix" size="mini">
                     <el-form-item label="单位名称" :label-width="formLabelWidth">
                         <el-input v-model="form.name" size="mini"></el-input>
                     </el-form-item>
@@ -445,7 +445,7 @@
         </el-dialog>
 
 
-        <el-dialog title="导入EXCEL" :visible.sync="excelDialogShow" class="pro-add">
+        <el-dialog title="导入EXCEL" :visible.sync="excelDialogShow" v-dialogDrag :close-on-click-modal="false" class="pro-add">
             <div class="app-container">
                 <upload-excel-component :on-success='handleSuccess' :before-upload="beforeUpload"></upload-excel-component>
                 <el-table :data="excelData" border highlight-current-row style="width: 100%;margin-top:20px;">
@@ -453,7 +453,10 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <el-button type="success" @click="importExcel">上传</el-button>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="formShown = false">取 消</el-button>
+                <el-button type="primary" @click="onSubmit">保存</el-button>
+            </div>
         </el-dialog>
 
         <search-box :chose="chose" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue"></search-box>
@@ -549,6 +552,9 @@
 
             this.getTableData()
 
+        },
+        props:{
+            closeOnClickModal:false,
         },
         methods: {
             // handleDrag() {
@@ -674,6 +680,15 @@
             search() {
                 this.searchData = {leader: this.leader, name: this.name, utype_id: this.utype_id}
                 this.getTableData(this.searchData)
+            },
+            reset(){
+                for(var item in this.form){
+                    this.$set(this.form,item)
+                }
+                this.form = {leader: '', name: '', utype_id: ''}
+                //
+                this.resetData = {leader: '', name: '', utype_id: ''}
+                this.getTableData(this.resetData)
             },
             cellClick(row) {
                 // this.$refs.table.toggleRowSelection(row)

@@ -58,7 +58,7 @@ html, body, #layout-app {
 }
 
 .view-container {
-  height: calc(100% - 38px);
+  height: calc(100% - 39px);
   overflow: auto
 }
 
@@ -107,13 +107,15 @@ body {
 //main
 //.el-container{ }
 .el-main {
-  padding: 6px 9px
+  padding: 6px 9px;
+  overflow: hidden;
 }
 
 .view-container {
   //background: #ddd;
   box-shadow: 0px 0px 3px #ddd;
-  border: 1px solid #f2f2f2;
+  border: 1px solid #d4d4d4;
+  //border-top: 0px;
   margin-top: -1px;
   //min-height: 700px;
 }

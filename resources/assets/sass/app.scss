@@ -7,12 +7,13 @@ $fa-font-path: "~font-awesome/fonts/";
 /**
 ** bootstrap.css
 **/
-@import "~bootstrap-sass/assets/stylesheets/_bootstrap";
+//@import "~bootstrap-sass/assets/stylesheets/_bootstrap";
 /**
 ** element-ui.css
 **/
 //@import "~element-ui/packages/theme-chalk/src/index";
 @import '~element-ui/lib/theme-chalk/index.css';
+@import '~element-ui/lib/theme-chalk/display.css'; //断点隐藏
 /**
 ** font-awesome.css
 **/

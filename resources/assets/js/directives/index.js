@@ -1,7 +1,8 @@
 import Vue from 'vue';
+
 Vue.directive('dialogDrag', {
     bind(el, binding, vnode, oldVnode) {
-        //el.componentInstance.closeOnClickModal = false;
+        //vnode.componentInstance.closeOnClickModal = false;
         //弹框可拉伸最小宽高
         let minWidth = 400;
         let minHeight = 300;
@@ -43,7 +44,8 @@ Vue.directive('dialogDrag', {
             } else {
                 styL = +sty.left.replace(/\px/g, '');
                 styT = +sty.top.replace(/\px/g, '');
-            };
+            }
+            ;
 
             document.onmousemove = function (e) {
                 // 通过事件委托，计算移动的距离
@@ -64,9 +66,7 @@ Vue.directive('dialogDrag', {
             };
         }
         dialogHeaderEl.onmousedown = moveDown;
-
-        //双击头部效果
-        dialogFullBtn.onclick = (e) => {
+        function FullClick(e) {
             if (isFullScreen == false) {
                 nowHight = dragDom.clientHeight;
                 nowWidth = dragDom.clientWidth;
@@ -83,20 +83,30 @@ Vue.directive('dialogDrag', {
                 dialogHeaderEl.onmousedown = null;
             } else {
                 dragDom.classList.remove("isFullScreen");
-                dragDom.style.left = 50 +'%';
-                dragDom.style.top = 50 +'%';
+                dragDom.style.left = 50 + '%';
+                dragDom.style.top = 50 + '%';
                 dragDom.style.height = "auto";
                 dragDom.style.width = nowWidth + 'px';
                 dragDom.style.marginTop = nowMarginTop;
                 isFullScreen = false;
-                //dialogHeaderEl.style.cursor = 'move';
+                dialogHeaderEl.style.cursor = 'move';
                 dialogHeaderEl.onmousedown = moveDown;
+            }
+        }
+        if (dialogFullBtn) {
+            //点击全屏按钮全屏，没找到按钮双击头部标题栏全屏
+            dialogFullBtn.onclick = (e) => {
+                FullClick(e);
+            }
+        } else {
+            dialogHeaderEl.ondblclick = (e) => {
+                FullClick(e);
             }
         }
 
 
         //拉伸
-        let resizeEl=document.createElement("div");
+        let resizeEl = document.createElement("div");
 
         dragDom.appendChild(resizeEl);
         //在弹窗右下角加上一个10-10px的控制块
@@ -145,7 +155,6 @@ Vue.directive('dialogDrag', {
         }
     }
 })
-
 // export default {
 //     data(){
 //         formShown:false;
