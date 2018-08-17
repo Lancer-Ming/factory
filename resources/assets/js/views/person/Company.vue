@@ -361,10 +361,10 @@
         <el-dialog title="编辑单位" :visible.sync="formShown" class="pro-add" v-dialogDrag :close-on-click-modal="false"  fullscreen="true" ref="dialog__wrapper" @dragDialog="handleDrag">
             <div class="line" v-dialogDragWidth="$refs.dialog__wrapper">
         -->
-        <el-dialog title="编辑单位" :visible.sync="formShown" v-dialogDrag :close-on-click-modal="false" class="pro-add" @dragDialog="handleDrag">
+        <el-dialog title="编辑单位" :visible.sync="formShown" v-dialogDrag  class="pro-add" @dragDialog="handleDrag">
             <div slot="title">
                 <span class="el-dialog__title">编辑单位</span>
-                <button class="el-dialog__headerbtn el-dialog_btn__fullscreen">
+                <button class="el-dialog_btn__fullscreen">
                 </button>
             </div>
             <div class="line">

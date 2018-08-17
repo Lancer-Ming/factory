@@ -1,6 +1,7 @@
 import Vue from 'vue';
 Vue.directive('dialogDrag', {
     bind(el, binding, vnode, oldVnode) {
+        //el.componentInstance.closeOnClickModal = false;
         //弹框可拉伸最小宽高
         let minWidth = 400;
         let minHeight = 300;
@@ -13,6 +14,8 @@ Vue.directive('dialogDrag', {
         let nowMarginTop = 0;
         //获取弹框头部（这部分可双击全屏）
         const dialogHeaderEl = el.querySelector('.el-dialog__header');
+        // 获取全屏按钮（点击全屏）
+        const dialogFullBtn = el.querySelector(".el-dialog_btn__fullscreen");
         //弹窗
         const dragDom = el.querySelector('.el-dialog');
         //给弹窗加上overflow auto；不然缩小时框内的标签可能超出dialog；
@@ -61,9 +64,8 @@ Vue.directive('dialogDrag', {
             };
         }
         dialogHeaderEl.onmousedown = moveDown;
-        let dialog_btn__fullscreen = el.querySelector(".el-dialog_btn__fullscreen");
         //双击头部效果
-        dialog_btn__fullscreen.onclick = (e) => {
+        dialogFullBtn.onclick = (e) => {
             if (isFullScreen == false) {
                 nowHight = dragDom.clientHeight;
                 nowWidth = dragDom.clientWidth;
@@ -115,11 +117,11 @@ Vue.directive('dialogDrag', {
             const disY = e.clientY - resizeEl.offsetTop;
 
             document.onmousemove = function (e) {
-                let dragModal= document.querySelector(".v-modal");
+                //let dragModal= document.querySelector(".v-modal");
                 //console.log(dragModal);
-                dragModal.onclick = (e) => {
-                    console.log(e);
-                }
+                // el.onclick = (e) => {
+                //     console.log(11);
+                // }
                 e.preventDefault(); // 移动时禁用默认事件
 
                 // 通过事件委托，计算移动的距离
@@ -131,9 +133,20 @@ Vue.directive('dialogDrag', {
             };
             //拉伸结束
             document.onmouseup = function (e) {
+                // let dialog_btn__closebtn = el.querySelector(".el-dialog__headerbtn");
+                // console.log(e);
+                //vnode.componentInstance.closeOnClickModal = false;
+                //let dragModal= document.querySelector(".v-modal");
+                //dialog_btn__closebtn.click();
                 document.onmousemove = null;
                 document.onmouseup = null;
             };
         }
     }
 })
+
+// export default {
+//     data(){
+//         formShown:false;
+//     }
+// }
