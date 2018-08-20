@@ -39,9 +39,10 @@ export function updatecrane(id,data,page,pagesize){
     })
 }
 
+
 export function destroycrane(id,page,pagesize){
     return axios({
-        url: `crane/${id}?page=${page}`,
+        url: `/crane`,
         method: 'delete',
         data: { id,pagesize }
     })

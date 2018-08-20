@@ -22,8 +22,8 @@
                 </el-form-item>
                 <el-form-item label="是否在线" :label-width="formLabelW">
                     <el-select v-model="form.is_online" placeholder="请选择活动区域">
-                        <el-option label="是" value="shanghai"></el-option>
-                        <el-option label="否" value="beijing"></el-option>
+                        <el-option label="是" value="是"></el-option>
+                        <el-option label="否" value="否"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-button type="primary" plain size="mini" style="float: left" @click="search">查询</el-button>
@@ -708,6 +708,27 @@
                     })
 
                 }
+            },
+            handleDelete(){
+                this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    destroycrane({id: this.multipleSelection}, this.page, this.pagesize).then(res =>{
+                        if (res.data.response_status === 'success') {
+                            this.tableData = res.data.data.data
+                            this.$message({
+                                type: 'success',
+                                showClose: true,
+                                message: res.data.msg
+                            })
+                        }
+                    })
+                }).catch(() => {
+                    return
+                })
             },
             search(){
                 this.getTableData(this.query)
