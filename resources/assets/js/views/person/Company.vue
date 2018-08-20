@@ -556,9 +556,6 @@
             this.getTableData()
 
         },
-        props:{
-            closeOnClickModal:false,
-        },
         methods: {
             // handleDrag() {
             //     this.$refs.select
@@ -687,15 +684,6 @@
                     this.$set(this.query, item, '')
                 }
                 this.getTableData(this.query)
-            },
-            reset(){
-                for(var item in this.form){
-                    this.$set(this.form,item)
-                }
-                this.form = {leader: '', name: '', utype_id: ''}
-                //
-                this.resetData = {leader: '', name: '', utype_id: ''}
-                this.getTableData(this.resetData)
             },
             cellClick(row) {
                 // this.$refs.table.toggleRowSelection(row)
