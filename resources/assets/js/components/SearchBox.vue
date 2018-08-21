@@ -99,7 +99,9 @@ import { unitForm,itemForm } from '../api/project'
             },
             // 请求数据
             getTableData(currentPage=this.currentPage, name="") {
-                switch (this.requestName) {
+                let requestName = this.requestName
+                requestName = requestName || 'unit'
+                switch (requestName) {
                     case 'item': itemForm(currentPage, { name }, this.pagesize).then(res => {
                             if (res.data.response_status === 'success') {
                                 this.tableData = res.data.data.data

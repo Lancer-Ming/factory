@@ -19,6 +19,9 @@ Auth::routes();
 Route::middleware('auth')->get('/', 'HomeController@index')->name('index');
 Route::middleware('auth')->get('/api', 'HomeController@api')->name('api');
 Route::middleware('auth')->get('/test', 'HomeController@test')->name('test');
+Route::middleware('auth')->get('/gateway', 'HomeController@gateway')->name('gateway');
+
+
 Route::middleware(['auth','role','header'])->group(function() {
 
     Route::namespace('System')->group(function() {
