@@ -1,0 +1,62 @@
+/**
+  * 重置elment table style
+ */
+//table
+.el-table--group, .el-table--border {
+  border: 1px solid #d4d4d4;
+}
+
+.el-table {
+  background: none;
+}
+
+.el-table--border th:first-child .cell, .el-table--border td:first-child .cell {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+//.el-form-item--mini.el-form-item{ margin-bottom: 0px;}
+.el-table thead {
+  color: $--table-thead-color;
+}
+
+.el-table thead tr {
+  background-color: $--table-thead-bg;
+  background: linear-gradient($--table-thead-bg 0px, $--table-thead-bg 100%) repeat-x;
+  background-repeat: repeat-x;
+}
+
+.el-table th {
+  background: none;
+  font-weight: normal
+}
+
+.el-table th, .el-table td {
+  padding: 0;
+}
+
+.el-table .caret-wrapper {
+  height: 12px;
+}
+
+.el-table .sort-caret.ascending {
+  top: -5px;
+}
+
+.el-table .sort-caret.descending {
+  bottom: -5px;
+}
+
+.el-table th > .cell {
+  height: 25px;
+  line-height: 25px;
+}
+/**
+  * 自定义 table style
+ */
+.as-table{
+  width: 100%;
+  td,th{
+    text-align: center;
+  }
+}
