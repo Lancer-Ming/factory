@@ -1,7 +1,7 @@
 <template>
     <div class="container crane">
         <el-row style="margin-top: 20px;">
-            <el-button type="primary"  icon="el-icon-plus" size="mini" style="border-radius: 8px;" @click="handleAdd">新增</el-button>
+            <el-button type="primary"  icon="el-icon-plus" size="mini" style="border-radius: 8px;margin-left: 20px;" @click="handleAdd">新增</el-button>
             <el-button type="primary" plain icon="el-icon-edit" size="mini" style="border-radius: 8px;" @click="handleEdit">编辑</el-button>
             <el-button type="danger" icon="el-icon-delete" size="mini" style="border-radius: 8px;" @click="handleDelete">删除</el-button>
             <el-button type="warning" plain icon="el-icon-download" size="mini" style="border-radius: 8px;">下载</el-button>
@@ -258,7 +258,7 @@
                 <el-form-item label="身份识别" :label-width="formLabelWidth" style="width: 100%;">
                     <el-checkbox style="width: 100%;margin-left: 30px;" v-model="form.identify.identification">司机识别</el-checkbox>
                     <el-checkbox style="width: 200px;margin-left: 30px;" v-model="form.identify.card">IC打卡</el-checkbox>
-                    <el-checkbox style="width: 200px;margin-left: 30px;" v-model="form.identify.fingerprint ">指纹打卡</el-checkbox>
+                    <el-checkbox style="width: 200px;margin-left: 30px;" v-model="form.identify.fingerprint">指纹打卡</el-checkbox>
                     <el-checkbox style="width: 200px;margin-left: 30px;" v-model="form.identify.recognition">人脸识别</el-checkbox>
                 </el-form-item>
 
