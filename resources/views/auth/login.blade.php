@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/css/app.css">
+    {{--<link rel="stylesheet" href="/css/app.css">--}}
     <title>login</title>
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    {{--<link href="{{asset('/vendor/bootstrap/bootstrap.min.css')}}" rel="stylesheet">--}}
+    {{--<link href="{{asset('/vendor/awesome/font-awesome.min.css')}}" rel="stylesheet">--}}
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{{asset('/css/login.css')}}" rel="stylesheet">
 </head>
 <body>
 <div class="wrapper login-page">
@@ -54,7 +58,7 @@
     </div>
     <div class="login-footer">
             <span>
-                <i class="fa fa-heart" style="color: #c56666;"></i>未经安拾科技有限公司同意，不得转载本网站之所有信息
+                <i class="fa fa-heart" style="color: #c56666;"></i>未经广州安拾科技有限公司同意，不得转载本网站之所有信息
             </span>
     </div>
 </div>
