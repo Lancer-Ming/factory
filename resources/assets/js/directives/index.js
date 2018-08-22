@@ -141,6 +141,9 @@ Vue.directive('dialogDrag', {
                 //比较是否小于最小宽高
                 dragDom.style.width = x > minWidth ? `${x}px` : minWidth + 'px';
                 dragDom.style.height = y > minHeight ? `${y}px` : minHeight + 'px';
+                // emit onDrag event
+                vnode.child.$emit('dragDialog')
+
             };
             //拉伸结束
             document.onmouseup = function (e) {

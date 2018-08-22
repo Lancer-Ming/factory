@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Cache;
 
+use App\Hardware\Entrance;
+
 class HomeController extends Controller
 {
     public function index()
@@ -22,5 +24,12 @@ class HomeController extends Controller
     public function test()
     {
         return view('test');
+    }
+
+    public function gateway()
+    {
+
+        dd($dust->formatData());
+        return view('gateway123');
     }
 }

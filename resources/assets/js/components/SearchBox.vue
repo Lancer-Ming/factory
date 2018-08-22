@@ -108,14 +108,13 @@ import { unitForm,itemForm } from '../api/project'
                             }
                         })
                         break;
-                    case 'unit': unitForm(currentPage, {form_name: this.currentUnitModel, name}, this.pagesize).then(res => {
+                    default: unitForm(currentPage, {form_name: this.currentUnitModel, name}, this.pagesize).then(res => {
                         if (res.data.response_status === 'success') {
                             this.tableData = res.data.data.data
                             this.total = res.data.data.total
                             this.loading = false
                         }
                     })
-                        break;
                 }
             }
         },

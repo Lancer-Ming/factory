@@ -42,37 +42,35 @@
                         @click="exportAllData">导出全部数据
                 </el-button>
             </el-row>
-            <div class="searchBox">
-                <el-row>
-                    <el-form :inline="true" size="mini">
-                        <el-form-item label="企业名称">
-                            <el-input v-model="query.name" placeholder="请输入内容"></el-input>
-                        </el-form-item>
-                        <el-form-item label="法人代表">
-                            <el-input v-model="query.leader" placeholder="请输入法人代表"></el-input>
-                        </el-form-item>
-                        <el-form-item label="单位类型">
-                            <el-select v-model="query.utype_id" multiple filterable placeholder="请选择" value-key="item">
-                                <el-option
-                                        v-for="item in options"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-button type="primary" plain size="mini" @click="search" icon="el-icon-search">搜索</el-button>
-                        <el-button native-type="reset" @click="reset">清空</el-button>
-                    </el-form>
-                </el-row>
-            </div>
+            <el-row class="searchBox">
+                <el-form :inline="true" size="mini">
+                    <el-form-item label="企业名称">
+                        <el-input v-model="query.name" placeholder="请输入内容"></el-input>
+                    </el-form-item>
+                    <el-form-item label="法人代表">
+                        <el-input v-model="query.leader" placeholder="请输入法人代表"></el-input>
+                    </el-form-item>
+                    <el-form-item label="单位类型">
+                        <el-select v-model="query.utype_id" multiple filterable placeholder="请选择" value-key="item">
+                            <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-button type="primary" plain size="mini" @click="search" icon="el-icon-search">搜索</el-button>
+                    <el-button native-type="reset" @click="reset">清空</el-button>
+                </el-form>
+            </el-row>
         </div>
         <el-table
                 :data="tableData"
                 align
                 border
                 stripe
-                style="width: 100%"
+                class="as-table"
                 size="mini"
                 :default-sort="{prop: 'id', order: 'ascending'}"
                 v-loading="loading"
@@ -83,7 +81,6 @@
         >
             <el-table-column
                     prop="id"
-                    align="center"
                     width="60"
                     fixed
                     sortable
@@ -94,14 +91,13 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    align="center"
                     type="selection"
                     width="30"
                     fixed
             >
             </el-table-column>
             <el-table-column
-
+                    align="left"
                     label="单位机构代码"
                     width="150"
             >
@@ -112,7 +108,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
+                    align="left"
                     label="企业名称"
                     width="200"
             >
@@ -124,6 +120,7 @@
             </el-table-column>
 
             <el-table-column
+                    align="left"
                     prop="utypes"
                     label="单位类型"
                     width="100"
@@ -135,9 +132,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
                     label="上级机构"
-                    align="center"
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
@@ -146,6 +141,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+                    align="left"
                     label="单位地址"
                     width="250"
             >
@@ -157,9 +153,7 @@
             </el-table-column>
 
             <el-table-column
-
                     label="法人代表"
-                    align="center"
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
@@ -168,9 +162,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
                     label="法人联系电话"
-                    align="center"
                     width="100"
             >
                 <template slot-scope="scope">
@@ -180,9 +172,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
                     label="联系人"
-                    align="center"
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
@@ -191,9 +181,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
                     label="联系人电话"
-                    align="center"
                     width="100"
             >
                 <template slot-scope="scope">
@@ -203,9 +191,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
                     label="邮箱"
-                    align="center"
                     width="140"
             >
                 <template slot-scope="scope">
@@ -215,9 +201,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
                     label="企业网址"
-                    align="center"
                     width="100"
             >
                 <template slot-scope="scope">
@@ -227,9 +211,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
                     label="传真"
-                    align="center"
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
@@ -240,9 +222,7 @@
 
 
             <el-table-column
-
                     label="业务区域"
-                    align="center"
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
@@ -251,9 +231,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
                     label="资质等级"
-                    align="center"
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
@@ -262,7 +240,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
+                    align="left"
                     label="资质证书编号"
                     width="150"
             >
@@ -273,9 +251,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
                     label="安全生产许可证"
-                    align="center"
                     width="110"
             >
                 <template slot-scope="scope">
@@ -285,9 +261,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
                     label="主营业务"
-                    align="center"
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
@@ -296,9 +270,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
                     label="备注"
-                    align="center"
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
@@ -307,9 +279,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
                     label="单位状态"
-                    align="center"
             >
                 <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper">
@@ -318,9 +288,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
                     label="更新时间"
-                    align="center"
                     width="165"
                     sortable
                     prop="updated_at"
@@ -330,9 +298,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-
                     label="创建时间"
-                    align="center"
                     width="165"
                     sortable
                     prop="created_at"
@@ -361,7 +327,7 @@
         <el-dialog title="编辑单位" :visible.sync="formShown" class="pro-add" v-dialogDrag :close-on-click-modal="false"  fullscreen="true" ref="dialog__wrapper" @dragDialog="handleDrag">
             <div class="line" v-dialogDragWidth="$refs.dialog__wrapper">
         -->
-        <el-dialog :visible.sync="formShown" v-dialogDrag :close-on-click-modal="false" class="pro-add">
+        <el-dialog :visible.sync="formShown" v-dialogDrag class="pro-add" @dragDialog="handleDrag">
             <div slot="title">
                 <span class="el-dialog__title">编辑单位</span>
                 <button class="el-dialog_btn__fullscreen">
@@ -557,9 +523,10 @@
 
         },
         methods: {
-            // handleDrag() {
-            //     this.$refs.select
-            // },
+            handleDrag() {
+                //放大缩小事件预留
+                //this.$refs.select
+            },
             // filterHandler(value, row, column) {
             //     const property = column['property'];
             //     return row[property] === value;
@@ -737,6 +704,7 @@
             },
             searchUnitBox() {
                 this.chose = true
+                this.getTableData();
             },
 
             getUnitValue(row) {

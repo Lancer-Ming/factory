@@ -44,7 +44,7 @@ class UnitsController extends Controller
 
     public function find(Unit $unit)
     {
-        return successJson(['label' => $unit->parent->name, 'value' => $unit->parent_id]);
+        return successJson(['label' => isset($unit->parent) ? $unit->parent->name :'', 'value' => $unit->parent_id]);
     }
 
     public function update(UnitRequest $request, Unit $unit) {
