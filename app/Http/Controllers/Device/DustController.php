@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Device;
 
+use App\Http\Requests\DustRequest;
 use App\Models\Dust;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -39,9 +40,30 @@ class DustController extends Controller
         return successJson($dusts);
     }
 
-    
+    public function store(DustRequest $request)
+    {
+        Dust::create($request->all());
+        return successJson($this->returnDust(), '操作成功！');
+    }
+
+    public function edit(Dust $dust)
+    {
+        return successJson($dust);
+    }
+
+    public function update(DustRequest $request, Dust $dust)
+    {
+        $dust->update($request->all());
+        return successJson($this->returnDust(), '操作成功！');
+    }
+
+    public function destroy(Request $request)
+    {
+        Dust::destroy($request->id);
+        return Dust::orderBy('created_at', 'asc')->paginate($pagesize);
+    }
 
     protected function returnDust($pagesize=30) {
-
+        return Dust::orderBy('created_at', 'asc')->paginate($pagesize);
     }
 }
