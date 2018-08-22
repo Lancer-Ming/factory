@@ -411,7 +411,7 @@
         </el-dialog>
 
 
-        <el-dialog title="导入EXCEL" :visible.sync="excelDialogShow" v-dialogDrag :close-on-click-modal="false" class="pro-add">
+        <el-dialog title="导入EXCEL" :visible.sync="excelDialogShow" v-dialogDrag class="pro-add">
             <div class="app-container">
                 <upload-excel-component :on-success='handleSuccess' :before-upload="beforeUpload"></upload-excel-component>
                 <el-table :data="excelData" border highlight-current-row style="width: 100%;margin-top:20px;">
@@ -704,7 +704,6 @@
             },
             searchUnitBox() {
                 this.chose = true
-                this.getTableData();
             },
 
             getUnitValue(row) {
