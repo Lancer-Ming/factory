@@ -7,7 +7,7 @@ $fa-font-path: "~font-awesome/fonts/";
 /**
 ** bootstrap.css
 **/
-@import "~bootstrap-sass/assets/stylesheets/_bootstrap";
+//@import "~bootstrap-sass/assets/stylesheets/_bootstrap";
 /**
 ** element-ui.css
 **/
@@ -18,11 +18,4 @@ $fa-font-path: "~font-awesome/fonts/";
 ** font-awesome.css
 **/
 @import "~font-awesome/scss/font-awesome";
-
-
-//login
-
-
-@import 'page/login';
-
 
