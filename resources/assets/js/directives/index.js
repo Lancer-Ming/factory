@@ -2,7 +2,7 @@ import Vue from 'vue';
 
 Vue.directive('dialogDrag', {
     bind(el, binding, vnode, oldVnode) {
-        //vnode.componentInstance.closeOnClickModal = false;
+        let closeOnClickModal = vnode.componentInstance.closeOnClickModal;
         //弹框可拉伸最小宽高
         let minWidth = 400;
         let minHeight = 300;
@@ -118,9 +118,7 @@ Vue.directive('dialogDrag', {
         resizeEl.style.bottom = '0px';
         //鼠标拉伸弹窗
         resizeEl.onmousedown = (e) => {
-
-
-            //close-on-click-modal = false;
+            closeOnClickModal = false;
             // 记录初始x位置
             const clientX = e.clientX;
             // 鼠标按下，计算当前元素距离可视区的距离

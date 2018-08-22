@@ -19,8 +19,9 @@ mix.webpackConfig({
     },
 })
 mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css')
+    .sass('resources/assets/sass/app.scss', 'public/css')
     .sass('resources/assets/sass/page/page.scss', 'public/css')
+    .sass('resources/assets/sass/login.scss', 'public/css')
    .sourceMaps()
    //.version()
    //.extract(['vue','vue-router','axios','element-ui'])
