@@ -1,7 +1,7 @@
 <template>
     <div class="container crane">
         <el-row style="margin-top: 20px;">
-            <el-button type="primary"  icon="el-icon-plus" size="mini" style="border-radius: 8px;margin-left: 20px;" @click="handleAdd">新增</el-button>
+            <el-button type="primary" icon="el-icon-plus" size="mini" style="border-radius: 8px;margin-left: 20px;" @click="handleAdd">新增</el-button>
             <el-button type="primary" plain icon="el-icon-edit" size="mini" style="border-radius: 8px;" @click="handleEdit">编辑</el-button>
             <el-button type="danger" icon="el-icon-delete" size="mini" style="border-radius: 8px;" @click="handleDelete">删除</el-button>
             <el-button type="warning" plain icon="el-icon-download" size="mini" style="border-radius: 8px;">下载</el-button>
@@ -36,7 +36,11 @@
                 border
                 stripe
                 style="width: 100%;"
+                :default-sort="{prop: 'id', order: 'ascending'}"
                 @selection-change="handleSelectionChange"
+                @row-click="cellClick"
+                @row-dblclick="dblclick"
+                ref="table"
         >
             <el-table-column
                     prop="id"
@@ -146,18 +150,18 @@
                 </template>
             </el-table-column>
         </el-table>
-            <el-row style="margin-top: 20px;">
-                <el-pagination
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        :current-page="currentPage"
-                        :page-sizes="[30, 60, 90, 120]"
-                        :page-size="pagesize"
-                        :pager-count="11"
-                        layout="total, sizes, prev, pager, next, jumper,slot,->"
-                        :total="total">
-                </el-pagination>
-            </el-row>
+        <el-row style="margin-top: 20px;">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[30, 60, 90, 120]"
+                    :page-size="pagesize"
+                    :pager-count="11"
+                    layout="total, sizes, prev, pager, next, jumper,slot,->"
+                    :total="total">
+            </el-pagination>
+        </el-row>
 
 
         <el-dialog v-dialogDrag :visible.sync="craneAdd">
@@ -233,14 +237,14 @@
                     <el-date-picker
                             v-model="form.paid_at"
                             type="date"
-                            placeholder="选择缴费日期"  format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+                            placeholder="选择缴费日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="安装日期" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="form.installed_at"
                             type="date"
-                            placeholder="选择安装日期"  format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+                            placeholder="选择安装日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item>&nbsp;</el-form-item>
@@ -329,7 +333,7 @@
                             height="250"
                             border
                             style="width: 100%">
-                        <el-table-column  width="60"></el-table-column>
+                        <el-table-column width="60"></el-table-column>
                         <el-table-column
                                 prop="name"
                                 label="姓名"
@@ -375,19 +379,18 @@
         </el-dialog>
 
 
-
         <search-box :chose="chose" v-on:dbClickSelection="getUnitValue" v-on:closeSearchBox="closeUnitValue" :requestName="requestName" :currentUnitModel="currentUnitModel"></search-box>
     </div>
 </template>
 
 <script>
     import SearchBox from '../../components/SearchBox.vue'
-    import { getcrane,editcrane,updatecrane,destroycrane,storecrane } from '../../api/crane'
-    import { implode} from "../../utils/common";
+    import {getcrane, editcrane, updatecrane, destroycrane, storecrane} from '../../api/crane'
+    import {implode} from "../../utils/common";
     import {pagesize, perPagesize} from '../../config/common'
 
     export default {
-        components:{
+        components: {
             SearchBox
         },
         data() {
@@ -399,7 +402,7 @@
                     right_name: '',
                     is_online: '',
                 },
-                form:{
+                form: {
                     id: '',
                     item_id: '',
                     right_id: '',
@@ -429,7 +432,7 @@
                     sn: '',
                     GPRS: '',
                     validity_month: '',
-                    model:　'',
+                    model: '',
                     paid_at: '',
                     installed_at: '',
                     function_config: {
@@ -497,7 +500,7 @@
                 }]
             }
         },
-        created(){
+        created() {
             this.$router.replace({path: this.$route.path, query: {page: this.currentPage}})
             this.getTableData()
         },
@@ -505,14 +508,17 @@
             handleClick(row) {
                 console.log(row);
             },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+            handleSizeChange(pagesize) {
+                this.pagesize = pagesize
+                this.getTableData(this.searchData)
             },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
+            handleCurrentChange(currentPage) {
+                this.currentPage = currentPage
+                this.$router.replace({path: this.$route.path, query: {page: this.currentPage}})
+                this.getTableData(this.searchData)
             },
-            handleAdd(){
-                this.form={
+            handleAdd() {
+                this.form = {
                     id: '',
                     item_id: '',
                     right_id: '',
@@ -545,7 +551,7 @@
                     sn: '',
                     GPRS: '',
                     validity_month: '',
-                    model:　'',
+                    model: '',
                     paid_at: '',
                     installed_at: '',
                     function_config: {
@@ -558,39 +564,54 @@
                         collision: '',
                         control: '',
                         gps: ''
-                        },
+                    },
                     identify: {
                         identification: '',
                         card: '',
                         fingerprint: '',
                         recognition: ''
-                        }
+                    }
                 }
                 this.craneAdd = true
                 this.submitType = 'add'
             },
-            searchUnitBox(requestName,currentUnitModel) {
+            searchUnitBox(requestName, currentUnitModel) {
                 this.chose = true
                 this.requestName = requestName
                 this.currentUnitModel = currentUnitModel
             },
-            getUnitValue(row){
+            getUnitValue(row) {
                 this.chose = false
-                if(this.requestName === 'item'){
+                if (this.requestName === 'item') {
                     this.$set(this.items, 0, {label: row.name, value: row.id})
                     this.$set(this.form, 'item_id', row.id)
-                }else{
+                } else {
                     this.$set(this.units, 0, {label: row.name, value: row.id})
                     this.form[this.currentUnitModel] = row.name
                 }
             },
-            closeUnitValue(){
+            closeUnitValue() {
                 this.chose = false
             },
-            searchDriver(){
+            searchDriver() {
 
             },
-            confirm(){
+            cellClick(row) {
+                // this.$refs.table.clearSelection()
+                this.$refs.table.toggleRowSelection(row, true)
+            },
+            dblclick(row) {
+                this.submitType = 'edit'
+                this.$refs.table.clearSelection()
+                this.$refs.table.toggleRowSelection(row, true)
+                editcrane(row.id).then(res => {
+                    this.editData = res.data.data
+                    this.getEdit(row.id)
+                    // 显示dialog编辑框
+                    this.craneAdd = true
+                })
+            },
+            confirm() {
                 let data = this.form
                 data.item_id = parseInt(data.item_id)
                 data.right_id = parseInt(data.right_id)
@@ -600,11 +621,11 @@
                 data.validity_month = parseInt(data.validity_month)
                 data.model = parseInt(data.model)
                 data.parameters = JSON.stringify(data.parameters)
-                data.function_config =  JSON.stringify(data.function_config)
-                data.identify =  JSON.stringify(data.identify)
+                data.function_config = JSON.stringify(data.function_config)
+                data.identify = JSON.stringify(data.identify)
 
                 if (this.submitType === 'edit') {
-                    updatecrane(this.editData.id, data,this.currentPage, this.pagesize).then(res => {
+                    updatecrane(this.editData.id, data, this.currentPage, this.pagesize).then(res => {
                         console.log(res)
                         this.tableData = res.data.data.data
                         this.craneAdd = false
@@ -628,9 +649,9 @@
                     })
                 }
             },
-            getTableData(data = {}){
-                getcrane(this.currentPage,data,this.pagesize).then(res =>{
-                    if(res.data.response_status === "success"){
+            getTableData(data = {}) {
+                getcrane(this.currentPage, data, this.pagesize).then(res => {
+                    if (res.data.response_status === "success") {
                         this.tableData = res.data.data.data
                         this.total = res.data.data.total
                         this.loading = false
@@ -640,83 +661,83 @@
             handleSelectionChange(selection) {
                 this.multipleSelection = implode(selection, 'id')
             },
-            handleEdit(){
+            handleEdit() {
                 this.submitType = 'edit'
-                if(this.multipleSelection.length ===1){
-                    editcrane(this.multipleSelection[0]).then(res => {
-                        this.editData = res.data.data
-                        this.items.push({
-                            label: this.editData.items.name,
-                            value: this.editData.items.id
-                        })
-                        this.units.push({
-                            label:this.editData.right_unit.name,
-                            value:this.editData.right_unit.id
-                        })
-                        this.units.push({
-                            label:this.editData.produce_unit.name,
-                            value:this.editData.produce_unit.id
-                        })
-                        console.log(this.editData)
-                        let Parameters= JSON.parse(this.editData.parameters)
-                        let Function_config = JSON.parse(this.editData.black_boxes.function_config)
-                        let Identify = JSON.parse(this.editData.black_boxes.identify)
-                        this.form.id = this.editData.id
-                        this.form.item_id = this.editData.item_id
-                        this.form.right_id = this.editData.right_id
-                        this.form.crane_produce_id = this.editData.crane_produce_id
-                        this.form.is_monitor = this.editData.is_monitor
-                        this.form.driver = this.editData.driver
-                        this.form.record_no = this.editData.record_no
-                        this.form.floor_no = this.editData.floor_no
-                        this.form.c_model = this.editData.c_model
-                        this.form.left_no = this.editData.left_no
-                        this.form.parameters.lifting_weight = Parameters.lifting_weight
-                        this.form.parameters.rated_torque = Parameters.rated_torque
-                        this.form.parameters.tower_crane = Parameters.tower_crane
-                        this.form.parameters.top_tower = Parameters.top_tower
-                        this.form.parameters.forearm_length = Parameters.forearm_length
-                        this.form.parameters.posterior_length = Parameters.posterior_length
-                        this.form.parameters.localX = Parameters.localX
-                        this.form.parameters.localY = Parameters.localY
-                        this.form.parameters.tower_type = Parameters.tower_type
-                        this.form.parameters.multiple_rate = Parameters.multiple_rate
-                        this.form.parameters.remarks = Parameters.remarks
-                        this.form.left_at = this.editData.left_at
-                        this.form.install_unit_id = this.editData.black_boxes.installed_at
-                        this.form.crane_id = this.editData.black_boxes.crane_id
-                        this.form.sn = this.editData.black_boxes.sn
-                        this.form.GPRS = this.editData.black_boxes.GPRS
-                        this.form.validity_month = this.editData.black_boxes.validity_month
-                        this.form.model = this.editData.black_boxes.model
-                        this.form.paid_at = this.editData.black_boxes.paid_at
-                        this.form.installed_at = this.editData.black_boxes.installed_at
-                        this.form.function_config.weight = Function_config.weight
-                        this.form.function_config.range = Function_config.range
-                        this.form.function_config.rotation = Function_config.rotation
-                        this.form.function_config.height = Function_config.height
-                        this.form.function_config.wind = Function_config.wind
-                        this.form.function_config.angle = Function_config.angle
-                        this.form.function_config.collision = Function_config.collision
-                        this.form.function_config.control = Function_config.control
-                        this.form.function_config.gps = Function_config.gps
-                        this.form.identify.identification = Identify.identification
-                        this.form.identify.card = Identify.card
-                        this.form.identify.fingerprint = Identify.fingerprint
-                        this.form.identify.recognition = Identify.recognition
+                if (this.multipleSelection.length === 1) {
+                        this.getEdit(this.multipleSelection[0])
                         this.craneAdd = true
-                    })
-
                 }
             },
-            handleDelete(){
+            getEdit(id) {
+                editcrane(id).then(res => {
+                    this.editData = res.data.data
+                    this.items.push({
+                        label: this.editData.items.name,
+                        value: this.editData.items.id
+                    })
+                    this.units.push({
+                        label: this.editData.right_unit.name,
+                        value: this.editData.right_unit.id
+                    }, {
+                        label: this.editData.produce_unit.name,
+                        value: this.editData.produce_unit.id
+                    })
+                    let Parameters = JSON.parse(this.editData.parameters) || this.form.parameters
+                    let Function_config = JSON.parse(this.editData.black_boxes.function_config) || this.form.function_config
+                    let Identify = JSON.parse(this.editData.black_boxes.identify) || this.form.identify
+                    this.form.id = this.editData.id
+                    this.form.item_id = this.editData.item_id
+                    this.form.right_id = this.editData.right_id
+                    this.form.crane_produce_id = this.editData.crane_produce_id
+                    this.form.is_monitor = this.editData.is_monitor
+                    this.form.driver = this.editData.driver
+                    this.form.record_no = this.editData.record_no
+                    this.form.floor_no = this.editData.floor_no
+                    this.form.c_model = this.editData.c_model
+                    this.form.left_no = this.editData.left_no
+                    this.form.parameters.lifting_weight = Parameters.lifting_weight
+                    this.form.parameters.rated_torque = Parameters.rated_torque
+                    this.form.parameters.tower_crane = Parameters.tower_crane
+                    this.form.parameters.top_tower = Parameters.top_tower
+                    this.form.parameters.forearm_length = Parameters.forearm_length
+                    this.form.parameters.posterior_length = Parameters.posterior_length
+                    this.form.parameters.localX = Parameters.localX
+                    this.form.parameters.localY = Parameters.localY
+                    this.form.parameters.tower_type = Parameters.tower_type
+                    this.form.parameters.multiple_rate = Parameters.multiple_rate
+                    this.form.parameters.remarks = Parameters.remarks
+                    this.form.left_at = this.editData.left_at
+                    this.form.install_unit_id = this.editData.black_boxes.installed_at
+                    this.form.crane_id = this.editData.black_boxes.crane_id
+                    this.form.sn = this.editData.black_boxes.sn
+                    this.form.GPRS = this.editData.black_boxes.GPRS
+                    this.form.validity_month = this.editData.black_boxes.validity_month
+                    this.form.model = this.editData.black_boxes.model
+                    this.form.paid_at = this.editData.black_boxes.paid_at
+                    this.form.installed_at = this.editData.black_boxes.installed_at
+                    this.form.function_config.weight = Function_config.weight
+                    this.form.function_config.range = Function_config.range
+                    this.form.function_config.rotation = Function_config.rotation
+                    this.form.function_config.height = Function_config.height
+                    this.form.function_config.wind = Function_config.wind
+                    this.form.function_config.angle = Function_config.angle
+                    this.form.function_config.collision = Function_config.collision
+                    this.form.function_config.control = Function_config.control
+                    this.form.function_config.gps = Function_config.gps
+                    this.form.identify.identification = Identify.identification
+                    this.form.identify.card = Identify.card
+                    this.form.identify.fingerprint = Identify.fingerprint
+                    this.form.identify.recognition = Identify.recognition
+                })
+            },
+            handleDelete() {
                 this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning',
                     center: true
                 }).then(() => {
-                    destroycrane({id: this.multipleSelection}, this.page, this.pagesize).then(res =>{
+                    destroycrane({id: this.multipleSelection}, this.currentPage, this.pagesize).then(res => {
                         if (res.data.response_status === 'success') {
                             this.tableData = res.data.data.data
                             this.$message({
@@ -730,7 +751,7 @@
                     return
                 })
             },
-            search(){
+            search() {
                 this.getTableData(this.query)
             },
         }
@@ -740,12 +761,13 @@
 
 
 <style>
-    .crane-head .el-form-item{
+    .crane-head .el-form-item {
         width: 30%;
         float: left;
         padding-right: 60px;
     }
-    .crane-tab .el-table__row{
+
+    .crane-tab .el-table__row {
         height: 35px;
     }
 </style>

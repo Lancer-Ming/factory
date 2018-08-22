@@ -142,9 +142,11 @@ class UnitsController extends Controller
             $utype = Utype::where('form_name', $request->form_name)->first();
             if(isset($utype)) {
                 $utype_id = $utype->id;
+                $unit_ids = \DB::table('unit_utype')->where('utype_id', $utype_id)->pluck('unit_id')->unique();
+                $units = Unit::whereIn('id', $unit_ids)->where($where)->orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
+            } else{
+                return successJson([]);
             }
-            $unit_ids = \DB::table('unit_utype')->where('utype_id', $utype_id)->pluck('unit_id')->unique();
-            $units = Unit::whereIn('id', $unit_ids)->where($where)->orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
         } else {
             $units = Unit::where($where)->orderBy('created_at', 'desc')->with('utypes')->paginate($pagesize);
         }
