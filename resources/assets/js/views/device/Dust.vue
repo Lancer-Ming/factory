@@ -33,6 +33,10 @@
                 stripe
                 style="width: 100%;"
                 @selection-change="handleSelectionChange"
+                :default-sort="{prop: 'id', order: 'ascending'}"
+                @row-click="cellClick"
+                @row-dblclick="dblclick"
+                ref="table"
         >
             <el-table-column
                     prop="id"
@@ -367,8 +371,8 @@
                 perPagesize: perPagesize,
                 total: null,
                 loading: true,
-                items: [],
-                units: [],
+                items: [{label: '请选择所在项目',value: 0}],
+                units: [{label: '请选择所在单位',value: 0}],
                 chose: false,
                 requestName: '',
                 currentUnitModel: "",
@@ -387,36 +391,8 @@
                 this.Monitoring = true;
             },
             handleAdd() {
-                this.form = {
-                    id: '',
-                    item_id: '',
-                    right_id: '',
-                    install_id: '',
-                    is_monitor: '',
-                    monitor_place_name: '',
-                    sn: '',
-                    d_model: '',
-                    installed_at: '',
-                    disassembled_at: '',
-                    SIM_card: '',
-                    valid_month: '',
-                    paid_at: '',
-                    func_config: {
-                        dust: '',
-                        pm10: '',
-                        pm2: '',
-                        point: '',
-                        pressure: '',
-                        humidity: '',
-                        temperature: '',
-                        noise: '',
-                        gps: '',
-                        wind_direction: '',
-                        wind_speed: ''
-                    },
-                    remark: '',
-                },
-                    this.dustAdd = true
+                this.initForm()
+                this.dustAdd = true
                 this.submitType = 'add'
             },
             handleSelectionChange(selection) {
@@ -432,6 +408,7 @@
             getEdit(id) {
                 editdust(id).then(res => {
                     this.editData = res.data.data
+                    this.initForm()
                     let Func_config = JSON.parse(this.editData.func_config) || this.form.func_config
                     this.form.id = this.editData.id
                     this.form.item_id = this.editData.item_id
@@ -493,6 +470,7 @@
                 data.is_monitor = parseInt(data.is_monitor)
                 data.valid_month = parseInt(data.valid_month)
                 data.func_config = JSON.stringify(data.func_config)
+                console.log(data.func_config)
 
                 if (this.submitType === 'edit') {
                     updatedust(this.editData.id, data, this.currentPage, this.pagesize).then(res => {
@@ -551,7 +529,49 @@
             closeUnitValue() {
                 this.chose = false
             },
-
+            cellClick(row) {
+                this.$refs.table.toggleRowSelection(row, true)
+            },
+            dblclick(row) {
+                this.submitType = 'edit'
+                this.$refs.table.clearSelection()
+                this.$refs.table.toggleRowSelection(row, true)
+                editdust(row.id).then(res => {
+                    this.editData = res.data.data
+                    this.getEdit(row.id)
+                    this.dustAdd = true
+                })
+            },
+            initForm() {
+                this.form = {
+                    item_id: 0,
+                    right_id: 0,
+                    install_id: 0,
+                    is_monitor: 1,
+                    monitor_place_name: '',
+                    sn: '',
+                    d_model: '',
+                    installed_at: '',
+                    disassembled_at: '',
+                    SIM_card: '',
+                    valid_month: 10,
+                    paid_at: '',
+                    func_config: {
+                        dust: '',
+                        pm10: '',
+                        pm2: '',
+                        point: '',
+                        pressure: '',
+                        humidity: '',
+                        temperature: '',
+                        noise: '',
+                        gps: '',
+                        wind_direction: '',
+                        wind_speed: ''
+                    },
+                    remark: '',
+                }
+            }
         }
     }
 </script>

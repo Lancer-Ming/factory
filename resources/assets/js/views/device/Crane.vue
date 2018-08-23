@@ -453,8 +453,8 @@
                         recognition: ''
                     }
                 },
-                items: [],
-                units: [],
+                items: [{label: '请选择所在项目',value: 0}],
+                units: [{label: '请选择所在单位',value: 0}],
                 currentUnitModel: "",
                 formLabel: '70px',
                 formLabelW: '75px',
@@ -518,60 +518,7 @@
                 this.getTableData(this.searchData)
             },
             handleAdd() {
-                this.form = {
-                    id: '',
-                    item_id: '',
-                    right_id: '',
-                    crane_produce_id: '',
-                    SIM_card: '',
-                    arrears_reminding: '',
-                    is_online: '',
-                    is_monitor: true,
-                    driver: '',
-                    record_no: '',
-                    floor_no: '',
-                    c_model: '',
-                    left_no: '',
-                    parameters: {
-                        lifting_weight: '',
-                        rated_torque: '',
-                        tower_crane: '',
-                        top_tower: '',
-                        forearm_length: '',
-                        posterior_length: '',
-                        localX: '',
-                        localY: '',
-                        tower_type: '',
-                        multiple_rate: '',
-                        remarks: ''
-                    },
-                    left_at: '',
-                    install_unit_id: '',
-                    crane_id: '',
-                    sn: '',
-                    GPRS: '',
-                    validity_month: '',
-                    model: '',
-                    paid_at: '',
-                    installed_at: '',
-                    function_config: {
-                        weight: '',
-                        range: '',
-                        rotation: '',
-                        height: '',
-                        wind: '',
-                        angle: '',
-                        collision: '',
-                        control: '',
-                        gps: ''
-                    },
-                    identify: {
-                        identification: '',
-                        card: '',
-                        fingerprint: '',
-                        recognition: ''
-                    }
-                }
+                this.initForm()
                 this.craneAdd = true
                 this.submitType = 'add'
             },
@@ -597,7 +544,6 @@
 
             },
             cellClick(row) {
-                // this.$refs.table.clearSelection()
                 this.$refs.table.toggleRowSelection(row, true)
             },
             dblclick(row) {
@@ -664,13 +610,14 @@
             handleEdit() {
                 this.submitType = 'edit'
                 if (this.multipleSelection.length === 1) {
-                        this.getEdit(this.multipleSelection[0])
-                        this.craneAdd = true
+                    this.getEdit(this.multipleSelection[0])
+                    this.craneAdd = true
                 }
             },
             getEdit(id) {
                 editcrane(id).then(res => {
                     this.editData = res.data.data
+                    this.initForm()
                     this.items.push({
                         label: this.editData.items.name,
                         value: this.editData.items.id
@@ -754,6 +701,61 @@
             search() {
                 this.getTableData(this.query)
             },
+            initForm() {
+                this.form = {
+                    item_id: 0,
+                    right_id: 0,
+                    crane_produce_id: 0,
+                    SIM_card: '',
+                    arrears_reminding: '',
+                    is_online: '',
+                    is_monitor: true,
+                    driver: '',
+                    record_no: '',
+                    floor_no: '',
+                    c_model: '',
+                    left_no: '',
+                    parameters: {
+                        lifting_weight: '',
+                        rated_torque: '',
+                        tower_crane: '',
+                        top_tower: '',
+                        forearm_length: '',
+                        posterior_length: '',
+                        localX: '',
+                        localY: '',
+                        tower_type: '',
+                        multiple_rate: '',
+                        remarks: ''
+                    },
+                    left_at: '',
+                    install_unit_id: '',
+                    crane_id: '',
+                    sn: '',
+                    GPRS: '',
+                    validity_month: 10,
+                    model: '',
+                    paid_at: '',
+                    installed_at: '',
+                    function_config: {
+                        weight: '',
+                        range: '',
+                        rotation: '',
+                        height: '',
+                        wind: '',
+                        angle: '',
+                        collision: '',
+                        control: '',
+                        gps: ''
+                    },
+                    identify: {
+                        identification: '',
+                        card: '',
+                        fingerprint: '',
+                        recognition: ''
+                    }
+                }
+            }
         }
     }
 
