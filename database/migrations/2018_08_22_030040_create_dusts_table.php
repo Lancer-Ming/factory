@@ -19,6 +19,7 @@ class CreateDustsTable extends Migration
             $table->unsignedInteger('right_id')->index()->nullable()->comment('产权单位id');
             $table->unsignedInteger('install_id')->index()->nullable()->comment('安装单位id');
             $table->unsignedInteger('is_monitor')->index()->nullable()->comment('是否监控');
+            $table->unsignedInteger('is_online')->index()->nullable()->comment('上线状态');
             $table->string('monitor_place_name')->nullable()->comment('监控点名称');
             $table->string('sn')->nullable()->comment('SN');
             $table->string('d_model')->nullable()->comment('设备型号');
@@ -29,6 +30,7 @@ class CreateDustsTable extends Migration
             $table->timestamp('paid_at')->nullable()->comment('缴费日期');
             $table->text('func_config')->nullable()->comment('功能配置');
             $table->string('remark')->nullable()->comment('备注');
+            $table->string('machanical_type')->nullable()->comment('备注');
             $table->timestamps();
         });
     }

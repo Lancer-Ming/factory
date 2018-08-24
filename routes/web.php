@@ -125,6 +125,11 @@ Route::middleware(['auth','role','header'])->group(function() {
         Route::as('current.')->group(function() {
             Route::get('/video/current', 'CurrentController@index')->name('index');
         });
+
+        // 扬尘监控
+        Route::as('dust.')->group(function() {
+            Route::get('/video/dust', 'DustVideoController@index');
+        });
     });
 
     // 萤石api
