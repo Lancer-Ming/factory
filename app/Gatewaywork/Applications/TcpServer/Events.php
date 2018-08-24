@@ -21,6 +21,7 @@
 //declare(ticks=1);
 
 use \GatewayWorker\Lib\Gateway;
+use App\Hardware\Entrance;
 /**
  * 主逻辑
  * 主要是处理 onConnect onMessage onClose 三个方法
@@ -38,7 +39,7 @@ class Events
     public static function onConnect($client_id)
     {
         // 向所有人发送
-        Gateway::sendToAll("$client_id login\n");
+        Gateway::sendToAll(Entrance::Dust()->sendConnectData());
     }
 
 
@@ -52,14 +53,6 @@ class Events
     {
         // 向所有人发送
         Gateway::sendToAll($message."chenming");
-        $dust = Entrance::Dust($message)->store();
-
-        $message = "##0239QN=20180821142509000;
-        ST=39;CN=2011;PW=123456;
-        MN=690000D5800028F889221AC0;
-        Flag=4;CP=&&DataTime=20180821142509;a34004-Rtd=0.0;
-        a34002-Rtd=0.0;a34001-Rtd=0.0;LA-Rtd=0.0;a01001-Rtd=0.0;
-        a01002-Rtd=0.0;a01006-Rtd=0.0;a01007-Rtd=0.0;a01008-Rtd=0&&E541";
     }
 
 
