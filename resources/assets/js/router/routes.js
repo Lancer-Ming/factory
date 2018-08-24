@@ -143,9 +143,9 @@ export default [
         component: () => import('../views/monitors/Crane') // 4.4 塔吊监控
     },
     {
-        path: '/video/green/index',
-        name: 'video.green.index',
-        component: () => import('../views/monitors/Green')  //4.5 绿色监控 -----监控管理 4.1-4.5 end
+        path: '/video/dust/index',
+        name: 'video.dust.index',
+        component: () => import('../views/monitors/Dust')  //4.5 绿色监控 -----监控管理 4.1-4.5 end
     },
     {
         path: '/wage/wage/index',
