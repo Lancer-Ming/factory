@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 class DustController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $where = function($query) use ($request) {
             // 备案编号
@@ -60,7 +60,7 @@ class DustController extends Controller
     public function destroy(Request $request)
     {
         Dust::destroy($request->id);
-        return Dust::orderBy('created_at', 'asc')->paginate($pagesize);
+        return successJson($this->returnDust(), '操作成功！');
     }
 
     protected function returnDust($pagesize=30) {

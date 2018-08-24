@@ -2,7 +2,8 @@ import Vue from 'vue';
 
 Vue.directive('dialogDrag', {
     bind(el, binding, vnode, oldVnode) {
-        let closeOnClickModal = vnode.componentInstance.closeOnClickModal;
+        //let closeOnClickModal = vnode.componentInstance.closeOnClickModal;
+        //closeOnClickModal = false;
         //弹框可拉伸最小宽高
         let minWidth = 400;
         let minHeight = 300;
@@ -118,7 +119,9 @@ Vue.directive('dialogDrag', {
         resizeEl.style.bottom = '0px';
         //鼠标拉伸弹窗
         resizeEl.onmousedown = (e) => {
-            closeOnClickModal = false;
+           // vnode.componentInstance.closeOnClickModal = false;
+            //closeOnClickModal = false;
+            //console.log(vnode.componentInstance);
             // 记录初始x位置
             const clientX = e.clientX;
             // 鼠标按下，计算当前元素距离可视区的距离
@@ -126,11 +129,6 @@ Vue.directive('dialogDrag', {
             const disY = e.clientY - resizeEl.offsetTop;
 
             document.onmousemove = function (e) {
-                //let dragModal= document.querySelector(".v-modal");
-                //console.log(dragModal);
-                // el.onclick = (e) => {
-                //     console.log(11);
-                // }
                 e.preventDefault(); // 移动时禁用默认事件
 
                 // 通过事件委托，计算移动的距离
@@ -145,11 +143,8 @@ Vue.directive('dialogDrag', {
             };
             //拉伸结束
             document.onmouseup = function (e) {
-                // let dialog_btn__closebtn = el.querySelector(".el-dialog__headerbtn");
-                // console.log(e);
-                //vnode.componentInstance.closeOnClickModal = false;
-                //let dragModal= document.querySelector(".v-modal");
-                //dialog_btn__closebtn.click();
+                //closeOnClickModal = false;
+                //console.log(closeOnClickModal);
                 document.onmousemove = null;
                 document.onmouseup = null;
             };
