@@ -94,7 +94,7 @@ class CraneController extends Controller
         return successJson($this->returnCrane($request->pagesize), '操作成功！');
     }
 
-    protected function returnCrane($pagesize=10)
+    protected function returnCrane($pagesize=30)
     {
         return Crane::with('blackBoxes', 'items')->orderBy('created_at', 'desc')->paginate($pagesize);
     }

@@ -12,7 +12,7 @@ class Entrance {
      */
     static $instance;
 
-    public static function create($name, $message)
+    public static function create($name, $message='')
     {
         $class = __NAMESPACE__."\\DeviceClass\\".$name."Class";
         static::$instance =  new $class($message);
@@ -24,7 +24,7 @@ class Entrance {
      * @param $arguments
      * @return Object
      */
-    public static function __callStatic($name, $arguments)
+    public static function __callStatic($name, $arguments=[])
     {
         static::create($name, ...$arguments);
         return static::$instance;
