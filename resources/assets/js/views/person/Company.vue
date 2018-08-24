@@ -327,7 +327,7 @@
         <el-dialog title="编辑单位" :visible.sync="formShown" class="pro-add" v-dialogDrag :close-on-click-modal="false"  fullscreen="true" ref="dialog__wrapper" @dragDialog="handleDrag">
             <div class="line" v-dialogDragWidth="$refs.dialog__wrapper">
         -->
-        <el-dialog :visible.sync="formShown" v-dialogDrag class="pro-add" @dragDialog="handleDrag">
+        <el-dialog :visible.sync="formShown" v-dialogDrag :close-on-click-modal="false" class="pro-add" @dragDialog="handleDrag">
             <div slot="title">
                 <span class="el-dialog__title">编辑单位</span>
                 <button class="el-dialog_btn__fullscreen">
@@ -411,7 +411,7 @@
         </el-dialog>
 
 
-        <el-dialog title="导入EXCEL" :visible.sync="excelDialogShow" v-dialogDrag class="pro-add">
+        <el-dialog title="导入EXCEL" :visible.sync="excelDialogShow" v-dialogDrag :close-on-click-modal="false" class="pro-add">
             <div class="app-container">
                 <upload-excel-component :on-success='handleSuccess' :before-upload="beforeUpload"></upload-excel-component>
                 <el-table :data="excelData" border highlight-current-row style="width: 100%;margin-top:20px;">
