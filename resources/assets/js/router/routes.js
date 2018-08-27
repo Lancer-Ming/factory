@@ -153,6 +153,26 @@ export default [
         component: () => import('../views/monitors/subDust/WorkingData')
     },
     {
+        path: '/video/dust/Information',
+        name: 'video.dust.Information',
+        component: () => import('../views/monitors/subDust/Information')
+    },
+    {
+        path: '/video/dust/Running',
+        name: 'video.dust.Running',
+        component: () => import('../views/monitors/subDust/Running')
+    },
+    {
+            path: '/video/dust/Chart',
+        name: 'video.dust.Chart',
+        component: () => import('../views/monitors/subDust/Chart')
+    },
+    {
+        path: '/video/dust/Standard',
+        name: 'video.dust.Standard',
+        component: () => import('../views/monitors/subDust/Standard')
+    },
+    {
         path: '/wage/wage/index',
         name: 'wage.wage.index',
         component: () => import('../views/attendance/Wage') // 5.1 工资管理
