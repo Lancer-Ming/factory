@@ -22,6 +22,11 @@ class DustClass
      */
     protected $client_id;
 
+    /** 生成唯一的设备标识
+     * @var
+     */
+    protected $sn;
+
     /** 构造接收消息
      * Entrance constructor.
      * @param $message\
@@ -65,9 +70,11 @@ class DustClass
     }
 
     /** 将后台的数据存入到数据库里
-     * @return DustClass|array|void
+     * @param $client_id
+     * @return string|void
+     * @throws \Exception
      */
-    public function store()
+    public function store($client_id)
     {
         // 检验
         if (!$this->CRC_16_Check()) {
@@ -77,10 +84,21 @@ class DustClass
         // 将数据进行格式化
         $this->formatData();
         $processMessage = $this->processMessage;
-        // 将数据储存
-        DB::insert('insert into dust_infos 
-(dust_id, received_at, a34001-Rtd, a34002-Rtd, a34004-Rtd, LA-Rtd, a01001-Rtd, a01002-Rtd, a01006-Rtd, a01007-Rtd, a01008-Rtd)
-values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$processMessage['']]);
+//        return $processMessage;
+        // 将数据储存到dust_code表
+        $time = date('Y-m-d H:i:s', time());
+        try {
+            DB::insert('insert into ams_dust_codes (client_id, sn, created_at, updated_at) values (?, ?, ?, ?)'
+                , [$client_id, $processMessage['MN'], $time, $time]);
+
+            DB::insert('insert into ams_dust_infos
+        (sn, received_at, flag, QN, CN, a34001_Rtd, a34002_Rtd, a34004_Rtd, LA_Rtd, a01001_Rtd, a01002_Rtd, a01006_Rtd, a01007_Rtd, a01008_Rtd) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$processMessage['MN'], $time, $processMessage['Flag'], $processMessage['QN'], $processMessage['CN'], $processMessage['a34001-Rtd'], $processMessage['a34002-Rtd'],
+                $processMessage['a34004-Rtd'], $processMessage['LA-Rtd'], $processMessage['a01001-Rtd'], $processMessage['a01002-Rtd'],
+                $processMessage['a01006-Rtd'], $processMessage['a01007-Rtd'], $processMessage['a01008-Rtd']]);
+
+        } catch (\Exception $exception) {
+            throw $exception;
+        }
     }
 
     /**CRC16 循环冗余校验算法
@@ -127,8 +145,8 @@ values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$processMessage['']]);
         if ($flag) {
             // 如果数据库有类型
             $code = (int) ($flag->code) + 1;
-            $mmdd = date('md', time());
-            $hostCode = str_pad($code, 4, 0, STR_PAD_LEFT).$mmdd;
+            $mm = date('m', time());
+            $hostCode = str_pad(base_convert($code, 10, 16), 4, 0, STR_PAD_LEFT).$mm;
 
             // 添加到数据库
             $flag->code = $code;
@@ -138,7 +156,7 @@ values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$processMessage['']]);
         }
         else {
             // 添加一个到数据库
-            Code::insert(['client_id'=> $this->client_id, 'code'=> 10000, 'type'=> 1]);
+            Code::insert(['code'=> 10000, 'type'=> 1]);
         }
     }
 
@@ -146,7 +164,17 @@ values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$processMessage['']]);
     {
         // 赋值给属性
         $this->client_id = $client_id;
-        return $result_code = $this->createRandomUniqueCode() . ';' . date('Ymd', time());
+
+        // 主体数据内容
+        $this->sn = $this->createRandomUniqueCode();       // 生成sn
+        $result_content = 'MN='.$this->sn . ';DATE=' . date('Ymd', time()).'&&';
+
+        // CRC16加密
+        $crc = $this->CRC_16($result_content, strlen($result_content));
+        $validate_code = strtoupper(base_convert($crc, 10, 32));
+        // 最终数据，含包头包尾
+        $result_all = '##'.str_pad(strlen($result_content), 4, 0, 0).$result_content.$validate_code.'\r\n';
+        return $result_all;
     }
 
 

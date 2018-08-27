@@ -35,7 +35,8 @@ export default [
     },
     {
         path: '*',
-        redirect: '/'
+        component: () => import('../views/errorPage/404')
+        //redirect: '/'
     },
     {
         path: '/401',
