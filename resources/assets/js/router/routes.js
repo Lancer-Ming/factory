@@ -145,7 +145,12 @@ export default [
     {
         path: '/video/dust/index',
         name: 'video.dust.index',
-        component: () => import('../views/monitors/Dust')  //4.5 绿色监控 -----监控管理 4.1-4.5 end
+        component: () => import('../views/monitors/Dust'),  //4.5 绿色监控 -----监控管理 4.1-4.5 end
+    },
+    {
+        path: '/video/dust/workingdata',
+        name: 'video.dust.workingdata',
+        component: () => import('../views/monitors/subDust/WorkingData')
     },
     {
         path: '/wage/wage/index',

@@ -53,7 +53,7 @@
                                 </el-table-column>
                                 <el-table-column label="查看" align="center" prop="look" width="500">
                                     <template slot-scope="scope">
-                                        <el-button size="mini" type="primary" plain class="dvedio_btn" @click="addTab(editableTabsValue2)">运行数据</el-button>
+                                        <el-button size="mini" type="primary" plain class="dvedio_btn" @click="addTab('/video/dust/workingdata', '运行数据')">运行数据</el-button>
                                         <el-button size="mini" type="danger" plain class="dvedio_btn">报警信息</el-button>
                                         <el-button size="mini" type="warning" plain class="dvedio_btn">运行时间</el-button>
                                         <el-button size="mini" type="primary" plain class="dvedio_btn">图表</el-button>
@@ -149,7 +149,7 @@
 
         <el-tabs v-model="editableTabsValue2" type="card" closable @tab-remove="removeTab">
             <el-tab-pane
-                    v-for="(item, index) in editableTabs2"
+                    v-for="(item) in editableTabs2"
                     :key="item.name"
                     :label="item.title"
                     :name="item.name"
@@ -163,6 +163,7 @@
 
 <script>
     import {pagesize, perPagesize} from '../../config/common'
+    import { Local } from '../../utils/common'
     export default{
         data(){
             return{
@@ -224,14 +225,34 @@
             },
 
 
-            addTab(targetName) {
-                let newTabName = ++this.tabIndex + '';
-                this.editableTabs2.push({
-                    title: 'New Tab',
-                    name: newTabName,
-                    content: 'New Tab content'
-                });
-                this.editableTabsValue2 = newTabName;
+            addTab(path, title) {
+                let name = path.split('/').join('.').substr(1)
+                let isRepeat = false
+                let tabs = this.$root.$data.tabs
+                tabs.forEach((item, index)=> {
+                    if (item.name === name) {
+                        isRepeat = true
+                    }
+                })
+
+                // 如果是tabs里没有
+                if (! isRepeat) {
+                    tabs.push({
+                        title,
+                        name,
+                        path: path,
+                        is_sub: true
+                    })
+
+                    new Local().set('tabs', tabs)
+                }
+                
+
+                this.$root.$data.tabsValue = name
+
+                new Local().set('activeTabs', name)
+
+
             },
             removeTab(targetName) {
                 let tabs = this.editableTabs2;
