@@ -3,7 +3,7 @@
 namespace App\Hardware\DeviceClass;
 
 use App\Models\Code;
-use App\Models\Crane;
+use Illuminate\Support\Facades\DB;
 
 class DustClass
 {
@@ -16,6 +16,11 @@ class DustClass
      * @var
      */
     protected $processMessage;
+
+    /** 与硬件交互的client_id
+     * @var
+     */
+    protected $client_id;
 
     /** 构造接收消息
      * Entrance constructor.
@@ -71,8 +76,11 @@ class DustClass
 
         // 将数据进行格式化
         $this->formatData();
-
+        $processMessage = $this->processMessage;
         // 将数据储存
+        DB::insert('insert into dust_infos 
+(dust_id, received_at, a34001-Rtd, a34002-Rtd, a34004-Rtd, LA-Rtd, a01001-Rtd, a01002-Rtd, a01006-Rtd, a01007-Rtd, a01008-Rtd)
+values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$processMessage['']]);
     }
 
     /**CRC16 循环冗余校验算法
@@ -120,7 +128,7 @@ class DustClass
             // 如果数据库有类型
             $code = (int) ($flag->code) + 1;
             $mmdd = date('md', time());
-            $hostCode = $code.$mmdd;
+            $hostCode = str_pad($code, 4, 0, STR_PAD_LEFT).$mmdd;
 
             // 添加到数据库
             $flag->code = $code;
@@ -130,12 +138,14 @@ class DustClass
         }
         else {
             // 添加一个到数据库
-            Code::insert(['code'=> 10000, 'type'=> 1]);
+            Code::insert(['client_id'=> $this->client_id, 'code'=> 10000, 'type'=> 1]);
         }
     }
 
-    public function sendConnectData()
+    public function sendConnectData($client_id)
     {
+        // 赋值给属性
+        $this->client_id = $client_id;
         return $result_code = $this->createRandomUniqueCode() . ';' . date('Ymd', time());
     }
 

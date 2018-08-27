@@ -39,7 +39,7 @@ class Events
     public static function onConnect($client_id)
     {
         // 向所有人发送
-        Gateway::sendToAll(Entrance::Dust()->sendConnectData());
+        Gateway::sendToAll(Entrance::Dust()->sendConnectData($client_id));
     }
 
 

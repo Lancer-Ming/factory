@@ -29,7 +29,6 @@ class HomeController extends Controller
 
     public function gateway()
     {
-        echo $mmdd = date('md', time());
         $message = "##0239QN=20180821142509000;ST=39;CN=2011;PW=123456;MN=690000D5800028F889221AC0;Flag=4;CP=&&DataTime=20180821142509;a34004-Rtd=0.0;a34002-Rtd=0.0;a34001-Rtd=0.0;LA-Rtd=0.0;a01001-Rtd=0.0;a01002-Rtd=0.0;a01006-Rtd=0.0;a01007-Rtd=0.0;a01008-Rtd=0&&E541";
 
         return Entrance::Dust($message)->store();
