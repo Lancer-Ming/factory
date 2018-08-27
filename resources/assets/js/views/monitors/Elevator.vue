@@ -1,5 +1,5 @@
 <template>
-    <div id="main">
+    <div id="main" class="elevator">
         <div id="leftInfo">
             <select id="deviceList" style="width: 30em; background-color: darkgray;">
                 <option value="0">4号</option>
@@ -102,12 +102,6 @@
 </template>
 
 <script>
-    /****************************************
-     *描述：HTML5 模拟监控塔机侧视图
-     *作者：王延博
-     *日期：2017-05-03
-     *2017-09-05 增加了对动臂和平臂类型的支持
-     *****************************************/
     var ctxSideView = null;
     //静态参数的数组
     const CANVASWIDTH_SIDE = 495;
@@ -774,7 +768,7 @@
         position: relative;
         top: 1em;
     }
-    td {
+    .elevator td {
         width: 10vw;
         font-size: 18px;
         font-family: 黑体;
