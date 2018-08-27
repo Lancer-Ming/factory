@@ -38,8 +38,13 @@ class Events
      */
     public static function onConnect($client_id)
     {
-        // 向所有人发送
-        Gateway::sendToAll(Entrance::Dust()->sendConnectData($client_id));
+        // 获取扬尘处理的实例
+        $dust = Entrance::Dust();
+
+        // 更改对应设备的状态
+
+        // 发送数据sn
+        Gateway::sendToClient($client_id, $dust->sendConnectData($client_id));
     }
 
 
@@ -51,8 +56,8 @@ class Events
      */
     public static function onMessage($client_id, $message)
     {
-        // 向所有人发送
-        Gateway::sendToAll($message."chenming");
+        // 向人发送
+        Gateway::sendToClient($client_id, 'ok');
     }
 
 
@@ -63,7 +68,7 @@ class Events
      */
     public static function onClose($client_id)
     {
-        // 向所有人发送
+        // 向人发送
         GateWay::sendToAll("$client_id logout");
     }
 }

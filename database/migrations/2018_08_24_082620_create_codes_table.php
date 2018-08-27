@@ -13,9 +13,8 @@ class CreateCodesTable extends Migration
      */
     public function up()
     {
-        Schema::create('code', function (Blueprint $table) {
+        Schema::create('codes', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('client_id')->nullable()->comment('客户端id');
             $table->unsignedInteger('code')->nullable()->comment('随机递增码');
             $table->unsignedInteger('type')->nullable()->comment('类型');
             $table->timestamps();
@@ -29,6 +28,6 @@ class CreateCodesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('code');
+        Schema::dropIfExists('codes');
     }
 }
