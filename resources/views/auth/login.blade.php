@@ -8,7 +8,7 @@
     <title>login</title>
     {{--<link href="{{asset('/vendor/bootstrap/bootstrap.min.css')}}" rel="stylesheet">--}}
     {{--<link href="{{asset('/vendor/awesome/font-awesome.min.css')}}" rel="stylesheet">--}}
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    {{--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">--}}
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{{asset('/css/login.css')}}" rel="stylesheet">
 </head>
