@@ -1,0 +1,87 @@
+<template>
+    <div class="container Running">
+        <el-form ref="form" :model="form" label-width="120px" style="margin-top: 20px;">
+            <el-form-item label="时间" size="mini">
+                <el-date-picker
+                        v-model="form.date"
+                        type="date"
+                        placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="warning" plain size="mini">查询</el-button>
+                <el-button type="warning" plain size="mini">清空</el-button>
+            </el-form-item>
+        </el-form>
+
+        <el-table
+                :data="tableData"
+                border
+                style="width: 100%">
+            <el-table-column
+                    prop="id"
+                    align="center"
+                    width="60"
+                    fixed
+                    sortable
+                    label="#"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="name"
+                    label="SN"
+                    width="180"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="name"
+                    label="监控点名称"
+                    width="180"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="start_time"
+                    label="开始时间"
+                    width="180"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="end_time"
+                    label="结束时间"
+                    width="180"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="address"
+                    label="runtime"
+                    width="180"
+                    align="center"
+            >
+            </el-table-column>
+        </el-table>
+    </div>
+</template>
+<script>
+    export default {
+        data() {
+            return {
+                form: {
+                    date: ''
+                },
+                tableData: []
+            }
+        }
+    }
+</script>
+
+<style>
+    .Running .el-form-item {
+        width: 25%;
+        float: left;
+        padding-right: 60px;
+    }
+</style>

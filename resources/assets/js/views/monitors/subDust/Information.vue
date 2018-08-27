@@ -1,5 +1,5 @@
 <template>
-    <div class="container Working">
+    <div class="container Information">
         <el-form ref="form" :model="form" label-width="120px" style="margin-top: 20px;">
             <el-form-item label="时间" size="mini">
                 <el-date-picker
@@ -8,13 +8,25 @@
                         placeholder="选择日期">
                 </el-date-picker>
             </el-form-item>
-            <el-form-item label="" style="width: 10%;" size="mini">
+            <el-form-item label="报警类型" size="mini">
+                <el-select v-model="form.alarm_type" placeholder="报警类型">
+                    <el-option v-for="(item,index) in alarm_type" :label="item.name" :key='index' :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="预警状态" size="mini">
+                <el-select v-model="form.region" placeholder="请选择活动区域">
+                    <el-option label="全部" value="whole"></el-option>
+                    <el-option label="预警" value="warning"></el-option>
+                    <el-option label="报警" value="danger"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label=""  size="mini" style="width: 15%;">
                 <el-checkbox  name="type"></el-checkbox>
             </el-form-item>
             <el-form-item label="开启自动查询" size="mini">
             </el-form-item>
             <el-form-item size="mini">
-                <el-button type="primary" plain size="mini">查询</el-button>
+                <el-button type="danger" plain size="mini">查询</el-button>
             </el-form-item>
         </el-form>
 
@@ -142,33 +154,32 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
+    import { alarm_type } from "../../../api/json"
+    export default{
+        data(){
+            return{
                 form:{
                     date: '',
+                    alarm_type: '',
+                    region: '',
                 },
-                tableData:[]
+                tableData: [],
+                alarm_type: [],
+                data: [],
             }
         },
-        methods:{
-            renderheader(h, { column, $index }) {
-                return h('span', {}, [
-                    h('span', {}, column.label.split('/')[0]),
-                    h('br'),
-                    h('span', {}, column.label.split('/')[1])
-                ])
-            }
+        created(){
+            alarm_type().then(res => {
+                this.alarm_type = res.data.alarm_type
+            })
         }
+
     }
 </script>
-
 <style>
-    .Working .el-form-item{
-        width: 20%;
+    .Information .el-form-item{
+        width: 25%;
         float: left;
         padding-right: 60px;
     }
 </style>
-
-
