@@ -145,13 +145,7 @@
             }
         },
         methods:{
-            renderheader(h, { column, $index }) {
-                return h('span', {}, [
-                    h('span', {}, column.label.split('/')[0]),
-                    h('br'),
-                    h('span', {}, column.label.split('/')[1])
-                ])
-            }
+          
         }
     }
 </script>
