@@ -54,10 +54,10 @@
                                 <el-table-column label="查看" align="center" prop="look" width="500">
                                     <template slot-scope="scope">
                                         <el-button size="mini" type="primary" plain class="dvedio_btn" @click="addTab('/video/dust/workingdata', '运行数据')">运行数据</el-button>
-                                        <el-button size="mini" type="danger" plain class="dvedio_btn">报警信息</el-button>
-                                        <el-button size="mini" type="warning" plain class="dvedio_btn">运行时间</el-button>
-                                        <el-button size="mini" type="primary" plain class="dvedio_btn">图表</el-button>
-                                        <el-button size="mini" type="success" plain class="dvedio_btn">设定标准值</el-button>
+                                        <el-button size="mini" type="danger" plain class="dvedio_btn" @click="addTab('/video/dust/Information', '报警信息')">报警信息</el-button>
+                                        <el-button size="mini" type="warning" plain class="dvedio_btn" @click="addTab('/video/dust/Running', '运行时间')">运行时间</el-button>
+                                        <el-button size="mini" type="primary" plain class="dvedio_btn" @click="addTab('/video/dust/Chart', '图表')">图表</el-button>
+                                        <el-button size="mini" type="success" plain class="dvedio_btn" @click="addTab('/video/dust/Standard', '设定标准值')">设定标准值</el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -147,16 +147,6 @@
             </el-pagination>
         </el-row>
 
-        <el-tabs v-model="editableTabsValue2" type="card" closable @tab-remove="removeTab">
-            <el-tab-pane
-                    v-for="(item) in editableTabs2"
-                    :key="item.name"
-                    :label="item.title"
-                    :name="item.name"
-            >
-                {{item.content}}
-            </el-tab-pane>
-        </el-tabs>
     </div>
 </template>
 
