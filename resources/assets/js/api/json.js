@@ -30,3 +30,9 @@ export function citys(){
         method: 'get'
     })
 }
+export function alarm_type(){
+    return axios ({
+        url: "/json/alarm_type.json",
+        method: 'get'
+    })
+}

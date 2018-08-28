@@ -23,6 +23,7 @@ Vue.prototype.$ = $
 Vue.prototype.axios = axios
 Vue.prototype.message = Message
 
+
 import { Local } from './utils/common'
 import './directives/'
 new Vue({
@@ -105,6 +106,7 @@ new Vue({
                 new Local().set('tabs', this.tabs)
             }
             this.activeSideBar = newTabName
+            // 设置为高亮
             this.tabsValue = newTabName
             new Local().set('activeTabs', newTabName)
             new Local().set('activeSideBar', newTabName)
@@ -172,12 +174,20 @@ new Vue({
         tabsValue(val) {
             const filter = this.tabs.filter(item => {
                 return item.name === val
-            })
-
-            const path = filter[0].path
+            })[0]
+            
+            const path = filter.path
 
             // 将currentActiveTab 存到LocalStorage里
             new Local().set('activeTabs', val)
+
+            // 如果点击的不是侧边栏
+            if (filter.is_sub) {
+                console.log(path)
+                this.$router.push({ path })
+                this.isInit = false
+                return
+            }
             new Local().set('activeSideBar', val)
 
             if (!this.isInit) {     // 如果是刷新了页面，这个就不用再次获取了。

@@ -35,7 +35,8 @@ export default [
     },
     {
         path: '*',
-        redirect: '/'
+        component: () => import('../views/errorPage/404')
+        //redirect: '/'
     },
     {
         path: '/401',
@@ -143,9 +144,34 @@ export default [
         component: () => import('../views/monitors/Crane') // 4.4 塔吊监控
     },
     {
-        path: '/video/green/index',
-        name: 'video.green.index',
-        component: () => import('../views/monitors/Green')  //4.5 绿色监控 -----监控管理 4.1-4.5 end
+        path: '/video/dust/index',
+        name: 'video.dust.index',
+        component: () => import('../views/monitors/Dust'),  //4.5 绿色监控 -----监控管理 4.1-4.5 end
+    },
+    {
+        path: '/video/dust/workingdata',
+        name: 'video.dust.workingdata',
+        component: () => import('../views/monitors/subDust/WorkingData')
+    },
+    {
+        path: '/video/dust/Information',
+        name: 'video.dust.Information',
+        component: () => import('../views/monitors/subDust/Information')
+    },
+    {
+        path: '/video/dust/Running',
+        name: 'video.dust.Running',
+        component: () => import('../views/monitors/subDust/Running')
+    },
+    {
+            path: '/video/dust/Chart',
+        name: 'video.dust.Chart',
+        component: () => import('../views/monitors/subDust/Chart')
+    },
+    {
+        path: '/video/dust/Standard',
+        name: 'video.dust.Standard',
+        component: () => import('../views/monitors/subDust/Standard')
     },
     {
         path: '/wage/wage/index',

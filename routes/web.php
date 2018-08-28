@@ -112,6 +112,11 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::delete('crane', 'CraneController@destroy')->name('crane.destroy');
             Route::resource('crane', 'CraneController')->except(['create', 'show', 'destroy']);
         });
+
+        Route::as('device.')->group(function() {
+            Route::delete('dust', 'DustController@destroy')->name('dust.destroy');
+            Route::resource('dust', 'DustController')->except(['create', 'show', 'destroy']);
+        });
     });
 
     //监控管理
@@ -119,6 +124,11 @@ Route::middleware(['auth','role','header'])->group(function() {
         //实时视频
         Route::as('current.')->group(function() {
             Route::get('/video/current', 'CurrentController@index')->name('index');
+        });
+
+        // 扬尘监控
+        Route::as('dust.')->group(function() {
+            Route::get('/video/dust', 'DustVideoController@index');
         });
     });
 

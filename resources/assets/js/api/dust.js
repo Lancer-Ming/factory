@@ -1,49 +1,48 @@
 import axios from '../utils/request'
 
-export function getcrane(page,data={},pagesize=10){
+export function getdust(page,data={},pagesize=10){
     if (Object.keys(data).length > 0) {
         Object.assign(data, {page, pagesize});
         return axios({
-            url: `/crane`,
+            url: `/dust`,
             method: 'get',
             params: data
         })
     }
-        return axios({
-            url: `/crane?page=${page}&pagesize=${pagesize}`,
-            method: 'get',
-        })
+    return axios({
+        url: `/dust?page=${page}&pagesize=${pagesize}`,
+        method: 'get',
+    })
 }
-
-export function storecrane(data,pagesize){
+export function storedust(data,pagesize){
     data.pagesize = pagesize
     return axios({
-        url: `/crane`,
+        url: `/dust`,
         method: 'post',
         data: data
     })
 }
 
-export function editcrane(id){
+export function editdust(id){
     return axios({
-        url: `/crane/${id}/edit`,
+        url: `/dust/${id}/edit`,
         method: 'get'
     })
 }
 
-export function updatecrane(id,data,page,pagesize){
+export function updatedust(id,data,page,pagesize){
     data.pagesize = pagesize
     return axios({
-        url: `/crane/${id}?page=${page}`,
+        url: `/dust/${id}?page=${page}`,
         method: 'patch',
         data: data
     })
 }
 
 
-export function destroycrane(id,page,pagesize){
+export function destroydust(id,page,pagesize){
     return axios({
-        url: `/crane`,
+        url: `/dust`,
         method: 'delete',
         data: { id,pagesize }
     })

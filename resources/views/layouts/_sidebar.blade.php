@@ -13,7 +13,7 @@
                 <el-submenu v-for="(item,index) in sidebars" :key="index" v-if="item.children.length > 0"
                         :index="`/${item.name.split('.').join('/')}`" style="color: #fff;"
                         :data-id="`/${item.name.split('.').join('/')}`"
-                        :class="{'is-highlight': item.name === tabsValue}"
+                        :class="{'is-highlight': item.name === activeSideBar}"
                 >
                     <template slot="title">
                         <i :class="`small-logo fa fa-${item.icon}`"></i>
@@ -24,14 +24,14 @@
                                 :data-id="`/${child.name.split('.').join('/')}`"
                                 :index="`/${child.name.split('.').join('/')}`"
                                 v-text="child.label"
-                                :class="{'is-highlight': child.name === tabsValue}"
+                                :class="{'is-highlight': child.name === activeSideBar}"
                                 >
                         </el-menu-item>
                     </div>
                 </el-submenu>
                 <el-menu-item v-for="(item,index) in sidebars" :key="index" v-if="item.children.length === 0"
                         :index="`/${item.name.split('.').join('/')}`"
-                        :class="{'is-highlight': item.name === tabsValue}"
+                        :class="{'is-highlight': item.name === activeSideBar}"
                         :data-id="item.name">
                     <i :class="`small-logo fa fa-${item.icon}`" style="color: #fff;"></i>
                     <span slot="title" class="tit-tab" v-text="item.label"></span>
