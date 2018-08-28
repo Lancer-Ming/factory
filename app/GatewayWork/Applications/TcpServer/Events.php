@@ -52,8 +52,9 @@ class Events
     public static function onMessage($client_id, $message)
     {
         // 向所有人发送
-        Gateway::sendToClient($client_id, $message);
-        Gateway::sendToAll($message);
+        Gateway::sendToClient($client_id, $message.'\n');
+//        Gateway::sendToAll(base_convert($message, 16, 10).'\n');
+        Gateway::sendToAll(base_convert($message, 16, 10).'\n');
 
         // 获取扬尘处理的实例
 //        $dust = Entrance::Dust();
@@ -77,5 +78,16 @@ class Events
     {
         // 向所有人发送
         GateWay::sendToAll("$client_id logout");
+    }
+
+    /**
+     *十六进制转字符串函数
+     *@pream string $hex='616263';
+     */
+    public function hexToStr($hex){
+        $str="";
+        for($i=0;$i<strlen($hex)-1;$i+=2)
+            $str.=chr(hexdec($hex[$i].$hex[$i+1]));
+        return  $str;
     }
 }
