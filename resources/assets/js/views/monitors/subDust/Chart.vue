@@ -69,11 +69,19 @@
             >
             </el-table-column>
         </el-table>
+
+        <chart-box></chart-box>
+
+
     </div>
 </template>
 
 <script>
+    import ChartBox from '../../../components/ChartBox.vue'
     export default{
+        components: {
+            ChartBox
+        },
         data(){
             return{
                 form:{
@@ -81,7 +89,8 @@
                 },
                 tableData: [],
             }
-        }
+        },
+
     }
 </script>
 
