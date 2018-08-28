@@ -27,7 +27,7 @@ class Item extends Model
 
     public function dusts()
     {
-        return $this->hasMany(Dust::class);
+        return $this->hasMany(Dust::class, 'item_id', 'id');
     }
 
     public function buildUnit()

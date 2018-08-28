@@ -33,10 +33,6 @@ class Events
 
     public static function onConnect($client_id)
     {
-        Gateway::sendToClient($client_id, json_encode(array(
-            'type' => 'init',
-            'client_id' => $client_id
-        )));
         // 向所有人发送
         $host = "127.0.0.1";
         $port = 8282;
@@ -50,7 +46,6 @@ class Events
 
     public static function onMessage($client_id, $message)
     {
-        \Log::info("ws:".$message);
         if ($GLOBALS['socket']) {
             // 数据指令解包
             $message_arr = str_split(str_replace(' ', '', trim($message)), 2);
