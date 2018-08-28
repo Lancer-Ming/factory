@@ -38,13 +38,7 @@ class Events
      */
     public static function onConnect($client_id)
     {
-        // 获取扬尘处理的实例
-        $dust = Entrance::Dust();
 
-        // 更改对应设备的状态
-
-        // 发送数据sn
-        Gateway::sendToClient($client_id, $dust->sendConnectData($client_id));
     }
 
 
@@ -58,6 +52,18 @@ class Events
     {
         // 向人发送
         Gateway::sendToClient($client_id, 'ok');
+
+        // 获取扬尘处理的实例
+//        $dust = Entrance::Dust();
+//        // 判断状态并且存储数据
+//        $dust->store($client_id);
+//        // 获取要发送给硬件的数据
+//        $message = $dust->sendConnectData($client_id);
+//        // 改变 dust 的状态
+//        $dust->changeStatus();
+//        // 发送数据sn
+//        Gateway::sendToClient($client_id, $message);
+
     }
 
 

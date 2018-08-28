@@ -17,4 +17,9 @@ class Dust extends Model
     {
         return $this->belongsTo(Unit::class);
     }
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
 }
