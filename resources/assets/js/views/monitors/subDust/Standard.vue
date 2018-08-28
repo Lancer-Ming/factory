@@ -209,8 +209,8 @@
                     align="center"
             >
             </el-table-column>
-
         </el-table>
+
     </div>
 </template>
 
@@ -226,7 +226,9 @@
                 tableData: []
             }
         }
+
     }
+
 </script>
 <style>
     .Standard .el-form-item{
