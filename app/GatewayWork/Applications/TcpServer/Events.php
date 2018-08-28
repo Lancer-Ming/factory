@@ -21,7 +21,7 @@
 //declare(ticks=1);
 
 use \GatewayWorker\Lib\Gateway;
-use App\Hardware\Entrance;
+
 /**
  * 主逻辑
  * 主要是处理 onConnect onMessage onClose 三个方法
@@ -38,13 +38,8 @@ class Events
      */
     public static function onConnect($client_id)
     {
-        // 获取扬尘处理的实例
-        $dust = Entrance::Dust();
-
-        // 更改对应设备的状态
-
-        // 发送数据sn
-        Gateway::sendToClient($client_id, $dust->sendConnectData($client_id));
+        // 向所有人发送
+        Gateway::sendToAll("$client_id login\n");
     }
 
 
@@ -56,8 +51,21 @@ class Events
      */
     public static function onMessage($client_id, $message)
     {
-        // 向人发送
-        Gateway::sendToClient($client_id, 'ok');
+        // 向所有人发送
+        Gateway::sendToClient($client_id, $message.'\n');
+//        Gateway::sendToAll(base_convert($message, 16, 10).'\n');
+        Gateway::sendToAll(base_convert($message, 16, 10).'\n');
+
+        // 获取扬尘处理的实例
+//        $dust = Entrance::Dust();
+//        // 判断状态并且存储数据
+//        $dust->store($client_id);
+//        // 获取要发送给硬件的数据
+//        $message = $dust->sendConnectData($client_id);
+//        // 改变 dust 的状态
+//        $dust->changeStatus();
+//        // 发送数据sn
+//        Gateway::sendToClient($client_id, $message);
     }
 
 
@@ -68,7 +76,18 @@ class Events
      */
     public static function onClose($client_id)
     {
-        // 向人发送
+        // 向所有人发送
         GateWay::sendToAll("$client_id logout");
+    }
+
+    /**
+     *十六进制转字符串函数
+     *@pream string $hex='616263';
+     */
+    public function hexToStr($hex){
+        $str="";
+        for($i=0;$i<strlen($hex)-1;$i+=2)
+            $str.=chr(hexdec($hex[$i].$hex[$i+1]));
+        return  $str;
     }
 }

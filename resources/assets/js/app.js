@@ -16,12 +16,17 @@ import axios from 'axios'
 import { implode } from "./utils/common.js"
 
 
+
 //
 //import i18n from './lang'
 Vue.use(ElementUI)
 Vue.prototype.$ = $
 Vue.prototype.axios = axios
 Vue.prototype.message = Message
+
+// echarts
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 
 
 import { Local } from './utils/common'

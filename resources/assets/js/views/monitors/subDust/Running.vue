@@ -56,8 +56,8 @@
             >
             </el-table-column>
             <el-table-column
-                    prop="address"
-                    label="runtime"
+                    prop="runtime"
+                    label="运行时长"
                     width="180"
                     align="center"
             >
@@ -82,6 +82,5 @@
     .Running .el-form-item {
         width: 25%;
         float: left;
-        padding-right: 60px;
     }
 </style>
