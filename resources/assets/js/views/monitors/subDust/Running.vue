@@ -82,6 +82,5 @@
     .Running .el-form-item {
         width: 25%;
         float: left;
-        padding-right: 60px;
     }
 </style>

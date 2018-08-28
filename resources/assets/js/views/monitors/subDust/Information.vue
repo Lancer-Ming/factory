@@ -65,66 +65,72 @@
                     align="center"
             >
             </el-table-column>
-            <el-table-column
-                    prop="dust"
-                    label="扬尘(ug/m³)"
-                    width="120"
-                    align="center"
-            >
+            <el-table-column label="扬尘" align="center">
+                <el-table-column
+                        prop="dust"
+                        label="(ug/m³)"
+                        width="100"
+                        align="center"
+                >
+                </el-table-column>
             </el-table-column>
-            <el-table-column
-                    prop="PM10"
-                    label="PM10I(ug/m³)"
-                    width="120"
-                    align="center"
-            >
+            <el-table-column label="PM10" align="center">
+                <el-table-column
+                        prop="PM10"
+                        label="(ug/m³)"
+                        width="100"
+                        align="center"
+                >
+                </el-table-column>
             </el-table-column>
-            <el-table-column
-                    prop="PM2"
-                    label="PM2.5(ug/m³)"
-                    width="120"
-                    align="center"
-            >
+            <el-table-column label="PM2.5" align="center">
+                <el-table-column
+                        prop="PM2"
+                        label="(ug/m³)"
+                        width="100"
+                        align="center"
+                >
+                </el-table-column>
             </el-table-column>
             <el-table-column
                     prop="PM2"
                     label="噪音(dB)"
-                    width="120"
+                    width="100"
                     align="center"
             >
             </el-table-column>
             <el-table-column
                     prop="PM2"
                     label="温度(℃)"
-                    width="120"
+                    width="100"
                     align="center"
             >
             </el-table-column>
             <el-table-column
                     prop="PM2"
                     label="湿度(%)"
-                    width="120"
+                    width="100"
                     align="center"
             >
             </el-table-column>
             <el-table-column
                     prop="PM2"
                     label="气压(mbar)"
-                    width="120"
+                    width="100"
                     align="center"
             >
             </el-table-column>
             <el-table-column
                     prop="PM2"
                     label="风级"
-                    width="120"
+                    width="100"
                     align="center"
             >
             </el-table-column>
             <el-table-column
                     prop="PM2"
                     label="风向"
-                    width="120"
+                    width="100"
                     align="center"
             >
             </el-table-column>
@@ -166,6 +172,5 @@
     .Information .el-form-item{
         width: 25%;
         float: left;
-        padding-right: 60px;
     }
 </style>
