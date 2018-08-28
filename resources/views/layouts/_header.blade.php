@@ -33,17 +33,8 @@
             </div>
         </div>
     </div>
-    <div class="tags-con">
-        <div class="tags-outer-scroll-con">
-            <div class="close-all-tag-con">
-                <div class="ivu-dropdown">
-                    <div class="ivu-dropdown-rel">
-                        <button type="button" class="ivu-btn ivu-btn-primary ivu-btn-small">
-                            <span><i class="ivu-icon ivu-icon-arrow-down-b fa"></i></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
+    <div class="as-tabs__Menu">
+        <div class="as-tabs__MenuWrap">
             <el-tabs v-model="tabsValue" type="border-card" closable @tab-remove="removeTab" @tab-click="handleClick" class="as-tabs-box">
                 <el-tab-pane
                         v-for="(item, index) in tabs" :key="item.name" :label="item.title" :name="item.name"
@@ -51,6 +42,20 @@
                     <span slot="label"><i :class="`${item.icon}`"></i><span v-text="item.title"></span></span>
                 </el-tab-pane>
             </el-tabs>
+            <div class="as-tabs__tools">
+                <div class="as-tabs__toolsWrap">
+                    <button type="button" class="as-tabs__icon" @click="pageRefresh">
+                        <i class="icon icon-refresh fa fa-refresh"></i>
+                    </button>
+                    <button type="button" class="as-tabs__icon" @click="pageFullscreen">
+                        <i class="icon icon-fullscreen fa fa-arrows-alt"></i>
+                    </button>
+                    <button type="button" class="as-tabs__icon" @click="pageClose">
+                        <i class="icon icon-close fa fa-times"></i>
+                        {{--<span><i class="icon-close  glyphicon glyphicon-remove"></i></span>--}}
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </el-header>

@@ -1,13 +1,13 @@
 //这里只放一些框架的sass 自己的样式在page/page.css 中引入 !
 @import "variables";
 //载入各框架字体库文件
-//$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 //$--font-path: '~element-ui/lib/theme-chalk/fonts';
 $fa-font-path: "~font-awesome/fonts/";
 /**
 ** bootstrap.css
 **/
-//@import "~bootstrap-sass/assets/stylesheets/_bootstrap";
+@import "~bootstrap-sass/assets/stylesheets/_bootstrap";
 /**
 ** element-ui.css
 **/
