@@ -20,6 +20,7 @@
 //declare(ticks=1);
 
 use \GatewayWorker\Lib\Gateway;
+use App\Hardware\Entrance;
 
 /**
  * 主逻辑
@@ -47,11 +48,27 @@ class Events
     * @param int $client_id 连接id
     * @param mixed $message 具体消息
     */
-   public static function onMessage($client_id, $message)
-   {
-        // 向所有人发送 
-       
-   }
+    public static function onMessage($client_id, $message)
+    {
+        GateWay::sendToAll(json_encode(array(
+            'type' => 'message',
+            'client_id' => $client_id,
+            'message' => $message
+        )));
+//        // 向人发送
+//        Gateway::sendToClient($client_id, 'ok');
+//        // 获取扬尘处理的实例
+//        $dust = Entrance::Dust();
+//        // 判断状态并且存储数据
+//        $dust->store($client_id);
+//        // 获取要发送给硬件的数据
+//        $message = $dust->sendConnectData($client_id);
+//        // 改变 dust 的状态
+//        $dust->changeStatus();
+//        // 发送数据sn
+//        Gateway::sendToClient($client_id, $message);
+
+    }
    
    /**
     * 当用户断开连接时触发
