@@ -1,22 +1,24 @@
 <template>
     <div class="container Chart">
-        <el-form ref="form" :model="form" label-width="120px" style="margin-top: 20px;">
-            <el-form-item label="时间" size="mini">
-                <el-date-picker
-                        v-model="form.date"
-                        type="date"
-                        placeholder="选择日期">
-                </el-date-picker>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" plain size="mini">查询</el-button>
-            </el-form-item>
-        </el-form>
+
+            <el-form ref="form" :model="form" label-width="120px" style="margin-top: 20px;">
+                <el-form-item label="时间" size="mini">
+                    <el-date-picker
+                            v-model="form.date"
+                            type="date"
+                            placeholder="选择日期">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" plain size="mini">查询</el-button>
+                </el-form-item>
+            </el-form>
 
         <el-table
                 :data="tableData"
                 border
                 style="width: 100%">
+
             <el-table-column
                     prop="date"
                     label="时间"

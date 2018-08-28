@@ -56,8 +56,8 @@
             >
             </el-table-column>
             <el-table-column
-                    prop="address"
-                    label="runtime"
+                    prop="runtime"
+                    label="运行时长"
                     width="180"
                     align="center"
             >

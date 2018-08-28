@@ -97,13 +97,6 @@
             </el-table-column>
             <el-table-column
                     prop="PM2"
-                    label="露点(℃)"
-                    width="120"
-                    align="center"
-            >
-            </el-table-column>
-            <el-table-column
-                    prop="PM2"
                     label="气压(mbar)"
                     width="120"
                     align="center"
@@ -119,13 +112,6 @@
             <el-table-column
                     prop="PM2"
                     label="风向"
-                    width="120"
-                    align="center"
-            >
-            </el-table-column>
-            <el-table-column
-                    prop="PM2"
-                    label="国测点距离"
                     width="120"
                     align="center"
             >
