@@ -173,6 +173,18 @@ new Vue({
         },
         implode(arr, attr) {
             return implode(arr, attr);
+        },
+        pageRefresh(){
+           location.reload();
+        },
+        pageFullscreen(){
+            $(".header-nav").toggle();
+            $(".aside-wrapper").toggle();
+        },
+        pageClose(){
+            // 清空localStorage
+            new Local().clear();
+            location.reload();
         }
     },
     watch: {

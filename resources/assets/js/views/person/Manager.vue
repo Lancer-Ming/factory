@@ -1,6 +1,5 @@
 <template>
     <div class="container content-container manager-page">
-        <div class="toolsbar">
             <div class="toolsbar">
                 <el-row class="btnBox">
                     <el-button
@@ -43,7 +42,6 @@
                             @click="exportAllData">导出全部数据
                     </el-button>
                 </el-row>
-
             </div>
             <el-table
                     :data="tableData"
@@ -104,7 +102,6 @@
                 >
                 </el-table-column>
             </el-table>
-        </div>
     </div>
 </template>
 

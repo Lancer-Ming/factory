@@ -1,5 +1,8 @@
 <template>
-    <div id="myChart" style="width: 500px;height:400px;margin-top: 20px;"></div>
+    <span>
+        <el-col :span="7"><div :id="chartData.id" style="width: 100%;height:400px;margin-top: 20px;"></div></el-col>
+        <el-col :span="1"><div>&nbsp;</div></el-col>
+    </span>
 </template>
 <script>
     // 引入基本模板
@@ -16,7 +19,18 @@
             }
         },
         props:{
-
+            chartData:{
+                type: Object,
+                default: {}
+            },
+            text:{
+                type: String,
+                default: ''
+            },
+            subtext:{
+                type: String,
+                default: ''
+            }
         },
         mounted() {
             this.drawLine();
@@ -24,18 +38,18 @@
         methods: {
             drawLine() {
                 // 基于准备好的dom，初始化echarts实例
-                var myChart = echarts.init(document.getElementById('myChart'))
+                var myChart = echarts.init(document.getElementById(this.chartData.id))
                 // 绘制图表
                 myChart.setOption({
                     title: {
-                        text: '扬尘值',
-                        subtext: '单位(ug/m³)'
+                        text: this.text,
+                        subtext: `单位:`+this.subtext
                     },
                     tooltip: {
                         trigger: 'axis'
                     },
                     legend: {
-                        data: ['扬尘值']
+                        data: this.text
                     },
                     toolbox: {
                         show: true,
@@ -60,9 +74,9 @@
                     ],
                     series: [
                         {
-                            name: '扬尘值',
+                            name: this.text,
                             type: 'line',
-                            data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7],
+                            data: this.chartData.data,
                             markPoint: {
                                 data: [
                                     {type: 'max', name: '最大值'},
