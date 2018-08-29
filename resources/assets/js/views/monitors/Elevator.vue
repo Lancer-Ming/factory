@@ -79,7 +79,7 @@
                     </tr>
                     </tbody>
                 </table>
-                <canvas id="overlookCanvas" width="450" height="408"></canvas>
+                <canvas id="overlookCanvas" width="400" height="408"></canvas>
                 <!--俯视图-->
                 <div class="Identification">
                     <p class="normalFont" style="float: right">其他</p>
@@ -769,8 +769,8 @@
         top: 1em;
     }
     .elevator td {
-        width: 10vw;
-        font-size: 18px;
+        width: 8vw;
+        font-size: 14px;
         font-family: 黑体;
         color: white;
         text-align: left;
@@ -787,7 +787,7 @@
         float: left;
     }
     #overlookCanvas {
-        margin: 8px 0px auto 9px;
+        margin: 29px 0px auto 0px;
         background-color: black;
     }
     .Identification {
