@@ -34,19 +34,22 @@
                     border
                     style="width: 100%"
             >
-                <el-table-column type="expand" style="width: 100%;">
-                    <template slot-scope="props" style="width: 100%;">
+                <el-table-column type="expand" style="width: 100%;" prop="dusts">
+                    <template style="width: 100%;"  slot-scope="scope">
                         <el-form label-position="left" inline class="demo-table-expand">
-                            <el-table :data="tableData1" style="width: 100%;">
+                            <el-table :data="scope.row.dusts" style="width: 100%;">
                                 <el-table-column label="SN" align="center" prop="sn" width="100">
                                 </el-table-column>
-                                <el-table-column label="备案编号" align="center" prop="record_no" width="100">
+                                <el-table-column label="备案编号" align="center" prop="pre_warn_count" width="100">
                                 </el-table-column>
-                                <el-table-column label="项目编号" align="center" prop="number" width="100">
+                                <el-table-column label="项目编号" align="center" prop="cur_warn_count" width="100">
                                 </el-table-column>
-                                <el-table-column label="机械类型" align="center" prop="type" width="100">
+                                <el-table-column label="机械类型" align="center" width="100">
+                                    <template slot-scope="scope">
+                                        <span>扬尘噪音</span>
+                                    </template>
                                 </el-table-column>
-                                <el-table-column label="状态" align="center" prop="state" width="100">
+                                <el-table-column label="状态" align="center" prop="is_online" width="100">
                                 </el-table-column>
                                 <el-table-column label="查看" align="center" prop="look" width="500">
                                     <template slot-scope="scope">
@@ -81,7 +84,7 @@
                 >
                 </el-table-column>
                 <el-table-column
-                        prop="construction_unit"
+                        prop="b_unit"
                         label="施工单位"
                         width="300"
                         align="center"
@@ -165,7 +168,6 @@
                 },
                 formLabelW: "120px",
                 tableData: [],
-                tableData1: [],
                 currentPage: 1, //当前页数
                 pagesize: pagesize,
                 perPagesize: perPagesize,
