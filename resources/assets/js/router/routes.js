@@ -29,11 +29,6 @@ export default [
         component: () => import('../views/demo/Selected')
     },
     {
-        path: '/',
-        name: 'Home',
-        component: () => import('../views/Home')
-    },
-    {
         path: '*',
         component: () => import('../views/errorPage/404')
         //redirect: '/'
@@ -49,9 +44,16 @@ export default [
         component: () => import('../views/errorPage/404')
     },
     {
+        path: '/',
+        name: 'Home',
+        component: () => import('../views/Home'),
+        meta: { title: '我的桌面' }
+    },
+    {
         path: '/person/staff/index',
         name: 'person.staff.index',
-        component: () => import('../views/person/Staff') //1.1 建筑工人库
+        component: () => import('../views/person/Staff'), //1.1 建筑工人库
+        meta: { title: '建筑工人库' }
     },
     {
         path: '/person/manager/index',

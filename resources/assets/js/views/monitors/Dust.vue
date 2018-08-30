@@ -35,12 +35,12 @@
             <el-table
                     :data="tableData"
                     border
-                    style="width: 100%"
+                    stripe
             >
-                <el-table-column type="expand" style="width: 100%;">
-                    <template slot-scope="props" style="width: 100%;">
+                <el-table-column type="expand">
+                    <template slot-scope="props">
                         <el-form label-position="left" inline class="demo-table-expand">
-                            <el-table :data="tableData1" style="width: 100%;">
+                            <el-table :data="tableData1">
                                 <el-table-column label="SN" align="center" prop="sn" width="100">
                                 </el-table-column>
                                 <el-table-column label="备案编号" align="center" prop="record_no" width="100">

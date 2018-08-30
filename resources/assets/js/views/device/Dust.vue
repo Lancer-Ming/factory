@@ -27,11 +27,11 @@
                 <el-button size="mini" style="float: left">清空</el-button>
             </el-form>
         </el-row>
-        <el-table class="crane-tab"
+        <el-table
+                class="crane-tab"
                 :data="tableData"
                 border
                 stripe
-                style="width: 100%;"
                 @selection-change="handleSelectionChange"
                 :default-sort="{prop: 'id', order: 'ascending'}"
                 @row-click="cellClick"

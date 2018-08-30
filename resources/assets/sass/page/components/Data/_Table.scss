@@ -7,9 +7,11 @@
 }
 
 .el-table {
-  background: none;
-  width: 99.5% !important;
-  margin: 0 auto;
+  background: #fff;
+  width: auto;
+  max-width: 99.5%;
+  margin: 0 5px 0 5px;
+  display: inline-block;
 }
 
 .el-table--border th:first-child .cell, .el-table--border td:first-child .cell {
@@ -94,9 +96,23 @@
 .el-table__empty-block {
   background: #fff;
 }
+// expand
+.el-table__row {
+  .el-table__expand-icon--expanded {
+    transform: none
+  }
+  .el-icon-arrow-right:before {
+    content: "\E62B"
+  }
+  .el-table__expand-icon--expanded .el-icon-arrow-right:before {
+    content: "\E621"
+  }
+}
+.el-table__expanded-cell[class*=cell]{ padding: 10px; z-index: 9}
 /**
   * 自定义 table style
  */
+.as-table__container{}
 .as-table{
   //width: 100%;
   td,th{

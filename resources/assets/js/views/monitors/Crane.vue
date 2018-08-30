@@ -35,12 +35,17 @@
             <el-table
                     :data="tableData"
                     border
-                    style="width: 100%"
+                    stripe
+                    size="mini"
+                    :highlight-current-row="true"
+                    :default-sort="{prop: 'id', order: 'ascending'}"
+                    ref="table"
+                    @row-click="cellClick"
             >
-                <el-table-column type="expand" style="width: 100%;">
-                    <template slot-scope="props" style="width: 100%;">
+                <el-table-column type="expand" fixed width="30">
+                    <template slot-scope="props">
                         <el-form label-position="left" inline class="demo-table-expand">
-                            <el-table :data="tableData1" style="width: 100%;">
+                            <el-table :data="tableData1" border size="mini">
                                 <el-table-column label="SN" align="center" prop="sn" width="100">
                                 </el-table-column>
                                 <el-table-column label="备案编号" align="center" prop="record_no" width="100">
@@ -323,6 +328,9 @@
             },
             handleCrane(){
                 this.distribution = true
+            },
+            cellClick(row){
+                this.$refs.table.toggleRowExpansion(row)
             }
         }
     }

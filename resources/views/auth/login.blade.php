@@ -26,7 +26,7 @@
                 <div class="col-lg-8 col-md-7 col-sm-5 col-xs-3">&nbsp;</div>
                 <div class="col-lg-3 col-md-4 col-sm-5 col-xs-7 login-index">
                     <div class="login-nav">
-                        <span>WELCOME TO LOG IN</span>
+                        <span>WELCOME TO LOGIN</span>
                         <div class="login-title clearfix">
                             <form action="/login" method="post">
                                 {{ csrf_field() }}

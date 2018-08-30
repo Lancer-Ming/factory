@@ -1,5 +1,5 @@
 <template>
-    <div class="container content-container company-page">
+    <div class="container content-container as-table__data company-page">
         <div class="toolsbar">
             <el-row class="btnBox">
                 <el-button
@@ -65,250 +65,252 @@
                 </el-form>
             </el-row>
         </div>
-        <el-table
-                :data="tableData"
-                align
-                border
-                stripe
-                class="as-table"
-                size="mini"
-                :default-sort="{prop: 'id', order: 'ascending'}"
-                v-loading="loading"
-                @selection-change="handleSelectionChange"
-                @row-click="cellClick"
-                @row-dblclick="dblclick"
-                ref="table"
-        >
-            <el-table-column
-                    prop="id"
-                    width="60"
-                    fixed
-                    sortable
-                    label="#"
+        <div>
+            <el-table
+                    class="as-table"
+                    :data="tableData"
+                    border
+                    stripe
+                    size="mini"
+                    :highlight-current-row="true"
+                    :default-sort="{prop: 'id', order: 'ascending'}"
+                    v-loading="loading"
+                    @selection-change="handleSelectionChange"
+                    ref="table"
+                    @row-click="cellClick"
+                    @row-dblclick="dblclick"
             >
-                <template slot-scope="scope">
-                    <span>{{ scope.row.id }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    type="selection"
-                    width="30"
-                    fixed
-            >
-            </el-table-column>
-            <el-table-column
-                    align="left"
-                    label="单位机构代码"
-                    width="150"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.unit_no }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    align="left"
-                    label="企业名称"
-                    width="200"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.name }}</span>
-                    </div>
-                </template>
-            </el-table-column>
+                <el-table-column
+                        type="selection"
+                        width="30"
+                        fixed
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="id"
+                        width="60"
+                        fixed
+                        sortable
+                        label="#"
+                >
+                    <template slot-scope="scope">
+                        <span>{{ scope.row.id }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        align="left"
+                        label="单位机构代码"
+                        width="150"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.unit_no }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        align="left"
+                        label="企业名称"
+                        width="200"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.name }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
 
-            <el-table-column
-                    align="left"
-                    prop="utypes"
-                    label="单位类型"
-                    width="100"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ implode(scope.row.utypes, 'name').join(',') }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="上级机构"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{scope.row.parent_id}}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    align="left"
-                    label="单位地址"
-                    width="250"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class=" name-wrapper">
-                        <span class="text-els">{{ decodeAddress(scope.row.province, scope.row.city, scope.row.county)+(scope.row.detail ? scope.row.detail : '') }}</span>
-                    </div>
-                </template>
-            </el-table-column>
+                <el-table-column
+                        align="left"
+                        prop="utypes"
+                        label="单位类型"
+                        width="100"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ implode(scope.row.utypes, 'name').join(',') }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="上级机构"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{scope.row.parent_id}}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        align="left"
+                        label="单位地址"
+                        width="250"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class=" name-wrapper">
+                            <span class="text-els">{{ decodeAddress(scope.row.province, scope.row.city, scope.row.county)+(scope.row.detail ? scope.row.detail : '') }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
 
-            <el-table-column
-                    label="法人代表"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.leader }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="法人联系电话"
-                    width="100"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.leader_tel }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="联系人"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.concact_person }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="联系人电话"
-                    width="100"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.concact_tel }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="邮箱"
-                    width="140"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.leader_tel }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="企业网址"
-                    width="100"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.company_site }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="传真"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.fax }}</span>
-                    </div>
-                </template>
-            </el-table-column>
+                <el-table-column
+                        label="法人代表"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.leader }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="法人联系电话"
+                        width="100"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.leader_tel }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="联系人"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.concact_person }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="联系人电话"
+                        width="100"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.concact_tel }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="邮箱"
+                        width="140"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.leader_tel }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="企业网址"
+                        width="100"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.company_site }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="传真"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.fax }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
 
 
-            <el-table-column
-                    label="业务区域"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.region }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="资质等级"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.grade }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    align="left"
-                    label="资质证书编号"
-                    width="150"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.qualification_no }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="安全生产许可证"
-                    width="110"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.safety_permit }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="主营业务"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.main_business }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="备注"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ scope.row.remark }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="单位状态"
-            >
-                <template slot-scope="scope">
-                    <div slot="reference" class="name-wrapper">
-                        <span>{{ status[scope.row.status] }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="更新时间"
-                    width="165"
-                    sortable
-                    prop="updated_at"
-            >
-                <template slot-scope="scope">
-                    <i class="el-icon-time"></i> <span style="margin-left: 10px">{{ scope.row.updated_at }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="创建时间"
-                    width="165"
-                    sortable
-                    prop="created_at"
-                    fixed="right"
-            >
-                <template slot-scope="scope">
-                    <i class="el-icon-time"></i> <span style="margin-left: 10px">{{ scope.row.created_at }}</span>
-                </template>
-            </el-table-column>
-        </el-table>
+                <el-table-column
+                        label="业务区域"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.region }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="资质等级"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.grade }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        align="left"
+                        label="资质证书编号"
+                        width="150"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.qualification_no }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="安全生产许可证"
+                        width="110"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.safety_permit }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="主营业务"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.main_business }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="备注"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ scope.row.remark }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="单位状态"
+                >
+                    <template slot-scope="scope">
+                        <div slot="reference" class="name-wrapper">
+                            <span>{{ status[scope.row.status] }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="更新时间"
+                        width="165"
+                        sortable
+                        prop="updated_at"
+                >
+                    <template slot-scope="scope">
+                        <i class="el-icon-time"></i> <span style="margin-left: 10px">{{ scope.row.updated_at }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="创建时间"
+                        width="165"
+                        sortable
+                        prop="created_at"
+                        fixed="right"
+                >
+                    <template slot-scope="scope">
+                        <i class="el-icon-time"></i> <span style="margin-left: 10px">{{ scope.row.created_at }}</span>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
         <!--分页-->
         <el-row class="paginate">
             <el-pagination

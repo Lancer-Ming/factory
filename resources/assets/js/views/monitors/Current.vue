@@ -17,15 +17,12 @@
                     <el-tree ref="tree" :filter-node-method="filterNode" :data="data" :props="defaultProps" highlight-current node-key="id" :expand-on-click-node="false" @node-click="handleNodeClick"></el-tree>
                 </el-row>
             </div>
-            <div class="current-right clearfix">
-                <el-row v-if="typeof currentAddressObject !== 'undefined' && currentAddressObject.hlsHd" class="video-row" style="height: 100%;">
-                    <el-col style="height: 100%;">
-                        <div class="video" style="width:100%;height:100%;"></div>
-                    </el-col>
+            <div class="video-item current-right clearfix">
+                <el-row v-if="typeof currentAddressObject !== 'undefined' && currentAddressObject.hlsHd" class="video-row">
+                        <el-col class="video"></el-col>
                 </el-row>
-                <el-row v-if="currentAddressArray.length > 0" style="background: #000; height:100%;" class="video-row-all">
-                        <el-col :span="12" v-for="(address, index) in currentAddressArray" :key="address.id" style="height: 50%">
-                            <div :class="`video${index}`" style="width: 100%;height: 100%;"></div>
+                <el-row v-if="currentAddressArray.length > 0" class="video-row-all">
+                        <el-col :span="12" v-for="(address, index) in currentAddressArray" :key="address.id" class="video" :class="`video${index}`">
                         </el-col>
                 </el-row>
             </div>

@@ -15,8 +15,14 @@
         @include('layouts._header')
         <el-container class="section-container">
             @include('layouts._sidebar')
-            @include('layouts._main')
-            @yield('content')
+            <el-container class="main-container">
+                <el-main class="main-wrapper">
+                    <breadcrumb></breadcrumb>
+                    <div class="view-container" :class="this.$route.path.split('/').join('_').substr(1)">
+                        <router-view/>
+                    </div>
+                </el-main>
+            </el-container>
         </el-container>
         <el-footer style="height: auto">
             2018 © 广州安拾科技有限公司

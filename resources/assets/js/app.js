@@ -28,6 +28,8 @@ Vue.prototype.message = Message
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 
+//
+import Breadcrumb from './components/Breadcrumb'
 
 import { Local } from './utils/common'
 import './directives/'
@@ -35,7 +37,7 @@ new Vue({
     el: '#layout-app',
     router,
     //i18n,
-    //components: { App },
+    components: { Breadcrumb },
     //template: '<App/>',
     delimiters: ['${', '}'],
     data:{
@@ -55,7 +57,6 @@ new Vue({
 
         this.axios.get("/permission").then(res => {
             this.headers = res.data.data;
-
             if (this.activeSideBar) {
                 this.activeNavIndex = this.recordTabsWithHeader[this.activeSideBar]
             }
@@ -122,6 +123,7 @@ new Vue({
 
         },
         removeTab(targetName) {
+            console.log(targetName);
             let tabs = this.tabs;
             let activeName = this.tabsValue;
             if (activeName === targetName) {
@@ -182,9 +184,13 @@ new Vue({
             $(".aside-wrapper").toggle();
         },
         pageClose(){
-            // 清空localStorage
-            new Local().clear();
-            location.reload();
+            if(confirm("确认要删除？")){
+                //window.event.returnValue = false;
+                // 清空localStorage
+                new Local().clear();
+                location.reload();
+            }
+            return false;
         }
     },
     watch: {
