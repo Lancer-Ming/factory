@@ -8,8 +8,5 @@ export function getworkData(page,sn,pagesize){
     })
 }
 
-export function abc() {
-    return 'abc';
-}
 
 
