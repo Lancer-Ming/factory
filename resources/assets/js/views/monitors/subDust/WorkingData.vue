@@ -14,7 +14,7 @@
             <el-form-item label="开启自动查询" size="mini">
             </el-form-item>
             <el-form-item size="mini">
-                <el-button type="primary" plain size="mini">查询</el-button>
+                <el-button type="primary" plain size="mini" @click="search">查询</el-button>
             </el-form-item>
         </el-form>
 
@@ -206,6 +206,9 @@
                         item.errorMsg += item.a01007_Rtd_is_warning ? '|风速上限报警' : ''
                     })
                 })
+            },
+            search() {
+                this.getTableData(this.form)
             }
         }
 
