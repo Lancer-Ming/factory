@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Video;
 
 use App\Models\Dust;
+use App\Models\DustCode;
 use App\models\DustInfo;
 use App\Models\Item;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -157,6 +159,40 @@ class DustVideoController extends Controller
         $dustInfos = DustInfo::with('dust:sn,monitor_place_name')->where('sn', $request->sn)->where($where)->paginate($pagesize);
 
         return $dustInfos;
+    }
+
+    public function workingTime(Request $request)
+    {
+        $where = function($query) use ($request) {
+            if ($request->has('time') && trim($request->time) != '') {
+                $time = explode(',', $request->time);
+
+                // 如果 $time 是一个时间点
+                if (count($time) == 1) {
+                    $query->where('created_at', '>=', $time[0]);
+                } // 如果 $time 是一个时间段
+                elseif (count($time) == 2) {
+                    $query->where('created_at', '>=', $time[0])->where('created_at', '<=', $time[0]);
+                }
+            }else {
+                $query->where('created_at', '>=', Carbon::today());
+            }
+        };
+
+        $pagesize = $request->pagesize or 30;
+        $dusts = DustCode::with('dust:sn,monitor_place_name')->where($where)->orderBy('id', 'desc')->paginate($pagesize);
+
+        forEach($dusts as &$dust) {
+            $diffTime = strtotime($dust->updated_at) - strtotime($dust->created_at);
+            if ($diffTime >= 3600) {
+                $dust->time = floor($diffTime / 3600) .'小时'.floor(($diffTime % 3600) / 60).'分钟';
+            } else {
+                $dust->time = floor(($diffTime % 3600) / 60).'分钟';
+            }
+
+        }
+
+        return $dusts;
     }
 
 
