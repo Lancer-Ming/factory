@@ -123,7 +123,6 @@ new Vue({
 
         },
         removeTab(targetName) {
-            console.log(targetName);
             let tabs = this.tabs;
             let activeName = this.tabsValue;
             if (activeName === targetName) {
@@ -200,14 +199,14 @@ new Vue({
             })[0]
             
             const path = filter.path
+            const query = filter.query
 
             // 将currentActiveTab 存到LocalStorage里
             new Local().set('activeTabs', val)
 
             // 如果点击的不是侧边栏
             if (filter.is_sub) {
-                console.log(path)
-                this.$router.push({ path })
+                this.$router.push({ path, query })
                 this.isInit = false
                 return
             }

@@ -9,12 +9,12 @@
                 </el-date-picker>
             </el-form-item>
             <el-form-item label="" style="width: 10%;" size="mini">
-                <el-checkbox  name="type"></el-checkbox>
+                <el-checkbox name="type"></el-checkbox>
             </el-form-item>
             <el-form-item label="开启自动查询" size="mini">
             </el-form-item>
             <el-form-item size="mini">
-                <el-button type="primary" plain size="mini">查询</el-button>
+                <el-button type="primary" plain size="mini" @click="search">查询</el-button>
             </el-form-item>
         </el-form>
 
@@ -24,38 +24,35 @@
                 style="width: 100%"
         >
             <el-table-column
-                    prop="id"
+                    type="index"
+                    width="50"
                     align="center"
-                    width="60"
-                    fixed
-                    sortable
-                    label="#"
             >
             </el-table-column>
             <el-table-column
-                    prop="SN"
+                    prop="sn"
                     label="SN"
                     width="100"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="dust.monitor_place_name"
                     label="监控点名称"
-                    width="120"
+                    width="300"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="date"
+                    prop="received_at"
                     label="时间"
-                    width="120"
+                    width="180"
                     align="center"
             >
             </el-table-column>
             <el-table-column label="扬尘" align="center">
                 <el-table-column
-                        prop="dust"
+                        prop="a34001_Rtd"
                         label="(ug/m³)"
                         width="100"
                         align="center"
@@ -64,7 +61,7 @@
             </el-table-column>
             <el-table-column label="PM10" align="center">
                 <el-table-column
-                        prop="PM10"
+                        prop="a34002_Rtd"
                         label="(ug/m³)"
                         width="100"
                         align="center"
@@ -73,7 +70,7 @@
             </el-table-column>
             <el-table-column label="PM2.5" align="center">
                 <el-table-column
-                        prop="PM2"
+                        prop="a34004_Rtd"
                         label="(ug/m³)"
                         width="100"
                         align="center"
@@ -81,77 +78,145 @@
                 </el-table-column>
             </el-table-column>
             <el-table-column
-                        prop="PM2"
-                        label="噪音(dB)"
-                        width="100"
-                        align="center"
-                >
+                    prop="LA_Rtd"
+                    label="噪音(dB)"
+                    width="100"
+                    align="center"
+            >
             </el-table-column>
 
             <el-table-column
-                    prop="PM2"
+                    prop="a01001_Rtd"
                     label="温度(℃)"
                     width="100"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="PM2"
+                    prop="a01002_Rtd"
                     label="湿度(%)"
                     width="100"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="PM2"
+                    prop="a01006_Rtd"
                     label="气压(mbar)"
                     width="100"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="PM2"
+                    prop="a01007_Rtd"
                     label="风级"
                     width="100"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="PM2"
+                    prop="a01008_Rtd"
                     label="风向"
                     width="100"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="PM2"
                     label="报警状态"
                     width="300"
                     align="center"
             >
+                <template slot-scope="scope">
+                    <span style="color: red;">{{ scope.row.errorMsg}}</span>
+                </template>
             </el-table-column>
         </el-table>
+        <el-row style="margin-top: 20px;">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[30, 60, 90, 120]"
+                    :page-size="pagesize"
+                    :pager-count="11"
+                    layout="total, sizes, prev, pager, next, jumper,slot,->"
+                    :total="total">
+            </el-pagination>
+        </el-row>
     </div>
 </template>
 
 <script>
+    import {getworkData} from '../../../api/workingData'
+    import {pagesize, perPagesize} from '../../../config/common'
+
     export default {
         data() {
             return {
-                form:{
+                form: {
                     date: '',
                 },
-                tableData:[]
+                tableData: [],
+                currentPage: 1, //当前页数
+                pagesize: pagesize,
+                perPagesize: perPagesize,
+                total: null,
             }
         },
-        methods:{
+        created() {
+            this.getTableData()
+        },
+        methods: {
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+            },
+            handleCrane() {
+                this.distribution = true
+            },
+            getTableData() {
+                getworkData(this.currentPage, this.$route.query.sn, this.pagesize).then(res => {
+                    console.log(2)
+                    if (res.data.response_status === "success") {
+                        this.tableData = res.data.data.data
+                        this.total = res.data.total
+                    }
 
+                    this.tableData.forEach(function(item,index){
+                        item.errorMsg = item.a34001_Rtd_pre_warning ? '扬尘预警': ''
+                        item.errorMsg += item.a34001_Rtd_is_warning ? '|扬尘报警' : ''
+                        item.errorMsg += item.a34002_Rtd_pre_warning ? '|PM10预警' : ''
+                        item.errorMsg += item.a34002_Rtd_is_warning ? '|PM10报警' : ''
+                        item.errorMsg += item.a34004_Rtd_pre_warning ? '|PM2.5预警' : ''
+                        item.errorMsg += item.a34004_Rtd_is_warning ? '|PM2.5报警' : ''
+                        item.errorMsg += item.LA_Rtd_pre_warning ? '|噪音上限预警' : ''
+                        item.errorMsg += item.LA_Rtd_is_warning ? '|噪音上限报警' : ''
+                        item.errorMsg += item.a01001_Rtd_high_pre_warning ? '|温度上限预警' : ''
+                        item.errorMsg += item.a01001_Rtd_high_is_warning ? '|温度上限报警' : ''
+                        item.errorMsg += item.a01001_Rtd_low_pre_warning ? '|温度下限预警' : ''
+                        item.errorMsg += item.a01001_Rtd_low_is_warning ? '|温度下限报警' : ''
+                        item.errorMsg += item.a01002_Rtd_pre_warning ? '|湿度上限预警' : ''
+                        item.errorMsg += item.a01002_Rtd_is_warning ? '|湿度上限报警' : ''
+                        item.errorMsg += item.a01006_Rtd_high_pre_warning ? '|气压上限预警' : ''
+                        item.errorMsg += item.a01006_Rtd_low_pre_warning ? '|气压下限预警' : ''
+                        item.errorMsg += item.a01006_Rtd_high_is_warning ? '|气压下限预警' : ''
+                        item.errorMsg += item.a01006_Rtd_low_is_warning ? '|气压下限报警' : ''
+                        item.errorMsg += item.a01007_Rtd_pre_warning ? '|风速上限预警' : ''
+                        item.errorMsg += item.a01007_Rtd_is_warning ? '|风速上限报警' : ''
+                    })
+                })
+            },
+            search() {
+                this.getTableData(this.form)
+            }
         }
+
     }
 </script>
 
 <style>
-    .Working .el-form-item{
+    .Working .el-form-item {
         width: 20%;
         float: left;
     }
