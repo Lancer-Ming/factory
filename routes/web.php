@@ -128,9 +128,9 @@ Route::middleware(['auth','role','header'])->group(function() {
 
         // 扬尘监控
         Route::as('dust.')->group(function() {
-            Route::get('/video/dust', 'DustVideoController@index');
-            Route::get('/video/dust/working_data/{sn}', 'DustVideoController@workingData');
-            Route::get('/video/dust/warn/{sn}', 'DustVideoController@warn');
+            Route::get('/video/dust', 'DustVideoController@index')->name('index');
+            Route::get('/video/dust/working_data/{sn}', 'DustVideoController@workingData')->name('working_data');
+            Route::get('/video/dust/warn/{sn}', 'DustVideoController@warn')->name('warn');
         });
     });
 
