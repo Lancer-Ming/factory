@@ -25,7 +25,7 @@
                     </el-select>
                 </el-form-item>
                 <el-button type="primary" plain size="mini" style="float: left" @click="search">查询</el-button>
-                <el-button size="mini" style="float: left">清空</el-button>
+                <el-button size="mini" style="float: left" @click="reset">清空</el-button>
             </el-form>
         </el-row>
         <el-row>
@@ -49,15 +49,18 @@
                                         <span>扬尘噪音</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="状态" align="center" prop="is_online" width="100">
+                                <el-table-column label="状态" align="center" width="100">
+                                    <template slot-scope="scope">
+                                        <span>{{ scope.row.is_online ? '在线' : '离线'}}</span>
+                                    </template>
                                 </el-table-column>
                                 <el-table-column label="查看" align="center" prop="look" width="500">
                                     <template slot-scope="scope">
-                                        <el-button size="mini" type="primary" plain class="dvedio_btn" @click="addTab('/video/dust/workingdata', '运行数据')">运行数据</el-button>
-                                        <el-button size="mini" type="danger" plain class="dvedio_btn" @click="addTab('/video/dust/Information', '报警信息')">报警信息</el-button>
-                                        <el-button size="mini" type="warning" plain class="dvedio_btn" @click="addTab('/video/dust/Running', '运行时间')">运行时间</el-button>
-                                        <el-button size="mini" type="primary" plain class="dvedio_btn" @click="addTab('/video/dust/Chart', '图表')">图表</el-button>
-                                        <el-button size="mini" type="success" plain class="dvedio_btn" @click="addTab('/video/dust/Standard', '设定标准值')">设定标准值</el-button>
+                                        <el-button size="mini" type="primary" plain class="dvedio_btn" @click="addTab('/video/dust/workingdata', '运行数据', scope.row.sn)">运行数据</el-button>
+                                        <el-button size="mini" type="danger" plain class="dvedio_btn" @click="addTab('/video/dust/Information', '报警信息', scope.row.sn)">报警信息</el-button>
+                                        <el-button size="mini" type="warning" plain class="dvedio_btn" @click="addTab('/video/dust/Running', '运行时间', scope.row.sn)">运行时间</el-button>
+                                        <el-button size="mini" type="primary" plain class="dvedio_btn" @click="addTab('/video/dust/Chart', '图表', scope.row.sn)">图表</el-button>
+                                        <el-button size="mini" type="success" plain class="dvedio_btn" @click="addTab('/video/dust/Standard', '设定标准值', scope.row.sn)">设定标准值</el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -79,7 +82,7 @@
                 <el-table-column
                         prop="name"
                         label="监测点名称"
-                        width="300"
+                        width="500"
                         align="center"
                 >
                 </el-table-column>
@@ -92,40 +95,47 @@
                 </el-table-column>
                 <el-table-column
                         prop="tower_crane"
-                        label="塔机"
+                        label="扬尘"
                         width="650"
                         align="center"
                 >
                     <el-table-column
-                            prop="total"
                             label="总计"
                             width="100"
                             align="center"
                     >
+                        <template slot-scope="scope">
+                            <span>{{ scope.row.dusts.length}}</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                            prop="on_line"
                             label="在线"
                             width="100"
                             align="center"
                     >
+                        <template slot-scope="scope">
+                            <span>{{ scope.row.online_count }}</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                            prop="off_line"
+                            prop="offline_count"
                             label="离线"
                             width="100"
                             align="center"
                     >
+                        <template slot-scope="scope">
+                            <span>{{ scope.row.offline_count = (scope.row.dusts.length) - (scope.row.online_count) }}</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                            prop="warning"
+                            prop="pre_warning_count"
                             label="预警"
                             width="100"
                             align="center"
                     >
                     </el-table-column>
                     <el-table-column
-                            prop="call_police"
+                            prop="is_warning_count"
                             label="报警"
                             width="100"
                             align="center"
@@ -192,7 +202,7 @@
             },
 
 
-            addTab(path, title) {
+            addTab(path, title, sn) {
                 let name = path.split('/').join('.').substr(1)
                 let isRepeat = false
                 let tabs = this.$root.$data.tabs
@@ -208,16 +218,16 @@
                         title,
                         name,
                         path: path,
-                        is_sub: true
+                        is_sub: true,
+                        query: { sn }
                     })
 
                     new Local().set('tabs', tabs)
                 }
 
+                new Local().set('activeTabs', name)
 
                 this.$root.$data.tabsValue = name
-
-                new Local().set('activeTabs', name)
 
 
             },
@@ -243,14 +253,20 @@
                     console.log(res)
                     if (res.data.response_status === "success") {
                         this.tableData = res.data.data
-                        this.total = res.data.data.total
+                        this.total = res.data.total
                         this.loading = false
                     }
                 })
             },
             search() {
                 this.getTableData(this.form)
-            }
+            },
+            reset() {
+                for (var item in this.form) {
+                    this.$set(this.form, item, '')
+                }
+                this.getTableData(this.form)
+            },
         }
 
     }

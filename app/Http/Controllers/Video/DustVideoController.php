@@ -87,7 +87,7 @@ class DustVideoController extends Controller
         $pagesize = $request->pagesize or 30;
         $dustInfos = DustInfo::with('dust:sn,monitor_place_name')->where('sn', $request->sn)->where($where)->paginate($pagesize);
 
-        return $dustInfos;
+        return successJson($dustInfos);
     }
 
     public function warn(Request $request) {
@@ -156,7 +156,7 @@ class DustVideoController extends Controller
         $pagesize = $request->pagesize or 30;
         $dustInfos = DustInfo::with('dust:sn,monitor_place_name')->where('sn', $request->sn)->where($where)->paginate($pagesize);
 
-        return $dustInfos;
+        return successJson($dustInfos);
     }
 
 
