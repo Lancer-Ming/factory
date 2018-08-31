@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Video;
 use App\Models\Dust;
 use App\Models\DustCode;
 use App\models\DustInfo;
+use App\Models\DustStandard;
 use App\Models\Item;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -192,8 +193,113 @@ class DustVideoController extends Controller
 
         }
 
+        return successJson($dusts);
+    }
+
+    public function standard(Request $request)
+    {
+        // 项目名称
+        $item_where = function($query) use ($request) {
+            if ($request->has('item_name') && $request->item_name != '') {
+                $query->where('name','like' , '%'.$request->item_name.'%');
+            }
+        };
+
+        // dust表
+        $where = function($query) use ($request) {
+            // sn
+            if ($request->has('sn') && $request->sn) {
+                $query->where('sn', 'like', '%'.$request->sn.'%');
+            }
+
+            // 监测点
+            if ($request->has('monitor_place_name') && $request->monitor_place_name != '') {
+                $query->where('monitor_place_name', $request->monitor_place_name);
+            }
+        };
+
+        $pagesize = $request->pagesize or 30;
+
+        // 查询符合标准的 dust
+        $dusts = Dust::with(['item' => function($query) use ($item_where){
+            $query->where($item_where)->select('id','name');
+        }, 'dustStandard'])->where($where)->orderBy('created_at', 'desc')->paginate($pagesize);
+
+        // 过滤掉 buildUnit 或者 dusts 为空的item
+        $dusts = $dusts->filter(function($value) {
+            return $value->item && $value->dustStandard;
+        });
+
+        return successJson($dusts);
+    }
+
+    public function chart(Request $request)
+    {
+        // 获取最开始的时间
+        $firstTime = DustInfo::where('sn', $request->sn)->orderBy('received_at', 'asc')->limit(1)->pluck('received_at')[0];
+        // 转化为最开始的一个小时
+        $firstHours = date('H:i:s', strtotime($firstTime)){0} == 0 ? date('H', strtotime($firstTime)){1} : date('H', strtotime($firstTime));
+        // 获取最后一个时间
+        $lastTime = DustInfo::where('sn', $request->sn)->orderBy('received_at', 'desc')->limit(1)->pluck('received_at')[0];
+        // 转化为最后的一个小时
+        $lastHours = date('H:i:s', strtotime($lastTime)){0} == 0 ? date('H', strtotime($lastTime)){1} : date('H', strtotime($lastTime));
+
+        $dusts = [];
+
+        $sn = $request->sn or failJson('参数错误', 400);
+
+        dd($this->avgData(11, $sn));
+        for($i = $firstHours; $i <= $lastHours; $i ++) {
+            $dusts[] = $this->avgData($i, $sn);
+        }
         return $dusts;
+
+    }
+
+    public function avgData($i, $sn)
+    {
+        // 获取当前的年月日 $i时分秒
+        $YMD = date('Y-m-d', time());
+        $targetDate = "$YMD $i:00:00";
+
+        $dust = \DB::select("select avg(a34001_Rtd) AS a34001_Rtd, avg(a34002_Rtd) AS a34002_Rtd, avg(a34004_Rtd) AS a34004_Rtd,
+        avg(LA_Rtd) AS LA_Rtd,avg(a01001_Rtd) AS a01001_Rtd,avg(a01002_Rtd) as a01002_Rtd avg(a01006_Rtd) AS a01006_Rtd,
+        AVG(a01007_Rtd) AS a01007_Rtd from ams_dust_infos WHERE sn = ? AND received_at > ? AND received_at <= ?", [$sn, $targetDate]);
+        return $dust;
     }
 
 
+
+
+    private function timeTransform($i, $sn)
+    {
+        // 获取当前的年月日 $i时分秒
+        $YMD = date('Y-m-d', time());
+        $targetDate = "$YMD $i:00:00";
+        // 获取那个时间点里的前后两个接近这个 $i 小时点
+        $pre = \DB::select("select received_at from ams_dust_infos WHERE sn= ? AND received_at <= ? ORDER BY received_at DESC limit 1", [$sn, $targetDate]);
+        $after =  \DB::select("select received_at from ams_dust_infos WHERE sn= ? AND received_at >= ? ORDER BY received_at ASC limit 1", [$sn, $targetDate]);
+        // 再进行判断
+        if($pre) {
+            $pre = $pre[0];
+            $diffPre = abs(strtotime($pre->received_at) - strtotime("$YMD $i:00:00"));
+        } else {
+            $dust = \DB::select("select * from ams_dust_infos WHERE sn = ? AND  received_at = ?", [$sn, $after[0]->received_at]);
+            return $dust[0];
+        }
+        if ($after) {
+            $after = $after[0];
+            $diffAfter = abs(strtotime($after->received_at) - strtotime("$YMD $i:00:00"));
+        } else {
+            $dust = \DB::select("select * from ams_dust_infos WHERE sn = ? AND  received_at = ?", [$sn, $pre[0]->received_at]);
+            return $dust[0];
+        }
+
+        if ($diffPre && $diffAfter && $diffAfter < $diffPre ) {
+            $dust = \DB::select("select * from ams_dust_infos WHERE sn = ? AND  received_at = ?", [$sn, $after->received_at]);
+        } elseif ($diffPre && $diffAfter && $diffAfter >= $diffPre ) {
+            $dust = \DB::select("select * from ams_dust_infos WHERE sn = ? AND  received_at = ?", [$sn, $pre->received_at]);
+        }
+        return $dust[0];
+    }
 }

@@ -21,12 +21,9 @@
                 border
                 style="width: 100%">
             <el-table-column
-                    prop="id"
+                    type="index"
+                    width="50"
                     align="center"
-                    width="60"
-                    fixed
-                    sortable
-                    label="#"
             >
             </el-table-column>
             <el-table-column
@@ -44,7 +41,7 @@
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="sn"
                     label="SN"
                     width="120"
                     align="center"
@@ -210,11 +207,26 @@
             >
             </el-table-column>
         </el-table>
+        <el-row style="margin-top: 20px;">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[30, 60, 90, 120]"
+                    :page-size="pagesize"
+                    :pager-count="11"
+                    layout="total, sizes, prev, pager, next, jumper,slot,->"
+                    :total="total">
+            </el-pagination>
+        </el-row>
 
     </div>
 </template>
 
 <script>
+    import {getstandard} from '../../../api/standard'
+    import {pagesize, perPagesize} from '../../../config/common'
+
     export default {
         data() {
             return {
@@ -223,7 +235,31 @@
                     address: '',
                     name: '',
                 },
-                tableData: []
+                tableData: [],
+                currentPage: 1, //当前页数
+                pagesize: pagesize,
+                perPagesize: perPagesize,
+                total: null,
+                distribution: false,
+            }
+        },
+        created() {
+            this.getTabdata()
+        },
+        methods: {
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+            },
+            handleCrane() {
+                this.distribution = true
+            },
+            getTabdata() {
+                getstandard(this.currentPage, this.$route.query.sn, this.pagesize).then(res => {
+
+                })
             }
         }
 
@@ -231,7 +267,7 @@
 
 </script>
 <style>
-    .Standard .el-form-item{
+    .Standard .el-form-item {
         width: 20%;
         float: left;
     }

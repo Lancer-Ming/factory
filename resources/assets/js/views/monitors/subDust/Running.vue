@@ -19,12 +19,9 @@
                 border
                 style="width: 100%">
             <el-table-column
-                    prop="id"
+                    type="index"
+                    width="50"
                     align="center"
-                    width="60"
-                    fixed
-                    sortable
-                    label="#"
             >
             </el-table-column>
             <el-table-column
@@ -35,25 +32,29 @@
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="dust.monitor_place_name"
                     label="监控点名称"
                     width="180"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="start_time"
                     label="开始时间"
                     width="180"
                     align="center"
             >
+                <template slot-scope="scope">
+                    <span>{{ scope.row.created_at }}</span>
+                </template>
             </el-table-column>
             <el-table-column
-                    prop="end_time"
                     label="结束时间"
                     width="180"
                     align="center"
             >
+                <template slot-scope="scope">
+                    <span>{{ scope.row.updated_at }}</span>
+                </template>
             </el-table-column>
             <el-table-column
                     prop="runtime"
@@ -61,6 +62,9 @@
                     width="180"
                     align="center"
             >
+                <template slot-scope="scope">
+                    <span>{{ scope.row.runtime = parseInt((Date.parse(scope.row.updated_at) - Date.parse(scope.row.created_at))/1000/3600)+"小时"+parseInt((Date.parse(scope.row.updated_at) - Date.parse(scope.row.created_at))/1000/3600/60)+"分钟" }}</span>
+                </template>
             </el-table-column>
         </el-table>
         <el-row style="margin-top: 20px;">
@@ -88,6 +92,7 @@
                     date: ''
                 },
                 tableData: [],
+                data: [],
                 currentPage: 1, //当前页数
                 pagesize: pagesize,
                 perPagesize: perPagesize,
@@ -109,8 +114,12 @@
                 this.distribution = true
             },
             getTabledata() {
-                getrunning(this.currentPage,  this.$route.query.sn, this.pagesize).then(res => {
-                    console.log(res)
+                getrunning(this.currentPage, this.$route.query.sn, this.pagesize).then(res => {
+                    if (res.data.response_status === "success") {
+                        console.log(res)
+                        this.tableData = res.data.data.data
+                        this.total = res.data.data.total
+                    }
                 })
             }
         }

@@ -177,7 +177,7 @@
                     console.log(2)
                     if (res.data.response_status === "success") {
                         this.tableData = res.data.data.data
-                        this.total = res.data.total
+                        this.total = res.data.data.total
                     }
 
                     this.tableData.forEach(function (item, index) {

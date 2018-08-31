@@ -250,8 +250,8 @@
             },
             getTableData(data = {}) {
                 getcontrol(this.currentPage, data, this.pagesize).then(res => {
-                    console.log(res)
                     if (res.data.response_status === "success") {
+                        console.log(res)
                         this.tableData = res.data.data
                         this.total = res.data.total
                         this.loading = false

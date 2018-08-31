@@ -132,6 +132,8 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::get('/video/dust/working_data/{sn}', 'DustVideoController@workingData')->name('workingdata');
             Route::get('/video/dust/warn/{sn}', 'DustVideoController@warn')->name('warn');
             Route::get('/video/dust/working_time/{sn}', 'DustVideoController@workingTime')->name('workingtime');
+            Route::get('/video/dust/standard', 'DustVideoController@standard')->name('standard');
+            Route::get('/video/dust/chart/{sn}', 'DustVideoController@chart')->name('chart');
         });
     });
 
