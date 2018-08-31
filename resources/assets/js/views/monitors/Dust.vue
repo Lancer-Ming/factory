@@ -35,7 +35,7 @@
                     stripe
             >
                 <el-table-column type="expand" prop="dusts">
-                    <template slot-scope="props">
+                    <template slot-scope="scope">
                         <el-form label-position="left" inline class="demo-table-expand">
                             <el-table :data="scope.row.dusts">
                                 <el-table-column label="SN" align="center" prop="sn" width="100">
@@ -250,8 +250,8 @@
             },
             getTableData(data = {}) {
                 getcontrol(this.currentPage, data, this.pagesize).then(res => {
-                    console.log(res)
                     if (res.data.response_status === "success") {
+                        console.log(res)
                         this.tableData = res.data.data
                         this.total = res.data.total
                         this.loading = false

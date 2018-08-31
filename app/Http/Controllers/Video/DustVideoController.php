@@ -193,7 +193,7 @@ class DustVideoController extends Controller
 
         }
 
-        return $dusts;
+        return successJson($dusts);
     }
 
     public function standard(Request $request)
