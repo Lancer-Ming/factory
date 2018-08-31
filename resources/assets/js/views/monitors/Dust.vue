@@ -35,7 +35,7 @@
                     stripe
             >
                 <el-table-column type="expand" prop="dusts">
-                    <template slot-scope="props">
+                    <template slot-scope="scope">
                         <el-form label-position="left" inline class="demo-table-expand">
                             <el-table :data="scope.row.dusts">
                                 <el-table-column label="SN" align="center" prop="sn" width="100">

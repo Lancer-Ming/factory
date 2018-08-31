@@ -92,27 +92,27 @@
                 },
                 tableData: [],
                 dustData: {
-                    data: [1, 2, 2, 2, 2, 3],
+                    data: [1, 2, 2, 2, 2, 3, 2, 2, 3 ,2, 3],
                     id: 'dustChart'
                 },
                 pm10Data: {
-                    data: [2, 10, 2, 3, 1, 5],
+                    data: [2, 10, 2, 3, 1, 5, 2, 2, 3,2, 3],
                     id: 'pm10Chart'
                 },
                 pm2Data: {
-                    data: [2, 3, 3, 5, 5,1],
+                    data: [2, 3, 3, 5, 5,1, 2, 2, 3,2, 3],
                     id: 'pm2Chart'
                 },
                 noiseData: {
-                    data: [8, 3, 2, 3, 5, 2],
+                    data: [8, 3, 2, 3, 5, 2, 2, 2, 3,2, 3],
                     id: 'noiseChart'
                 },
                 temperatureData: {
-                    data: [6, 3, 2, 3, 5, 1.5],
+                    data: [6, 3, 2, 3, 5, 1.5, 2, 2, 3,2, 3],
                     id: 'temperatureChart'
                 },
                 speedData: {
-                    data: [5, 3, 2, 3, 5, 1],
+                    data: [5, 3, 2, 3, 5, 1, 2, 2, 3,2, 3],
                     id: 'speedChart'
                 },
                 dustText: '扬尘值',

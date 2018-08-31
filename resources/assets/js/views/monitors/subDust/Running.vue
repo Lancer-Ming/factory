@@ -28,7 +28,7 @@
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="sn"
                     label="SN"
                     width="180"
                     align="center"
@@ -63,16 +63,55 @@
             >
             </el-table-column>
         </el-table>
+        <el-row style="margin-top: 20px;">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[30, 60, 90, 120]"
+                    :page-size="pagesize"
+                    :pager-count="11"
+                    layout="total, sizes, prev, pager, next, jumper,slot,->"
+                    :total="total">
+            </el-pagination>
+        </el-row>
     </div>
 </template>
 <script>
+    import {getrunning} from '../../../api/running'
+    import {pagesize, perPagesize} from '../../../config/common'
+
     export default {
         data() {
             return {
                 form: {
                     date: ''
                 },
-                tableData: []
+                tableData: [],
+                currentPage: 1, //当前页数
+                pagesize: pagesize,
+                perPagesize: perPagesize,
+                total: null,
+                distribution: false,
+            }
+        },
+        created() {
+            this.getTabledata()
+        },
+        methods: {
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+            },
+            handleCrane() {
+                this.distribution = true
+            },
+            getTabledata() {
+                getrunning(this.currentPage,  this.$route.query.sn, this.pagesize).then(res => {
+                    console.log(res)
+                })
             }
         }
     }

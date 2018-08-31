@@ -160,6 +160,7 @@
                 pagesize: pagesize,
                 perPagesize: perPagesize,
                 total: null,
+                distribution: false,
             }
         },
         created() {
