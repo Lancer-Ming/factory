@@ -1,27 +1,29 @@
 <template>
     <div class="container Working">
-        <el-form ref="form" :model="form" label-width="120px" style="margin-top: 20px;">
-            <el-form-item label="时间" size="mini">
-                <el-date-picker
-                        v-model="form.date"
-                        type="date"
-                        placeholder="选择日期">
-                </el-date-picker>
-            </el-form-item>
-            <el-form-item label="" style="width: 10%;" size="mini">
-                <el-checkbox name="type"></el-checkbox>
-            </el-form-item>
-            <el-form-item label="开启自动查询" size="mini">
-            </el-form-item>
-            <el-form-item size="mini">
-                <el-button type="primary" plain size="mini" @click="search">查询</el-button>
-            </el-form-item>
-        </el-form>
-
+        <el-row class="toolsbar">
+            <el-row class="searchBox">
+                <el-form ref="form" :model="form" inline size="mini">
+                    <el-form-item label="时间">
+                        <el-date-picker
+                                v-model="form.date"
+                                type="date"
+                                placeholder="选择日期">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="">
+                        <el-checkbox name="type"></el-checkbox>
+                    </el-form-item>
+                    <el-form-item label="开启自动查询">
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" plain @click="search">查询</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-row>
+        </el-row>
         <el-table
                 :data="tableData"
                 border
-                style="width: 100%"
         >
             <el-table-column
                     type="index"
@@ -50,32 +52,26 @@
                     align="center"
             >
             </el-table-column>
-            <el-table-column label="扬尘" align="center">
-                <el-table-column
-                        prop="a34001_Rtd"
-                        label="(ug/m³)"
-                        width="100"
-                        align="center"
-                >
-                </el-table-column>
+            <el-table-column
+                    prop="a34001_Rtd"
+                    label="扬尘(ug/m³)"
+                    width="120"
+                    align="center"
+            >
             </el-table-column>
-            <el-table-column label="PM10" align="center">
-                <el-table-column
-                        prop="a34002_Rtd"
-                        label="(ug/m³)"
-                        width="100"
-                        align="center"
-                >
-                </el-table-column>
+            <el-table-column
+                    prop="a34002_Rtd"
+                    label="PM10(ug/m³)"
+                    width="120"
+                    align="center"
+            >
             </el-table-column>
-            <el-table-column label="PM2.5" align="center">
-                <el-table-column
-                        prop="a34004_Rtd"
-                        label="(ug/m³)"
-                        width="100"
-                        align="center"
-                >
-                </el-table-column>
+            <el-table-column
+                    prop="a34004_Rtd"
+                    label="PM2.5(ug/m³)"
+                    width="120"
+                    align="center"
+            >
             </el-table-column>
             <el-table-column
                     prop="LA_Rtd"
@@ -184,8 +180,8 @@
                         this.total = res.data.data.total
                     }
 
-                    this.tableData.forEach(function(item,index){
-                        item.errorMsg = item.a34001_Rtd_pre_warning ? '扬尘预警': ''
+                    this.tableData.forEach(function (item, index) {
+                        item.errorMsg = item.a34001_Rtd_pre_warning ? '扬尘预警' : ''
                         item.errorMsg += item.a34001_Rtd_is_warning ? '|扬尘报警' : ''
                         item.errorMsg += item.a34002_Rtd_pre_warning ? '|PM10预警' : ''
                         item.errorMsg += item.a34002_Rtd_is_warning ? '|PM10报警' : ''
@@ -215,12 +211,5 @@
 
     }
 </script>
-
-<style>
-    .Working .el-form-item {
-        width: 20%;
-        float: left;
-    }
-</style>
 
 
