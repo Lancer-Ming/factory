@@ -200,7 +200,7 @@
                         console.log(res)
                         this.tableData = res.data.data.data
                         console.log(this.tableData)
-                        this.total = res.data.total
+                        this.total = res.data.data.total
                     }
                     this.tableData.forEach(function(item,index){
                         item.errorMsg = item.a34001_Rtd_pre_warning ? '扬尘预警': ''
