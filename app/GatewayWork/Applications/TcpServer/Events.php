@@ -53,19 +53,17 @@ class Events
     {
         // 向所有人发送
         Gateway::sendToClient($client_id, $message.'\n');
-//        Gateway::sendToAll(base_convert($message, 16, 10).'\n');
-        Gateway::sendToAll(base_convert($message, 16, 10).'\n');
 
         // 获取扬尘处理的实例
-//        $dust = Entrance::Dust();
-//        // 判断状态并且存储数据
-//        $dust->store($client_id);
-//        // 获取要发送给硬件的数据
-//        $message = $dust->sendConnectData($client_id);
-//        // 改变 dust 的状态
-//        $dust->changeStatus();
-//        // 发送数据sn
-//        Gateway::sendToClient($client_id, $message);
+        $dust = Entrance::Dust();
+        // 判断状态并且存储数据
+        $dust->store($client_id);
+        // 获取要发送给硬件的数据
+        $message = $dust->sendConnectData($client_id);
+        // 改变 dust 的状态
+        $dust->changeStatus();
+        // 发送数据sn
+        Gateway::sendToClient($client_id, $message);
     }
 
 

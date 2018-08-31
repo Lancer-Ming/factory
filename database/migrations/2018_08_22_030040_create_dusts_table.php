@@ -19,7 +19,7 @@ class CreateDustsTable extends Migration
             $table->unsignedInteger('right_id')->index()->nullable()->comment('产权单位id');
             $table->unsignedInteger('install_id')->index()->nullable()->comment('安装单位id');
             $table->unsignedInteger('is_monitor')->index()->nullable()->comment('是否监控');
-            $table->unsignedInteger('is_online')->index()->nullable()->comment('在线状态');
+            $table->unsignedInteger('is_online')->index()->default(0)->nullable()->comment('在线状态');
             $table->string('monitor_place_name')->nullable()->comment('监控点名称');
             $table->string('sn')->unique()->nullable()->comment('SN');
             $table->string('pre_warn_count')->index()->nullable()->comment('预警数');

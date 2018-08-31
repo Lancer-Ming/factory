@@ -15,7 +15,7 @@ class CreateDustInfosTable extends Migration
     {
         Schema::create('dust_infos', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('sn')->unique()->nullable()->comment('设备唯一标识符');
+            $table->string('sn')->index()->nullable()->comment('设备唯一标识符');
             $table->string('QN')->nullable()->comment('请求编码');
             $table->string('CN')->nullable()->comment('命令编码');
             $table->string('flag')->nullable()->comment('拆分包及应答标志');
