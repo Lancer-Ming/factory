@@ -22,4 +22,9 @@ class Dust extends Model
     {
         return $this->belongsTo(Item::class);
     }
+
+    public function dustStandard()
+    {
+        return $this->hasOne(DustStandard::class, 'sn', 'sn');
+    }
 }
