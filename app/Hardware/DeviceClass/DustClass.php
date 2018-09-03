@@ -17,11 +17,6 @@ class DustClass
      */
     protected $processMessage;
 
-    /** 与硬件交互的client_id
-     * @var
-     */
-    protected $client_id;
-
     /** 生成唯一的设备标识
      * @var
      */
@@ -37,6 +32,8 @@ class DustClass
      */
     protected $snIsHaved = false;
 
+
+    protected $isTest = false;
     /** 构造接收消息
      * Entrance constructor.
      * @param $message\
@@ -47,11 +44,10 @@ class DustClass
     }
 
     /** 将后台的数据存入到数据库里
-     * @param $client_id
      * @return string|void
      * @throws \Exception
      */
-    public function store($client_id)
+    public function store()
     {
         // 检验
         if (!$this->CRC_16_Check()) {
@@ -77,7 +73,7 @@ class DustClass
 
         $time = date('Y-m-d H:i:s', time());
         try {
-            DB::insert('insert into ams_dust_codes (client_id, sn, created_at, updated_at) values (?, ?, ?, ?)', [$client_id, '971228', $time, $time]);
+            DB::insert('insert into ams_dust_codes (sn, created_at, updated_at) values (?, ?, ?, ?)', ['971228', $time, $time]);
 
             DB::insert('insert into ams_dust_infos
         (sn, received_at, flag, QN, CN, a34001_Rtd, a34002_Rtd, a34004_Rtd, LA_Rtd, a01001_Rtd, a01002_Rtd, a01006_Rtd, a01007_Rtd, a01008_Rtd) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', ['971228', $time, $processMessage['Flag'], $processMessage['QN'], $processMessage['CN'], $processMessage['a34001-Rtd'], $processMessage['a34002-Rtd'], $processMessage['a34004-Rtd'], $processMessage['LA-Rtd'], $processMessage['a01001-Rtd'], $processMessage['a01002-Rtd'], $processMessage['a01006-Rtd'], $processMessage['a01007-Rtd'], $processMessage['a01008-Rtd']]);
@@ -91,6 +87,9 @@ class DustClass
         }
     }
 
+    /**
+     *
+     */
     public function changeStatus()
     {
         DB::update('update ams_dusts set is_online=1 WHERE sn = ?', ['971228']);
@@ -104,14 +103,10 @@ class DustClass
     }
 
     /** 发送数据给硬件
-     * @param $client_id
      * @return string
      */
-    public function sendConnectData($client_id)
+    public function sendConnectData()
     {
-        // 赋值给属性
-        $this->client_id = $client_id;
-
         // 获取sn 查看是否已经交流过
         if ($this->isInit) {
             return 'ok';
