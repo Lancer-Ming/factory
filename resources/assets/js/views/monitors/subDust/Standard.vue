@@ -27,7 +27,7 @@
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="item.name"
                     label="监测站名称"
                     width="120"
                     align="center"
@@ -49,7 +49,7 @@
             </el-table-column>
             <el-table-column label="扬尘预警" align="center">
                 <el-table-column
-                        prop="name"
+                        prop="dust_standard.a34001_Rtd_pre_warning"
                         label="（ug/m³）"
                         width="120"
                         align="center"
@@ -58,7 +58,7 @@
             </el-table-column>
             <el-table-column label="扬尘报警" align="center">
                 <el-table-column
-                        prop="name"
+                        prop="dust_standard.a34001_Rtd_is_warning"
                         label="（ug/m³）"
                         width="120"
                         align="center"
@@ -67,7 +67,7 @@
             </el-table-column>
             <el-table-column label="PM10预警" align="center">
                 <el-table-column
-                        prop="name"
+                        prop="dust_standard.a34002_Rtd_pre_warning"
                         label="（ug/m³）"
                         width="120"
                         align="center"
@@ -76,7 +76,7 @@
             </el-table-column>
             <el-table-column label="PM10报警" align="center">
                 <el-table-column
-                        prop="name"
+                        prop="dust_standard.a34002_Rtd_is_warning"
                         label="（ug/m³）"
                         width="120"
                         align="center"
@@ -85,7 +85,7 @@
             </el-table-column>
             <el-table-column label="PM2.5预警" align="center">
                 <el-table-column
-                        prop="name"
+                        prop="dust_standard.a34004_Rtd_pre_warning"
                         label="（ug/m³）"
                         width="120"
                         align="center"
@@ -94,7 +94,7 @@
             </el-table-column>
             <el-table-column label="PM2.5报警" align="center">
                 <el-table-column
-                        prop="name"
+                        prop="dust_standard.a34004_Rtd_is_warning"
                         label="（ug/m³）"
                         width="120"
                         align="center"
@@ -102,105 +102,91 @@
                 </el-table-column>
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="dust_standard.a01001_Rtd_high_pre_warning"
                     label="温度上限预警"
                     width="120"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="dust_standard.a01001_Rtd_high_is_warning"
                     label="温度上限报警"
                     width="120"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="dust_standard.a01001_Rtd_low_pre_warning"
                     label="温度下限预警"
                     width="120"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="dust_standard.a01001_Rtd_low_is_warning"
                     label="温度下限报警"
                     width="120"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="dust_standard.LA_Rtd_pre_warning"
                     label="噪音上限预警"
                     width="120"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="dust_standard.LA_Rtd_is_warning"
                     label="噪音上限报警"
                     width="120"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="dust_standard.a01007_Rtd_pre_warning"
                     label="风速上限预警"
                     width="120"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="dust_standard.a01007_Rtd_is_warning"
                     label="风速上限报警"
                     width="120"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="dust_standard.a01006_Rtd_high_is_warning"
                     label="气压上限预警"
                     width="120"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="dust_standard.a01006_Rtd_low_is_warning"
                     label="	气压上限报警"
                     width="120"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
-                    label="气压下限预警"
-                    width="120"
-                    align="center"
-            >
-            </el-table-column>
-            <el-table-column
-                    prop="name"
-                    label="气压下限报警"
-                    width="120"
-                    align="center"
-            >
-            </el-table-column>
-            <el-table-column
-                    prop="name"
+                    prop="dust_standard.a01002_Rtd_pre_warning"
                     label="湿度上限预警"
                     width="120"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="dust_standard.a01002_Rtd_is_warning"
                     label="湿度上限报警"
                     width="120"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop="name"
+                    prop="dust_standard.remark"
                     label="备注"
                     width="120"
                     align="center"
@@ -258,7 +244,11 @@
             },
             getTabdata() {
                 getstandard(this.currentPage, this.$route.query.sn, this.pagesize).then(res => {
+                    if (res.data.response_status === "success") {
+                        console.log(res)
+                        this.tableData = res.data.data
 
+                    }
                 })
             }
         }

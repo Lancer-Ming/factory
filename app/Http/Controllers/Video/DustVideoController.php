@@ -249,9 +249,9 @@ class DustVideoController extends Controller
         $sn = $request->sn or failJson('参数错误', 400);
 
         for($i = $firstHours; $i <= $lastHours; $i ++) {
-            $dusts[$i+1] = $this->avgData($i, $sn);
+            $dusts[] = $this->avgData($i, $sn);
         }
-        return $dusts;
+        return successJson($dusts);
 
     }
 
@@ -266,6 +266,7 @@ class DustVideoController extends Controller
         $dust = \DB::select("select avg(a34001_Rtd) AS a34001_Rtd, avg(a34002_Rtd) AS a34002_Rtd, avg(a34004_Rtd) AS a34004_Rtd,
         avg(LA_Rtd) AS LA_Rtd,avg(a01001_Rtd) AS a01001_Rtd,avg(a01002_Rtd) as a01002_Rtd, avg(a01006_Rtd) AS a01006_Rtd,
         AVG(a01007_Rtd) AS a01007_Rtd from ams_dust_infos WHERE sn = ? AND received_at > ? AND received_at <= ?", [$sn, $targetDate, $nextDate]);
+        $dust[0]->hour = $i+1;
         return $dust[0];
     }
 
