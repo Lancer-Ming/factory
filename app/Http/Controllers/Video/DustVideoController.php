@@ -82,14 +82,14 @@ class DustVideoController extends Controller
                 }
                 // 如果 $time 是一个时间段
                 else {
-                    $query->where('received_at', '>=' ,$time[0])->where('received_at', '<=' ,$time[0]);
+                    $addTime = 24 * 60 * 60 - 1;
+                    $query->where('received_at', '>=' ,$time[0])->where('received_at', '<=' ,date('Y-m-d H:i:s', strtotime($time[1]) + $addTime));
                 }
             }
         };
 
         $pagesize = $request->pagesize or 30;
         $dustInfos = DustInfo::with('dust:sn,monitor_place_name')->where('sn', $request->sn)->where($where)->paginate($pagesize);
-
         return successJson($dustInfos);
     }
 
@@ -105,7 +105,8 @@ class DustVideoController extends Controller
                 }
                 // 如果 $time 是一个时间段
                 elseif(count($time) == 2) {
-                    $query->where('received_at', '>=' ,$time[0])->where('received_at', '<=' ,$time[0]);
+                    $addTime = 24 * 60 * 60 - 1;
+                    $query->where('received_at', '>=' ,$time[0])->where('received_at', '<=' ,date('Y-m-d H:i:s', strtotime($time[1]) + $addTime));
                 }
             }
 
@@ -173,7 +174,8 @@ class DustVideoController extends Controller
                     $query->where('created_at', '>=', $time[0]);
                 } // 如果 $time 是一个时间段
                 elseif (count($time) == 2) {
-                    $query->where('created_at', '>=', $time[0])->where('created_at', '<=', $time[0]);
+                    $addTime = 24 * 60 * 60 - 1;
+                    $query->where('created_at', '>=', $time[0])->where('created_at', '<=',date('Y-m-d H:i:s', strtotime($time[1]) + $addTime));
                 }
             }else {
                 $query->where('created_at', '>=', Carbon::today());
@@ -181,7 +183,7 @@ class DustVideoController extends Controller
         };
 
         $pagesize = $request->pagesize or 30;
-        $dusts = DustCode::with('dust:sn,monitor_place_name')->where($where)->orderBy('id', 'desc')->paginate($pagesize);
+        $dusts = DustCode::with('dust:sn,monitor_place_name')->where($where)->where('sn', $request->sn)->orderBy('id', 'desc')->paginate($pagesize);
 
         forEach($dusts as &$dust) {
             $diffTime = strtotime($dust->updated_at) - strtotime($dust->created_at);

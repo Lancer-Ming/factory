@@ -4,8 +4,14 @@
             <el-form-item label="时间" size="mini">
                 <el-date-picker
                         v-model="form.time"
-                        type="date"
-                        placeholder="选择日期">
+                        type="daterange"
+                        placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :picker-options="pickerOptions2"
+                >
                 </el-date-picker>
             </el-form-item>
             <el-form-item label="报警类型" size="mini">
@@ -170,12 +176,40 @@
                 },
                 tableData: [],
                 alarm_type: [],
-                data: [],
                 currentPage: 1, //当前页数
                 pagesize: pagesize,
                 perPagesize: perPagesize,
                 total: null,
                 distribution: false,
+
+                pickerOptions2: {
+                    shortcuts: [{
+                        text: '最近一周',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近一个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近三个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                },
+
             }
         },
         created(){
@@ -194,40 +228,42 @@
             handleCrane() {
                 this.distribution = true
             },
-            getTableData(){
-                getinformation(this.currentPage, this.$route.query.sn, this.pagesize).then(res => {
+            getTableData(time){
+                console.log(time)
+                getinformation(this.currentPage, this.$route.query.sn, this.pagesize, time).then(res => {
                     if (res.data.response_status === "success") {
                         console.log(res)
                         this.tableData = res.data.data.data
-                        console.log(this.tableData)
                         this.total = res.data.data.total
                     }
                     this.tableData.forEach(function(item,index){
-                        item.errorMsg = item.a34001_Rtd_pre_warning ? '扬尘预警': ''
-                        item.errorMsg += item.a34001_Rtd_is_warning ? '|扬尘报警' : ''
-                        item.errorMsg += item.a34002_Rtd_pre_warning ? '|PM10预警' : ''
-                        item.errorMsg += item.a34002_Rtd_is_warning ? '|PM10报警' : ''
-                        item.errorMsg += item.a34004_Rtd_pre_warning ? '|PM2.5预警' : ''
-                        item.errorMsg += item.a34004_Rtd_is_warning ? '|PM2.5报警' : ''
-                        item.errorMsg += item.LA_Rtd_pre_warning ? '|噪音上限预警' : ''
-                        item.errorMsg += item.LA_Rtd_is_warning ? '|噪音上限报警' : ''
-                        item.errorMsg += item.a01001_Rtd_high_pre_warning ? '|温度上限预警' : ''
-                        item.errorMsg += item.a01001_Rtd_high_is_warning ? '|温度上限报警' : ''
-                        item.errorMsg += item.a01001_Rtd_low_pre_warning ? '|温度下限预警' : ''
-                        item.errorMsg += item.a01001_Rtd_low_is_warning ? '|温度下限报警' : ''
-                        item.errorMsg += item.a01002_Rtd_pre_warning ? '|湿度上限预警' : ''
-                        item.errorMsg += item.a01002_Rtd_is_warning ? '|湿度上限报警' : ''
-                        item.errorMsg += item.a01006_Rtd_high_pre_warning ? '|气压上限预警' : ''
-                        item.errorMsg += item.a01006_Rtd_low_pre_warning ? '|气压下限预警' : ''
-                        item.errorMsg += item.a01006_Rtd_high_is_warning ? '|气压下限预警' : ''
-                        item.errorMsg += item.a01006_Rtd_low_is_warning ? '|气压下限报警' : ''
-                        item.errorMsg += item.a01007_Rtd_pre_warning ? '|风速上限预警' : ''
-                        item.errorMsg += item.a01007_Rtd_is_warning ? '|风速上限报警' : ''
+                        item.errorMsg = item.a34001_Rtd_pre_warning ? '扬尘预警|': ''
+                        item.errorMsg += item.a34001_Rtd_is_warning ? '扬尘报警|' : ''
+                        item.errorMsg += item.a34002_Rtd_pre_warning ? 'PM10预警|' : ''
+                        item.errorMsg += item.a34002_Rtd_is_warning ? 'PM10报警|' : ''
+                        item.errorMsg += item.a34004_Rtd_pre_warning ? 'PM2.5预警|' : ''
+                        item.errorMsg += item.a34004_Rtd_is_warning ? 'PM2.5报警|' : ''
+                        item.errorMsg += item.LA_Rtd_pre_warning ? '噪音上限预警|' : ''
+                        item.errorMsg += item.LA_Rtd_is_warning ? '噪音上限报警|' : ''
+                        item.errorMsg += item.a01001_Rtd_high_pre_warning ? '温度上限预警|' : ''
+                        item.errorMsg += item.a01001_Rtd_high_is_warning ? '温度上限报警|' : ''
+                        item.errorMsg += item.a01001_Rtd_low_pre_warning ? '温度下限预警|' : ''
+                        item.errorMsg += item.a01001_Rtd_low_is_warning ? '温度下限报警|' : ''
+                        item.errorMsg += item.a01002_Rtd_pre_warning ? '湿度上限预警|' : ''
+                        item.errorMsg += item.a01002_Rtd_is_warning ? '湿度上限报警|' : ''
+                        item.errorMsg += item.a01006_Rtd_high_pre_warning ? '气压上限预警|' : ''
+                        item.errorMsg += item.a01006_Rtd_low_pre_warning ? '气压下限预警|' : ''
+                        item.errorMsg += item.a01006_Rtd_high_is_warning ? '气压下限预警|' : ''
+                        item.errorMsg += item.a01006_Rtd_low_is_warning ? '气压下限报警|' : ''
+                        item.errorMsg += item.a01007_Rtd_pre_warning ? '风速上限预警|' : ''
+                        item.errorMsg += item.a01007_Rtd_is_warning ? '风速上限报警|' : ''
+                        item.errorMsg = item.errorMsg.substring(0, item.errorMsg.length - 1)
                     })
                 })
             },
             search() {
-                this.getTableData(this.form)
+                let time = this.form.time instanceof Array ? this.form.time.join(',') : this.form.time
+                this.getTableData(time)
             }
         }
 

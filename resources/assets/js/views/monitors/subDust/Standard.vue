@@ -5,13 +5,13 @@
                 <el-input v-model="form.sn"></el-input>
             </el-form-item>
             <el-form-item label="监测点">
-                <el-input v-model="form.address"></el-input>
-            </el-form-item>
-            <el-form-item label="监测站名称">
                 <el-input v-model="form.name"></el-input>
             </el-form-item>
+            <el-form-item label="监测站名称">
+                <el-input v-model="form.item_name"></el-input>
+            </el-form-item>
             <el-form-item>
-                <el-button type="success" plain>查询</el-button>
+                <el-button type="success" plain @click="search">查询</el-button>
                 <el-button type="success" plain>清空</el-button>
             </el-form-item>
         </el-form>
@@ -218,8 +218,8 @@
             return {
                 form: {
                     sn: '',
-                    address: '',
                     name: '',
+                    item_name: '',
                 },
                 tableData: [],
                 currentPage: 1, //当前页数
@@ -230,7 +230,7 @@
             }
         },
         created() {
-            this.getTabdata()
+            this.getTableData()
         },
         methods: {
             handleSizeChange(val) {
@@ -242,7 +242,7 @@
             handleCrane() {
                 this.distribution = true
             },
-            getTabdata() {
+            getTableData() {
                 getstandard(this.currentPage, this.$route.query.sn, this.pagesize).then(res => {
                     if (res.data.response_status === "success") {
                         console.log(res)
@@ -250,6 +250,9 @@
 
                     }
                 })
+            },
+            search(){
+                this.getTableData(this.form)
             }
         }
 

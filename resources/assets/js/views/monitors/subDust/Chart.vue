@@ -4,13 +4,15 @@
         <el-form ref="form" :model="form" label-width="120px" style="margin-top: 20px;">
             <el-form-item label="时间" size="mini">
                 <el-date-picker
-                        v-model="form.date"
+                        v-model="form.time"
                         type="date"
-                        placeholder="选择日期">
+                        placeholder="选择日期"
+                        format="yyyy-MM-dd" value-format="yyyy-MM-dd"
+                >
                 </el-date-picker>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" plain size="mini">查询</el-button>
+                <el-button type="primary" plain size="mini" @click="search">查询</el-button>
             </el-form-item>
         </el-form>
 
@@ -106,7 +108,7 @@
         data() {
             return {
                 form: {
-                    date: ''
+                    time: ''
                 },
                 tableData: [],
                 data: [],
@@ -154,7 +156,7 @@
             }
         },
         created() {
-            this.getTabledata()
+            this.getTableData()
         },
         methods: {
             handleSizeChange(val) {
@@ -166,14 +168,17 @@
             handleCrane() {
                 this.distribution = true
             },
-            getTabledata() {
-                getchart(this.currentPage, this.$route.query.sn, this.pagesize).then(res => {
+            getTableData(time) {
+                getchart(this.currentPage, this.$route.query.sn, this.pagesize,time).then(res => {
                     if (res.data.response_status === "success") {
                         console.log(res)
                         this.tableData = res.data.data
                         console.log(this.tableData)
                     }
                 })
+            },
+            search(){
+                this.getTableData(this.form.time)
             }
         }
 
