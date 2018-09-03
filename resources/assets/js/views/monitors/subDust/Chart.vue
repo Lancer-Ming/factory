@@ -20,66 +20,84 @@
                 style="width: 100%">
 
             <el-table-column
-                    prop="date"
                     label="时间"
                     width="180"
                     align="center"
             >
+                <template slot-scope="scope">
+                    <span>{{ scope.row.hour + '时' }}</span>
+                </template>
             </el-table-column>
             <el-table-column
-                    prop=""
+                    prop="a34001_Rtd"
                     label="扬尘(ug/m³)"
                     width="180"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop=""
+                    prop="a34002_Rtd"
                     label="PM10（ug/m³）"
                     width="180"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop=""
+                    prop="a34004_Rtd"
                     label="PM2.5（ug/m³）"
                     width="180"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop=""
+                    prop="LA_Rtd"
                     label="噪音（dB）"
                     width="180"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop=""
+                    prop="a01001_Rtd"
                     label="温度（℃）"
                     width="180"
                     align="center"
             >
             </el-table-column>
             <el-table-column
-                    prop=""
+                    prop="a01007_Rtd"
                     label="风速（m/s）"
                     width="180"
                     align="center"
             >
             </el-table-column>
         </el-table>
-            <chart-box :chart-data="dustData" :text="dustText" :subtext="dustSubtext"></chart-box>
-            <chart-box :chart-data="pm10Data" :text="pm10Text" :subtext="pm10Subtext"></chart-box>
-            <chart-box :chart-data="pm2Data" :text="pm2Text" :subtext="pm2Subtext"></chart-box>
-            <chart-box :chart-data="noiseData" :text="noiseText" :subtext="noiseSubtext"></chart-box>
-            <chart-box :chart-data="temperatureData" :text="temperatureText" :subtext="temperatureSubtext"></chart-box>
-            <chart-box :chart-data="speedData" :text="speedText" :subtext="speedSubtext"></chart-box>
+        <chart-box :chart-data="dustData" :text="dustText" :subtext="dustSubtext"></chart-box>
+        <chart-box :chart-data="pm10Data" :text="pm10Text" :subtext="pm10Subtext"></chart-box>
+        <chart-box :chart-data="pm2Data" :text="pm2Text" :subtext="pm2Subtext"></chart-box>
+        <chart-box :chart-data="noiseData" :text="noiseText" :subtext="noiseSubtext"></chart-box>
+        <chart-box :chart-data="temperatureData" :text="temperatureText" :subtext="temperatureSubtext"></chart-box>
+        <chart-box :chart-data="speedData" :text="speedText" :subtext="speedSubtext"></chart-box>
+
+        <el-row style="margin-top: 20px;">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[30, 60, 90, 120]"
+                    :page-size="pagesize"
+                    :pager-count="11"
+                    layout="total, sizes, prev, pager, next, jumper,slot,->"
+                    :total="total">
+            </el-pagination>
+        </el-row>
     </div>
 </template>
 
 <script>
     import ChartBox from '../../../components/ChartBox.vue'
+    import {getchart} from '../../../api/chart'
+    import {pagesize, perPagesize} from '../../../config/common'
+
 
     export default {
         components: {
@@ -91,28 +109,29 @@
                     date: ''
                 },
                 tableData: [],
+                data: [],
                 dustData: {
-                    data: [1, 2, 2, 2, 2, 3, 2, 2, 3 ,2, 3],
+                    data: [1, 2, 2, 2, 2, 3, 2, 2, 3, 2, 3],
                     id: 'dustChart'
                 },
                 pm10Data: {
-                    data: [2, 10, 2, 3, 1, 5, 2, 2, 3,2, 3],
+                    data: [2, 10, 2, 3, 1, 5, 2, 2, 3, 2, 3],
                     id: 'pm10Chart'
                 },
                 pm2Data: {
-                    data: [2, 3, 3, 5, 5,1, 2, 2, 3,2, 3],
+                    data: [2, 3, 3, 5, 5, 1, 2, 2, 3, 2, 3],
                     id: 'pm2Chart'
                 },
                 noiseData: {
-                    data: [8, 3, 2, 3, 5, 2, 2, 2, 3,2, 3],
+                    data: [8, 3, 2, 3, 5, 2, 2, 2, 3, 2, 3],
                     id: 'noiseChart'
                 },
                 temperatureData: {
-                    data: [6, 3, 2, 3, 5, 1.5, 2, 2, 3,2, 3],
+                    data: [6, 3, 2, 3, 5, 1.5, 2, 2, 3, 2, 3],
                     id: 'temperatureChart'
                 },
                 speedData: {
-                    data: [5, 3, 2, 3, 5, 1, 2, 2, 3,2, 3],
+                    data: [5, 3, 2, 3, 5, 1, 2, 2, 3, 2, 3],
                     id: 'speedChart'
                 },
                 dustText: '扬尘值',
@@ -126,9 +145,37 @@
                 pm2Subtext: 'ug/m³',
                 noiseSubtext: 'dB',
                 temperatureSubtext: '℃',
-                speedSubtext: 'm/s'
+                speedSubtext: 'm/s',
+                currentPage: 1, //当前页数
+                pagesize: pagesize,
+                perPagesize: perPagesize,
+                total: null,
+                distribution: false,
             }
         },
+        created() {
+            this.getTabledata()
+        },
+        methods: {
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+            },
+            handleCrane() {
+                this.distribution = true
+            },
+            getTabledata() {
+                getchart(this.currentPage, this.$route.query.sn, this.pagesize).then(res => {
+                    if (res.data.response_status === "success") {
+                        console.log(res)
+                        this.tableData = res.data.data
+                        console.log(this.tableData)
+                    }
+                })
+            }
+        }
 
     }
 </script>
