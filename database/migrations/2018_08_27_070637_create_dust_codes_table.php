@@ -15,7 +15,6 @@ class CreateDustCodesTable extends Migration
     {
         Schema::create('dust_codes', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('client_id')->nullable()->comment('客户端id');
             $table->string('sn')->index()->nullable()->comment('sn唯一标识');
             $table->string('IMEI')->nullable()->comment('设备的IMEI号');
             $table->string('SIM')->nullable()->comment('信用卡');

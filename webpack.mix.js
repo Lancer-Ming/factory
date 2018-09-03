@@ -10,19 +10,31 @@ let mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 mix.webpackConfig({
-    devtool: "#cheap-module-eval-source-map",
+    plugins: [
+        new BundleAnalyzerPlugin(),
+    ],
+    //devtool: "#cheap-module-eval-source-map",
     output: {
         publicPath: "/",
         //chunkFilename: 'js/lazy/[name].[chunkhash].js'
         chunkFilename: 'js/lazy/[name].js'
     },
-})
-mix.js('resources/assets/js/app.js', 'public/js')
+    // externals: {
+    //     'element-ui': 'Element',
+    //     'axios': 'axios',
+    //     'vue': 'Vue',
+    //     'vuex': 'Vuex',
+    //     'vue-router': 'VueRouter',
+    //     'vue-chartjs': 'VueChartJs',
+    //     'lodash': '_',
+    // }
+}).js('resources/assets/js/app.js', 'public/js')
     .sass('resources/assets/sass/app.scss', 'public/css')
     .sass('resources/assets/sass/page/page.scss', 'public/css')
     .sass('resources/assets/sass/login.scss', 'public/css')
-   .sourceMaps()
-   //.version()
-   //.extract(['vue','vue-router','axios','element-ui'])
+    .sourceMaps()
+//.version()
+//.extract(['vue','vue-router','axios','element-ui'])
 
