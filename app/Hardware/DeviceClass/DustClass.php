@@ -4,6 +4,7 @@ namespace App\Hardware\DeviceClass;
 
 use App\Models\Code;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DustClass
 {
@@ -33,14 +34,16 @@ class DustClass
     protected $snIsHaved = false;
 
 
-    protected $isTest = true;
+    protected $isTest;
     /** 构造接收消息
      * Entrance constructor.
      * @param $message\
      */
     public function __construct($message)
     {
-        $this->message = $message;
+        $this->message = str_replace(array("\r\n", "\r", "\n"),"", $message);
+        $this->isTest = true;
+        Log::info('构造：'.$this->message);
     }
 
     /** 将后台的数据存入到数据库里
@@ -49,17 +52,21 @@ class DustClass
      */
     public function store()
     {
+        Log::info('1'.$this->message);
         // 检验
         if (!$this->CRC_16_Check()) {
+            Log::info('2'.$this->message);
             return;
         }
 
         // 将数据进行格式化
         $this->formatData();
+
         $processMessage = $this->processMessage;
 
         // 如果 processMessage 是包含IMEI号  就是首次访问。
-        if (array_key_exists($processMessage, 'IMEI')) {
+        if (array_key_exists('IMEI', $processMessage)) {
+            Log::info('4'.$processMessage);
             // 确认是刚上线
             $this->isInit = true;
             // 查询 IMEI 号
@@ -73,10 +80,11 @@ class DustClass
         } else {
             // 如果是测试环境
             if ($this->isTest) {
-                $this->storeTestData();
+                Log::info('测试：'.$this->message);
+                $this->storeTestData($processMessage);
             } else {
                 $this->sn = $this->snIsHaved ? $this->sn : $this->createRandomUniqueCode();       // 生成sn
-                $this->storeProductionData();
+                $this->storeProductionData($processMessage);
             }
         }
 
@@ -128,7 +136,7 @@ class DustClass
     /**
      *  储存测试环境数据
      */
-    protected function storeTestData()
+    protected function storeTestData($processMessage)
     {
         $time = date('Y-m-d H:i:s', time());
         // 新增扬尘上线信息
@@ -141,7 +149,7 @@ class DustClass
     /**
      *  储存生产环境数据
      */
-    protected function storeProductionData()
+    protected function storeProductionData($processMessage)
     {
         $time = date('Y-m-d H:i:s', time());
         // 新增扬尘上线信息
@@ -157,7 +165,7 @@ class DustClass
      */
     protected function formatData()
     {
-
+        Log::info('formatData....');
         // a34004-Rtd：PM2.5    a34002-Rtd：PM10    a34001-Rtd：总悬浮颗粒物 TSP    LA-Rtd：噪音
         // a01001-Rtd：温度    a01002-Rtd：湿度   a01006-Rtd：气压   a01007-Rtd：风速   a01008-Rtd：风向
         $this->message = substr($this->message, 6, -6);
@@ -181,6 +189,8 @@ class DustClass
         }
         // 将格式化好的数据赋值给$processMessage
         $this->processMessage = $formatData;
+
+        Log::info('3');
 
         return $this;
     }
@@ -212,10 +222,12 @@ class DustClass
     protected function CRC_16_Check()
     {
         $validateCode = substr($this->message, -4);
+        $validateCode=str_replace(array("\r\n", "\r", "\n"),"", $validateCode);
         $puchMsg = substr($this->message, 6, -4);
         $usDataLen = strlen($puchMsg);
         $crc = $this->CRC_16($puchMsg, $usDataLen);
-        return strtoupper(base_convert($crc, 10, 16)) === $validateCode;
+        Log::info('validate:'.$validateCode.strtoupper(base_convert($crc, 10, 16)));
+        return (strtoupper(base_convert($crc, 10, 16))) == $validateCode;
     }
 
     /** 随机独立的6位码
