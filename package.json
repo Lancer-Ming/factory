@@ -19,7 +19,8 @@
     "popper.js": "^1.12",
     "script-loader": "^0.7.2",
     "vue": "^2.5.7",
-    "vue-splitpane": "^1.0.2"
+    "vue-splitpane": "^1.0.2",
+    "webpack-bundle-analyzer": "^2.13.1"
   },
   "dependencies": {
     "axios": "^0.18.0",

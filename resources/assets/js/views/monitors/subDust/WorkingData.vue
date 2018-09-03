@@ -126,7 +126,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-row style="margin-top: 20px;">
+        <el-row>
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
