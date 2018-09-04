@@ -15,11 +15,11 @@ mix.webpackConfig({
     plugins: [
         new BundleAnalyzerPlugin(),
     ],
-    //devtool: "#cheap-module-eval-source-map",
+    devtool: "source-map",
     output: {
         publicPath: "/",
-        //chunkFilename: 'js/lazy/[name].[chunkhash].js'
-        chunkFilename: 'js/lazy/[name].js'
+        chunkFilename: 'js/lazy/[name].[chunkhash].js'
+        //chunkFilename: 'js/lazy/[name].js'
     },
     // externals: {
     //     'element-ui': 'Element',
