@@ -3,6 +3,7 @@
 namespace App\Hardware\DeviceClass;
 
 use App\Models\Code;
+use GatewayWorker\Lib\Gateway;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -33,6 +34,11 @@ class DustClass
      */
     protected $snIsHaved = false;
 
+    /** 客户端唯一标识
+     * @var
+     */
+    protected $client_id;
+
 
     protected $isTest;
     /** 构造接收消息
@@ -50,8 +56,9 @@ class DustClass
      * @return string|void
      * @throws \Exception
      */
-    public function store()
+    public function store($client_id)
     {
+        $this->client_id = $client_id;
         Log::info('1'.$this->message);
         // 检验
         if (!$this->CRC_16_Check()) {
@@ -66,46 +73,65 @@ class DustClass
 
         // 如果 processMessage 是包含IMEI号  就是首次访问。
         if (array_key_exists('IMEI', $processMessage)) {
-            Log::info('4'.$processMessage);
+            Log::info('4'.json_encode($processMessage));
             // 确认是刚上线
             $this->isInit = true;
             // 查询 IMEI 号
-            $sn = DB::select('select sn from ams_dust_codes WHERE IMEI = ?', [$processMessage['IMEI']])[0];
+            $sn = DB::select('select sn from ams_dust_codes WHERE IMEI = ?', [$processMessage['IMEI']]);
             if ($sn) {
                 // 如果查询到了 说明已经储存过了
                 $this->snIsHaved = true;
-                $this->$sn = $sn;
+                $this->sn = $sn[0];
+
+                // 将sn 作为Uid 与 client_id 进行绑定
+                Gateway::bindUid($client_id, $this->sn);
+
+                // 改变 dust 状态
+                $this->changeStatus($client_id);
+                return;
+            } else {
+                $this->sn = $this->createRandomUniqueCode();
+                Log::info('sn::::::'.$this->sn);
+
+                // 将sn 作为Uid 与 client_id 进行绑定
+                Gateway::bindUid($client_id, $this->sn);
+
+                // 改变 dust 状态
+                $this->changeStatus($client_id);
+
+                // 储存起来
+                $time = date('Y-m-d H:i:s', time());
+                DB::insert('insert into ams_dust_codes (sn, IMEI, client_id, created_at) values (?, ?, ?, ?)', [$this->sn,$processMessage['IMEI'], $this->client_id,  $time]);
                 return;
             }
-        } else {
+
+        } else {        // 不是首次访问，发数据包了
+            $this->isInit = false;
             // 如果是测试环境
             if ($this->isTest) {
                 Log::info('测试：'.$this->message);
                 $this->storeTestData($processMessage);
             } else {
-                $this->sn = $this->snIsHaved ? $this->sn : $this->createRandomUniqueCode();       // 生成sn
+                $this->sn =  substr($processMessage['MN'], -6);      // 生成sn
                 $this->storeProductionData($processMessage);
             }
         }
 
-
-            // 获取 标准数据值
-//            $standard = DB::select('select * from ams_dust_standards where sn = ?', [$this->sn]);
-            // 如果存在进行各种判断是否预警
-
     }
 
     /**
-     * 改变状态
+     * 改变 dust 在线状态
      */
-    public function changeStatus()
+    public function changeStatus($client_id)
     {
-        DB::update('update ams_dusts set is_online=1 WHERE sn = ?', ['971228']);
-        return;
-        if ($this->isInit) {
-            DB::update('update ams_dusts set is_online=1 WHERE sn = ?', ['971228']);
+        // 根据client_id获取sn
+        $sn = Gateway::getUidByClientId($client_id);
+        Log::info(json_encode('sn........'.json_encode($sn)));
+        $is_online = Gateway::isUidOnline($sn);
+        if ($is_online) {
+            DB::update('update ams_dusts set is_online=1 WHERE sn = ?', [$sn]);
         } else {
-            DB::update('update ams_dusts set is_online=0 WHERE sn = ?', ['971228']);
+            DB::update('update ams_dusts set is_online=0 WHERE sn = ?', [$sn]);
         }
 
     }
@@ -115,21 +141,25 @@ class DustClass
      */
     public function sendConnectData()
     {
-        // 获取sn 查看是否已经交流过
-        if ($this->isInit) {
-            return 'ok';
+        if (!$this->isInit) {
+           return 'ok';
         }
-
         // 主体数据内容
-
-        $result_content = 'MN=' . $this->sn . ';DATETIME=' . date('YmdHis', time()) . '&&';
+        $result_content = 'SN=' . $this->sn . ';DATETIME=' . date('YmdHis', time()) . '&&';
 
         // CRC16加密
         $crc = $this->CRC_16($result_content, strlen($result_content));
-        $validate_code = strtoupper(base_convert($crc, 10, 32));
+        $validate_code = strtoupper(str_pad(base_convert($crc, 10, 16), 4, STR_PAD_LEFT));
         // 最终数据，含包头包尾
-        $result_all = '##' . str_pad(strlen($result_content), 4, 0, 0) . $result_content . $validate_code . '\r\n';
+        $result_all = '##' . str_pad(strlen($result_content), 4, 0, 0) . $result_content . $validate_code;
         return $result_all;
+    }
+
+    public function insertCloseTime($client_id)
+    {
+        $sn = Gateway::getUidByClientId($client_id);
+        $time = date('Y-m-d H:i:s', time());
+        DB::update('update ams_dust_codes set updated_at = ? WHERE $sn = ?', [$time, $sn]);
     }
 
 
@@ -139,8 +169,6 @@ class DustClass
     protected function storeTestData($processMessage)
     {
         $time = date('Y-m-d H:i:s', time());
-        // 新增扬尘上线信息
-        DB::insert('insert into ams_dust_codes (sn, created_at, updated_at) values (?, ?, ?)', ['971228', $time, $time]);
         // 新增扬尘数据信息
         DB::insert('insert into ams_dust_infos
         (sn, received_at, flag, QN, CN, a34001_Rtd, a34002_Rtd, a34004_Rtd, LA_Rtd, a01001_Rtd, a01002_Rtd, a01006_Rtd, a01007_Rtd, a01008_Rtd) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', ['971228', $time, $processMessage['Flag'], $processMessage['QN'], $processMessage['CN'], $processMessage['a34001-Rtd'], $processMessage['a34002-Rtd'], $processMessage['a34004-Rtd'], $processMessage['LA-Rtd'], $processMessage['a01001-Rtd'], $processMessage['a01002-Rtd'], $processMessage['a01006-Rtd'], $processMessage['a01007-Rtd'], $processMessage['a01008-Rtd']]);
@@ -152,8 +180,6 @@ class DustClass
     protected function storeProductionData($processMessage)
     {
         $time = date('Y-m-d H:i:s', time());
-        // 新增扬尘上线信息
-        DB::insert('insert into ams_dust_codes (sn, created_at, updated_at) values (?, ?, ?)', ['971228', $time, $time]);
         // 新增扬尘数据信息
         DB::insert('insert into ams_dust_infos
         (sn, received_at, flag, QN, CN, a34001_Rtd, a34002_Rtd, a34004_Rtd, LA_Rtd, a01001_Rtd, a01002_Rtd, a01006_Rtd, a01007_Rtd, a01008_Rtd) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$this->sn, $time, $processMessage['Flag'], $processMessage['QN'], $processMessage['CN'], $processMessage['a34001-Rtd'], $processMessage['a34002-Rtd'], $processMessage['a34004-Rtd'], $processMessage['LA-Rtd'], $processMessage['a01001-Rtd'], $processMessage['a01002-Rtd'], $processMessage['a01006-Rtd'], $processMessage['a01007-Rtd'], $processMessage['a01008-Rtd']]);
@@ -222,11 +248,10 @@ class DustClass
     protected function CRC_16_Check()
     {
         $validateCode = substr($this->message, -4);
-        $validateCode=str_replace(array("\r\n", "\r", "\n"),"", $validateCode);
         $puchMsg = substr($this->message, 6, -4);
         $usDataLen = strlen($puchMsg);
         $crc = $this->CRC_16($puchMsg, $usDataLen);
-        Log::info('validate:'.$validateCode.strtoupper(base_convert($crc, 10, 16)));
+        Log::info('validate:'.$validateCode.'--------'.strtoupper(base_convert($crc, 10, 16)));
         return (strtoupper(base_convert($crc, 10, 16))) == $validateCode;
     }
 
@@ -241,8 +266,7 @@ class DustClass
         if ($flag) {
             // 如果数据库有类型
             $code = (int)($flag->code) + 1;
-            $mm = date('m', time());
-            $hostCode = str_pad(base_convert($code, 10, 16), 4, 0, STR_PAD_LEFT) . $mm;
+            $hostCode = str_pad($code, 6, 0, STR_PAD_LEFT);
 
             // 添加到数据库
             $flag->code = $code;
@@ -250,8 +274,8 @@ class DustClass
 
         } else {
             // 添加一个到数据库
-            Code::insert(['code' => 10000, 'type' => 1]);
-            return 10000;
+            Code::insert(['code' => 1, 'type' => 1]);
+            return str_pad(1, 6, 0, STR_PAD_LEFT);
         }
 
         return $hostCode;

@@ -29,6 +29,7 @@
         </el-footer>
     </el-container>
 </div>
+{{--<script src="https://unpkg.com/element-ui@2.4.2/lib/index.js"></script>--}}
 {{--<script src="{{ mix('js/manifest.js') }}"></script>--}}
 {{--<script src="{{ mix('js/vendor.js') }}"></script>--}}
 <script src="{{asset('vendor/ckplayer/ckplayer/ckplayer.js')}}"></script>

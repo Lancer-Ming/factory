@@ -12,6 +12,7 @@ use App\Hardware\Entrance;
 
 class HomeController extends Controller
 {
+    protected $message;
     public function index()
     {
         return view('index', compact('permissions'));
@@ -29,8 +30,14 @@ class HomeController extends Controller
 
     public function gateway()
     {
-        $message = "##0239QN=20180821142509000;ST=39;CN=2011;PW=123456;MN=690000D5800028F889221AC0;Flag=4;CP=&&DataTime=20180821142509;a34004-Rtd=0.0;a34002-Rtd=0.0;a34001-Rtd=0.0;LA-Rtd=0.0;a01001-Rtd=0.0;a01002-Rtd=0.0;a01006-Rtd=0.0;a01007-Rtd=0.0;a01008-Rtd=0&&E541";
-
+        $message = "##0091QN=20180904160638000;ST=39;CN=2011;PW=123456;USCC=91440101MA59F70720;IMEI=867732039951777&&B8C1";
+        $message = "##0035SN=271909;DATETIME=20180904163444&&";
+        $this->message = str_replace(array("\r\n", "\r", "\n"),"", $message);
+        $validateCode = substr($this->message, -4);
+        $puchMsg = substr($this->message, 6, -4);
+        $usDataLen = strlen($puchMsg);
+        $crc = $this->CRC_16($puchMsg, $usDataLen);
+        return strtoupper(base_convert($crc, 10, 16));
         // 获取扬尘处理的实例
         $dust = Entrance::Dust($message);
         // 判断状态并且存储数据
@@ -39,5 +46,21 @@ class HomeController extends Controller
 //        $message = $dust->sendConnectData($client_id);
         // 改变 dust 的状态
         $dust->changeStatus();
+    }
+
+    protected function CRC_16($puchMsg, $usDataLen)
+    {
+        $crc_reg = 0xFFFF;
+        for ($i = 0; $i < $usDataLen; $i++) {
+            $crc_reg = ($crc_reg >> 8) ^ ord($puchMsg[$i]);
+            for ($j = 0; $j < 8; $j++) {
+                $check = $crc_reg & 0x0001;
+                $crc_reg >>= 1;
+                if ($check == 0x0001) {
+                    $crc_reg ^= 0xA001;
+                }
+            }
+        }
+        return $crc_reg;
     }
 }
