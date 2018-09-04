@@ -20,11 +20,9 @@ class Events
         // 获取扬尘处理的实例
         $dust = Entrance::Dust($message);
         // 判断状态并且存储数据
-        $dust->store();
+        $dust->store($client_id);
         // 获取要发送给硬件的数据
-//        $message = $dust->sendConnectData($client_id);
-        // 改变 dust 的状态
-        $dust->changeStatus();
+        $message = $dust->sendConnectData($client_id);
         // 发送数据sn
 //        Gateway::sendToClient($client_id, $message);
         // 向所有人发送
@@ -33,7 +31,12 @@ class Events
 
     public static function onClose($client_id)
     {
+        $dust = Entrance::Dust();
+        // 判断状态并且存储数据
+        $dust->changeStatus($client_id);
 
+        // 更新设备退出时间
+        $dust->insertCloseTime($client_id);
     }
 
 }
