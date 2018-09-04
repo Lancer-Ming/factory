@@ -74,7 +74,12 @@ class DustClass
             if ($sn) {
                 // 如果查询到了 说明已经储存过了
                 $this->snIsHaved = true;
-                $this->$sn = $sn;
+                $this->sn = $sn;
+                return;
+            } else {
+                $this->sn = $this->createRandomUniqueCode();
+                // 储存起来
+                DB::insert('insert into ams_dust_codes (sn, IMEI, created_at, updated_at) values (?, ?, ?, ?)', [$this->sn, $processMessage['IMEI'], $time, $time]);
                 return;
             }
         } else {
@@ -83,15 +88,10 @@ class DustClass
                 Log::info('测试：'.$this->message);
                 $this->storeTestData($processMessage);
             } else {
-                $this->sn = $this->snIsHaved ? $this->sn : $this->createRandomUniqueCode();       // 生成sn
+                $this->sn =  substr($processMessage['MN'], -6);      // 生成sn
                 $this->storeProductionData($processMessage);
             }
         }
-
-
-            // 获取 标准数据值
-//            $standard = DB::select('select * from ams_dust_standards where sn = ?', [$this->sn]);
-            // 如果存在进行各种判断是否预警
 
     }
 
@@ -100,8 +100,6 @@ class DustClass
      */
     public function changeStatus()
     {
-        DB::update('update ams_dusts set is_online=1 WHERE sn = ?', ['971228']);
-        return;
         if ($this->isInit) {
             DB::update('update ams_dusts set is_online=1 WHERE sn = ?', ['971228']);
         } else {
@@ -115,20 +113,14 @@ class DustClass
      */
     public function sendConnectData()
     {
-        // 获取sn 查看是否已经交流过
-        if ($this->isInit) {
-            return 'ok';
-        }
-
         // 主体数据内容
-
-        $result_content = 'MN=' . $this->sn . ';DATETIME=' . date('YmdHis', time()) . '&&';
+        $result_content = 'sn=' . $this->sn . ';DATETIME=' . date('YmdHis', time()) . '&&';
 
         // CRC16加密
         $crc = $this->CRC_16($result_content, strlen($result_content));
         $validate_code = strtoupper(base_convert($crc, 10, 32));
         // 最终数据，含包头包尾
-        $result_all = '##' . str_pad(strlen($result_content), 4, 0, 0) . $result_content . $validate_code . '\r\n';
+        $result_all = '##' . str_pad(strlen($result_content), 4, 0, 0) . $result_content . $validate_code;
         return $result_all;
     }
 

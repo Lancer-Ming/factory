@@ -31,4 +31,9 @@ class Events
         Gateway::sendToAll($message);
     }
 
+    public static function onClose($client_id)
+    {
+
+    }
+
 }
