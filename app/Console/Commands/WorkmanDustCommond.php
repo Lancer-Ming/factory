@@ -49,9 +49,6 @@ class WorkmanDustCommond extends Command {
         $gateway->count                = 4;
         $gateway->lanIp                = '127.0.0.1';
         $gateway->startPort            = 2900;
-        $gateway->pingInterval         = 30;
-        $gateway->pingNotResponseLimit = 0;
-        $gateway->pingData             = '{"type":"@heart@"}';
         $gateway->registerAddress      = '127.0.0.1:1238';
     }
 

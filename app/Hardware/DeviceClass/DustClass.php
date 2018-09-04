@@ -4,6 +4,7 @@ namespace App\Hardware\DeviceClass;
 
 use App\Models\Code;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DustClass
 {
@@ -33,14 +34,16 @@ class DustClass
     protected $snIsHaved = false;
 
 
-    protected $isTest = false;
+    protected $isTest;
     /** 构造接收消息
      * Entrance constructor.
      * @param $message\
      */
     public function __construct($message)
     {
-        $this->message = $message;
+        $this->message = str_replace(array("\r\n", "\r", "\n"),"", $message);
+        $this->isTest = true;
+        Log::info('构造：'.$this->message);
     }
 
     /** 将后台的数据存入到数据库里
@@ -49,46 +52,51 @@ class DustClass
      */
     public function store()
     {
+        Log::info('1'.$this->message);
         // 检验
         if (!$this->CRC_16_Check()) {
+            Log::info('2'.$this->message);
             return;
         }
 
         // 将数据进行格式化
         $this->formatData();
+
         $processMessage = $this->processMessage;
 
-        // 将 sn 赋值给属性
-//        $this->sn = $processMessage['MN'];
-
         // 如果 processMessage 是包含IMEI号  就是首次访问。
-//        if (array_key_exists($processMessage, 'IMEI')) {
-//            $this->isInit = true;
-//            $sn = DB::select('select sn from ams_dust_codes WHERE IMEI = ?', [$processMessage['IMEI']]);
-//            if ($sn) {
-//                $this->snIsHaved = true;
-//            }
-//            return;
-//        }
+        if (array_key_exists('IMEI', $processMessage)) {
+            Log::info('4'.$processMessage);
+            // 确认是刚上线
+            $this->isInit = true;
+            // 查询 IMEI 号
+            $sn = DB::select('select sn from ams_dust_codes WHERE IMEI = ?', [$processMessage['IMEI']])[0];
+            if ($sn) {
+                // 如果查询到了 说明已经储存过了
+                $this->snIsHaved = true;
+                $this->$sn = $sn;
+                return;
+            }
+        } else {
+            // 如果是测试环境
+            if ($this->isTest) {
+                Log::info('测试：'.$this->message);
+                $this->storeTestData($processMessage);
+            } else {
+                $this->sn = $this->snIsHaved ? $this->sn : $this->createRandomUniqueCode();       // 生成sn
+                $this->storeProductionData($processMessage);
+            }
+        }
 
-        $time = date('Y-m-d H:i:s', time());
-        try {
-            DB::insert('insert into ams_dust_codes (sn, created_at, updated_at) values (?, ?, ?, ?)', ['971228', $time, $time]);
-
-            DB::insert('insert into ams_dust_infos
-        (sn, received_at, flag, QN, CN, a34001_Rtd, a34002_Rtd, a34004_Rtd, LA_Rtd, a01001_Rtd, a01002_Rtd, a01006_Rtd, a01007_Rtd, a01008_Rtd) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', ['971228', $time, $processMessage['Flag'], $processMessage['QN'], $processMessage['CN'], $processMessage['a34001-Rtd'], $processMessage['a34002-Rtd'], $processMessage['a34004-Rtd'], $processMessage['LA-Rtd'], $processMessage['a01001-Rtd'], $processMessage['a01002-Rtd'], $processMessage['a01006-Rtd'], $processMessage['a01007-Rtd'], $processMessage['a01008-Rtd']]);
 
             // 获取 标准数据值
 //            $standard = DB::select('select * from ams_dust_standards where sn = ?', [$this->sn]);
             // 如果存在进行各种判断是否预警
 
-        } catch (\Exception $exception) {
-            throw $exception;
-        }
     }
 
     /**
-     *
+     * 改变状态
      */
     public function changeStatus()
     {
@@ -113,7 +121,7 @@ class DustClass
         }
 
         // 主体数据内容
-        $this->sn = $this->createRandomUniqueCode();       // 生成sn
+
         $result_content = 'MN=' . $this->sn . ';DATETIME=' . date('YmdHis', time()) . '&&';
 
         // CRC16加密
@@ -124,12 +132,40 @@ class DustClass
         return $result_all;
     }
 
+
+    /**
+     *  储存测试环境数据
+     */
+    protected function storeTestData($processMessage)
+    {
+        $time = date('Y-m-d H:i:s', time());
+        // 新增扬尘上线信息
+        DB::insert('insert into ams_dust_codes (sn, created_at, updated_at) values (?, ?, ?)', ['971228', $time, $time]);
+        // 新增扬尘数据信息
+        DB::insert('insert into ams_dust_infos
+        (sn, received_at, flag, QN, CN, a34001_Rtd, a34002_Rtd, a34004_Rtd, LA_Rtd, a01001_Rtd, a01002_Rtd, a01006_Rtd, a01007_Rtd, a01008_Rtd) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', ['971228', $time, $processMessage['Flag'], $processMessage['QN'], $processMessage['CN'], $processMessage['a34001-Rtd'], $processMessage['a34002-Rtd'], $processMessage['a34004-Rtd'], $processMessage['LA-Rtd'], $processMessage['a01001-Rtd'], $processMessage['a01002-Rtd'], $processMessage['a01006-Rtd'], $processMessage['a01007-Rtd'], $processMessage['a01008-Rtd']]);
+    }
+
+    /**
+     *  储存生产环境数据
+     */
+    protected function storeProductionData($processMessage)
+    {
+        $time = date('Y-m-d H:i:s', time());
+        // 新增扬尘上线信息
+        DB::insert('insert into ams_dust_codes (sn, created_at, updated_at) values (?, ?, ?)', ['971228', $time, $time]);
+        // 新增扬尘数据信息
+        DB::insert('insert into ams_dust_infos
+        (sn, received_at, flag, QN, CN, a34001_Rtd, a34002_Rtd, a34004_Rtd, LA_Rtd, a01001_Rtd, a01002_Rtd, a01006_Rtd, a01007_Rtd, a01008_Rtd) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$this->sn, $time, $processMessage['Flag'], $processMessage['QN'], $processMessage['CN'], $processMessage['a34001-Rtd'], $processMessage['a34002-Rtd'], $processMessage['a34004-Rtd'], $processMessage['LA-Rtd'], $processMessage['a01001-Rtd'], $processMessage['a01002-Rtd'], $processMessage['a01006-Rtd'], $processMessage['a01007-Rtd'], $processMessage['a01008-Rtd']]);
+    }
+
+
     /** 将后台数据按要求进行格式化
      * @return $this|array
      */
     protected function formatData()
     {
-
+        Log::info('formatData....');
         // a34004-Rtd：PM2.5    a34002-Rtd：PM10    a34001-Rtd：总悬浮颗粒物 TSP    LA-Rtd：噪音
         // a01001-Rtd：温度    a01002-Rtd：湿度   a01006-Rtd：气压   a01007-Rtd：风速   a01008-Rtd：风向
         $this->message = substr($this->message, 6, -6);
@@ -153,6 +189,8 @@ class DustClass
         }
         // 将格式化好的数据赋值给$processMessage
         $this->processMessage = $formatData;
+
+        Log::info('3');
 
         return $this;
     }
@@ -184,10 +222,12 @@ class DustClass
     protected function CRC_16_Check()
     {
         $validateCode = substr($this->message, -4);
+        $validateCode=str_replace(array("\r\n", "\r", "\n"),"", $validateCode);
         $puchMsg = substr($this->message, 6, -4);
         $usDataLen = strlen($puchMsg);
         $crc = $this->CRC_16($puchMsg, $usDataLen);
-        return strtoupper(base_convert($crc, 10, 16)) === $validateCode;
+        Log::info('validate:'.$validateCode.strtoupper(base_convert($crc, 10, 16)));
+        return (strtoupper(base_convert($crc, 10, 16))) == $validateCode;
     }
 
     /** 随机独立的6位码
@@ -208,11 +248,13 @@ class DustClass
             $flag->code = $code;
             $flag->save();
 
-            return $hostCode;
         } else {
             // 添加一个到数据库
             Code::insert(['code' => 10000, 'type' => 1]);
+            return 10000;
         }
+
+        return $hostCode;
     }
 
 
