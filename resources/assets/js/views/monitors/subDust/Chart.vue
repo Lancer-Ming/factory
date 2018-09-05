@@ -73,32 +73,18 @@
             >
             </el-table-column>
         </el-table>
-        <chart-box :chart-data="dustData" :text="dustText" :subtext="dustSubtext"></chart-box>
-        <chart-box :chart-data="pm10Data" :text="pm10Text" :subtext="pm10Subtext"></chart-box>
-        <chart-box :chart-data="pm2Data" :text="pm2Text" :subtext="pm2Subtext"></chart-box>
-        <chart-box :chart-data="noiseData" :text="noiseText" :subtext="noiseSubtext"></chart-box>
-        <chart-box :chart-data="temperatureData" :text="temperatureText" :subtext="temperatureSubtext"></chart-box>
-        <chart-box :chart-data="speedData" :text="speedText" :subtext="speedSubtext"></chart-box>
-
-        <el-row style="margin-top: 20px;">
-            <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="currentPage"
-                    :page-sizes="[30, 60, 90, 120]"
-                    :page-size="pagesize"
-                    :pager-count="11"
-                    layout="total, sizes, prev, pager, next, jumper,slot,->"
-                    :total="total">
-            </el-pagination>
-        </el-row>
+        <chart-box :chart-data="dustData.data" :id="dustData.id" :text="dustText" :subtext="dustSubtext" :hour="hour.data"></chart-box>
+        <chart-box :chart-data="pm10Data.data" :id="pm10Data.id" :text="pm10Text" :subtext="pm10Subtext" :hour="hour.data"></chart-box>
+        <chart-box :chart-data="pm2Data.data" :id="pm2Data.id" :text="pm2Text" :subtext="pm2Subtext" :hour="hour.data"></chart-box>
+        <chart-box :chart-data="noiseData.data" :id="noiseData.id" :text="noiseText" :subtext="noiseSubtext" :hour="hour.data"></chart-box>
+        <chart-box :chart-data="temperatureData.data" :id="temperatureData.id" :text="temperatureText" :subtext="temperatureSubtext" :hour="hour.data"></chart-box>
+        <chart-box :chart-data="speedData.data" :id="speedData.id" :text="speedText" :subtext="speedSubtext" :hour="hour.data"></chart-box>
     </div>
 </template>
 
 <script>
     import ChartBox from '../../../components/ChartBox.vue'
     import {getchart} from '../../../api/chart'
-    import {pagesize, perPagesize} from '../../../config/common'
 
 
     export default {
@@ -111,30 +97,32 @@
                     time: ''
                 },
                 tableData: [],
-                data: [],
                 dustData: {
-                    data: [1, 2, 2, 2, 2, 3, 2, 2, 3, 2, 3],
+                    data: [],
                     id: 'dustChart'
                 },
                 pm10Data: {
-                    data: [2, 10, 2, 3, 1, 5, 2, 2, 3, 2, 3],
+                    data: [],
                     id: 'pm10Chart'
                 },
                 pm2Data: {
-                    data: [2, 3, 3, 5, 5, 1, 2, 2, 3, 2, 3],
+                    data: [],
                     id: 'pm2Chart'
                 },
                 noiseData: {
-                    data: [8, 3, 2, 3, 5, 2, 2, 2, 3, 2, 3],
+                    data: [],
                     id: 'noiseChart'
                 },
                 temperatureData: {
-                    data: [6, 3, 2, 3, 5, 1.5, 2, 2, 3, 2, 3],
+                    data: [],
                     id: 'temperatureChart'
                 },
                 speedData: {
-                    data: [5, 3, 2, 3, 5, 1, 2, 2, 3, 2, 3],
+                    data: [],
                     id: 'speedChart'
+                },
+                hour: {
+                    data: []
                 },
                 dustText: '扬尘值',
                 pm10Text: 'PM10',
@@ -148,38 +136,52 @@
                 noiseSubtext: 'dB',
                 temperatureSubtext: '℃',
                 speedSubtext: 'm/s',
-                currentPage: 1, //当前页数
-                pagesize: pagesize,
-                perPagesize: perPagesize,
-                total: null,
-                distribution: false,
             }
         },
         created() {
             this.getTableData()
         },
         methods: {
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-            },
-            handleCrane() {
-                this.distribution = true
-            },
             getTableData(time) {
-                getchart(this.currentPage, this.$route.query.sn, this.pagesize,time).then(res => {
+                getchart(this.currentPage, this.$route.query.sn, this.pagesize, time).then(res => {
                     if (res.data.response_status === "success") {
-                        console.log(res)
+                        var charts = {
+                            timeSlot: [],
+                            data: {
+                                dust: [],
+                                pm10: [],
+                                pm2: [],
+                                noise: [],
+                                temperature: [],
+                                speed: []
+                            }
+                        }
                         this.tableData = res.data.data
-                        console.log(this.tableData)
+                        this.tableData.forEach(item => {
+                            charts.timeSlot.push(item.hour)
+                            charts.data.dust.push(item.a34001_Rtd)
+                            charts.data.pm10.push(item.a34002_Rtd)
+                            charts.data.pm2.push(item.a34004_Rtd)
+                            charts.data.noise.push(item.LA_Rtd)
+                            charts.data.temperature.push(item.a01001_Rtd)
+                            charts.data.speed.push(item.a01007_Rtd)
+                        })
+                        this.hour.data = charts.timeSlot
+                        this.dustData.data = charts.data.dust
+                        this.pm10Data.data = charts.data.pm10
+                        this.pm2Data.data = charts.data.pm2
+                        this.noiseData.data = charts.data.noise
+                        this.temperatureData.data = charts.data.temperature
+                        this.speedData.data = charts.data.speed
+
+                        console.log(charts)
                     }
                 })
             },
-            search(){
+            search() {
                 this.getTableData(this.form.time)
-            }
+            },
+
         }
 
     }
