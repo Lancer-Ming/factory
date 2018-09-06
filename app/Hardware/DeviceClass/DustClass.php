@@ -86,6 +86,7 @@ class DustClass
                 // 每次都需要插入一条新的client_id 记录
                 $time = date('Y-m-d H:i:s', time());
                 DB::insert('insert into ams_dust_codes (sn, IMEI, client_id, created_at) values (?, ?, ?, ?)', [$this->sn,$processMessage['IMEI'], $this->client_id,  $time]);
+
                 // 改变 dust 状态
                 $this->changeStatus($client_id);
                 return;
@@ -137,8 +138,6 @@ class DustClass
         $is_online = Gateway::isUidOnline($sn);
         if ($is_online) {
             DB::update('update ams_dusts set is_online=1 WHERE sn = ?', [$sn]);
-            $time = date('Y-m-d H:i:s', time());
-            DB::update('update ams_dust_codes set created_at=? WHERE sn = ?', [$time, $sn]);
         }
     }
 
@@ -163,17 +162,20 @@ class DustClass
 
     public function insertCloseTime($client_id)
     {
-        $sn = DB::select('select sn from ams_dust_codes WHERE client_id = ?', [$client_id]);
-        if ($sn) {
-            $sn = $sn[0]->sn;
+        $data = DB::select('select sn, id from ams_dust_codes WHERE client_id = ?', [$client_id]);
+        if ($data) {
+            $sn = $data[0]->sn;
         }
         Log::info('inserCloseTime-----------'.json_encode($sn));
         // 如果 $sn 是空数组 直接return
         if (empty($sn)) {
             return;
         }
+        // 查询要退出的那个id
+        $id = DB::select("select id from ams_dust_codes where sn = ? ORDER BY id desc LIMIT 1", [$sn])[0]->id;
+        Log::info('id------------------------'.$id);
         $time = date('Y-m-d H:i:s', time());
-        DB::update('update ams_dust_codes set updated_at = ? WHERE sn = ?', [$time, $sn]);
+        DB::update('update ams_dust_codes set updated_at = ? WHERE id = ?', [$time, $id]);
         DB::update('update ams_dusts set is_online=0, pre_warn_count=0, cur_warn_count=0 WHERE sn = ?', [$sn]);
     }
 

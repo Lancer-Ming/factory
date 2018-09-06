@@ -44,12 +44,12 @@ class WorkmanDustCommond extends Command {
 
     private function startGateWay()
     {
-        $gateway = new Gateway("tcp://0.0.0.0:8283");
+        $gateway = new Gateway("tcp://0.0.0.0:8284");
         $gateway->name                 = 'DustGateway';
         $gateway->count                = 4;
         $gateway->lanIp                = '127.0.0.1';
         $gateway->startPort            = 2300;
-        $gateway->pingInterval         = 90;
+        $gateway->pingInterval         = 10;
         $gateway->pingNotResponseLimit = 1;
         $gateway->pingData             = '{"type":"@heart@"}';
         $gateway->registerAddress      = '127.0.0.1:1238';

@@ -31,7 +31,7 @@ class HomeController extends Controller
 
     public function gateway()
     {
-        $id = DB::table('codes')->insertGetId(['code' => 12, 'type' => 2]);
+        $id = DB::select("select id from ams_dust_codes where sn = ? ORDER BY id desc LIMIT 1", ['000003'])[0]->id;
         dd($id);
         $message = "QN=20180906103406000;ST=39;CN=2011;PW=123456;MN=690000D5800028F889000003;Flag=4;CP=&&DataTime=20180906103406;a34004-Rtd=45.0;a34002-Rtd=62.7;a34001-Rtd=78.4;LA-Rtd=63.2;a01001-Rtd=28.3;a01002-Rtd=60.0;a01006-Rtd=100.3;a01007-Rtd=0.0;a01008-Rtd=45&&";
         $puchMsg = $message;
