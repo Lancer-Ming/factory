@@ -4,6 +4,7 @@ namespace App\Workerman\Dust;
 
 use App\Hardware\Entrance;
 use GatewayWorker\Lib\Gateway;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class Events
@@ -31,12 +32,10 @@ class Events
 
     public static function onClose($client_id)
     {
+        Log::info('关闭：...');
         $dust = Entrance::Dust();
-        // 判断状态并且存储数据
-        $dust->changeStatus($client_id);
-
-        // 更新设备退出时间
         $dust->insertCloseTime($client_id);
+        Log::info('关闭：...成功！');
     }
 
 }

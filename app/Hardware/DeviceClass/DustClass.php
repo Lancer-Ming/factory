@@ -45,11 +45,10 @@ class DustClass
      * Entrance constructor.
      * @param $message\
      */
-    public function __construct($message)
+    public function __construct($message='')
     {
         $this->message = str_replace(array("\r\n", "\r", "\n"),"", $message);
-        $this->isTest = true;
-        Log::info('构造：'.$this->message);
+//        $this->isTest = true;
     }
 
     /** 将后台的数据存入到数据库里
@@ -81,17 +80,16 @@ class DustClass
             if ($sn) {
                 // 如果查询到了 说明已经储存过了
                 $this->snIsHaved = true;
-                $this->sn = $sn[0];
-
+                $this->sn = $sn[0]->sn;
                 // 将sn 作为Uid 与 client_id 进行绑定
-                Gateway::bindUid($client_id, $this->sn);
-
+                Gateway::bindUid($this->client_id, $this->sn);
+                // 每次都需要更新client_id
+                DB::update('update ams_dust_codes set client_id = ? WHERE sn = ?', [$this->client_id, $this->sn]);
                 // 改变 dust 状态
                 $this->changeStatus($client_id);
                 return;
             } else {
                 $this->sn = $this->createRandomUniqueCode();
-                Log::info('sn::::::'.$this->sn);
 
                 // 将sn 作为Uid 与 client_id 进行绑定
                 Gateway::bindUid($client_id, $this->sn);
@@ -113,6 +111,8 @@ class DustClass
                 $this->storeTestData($processMessage);
             } else {
                 $this->sn =  substr($processMessage['MN'], -6);      // 生成sn
+                // 将sn 作为Uid 与 client_id 进行绑定
+                Gateway::bindUid($this->client_id, $this->sn);
                 $this->storeProductionData($processMessage);
             }
         }
@@ -130,10 +130,9 @@ class DustClass
         $is_online = Gateway::isUidOnline($sn);
         if ($is_online) {
             DB::update('update ams_dusts set is_online=1 WHERE sn = ?', [$sn]);
-        } else {
-            DB::update('update ams_dusts set is_online=0 WHERE sn = ?', [$sn]);
+            $time = date('Y-m-d H:i:s', time());
+            DB::update('update ams_dust_codes set created_at=? WHERE sn = ?', [$time, $sn]);
         }
-
     }
 
     /** 发送数据给硬件
@@ -157,9 +156,18 @@ class DustClass
 
     public function insertCloseTime($client_id)
     {
-        $sn = Gateway::getUidByClientId($client_id);
+        $sn = DB::select('select sn from ams_dust_codes WHERE client_id = ?', [$client_id]);
+        if ($sn) {
+            $sn = $sn[0]->sn;
+        }
+        Log::info('inserCloseTime-----------'.json_encode($sn));
+        // 如果 $sn 是空数组 直接return
+        if (empty($sn)) {
+            return;
+        }
         $time = date('Y-m-d H:i:s', time());
-        DB::update('update ams_dust_codes set updated_at = ? WHERE $sn = ?', [$time, $sn]);
+        DB::update('update ams_dust_codes set updated_at = ? WHERE sn = ?', [$time, $sn]);
+        DB::update('update ams_dusts set is_online=0 WHERE sn = ?', [$sn]);
     }
 
 
@@ -180,9 +188,85 @@ class DustClass
     protected function storeProductionData($processMessage)
     {
         $time = date('Y-m-d H:i:s', time());
+        // 获取标准值
+        $standard = DB::select('select * from ams_dust_standards where sn = ?', ['000001']);
+        $standard = $standard ? $standard[0] : [];
+        Log::info('$processMessage----------------'.json_encode($processMessage));
+        Log::info('$standard----------------'.json_encode($standard));
+        $warningMessage = [];
+        // 扬尘预警
+        $warningMessage['a34001_Rtd_pre_warning'] = ((float) $processMessage['a34001-Rtd'] >= $standard->a34001_Rtd_pre_warning && (float) $processMessage['a34001-Rtd'] < $standard->a34001_Rtd_is_warning) ? 1 : 0;
+        // 扬尘报警
+        $warningMessage['a34001_Rtd_is_warning'] = (float) $processMessage['a34001-Rtd'] >= $standard->a34001_Rtd_is_warning ? 1 : 0;
+        // PM10 预警
+        $warningMessage['a34002_Rtd_pre_warning'] = ((float) $processMessage['a34002-Rtd'] >= $standard->a34001_Rtd_pre_warning && (float) $processMessage['a34002-Rtd'] < $standard->a34001_Rtd_is_warning) ? 1 : 0;
+        // PM10 报警
+        $warningMessage['a34002_Rtd_is_warning'] = (float) $processMessage['a34002-Rtd'] >= $standard->a34001_Rtd_is_warning ? 1 : 0;
+        // PM2.5 预警
+        $warningMessage['a34004_Rtd_pre_warning'] = ((float) $processMessage['a34004-Rtd'] >= $standard->a34004_Rtd_pre_warning && (float) $processMessage['a34004-Rtd'] < $standard->a34004_Rtd_is_warning) ? 1 : 0;
+        // PM2.5 报警
+        $warningMessage['a34004_Rtd_is_warning'] = (float) $processMessage['a34004-Rtd'] >= $standard->a34004_Rtd_is_warning ? 1 : 0;
+        // 噪音上限预警
+        $warningMessage['LA_Rtd_pre_warning'] = ((float) $processMessage['LA-Rtd'] >= $standard->LA_Rtd_pre_warning && (float) $processMessage['LA-Rtd'] < $standard->LA_Rtd_is_warning) ? 1 : 0;
+        // 噪音上限报警
+        $warningMessage['LA_Rtd_is_warning'] = (float) $processMessage['LA-Rtd'] >= $standard->LA_Rtd_is_warning ? 1 : 0;
+        // 温度上限预警
+        $warningMessage['a01001_Rtd_high_pre_warning'] = ((float) $processMessage['a01001-Rtd'] >= $standard->a01001_Rtd_high_pre_warning && (float) $processMessage['a01001-Rtd'] < $standard->a01001_Rtd_high_is_warning) ? 1 : 0;
+        // 温度上限报警
+        $warningMessage['a01001_Rtd_high_is_warning'] = (float) $processMessage['a01001-Rtd'] >= $standard->a01001_Rtd_high_is_warning ? 1 : 0;
+        // 温度下限预警
+        $warningMessage['a01001_Rtd_low_pre_warning'] = ((float) $processMessage['a01001-Rtd'] <= $standard->a01001_Rtd_low_pre_warning && (float) $processMessage['a01001-Rtd'] > $standard->a01001_Rtd_low_is_warning) ? 1 : 0;
+        // 温度下限报警
+        $warningMessage['a01001_Rtd_low_is_warning'] = (float) $processMessage['a01001-Rtd'] <= $standard->a01001_Rtd_low_is_warning ? 1 : 0;
+        // 湿度上限预警
+        $warningMessage['a01002_Rtd_pre_warning'] = ((float) $processMessage['a01002-Rtd'] >= $standard->a01002_Rtd_pre_warning && (float) $processMessage['a01002-Rtd'] < $standard->a01002_Rtd_is_warning) ? 1 : 0;
+        // 湿度上限报警
+        $warningMessage['a01002_Rtd_is_warning'] = (float) $processMessage['a01002-Rtd'] >= $standard->a01002_Rtd_is_warning ? 1 : 0;
+        // 气压上限预警
+        $warningMessage['a01006_Rtd_high_pre_warning'] = ((float) $processMessage['a01006-Rtd'] >= $standard->a01006_Rtd_high_pre_warning && (float) $processMessage['a01006-Rtd'] < $standard->a01006_Rtd_high_is_warning) ? 1 : 0;
+        // 气压上限报警
+        $warningMessage['a01006_Rtd_high_is_warning'] = (float) $processMessage['a01006-Rtd'] >= $standard->a01006_Rtd_high_is_warning ? 1 : 0;
+        // 气压下限预警
+        $warningMessage['a01006_Rtd_low_pre_warning'] = ((float) $processMessage['a01006-Rtd'] <= $standard->a01006_Rtd_low_pre_warning && (float) $processMessage['a01006-Rtd'] > $standard->a01006_Rtd_low_is_warning) ? 1 : 0;
+        // 气压下限报警
+        $warningMessage['a01006_Rtd_low_is_warning'] = (float) $processMessage['a01006-Rtd'] <= $standard->a01006_Rtd_low_is_warning ? 1 : 0;
+        // 风速上限预警
+        $warningMessage['a01007_Rtd_pre_warning'] = ((float) $processMessage['a01007-Rtd'] >= $standard->a01007_Rtd_pre_warning && (float) $processMessage['a01007-Rtd'] < $standard->a01007_Rtd_is_warning) ? 1 : 0;
+        // 风速上限报警
+        $warningMessage['a01007_Rtd_is_warning'] = (float) $processMessage['a01007-Rtd'] >= $standard->a01007_Rtd_is_warning ? 1 : 0;
+
+        // 判断是否有报警
+        if ($warningMessage['a01007_Rtd_is_warning'] || $warningMessage['a01006_Rtd_low_is_warning'] || $warningMessage['a01006_Rtd_high_is_warning'] ||
+            $warningMessage['a01002_Rtd_is_warning'] || $warningMessage['a01001_Rtd_low_is_warning'] || $warningMessage['a01001_Rtd_high_is_warning'] ||
+            $warningMessage['LA_Rtd_is_warning'] || $warningMessage['a34004_Rtd_is_warning'] || $warningMessage['a34002_Rtd_is_warning'] || $warningMessage['a34001_Rtd_is_warning']) {
+            $warningMessage['is_warning_status'] = 1;
+            $warningMessage['pre_warning_status'] = 0;
+        } elseif ($warningMessage['a01007_Rtd_pre_warning'] || $warningMessage['a01006_Rtd_low_pre_warning'] || $warningMessage['a01006_Rtd_high_pre_warning'] ||
+            $warningMessage['a01002_Rtd_pre_warning'] || $warningMessage['a01001_Rtd_low_pre_warning'] || $warningMessage['a01001_Rtd_high_pre_warning'] ||
+            $warningMessage['LA_Rtd_pre_warning'] || $warningMessage['a34004_Rtd_pre_warning'] || $warningMessage['a34002_Rtd_pre_warning'] || $warningMessage['a34001_Rtd_pre_warning']) {
+            // 判断是否有预警
+            $warningMessage['pre_warning_status'] = 1;
+            $warningMessage['is_warning_status'] = 0;
+        } else {
+            $warningMessage['is_warning_status'] = 0;
+            $warningMessage['pre_warning_status'] = 0;
+        }
+
         // 新增扬尘数据信息
         DB::insert('insert into ams_dust_infos
-        (sn, received_at, flag, QN, CN, a34001_Rtd, a34002_Rtd, a34004_Rtd, LA_Rtd, a01001_Rtd, a01002_Rtd, a01006_Rtd, a01007_Rtd, a01008_Rtd) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$this->sn, $time, $processMessage['Flag'], $processMessage['QN'], $processMessage['CN'], $processMessage['a34001-Rtd'], $processMessage['a34002-Rtd'], $processMessage['a34004-Rtd'], $processMessage['LA-Rtd'], $processMessage['a01001-Rtd'], $processMessage['a01002-Rtd'], $processMessage['a01006-Rtd'], $processMessage['a01007-Rtd'], $processMessage['a01008-Rtd']]);
+        (sn, received_at, flag, QN, CN, a34001_Rtd, a34002_Rtd, a34004_Rtd, LA_Rtd, a01001_Rtd, a01002_Rtd, a01006_Rtd, a01007_Rtd, a01008_Rtd, 
+        a34001_Rtd_pre_warning, a34001_Rtd_is_warning, a34002_Rtd_pre_warning, a34002_Rtd_is_warning, a34004_Rtd_pre_warning, a34004_Rtd_is_warning,
+        LA_Rtd_pre_warning, LA_Rtd_is_warning, a01001_Rtd_high_pre_warning, a01001_Rtd_high_is_warning, a01001_Rtd_low_pre_warning, a01001_Rtd_low_is_warning,
+        a01002_Rtd_pre_warning, a01002_Rtd_is_warning, a01006_Rtd_high_pre_warning, a01006_Rtd_low_pre_warning, a01006_Rtd_high_is_warning, a01006_Rtd_low_is_warning,
+        a01007_Rtd_pre_warning, a01007_Rtd_is_warning, pre_warning_status, is_warning_status) 
+        values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [$this->sn, $time, $processMessage['Flag'], $processMessage['QN'], $processMessage['CN'],
+            $processMessage['a34001-Rtd'], $processMessage['a34002-Rtd'], $processMessage['a34004-Rtd'], $processMessage['LA-Rtd'], $processMessage['a01001-Rtd'],
+            $processMessage['a01002-Rtd'], $processMessage['a01006-Rtd'], $processMessage['a01007-Rtd'], $processMessage['a01008-Rtd'], $warningMessage['a34001_Rtd_pre_warning'],
+                $warningMessage['a34001_Rtd_is_warning'], $warningMessage['a34002_Rtd_pre_warning'], $warningMessage['a34002_Rtd_is_warning'], $warningMessage['a34004_Rtd_pre_warning'], $warningMessage['a34004_Rtd_is_warning'],
+                $warningMessage['LA_Rtd_pre_warning'], $warningMessage['LA_Rtd_is_warning'], $warningMessage['a01001_Rtd_high_pre_warning'], $warningMessage['a01001_Rtd_high_is_warning'], $warningMessage['a01001_Rtd_low_pre_warning'], $warningMessage['a01001_Rtd_low_is_warning'],
+                $warningMessage['a01002_Rtd_pre_warning'], $warningMessage['a01002_Rtd_is_warning'], $warningMessage['a01006_Rtd_high_pre_warning'], $warningMessage['a01006_Rtd_low_pre_warning'], $warningMessage['a01006_Rtd_high_is_warning'], $warningMessage['a01001_Rtd_low_is_warning'],
+                $warningMessage['a01007_Rtd_pre_warning'], $warningMessage['a01007_Rtd_is_warning'], $warningMessage['pre_warning_status'], $warningMessage['is_warning_status']]);
     }
 
 
