@@ -37,7 +37,8 @@ return [
     'logoUrl' => [
         'yutong.an-safe.com' => '/static/img/logo3.png',
         'zhiwang.an-safe.com' => '/static/img/logo3.png',
-        'factory.test' => '/static/img/logo2.png'
+        'factory.test' => '/static/img/logo2.png',
+        'as.an-safe.com' => '/static/img/logo2.png'
     ]
 
 
