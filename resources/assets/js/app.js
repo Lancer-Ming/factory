@@ -2,6 +2,7 @@ require('./bootstrap')
 
 //window.Vue = require('vue')
 import Vue from 'vue'
+
 Vue.config.productionTip = false
 //import App from './App.vue'
 import router from './router'
@@ -10,10 +11,10 @@ import ElementUI from 'element-ui'
 //
 import $ from 'jquery'
 //
-import { Message } from 'element-ui'
-import { MessageBox } from 'element-ui'
+import {Message} from 'element-ui'
+import {MessageBox} from 'element-ui'
 import axios from 'axios'
-import { implode } from "./utils/common.js"
+import {implode} from "./utils/common.js"
 
 import "babel-polyfill" //低版本浏览器不支持es6转码
 
@@ -26,21 +27,23 @@ Vue.prototype.message = Message
 
 // echarts
 import echarts from 'echarts'
+
 Vue.prototype.$echarts = echarts
 
 //
 import Breadcrumb from './components/Breadcrumb'
 
-import { Local } from './utils/common'
+import {Local} from './utils/common'
 import './directives/'
+
 new Vue({
     el: '#layout-app',
     router,
     //i18n,
-    components: { Breadcrumb },
+    components: {Breadcrumb},
     //template: '<App/>',
     delimiters: ['${', '}'],
-    data:{
+    data: {
         headers: [],    // 导航头
         sidebars: [],   // 侧边栏
         isCollapse: false,      // 是否折叠
@@ -54,38 +57,71 @@ new Vue({
     },
     created() {
         this.initLocal()
-
+        this.switchActivedUrl()
         this.axios.get("/permission").then(res => {
             this.headers = res.data.data;
             if (this.activeSideBar) {
                 this.activeNavIndex = this.recordTabsWithHeader[this.activeSideBar]
             }
-        
+
             this.getSideBars(this.activeNavIndex)
-        
+
         })
 
         this.isInit = true
     },
     methods: {
 
-        getSideBars(index){
-            //console.log(index)
-            this.sidebars = this.headers[index].children
-            this.isCollapse = false
+        getSideBars(index) {
+            console.log(index)
+            //当为首页时
+            if (index == 0) {
+                this.$router.push({path: '/'})
+                this.homePageAddTab('/', '首页')
+                this.activeSideBar = ''
+            } else {
+                this.sidebars = this.headers[index].children
+                this.isCollapse = false
+            }
             this.activeNavIndex = index
-
             new Local().set('activeNavIndex', index)
         },
         switchBar() {
             this.isCollapse = !this.isCollapse
+        },
+        homePageAddTab(path, title) {
+            let name = 'index'
+            let isRepeat = false
+            let tabs = this.$root.$data.tabs
+            tabs.forEach((item, index) => {
+                if (item.name === name) {
+                    isRepeat = true
+                }
+            })
+
+            // 如果是tabs里没有
+            if (!isRepeat) {
+                tabs.push({
+                    title,
+                    name,
+                    path: path
+                })
+
+                new Local().set('tabs', tabs)
+            }
+
+            new Local().set('activeTabs', name)
+
+            this.tabsValue = name
+
+
         },
         addTab(routerName) {
             //console.log(routerName)
             let newTabName = routerName.split('/').join('.').substr(1);
             let path = routerName
             let isRepeat = false
-            this.tabs.forEach((item, index)=> {
+            this.tabs.forEach((item, index) => {
                 if (item.name === newTabName) {
                     isRepeat = true
                 }
@@ -141,12 +177,12 @@ new Vue({
             // 给localStorage里更改tabs
             new Local().set('tabs', this.tabs)
             // 如果tabs全部关闭了
-            if(this.tabs.length === 0) {
+            if (this.tabs.length === 0) {
                 // 清空localStorage
                 new Local().clear()
                 // 清空一写data
                 this.activeNavIndex = null,
-                this.recordTabsWithHeader = {}
+                    this.recordTabsWithHeader = {}
                 this.activeSideBar = ''
                 this.tabsValue = ""
                 // 跳转主页
@@ -158,6 +194,7 @@ new Vue({
         },
         logout() {
             let form = document.querySelector('.logout');
+            localStorage.clear()
             form.submit();
         },
         initLocal() {
@@ -170,26 +207,34 @@ new Vue({
         },
         openSubMenu(index) {
             this.currentOpenMenuName[0] = index
-            new Local().set('currentOpenMenuName',  this.currentOpenMenuName)
+            new Local().set('currentOpenMenuName', this.currentOpenMenuName)
         },
         implode(arr, attr) {
             return implode(arr, attr);
         },
-        pageRefresh(){
-           location.reload();
+        pageRefresh() {
+            location.reload();
         },
-        pageFullscreen(){
+        pageFullscreen() {
             $(".header-nav").toggle();
             $(".aside-wrapper").toggle();
         },
-        pageClose(){
-            if(confirm("确认要删除？")){
+        pageClose() {
+            if (confirm("确认要删除？")) {
                 //window.event.returnValue = false;
                 // 清空localStorage
                 new Local().clear();
                 location.reload();
             }
             return false;
+        },
+        switchActivedUrl() {
+            if (this.activeSideBar) {
+                let activeSideBar = '/' + this.activeSideBar.split('.').join('/')
+                router.push({path: activeSideBar})
+            }
+
+
         }
     },
     watch: {
@@ -197,7 +242,7 @@ new Vue({
             const filter = this.tabs.filter(item => {
                 return item.name === val
             })[0]
-            
+
             const path = filter.path
             const query = filter.query
 
@@ -206,11 +251,18 @@ new Vue({
 
             // 如果点击的不是侧边栏
             if (filter.is_sub) {
-                this.$router.push({ path, query })
+                this.$router.push({path, query})
                 this.isInit = false
                 return
             }
             new Local().set('activeSideBar', val)
+
+            // 如果是首页
+            if(val === 'index') {
+                this.$router.push({path: path})
+                this.getSideBars(0)
+                return
+            }
 
             if (!this.isInit) {     // 如果是刷新了页面，这个就不用再次获取了。
                 this.isInit = false
@@ -218,7 +270,7 @@ new Vue({
                 this.activeNavIndex = this.recordTabsWithHeader[val]
                 this.getSideBars(this.activeNavIndex)
                 // 并且路由跳转
-                this.$router.push({ path: path})
+                this.$router.push({path: path})
             } else {
                 this.isInit = false
             }

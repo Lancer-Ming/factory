@@ -26,6 +26,7 @@
                 </el-form-item>
                 <el-button type="primary" plain size="mini" style="float: left" @click="search">查询</el-button>
                 <el-button size="mini" style="float: left" @click="reset">清空</el-button>
+                <el-button type="warning" icon="el-icon-star-off" circle plain style="float: right;margin-right: 15px" @click="unregistered=true"></el-button>
             </el-form>
         </el-row>
         <el-row>
@@ -157,6 +158,28 @@
             </el-pagination>
         </el-row>
 
+        <el-dialog title="未登记SN" :visible.sync="unregistered" width="30%" center>
+            <el-table :data="gridData" border style="margin:10px 0px 30px;">
+                <el-table-column
+                        prop="id"
+                        align="center"
+                        width="60"
+                        fixed
+                        sortable
+                        label="#"
+                >
+                    <template slot-scope="scope">
+                        <span>{{ scope.row.id }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column property="sn" label="SN" width="200" align="center"></el-table-column>
+                <el-table-column align="center">
+                    <template slot-scope="scope">
+                        <el-button type="primary" plain size="mini" @click="register">去登记</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-dialog>
     </div>
 </template>
 
@@ -183,11 +206,15 @@
                 perPagesize: perPagesize,
                 total: null,
                 distribution: false,
+                gridData: [{
+                    sn: '121212'
+                }],
+                unregistered: false
 
             }
         },
         created() {
-            this.$router.replace({path: this.$route.path, form: {page: this.currentPage}})
+            this.$router.replace({path: this.$route.path, query: {page: this.currentPage}})
             this.getTableData()
         },
         methods: {
@@ -219,7 +246,7 @@
                         name,
                         path: path,
                         is_sub: true,
-                        query: { sn }
+                        query: {sn}
                     })
 
                     new Local().set('tabs', tabs)
@@ -267,6 +294,9 @@
                 }
                 this.getTableData(this.form)
             },
+            register(){
+                this.$router.replace({path: '/device/dust/index', query: {sn: '1111'}})
+            }
         }
 
     }

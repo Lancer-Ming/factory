@@ -1,6 +1,6 @@
 <template>
     <div class="container Standard">
-        <el-form ref="form" :model="form" label-width="120px" size="mini" style="margin-top: 20px;">
+        <el-form :model="form" label-width="120px" size="mini" style="margin-top: 20px;">
             <el-form-item label="SN">
                 <el-input v-model="form.sn"></el-input>
             </el-form-item>
@@ -12,7 +12,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="success" plain @click="search">查询</el-button>
-                <el-button type="success" plain>清空</el-button>
+                <el-button type="success" plain @click="reset">清空</el-button>
             </el-form-item>
         </el-form>
 
@@ -230,7 +230,8 @@
             }
         },
         created() {
-            this.getTableData()
+            this.form.sn = this.$route.query.sn
+            this.getTableData(this.form)
         },
         methods: {
             handleSizeChange(val) {
@@ -242,16 +243,21 @@
             handleCrane() {
                 this.distribution = true
             },
-            getTableData() {
-                getstandard(this.currentPage, this.$route.query.sn, this.pagesize).then(res => {
+            getTableData(param) {
+                getstandard(this.currentPage, param, this.pagesize).then(res => {
                     if (res.data.response_status === "success") {
-                        console.log(res)
                         this.tableData = res.data.data
-
+                        this.$router.replace({ path: '/video/dust/Standard', query: { sn: param.sn}})
                     }
                 })
             },
-            search(){
+            search() {
+                this.getTableData(this.form)
+            },
+            reset() {
+                for (var item in this.form) {
+                    this.$set(this.form, item, '')
+                }
                 this.getTableData(this.form)
             }
         }

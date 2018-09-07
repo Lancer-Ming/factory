@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Cache;
 
@@ -12,6 +13,7 @@ use App\Hardware\Entrance;
 
 class HomeController extends Controller
 {
+    protected $message;
     public function index()
     {
         return view('index', compact('permissions'));
@@ -29,15 +31,40 @@ class HomeController extends Controller
 
     public function gateway()
     {
-        $message = "##0239QN=20180821142509000;ST=39;CN=2011;PW=123456;MN=690000D5800028F889221AC0;Flag=4;CP=&&DataTime=20180821142509;a34004-Rtd=0.0;a34002-Rtd=0.0;a34001-Rtd=0.0;LA-Rtd=0.0;a01001-Rtd=0.0;a01002-Rtd=0.0;a01006-Rtd=0.0;a01007-Rtd=0.0;a01008-Rtd=0&&E541";
+        $id = DB::select("select id from ams_dust_codes where sn = ? ORDER BY id desc LIMIT 1", ['000003'])[0]->id;
+        dd($id);
+        $message = "QN=20180906103406000;ST=39;CN=2011;PW=123456;MN=690000D5800028F889000003;Flag=4;CP=&&DataTime=20180906103406;a34004-Rtd=45.0;a34002-Rtd=62.7;a34001-Rtd=78.4;LA-Rtd=63.2;a01001-Rtd=28.3;a01002-Rtd=60.0;a01006-Rtd=100.3;a01007-Rtd=0.0;a01008-Rtd=45&&";
+        $puchMsg = $message;
+        $usDataLen = strlen($message);
+        $crc = $this->CRC_16($puchMsg, $usDataLen);
+        return strtoupper(base_convert($crc, 10, 16));
+    }
 
-        // 获取扬尘处理的实例
-        $dust = Entrance::Dust($message);
-        // 判断状态并且存储数据
-        $dust->store();
-        // 获取要发送给硬件的数据
-//        $message = $dust->sendConnectData($client_id);
-        // 改变 dust 的状态
-        $dust->changeStatus();
+    protected function CRC_16($puchMsg, $usDataLen)
+    {
+        $crc_reg = 0xFFFF;
+        for ($i = 0; $i < $usDataLen; $i++) {
+            $crc_reg = ($crc_reg >> 8) ^ ord($puchMsg[$i]);
+            for ($j = 0; $j < 8; $j++) {
+                $check = $crc_reg & 0x0001;
+                $crc_reg >>= 1;
+                if ($check == 0x0001) {
+                    $crc_reg ^= 0xA001;
+                }
+            }
+        }
+        return $crc_reg;
+    }
+
+    protected function gateTest()
+    {
+        $message = "##0091QN=20180904160638000;ST=39;CN=2011;PW=123456;USCC=91440101MA59F70720;IMEI=867732039951777&&B8C1";
+        $message = "QN=20180906103406000;ST=39;CN=2011;PW=123456;MN=690000D5800028F889000003;Flag=4;CP=&&DataTime=20180906103406;a34004-Rtd=45.0;a34002-Rtd=62.7;a34001-Rtd=78.4;LA-Rtd=63.2;a01001-Rtd=28.3;a01002-Rtd=60.0;a01006-Rtd=100.3;a01007-Rtd=0.0;a01008-Rtd=45&&";
+        $this->message = str_replace(array("\r\n", "\r", "\n"),"", $message);
+        $validateCode = substr($this->message, -4);
+        $puchMsg = $message;
+        $usDataLen = strlen($message);
+        $crc = $this->CRC_16($puchMsg, $usDataLen);
+        return strtoupper(base_convert($crc, 10, 16));
     }
 }

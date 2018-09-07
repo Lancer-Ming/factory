@@ -217,7 +217,7 @@
                 </el-form-item>
 
                 <h4 style="display: block;margin: 30px auto;text-align: center;font-weight: bold;">扬尘噪声监控设备信息</h4>
-                <el-form-item label="黑匣子SN" :label-width="formLabelWidth">
+                <el-form-item label="扬尘噪声SN" :label-width="formLabelWidth">
                     <el-input v-model="form.sn" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="设备型号" :label-width="formLabelWidth">
@@ -379,7 +379,7 @@
             }
         },
         created() {
-            this.$router.replace({path: this.$route.path, query: {page: this.currentPage}})
+            // this.$router.replace({path: this.$route.path, query: {page: this.currentPage}})
             this.getTableData()
         },
         methods: {
@@ -571,8 +571,19 @@
                     },
                     remark: '',
                 }
-            }
-        }
+            },
+            // beforeRouteUpdate(to, from, next) {
+            //     const newId = to.query.sn;
+            //     const oldId = from.query.page;
+            //     console.log(newId,oldId);    //345,123
+            //     next();
+            // }
+        },
+        // watch:{
+        //     $route(to,from){
+        //         this.handleAdd()
+        //     }
+        // }
     }
 </script>
 

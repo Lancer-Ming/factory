@@ -69,7 +69,7 @@
                     align="center"
             >
                 <template slot-scope="scope">
-                    <span>{{ scope.row.runtime = parseInt((Date.parse(scope.row.updated_at) - Date.parse(scope.row.created_at))/1000/3600)+"小时"+parseInt((Date.parse(scope.row.updated_at) - Date.parse(scope.row.created_at))/1000/3600/60)+"分钟" }}</span>
+                    <span>{{ scope.row.runtime = Math.floor((Date.parse(scope.row.updated_at) - Date.parse(scope.row.created_at))/1000/3600)+"小时"+Math.floor((Date.parse(scope.row.updated_at) - Date.parse(scope.row.created_at))/1000%3600/60)+"分钟" }}</span>
                 </template>
             </el-table-column>
         </el-table>

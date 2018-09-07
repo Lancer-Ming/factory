@@ -1,6 +1,6 @@
 <template>
     <span>
-        <el-col :span="7"><div :id="chartData.id" style="width: 100%;height:400px;margin-top: 20px;"></div></el-col>
+        <el-col :span="7"><div :id="id" style="width: 100%;height:400px;margin-top: 40px;"></div></el-col>
         <el-col :span="1"><div>&nbsp;</div></el-col>
     </span>
 </template>
@@ -13,23 +13,29 @@
     require('echarts/lib/component/tooltip')
     require('echarts/lib/component/title')
     export default {
-        data(){
-            return{
-
-            }
+        data() {
+            return {}
         },
-        props:{
-            chartData:{
-                type: Object,
-                default: {}
+        props: {
+            chartData: {
+                type: Array,
+                default: []
             },
-            text:{
+            id: {
                 type: String,
                 default: ''
             },
-            subtext:{
+            text: {
                 type: String,
                 default: ''
+            },
+            subtext: {
+                type: String,
+                default: ''
+            },
+            hour: {
+                type: Array,
+                default: []
             }
         },
         mounted() {
@@ -38,12 +44,12 @@
         methods: {
             drawLine() {
                 // 基于准备好的dom，初始化echarts实例
-                var myChart = echarts.init(document.getElementById(this.chartData.id))
+                var myChart = echarts.init(document.getElementById(this.id))
                 // 绘制图表
                 myChart.setOption({
                     title: {
                         text: this.text,
-                        subtext: `单位:`+this.subtext
+                        subtext: `单位:` + this.subtext
                     },
                     tooltip: {
                         trigger: 'axis'
@@ -64,7 +70,7 @@
                     xAxis: [
                         {
                             type: 'category',
-                            data: ['0时','1时', '2时', '3时', '4时', '5时', '6时','7时','8时','9时','10时']
+                            data: this.hour
                         }
                     ],
                     yAxis: [
@@ -76,7 +82,7 @@
                         {
                             name: this.text,
                             type: 'line',
-                            data: this.chartData.data,
+                            data: this.chartData,
                             markPoint: {
                                 data: [
                                     {type: 'max', name: '最大值'},
@@ -94,6 +100,11 @@
                 });
             }
 
+        },
+        watch: {
+            hour: function (val) {
+                this.drawLine()
+            }
         }
     }
 </script>

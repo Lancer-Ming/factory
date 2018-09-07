@@ -16,7 +16,7 @@
             </el-form-item>
             <el-form-item label="报警类型" size="mini">
                 <el-select v-model="form.warning_type" placeholder="报警类型">
-                    <el-option v-for="(item,index) in alarm_type" :label="item.name" :key='index' :value="item.id"></el-option>
+                    <el-option v-for="(item,index) in alarm_type" :label="item.name" :key='index' :value="item.warning_type"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="预警状态" size="mini" style="width: 32%">
@@ -216,7 +216,7 @@
             alarm_type().then(res => {
                 this.alarm_type = res.data.alarm_type
             })
-            this.getTableData()
+            this.getTableData(this.form)
         },
         methods:{
             handleSizeChange(val) {
@@ -229,7 +229,6 @@
                 this.distribution = true
             },
             getTableData(time){
-                console.log(time)
                 getinformation(this.currentPage, this.$route.query.sn, this.pagesize, time).then(res => {
                     if (res.data.response_status === "success") {
                         console.log(res)
@@ -264,7 +263,40 @@
             search() {
                 let time = this.form.time instanceof Array ? this.form.time.join(',') : this.form.time
                 this.getTableData(time)
-            }
+            },
+            // aaa(){
+            //     $('#auto-refresh').change(function() {
+            //         if($('#auto-refresh').is(':checked')){
+            //             sessionStorage.setItem("el-checkbox","true");
+            //             var status = sessionStorage.getItem("el-checkbox");
+            //             if(status == "true"){
+            //                 setInterval(chat, "5000");
+            //                 function chat() {
+            //                     if($('#auto-refresh').is(':checked')){
+            //                         sessionStorage.setItem("el-checkbox","true");
+            //                         location.reload();
+            //                     }
+            //                 }
+            //             }
+            //         }else{
+            //             sessionStorage.setItem("el-checkbox","false");
+            //         }
+            //     });
+            //
+            //
+            //     var status = sessionStorage.getItem("el-checkbox");
+            //     if(status == "true"){
+            //         $('#auto-refresh').attr("checked", true);
+            //         setInterval(chat, "5000");
+            //         function chat() {
+            //             if($('#auto-refresh').is(':checked')){
+            //                 sessionStorage.setItem("el-checkbox","true");
+            //                 location.reload();
+            //             }
+            //         }
+            //     }
+            //
+            // }
         }
 
     }
