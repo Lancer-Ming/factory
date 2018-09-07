@@ -16,7 +16,7 @@
             </el-form-item>
             <el-form-item label="报警类型" size="mini">
                 <el-select v-model="form.warning_type" placeholder="报警类型">
-                    <el-option v-for="(item,index) in alarm_type" :label="item.name" :key='index' :value="item.id"></el-option>
+                    <el-option v-for="(item,index) in alarm_type" :label="item.name" :key='index' :value="item.warning_type"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="预警状态" size="mini" style="width: 32%">
@@ -218,9 +218,6 @@
             })
             this.getTableData(this.form)
         },
-        mounted(){
-            this.aaa();
-        },
         methods:{
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
@@ -231,8 +228,8 @@
             handleCrane() {
                 this.distribution = true
             },
-            getTableData(time,warning_status){
-                getinformation(this.currentPage, this.$route.query.sn, this.pagesize, time,warning_status).then(res => {
+            getTableData(time){
+                getinformation(this.currentPage, this.$route.query.sn, this.pagesize, time).then(res => {
                     if (res.data.response_status === "success") {
                         console.log(res)
                         this.tableData = res.data.data.data
