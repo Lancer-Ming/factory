@@ -32,6 +32,12 @@ return [
         27 => '综合一队',
         28 => '综合二队',
         29 => '其他',
+    ],
+
+    'logoUrl' => [
+        'yutong.an-safe.com' => '/static/img/logo3.png',
+        'zhiwang.an-safe.com' => '/static/img/logo3.png',
+        'factory.test' => '/static/img/logo2.png'
     ]
 
 
