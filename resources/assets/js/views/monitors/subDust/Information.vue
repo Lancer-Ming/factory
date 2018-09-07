@@ -216,7 +216,10 @@
             alarm_type().then(res => {
                 this.alarm_type = res.data.alarm_type
             })
-            this.getTableData()
+            this.getTableData(this.form)
+        },
+        mounted(){
+            this.aaa();
         },
         methods:{
             handleSizeChange(val) {
@@ -228,9 +231,8 @@
             handleCrane() {
                 this.distribution = true
             },
-            getTableData(time){
-                console.log(time)
-                getinformation(this.currentPage, this.$route.query.sn, this.pagesize, time).then(res => {
+            getTableData(time,warning_status){
+                getinformation(this.currentPage, this.$route.query.sn, this.pagesize, time,warning_status).then(res => {
                     if (res.data.response_status === "success") {
                         console.log(res)
                         this.tableData = res.data.data.data
@@ -264,7 +266,40 @@
             search() {
                 let time = this.form.time instanceof Array ? this.form.time.join(',') : this.form.time
                 this.getTableData(time)
-            }
+            },
+            // aaa(){
+            //     $('#auto-refresh').change(function() {
+            //         if($('#auto-refresh').is(':checked')){
+            //             sessionStorage.setItem("el-checkbox","true");
+            //             var status = sessionStorage.getItem("el-checkbox");
+            //             if(status == "true"){
+            //                 setInterval(chat, "5000");
+            //                 function chat() {
+            //                     if($('#auto-refresh').is(':checked')){
+            //                         sessionStorage.setItem("el-checkbox","true");
+            //                         location.reload();
+            //                     }
+            //                 }
+            //             }
+            //         }else{
+            //             sessionStorage.setItem("el-checkbox","false");
+            //         }
+            //     });
+            //
+            //
+            //     var status = sessionStorage.getItem("el-checkbox");
+            //     if(status == "true"){
+            //         $('#auto-refresh').attr("checked", true);
+            //         setInterval(chat, "5000");
+            //         function chat() {
+            //             if($('#auto-refresh').is(':checked')){
+            //                 sessionStorage.setItem("el-checkbox","true");
+            //                 location.reload();
+            //             }
+            //         }
+            //     }
+            //
+            // }
         }
 
     }

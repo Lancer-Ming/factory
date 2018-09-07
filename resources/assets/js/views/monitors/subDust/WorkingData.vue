@@ -243,7 +243,7 @@
             search() {
                 let time = this.form.time instanceof Array ? this.form.time.join(',') : this.form.time
                 this.getTableData(time)
-            },
+            }
         }
 
     }
