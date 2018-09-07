@@ -1,48 +1,47 @@
 {
   "alarm_type": [
     {
-      "id": 1,
       "name": "全部"
     },
     {
-      "id": 2,
-      "name": "PM10上限"
+      "name": "PM10上限",
+      "warning_type":"a34002_Rtd_is_warning"
     },
     {
-      "id": 3,
-      "name": "PM2.5上限"
+      "name": "PM2.5上限",
+      "warning_type":"a34004_Rtd_is_warning" 
     },
     {
-      "id": 4,
-      "name": "噪音上限"
+      "name": "噪音上限",
+      "warning_type":"LA_Rtd_is_warning" 
     },
     {
-      "id": 5,
-      "name": "温度上限"
+      "name": "温度上限",
+      "warning_type":"a01001_Rtd_high_is_warning" 
     },
     {
-      "id": 6,
-      "name": "温度下限"
+      "name": "温度下限",
+      "warning_type":"a01001_Rtd_low_is_warning" 
     },
     {
-      "id": 7,
-      "name": "风速上限"
+      "name": "风速上限",
+      "warning_type":"a01007_Rtd_is_warning" 
     },
     {
-      "id": 8,
-      "name": "气压上限"
+      "name": "气压上限",
+      "warning_type":"a01006_Rtd_high_is_warning" 
     },
     {
-      "id": 9,
-      "name": "气压下限"
+      "name": "气压下限",
+      "warning_type":"a01006_Rtd_low_is_warning" 
     },
     {
-      "id": 10,
-      "name": "湿度上限"
+      "name": "湿度上限",
+      "warning_type":"a01002_Rtd_is_warning" 
     },
     {
-      "id": 11,
-      "name": "露点上限"
+      "name": "扬尘上限",
+      "warning_type":"a34001_Rtd_is_warning" 
     }
   ]
 }
