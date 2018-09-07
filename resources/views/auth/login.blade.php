@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {{--<link rel="stylesheet" href="/css/app.css">--}}
-    <title>login</title>
+    <title>数字化工地起重机械安全监控平台</title>
     {{--<link href="{{asset('/vendor/bootstrap/bootstrap.min.css')}}" rel="stylesheet">--}}
     {{--<link href="{{asset('/vendor/awesome/font-awesome.min.css')}}" rel="stylesheet">--}}
     {{--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">--}}
@@ -58,7 +58,9 @@
     </div>
     <div class="login-footer">
             <span>
-                <i class="fa fa-heart" style="color: #c56666;"></i>未经广州安拾科技有限公司同意，不得转载本网站之所有信息
+                Copyright  © 2018 {{$_SERVER['HTTP_HOST']==='http://as.an-safe.com' ? ' an-safe.com 版权所有': ''}}未禁同意,禁止非法复制
+                <br/>
+                <span style="color: #000;margin-top: 10px;">推荐使用火狐、谷歌、Safari、360浏览器（极速模式）体验更佳</span>
             </span>
     </div>
 </div>

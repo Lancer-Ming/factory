@@ -10,6 +10,10 @@ export const logoUrl = [
         image: '/static/img/logo3.png'
     },
     {
+        url: 'http://factory1.test/#/',
+        image: '/static/img/logo2.png'
+    },
+    {
         url: 'http://yutong.an-safe.com/#/',
         image: '/static/img/logo3.png'
     },
