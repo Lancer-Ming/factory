@@ -39,7 +39,8 @@ return [
         'zhiwang.an-safe.com' => '/static/img/logo3.png',
         'factory.test' => '/static/img/logo2.png',
         'factory1.test' => '/static/img/logo2.png',
-        'as.an-safe.com' => '/static/img/logo2.png'
+        'as.an-safe.com' => '/static/img/logo2.png',
+        'test.an-safe.com'=>'/static/img/logo2.png',
     ]
 
 

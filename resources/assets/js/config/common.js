@@ -24,6 +24,10 @@ export const logoUrl = [
     {
         url: 'http://as.an-safe.com/#/',
         image: '/static/img/logo2.png'
+    },
+    {
+        url: 'http://test.an-safe.com/#/',
+        image: '/static/img/logo2.png'
     }
 ]
 
