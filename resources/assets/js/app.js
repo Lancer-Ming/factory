@@ -77,7 +77,7 @@ new Vue({
             //当为首页时
             if (index == 0) {
                 this.$router.push({path: '/'})
-                this.homePageAddTab('/', '首页')
+                this.homePageAddTab('/', '智慧工地首页')
                 this.activeSideBar = ''
             } else {
                 this.sidebars = this.headers[index].children
