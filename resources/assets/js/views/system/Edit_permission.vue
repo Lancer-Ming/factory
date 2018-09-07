@@ -70,8 +70,19 @@
         },
         methods: {
             handleCheckAllChange(object) {
+                // 如果下面没有children 权限
+                if (object.children.length === 0) {
+                    console.log(123)
+                    if(this.permission_id.indexOf(object.id) === -1) {
+                        console.log(456)
+                        this.permission_id = this.permission_id.filter(item => {
+                            return item !== object.id
+                        })
+                    }
+                    return
+                }
+
                 let ids = []
-                //console.log(object)
                 let findChildren = new FindChildren(ids)
                 ids = findChildren.childRecursion(object)
                 if(this.permission_id.indexOf(object.id) > -1) {
@@ -84,6 +95,7 @@
 
             },
             handleCheck(object) {
+                console.log(111)
                 this.checkRelation(object)
             },
             checkRelation(object) {
