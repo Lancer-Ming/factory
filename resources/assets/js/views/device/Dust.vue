@@ -379,7 +379,7 @@
             }
         },
         created() {
-            // this.$router.replace({path: this.$route.path, query: {page: this.currentPage}})
+            this.$router.replace({path: this.$route.path, query: {page: this.currentPage}})
             this.getTableData()
         },
         methods: {
@@ -572,18 +572,15 @@
                     remark: '',
                 }
             },
-            // beforeRouteUpdate(to, from, next) {
-            //     const newId = to.query.sn;
-            //     const oldId = from.query.page;
-            //     console.log(newId,oldId);    //345,123
-            //     next();
-            // }
+            beforeRouteUpdate(to, from, next) {
+                console.log(to,from)
+                const newId = to.query.sn;
+                const oldId = from.query.page;
+                console.log(newId,oldId);    //345,123
+                next();
+            }
         },
-        // watch:{
-        //     $route(to,from){
-        //         this.handleAdd()
-        //     }
-        // }
+
     }
 </script>
 
