@@ -4,6 +4,7 @@
 /storage/*.key
 /public/js/app.js
 /public/css/*.css
+/public/css/*.map
 /public/js/lazy/*
 /public/fonts/vendor/*
 /vendor
@@ -15,4 +16,6 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+*.map
+*.swp
 .env

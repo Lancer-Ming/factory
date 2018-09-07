@@ -10,11 +10,11 @@ let mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 mix.webpackConfig({
-    plugins: [
-        new BundleAnalyzerPlugin(),
-    ],
+    // plugins: [
+    //     new BundleAnalyzerPlugin(),
+    // ],
     devtool: "source-map",
     output: {
         publicPath: "/",

@@ -15,6 +15,7 @@ import {Message} from 'element-ui'
 import {MessageBox} from 'element-ui'
 import axios from 'axios'
 import {implode} from "./utils/common.js"
+import {logoUrl} from "./config/common.js"
 
 import "babel-polyfill" //低版本浏览器不支持es6转码
 
@@ -29,6 +30,8 @@ Vue.prototype.message = Message
 import echarts from 'echarts'
 
 Vue.prototype.$echarts = echarts
+
+
 
 //
 import Breadcrumb from './components/Breadcrumb'
@@ -53,11 +56,13 @@ new Vue({
         activeSideBar: '',  // active 侧边栏
         recordTabsWithHeader: {},   // 表示记录标签和头的关系
         isInit: false,   // 是否刷新初始化
-        currentOpenMenuName: []
+        currentOpenMenuName: [],
+        logoImg: ''
     },
     created() {
         this.initLocal()
         this.switchActivedUrl()
+        this.initLogo()
         this.axios.get("/permission").then(res => {
             this.headers = res.data.data;
             if (this.activeSideBar) {
@@ -77,7 +82,7 @@ new Vue({
             //当为首页时
             if (index == 0) {
                 this.$router.push({path: '/'})
-                this.homePageAddTab('/', '首页')
+                this.homePageAddTab('/', '智慧工地首页')
                 this.activeSideBar = ''
             } else {
                 this.sidebars = this.headers[index].children
@@ -233,8 +238,14 @@ new Vue({
                 let activeSideBar = '/' + this.activeSideBar.split('.').join('/')
                 router.push({path: activeSideBar})
             }
-
-
+        },
+        initLogo() {
+            let href = location.href
+            logoUrl.forEach(item => {
+                if (href === item.url) {
+                    this.logoImg = item.image
+                }
+            })
         }
     },
     watch: {

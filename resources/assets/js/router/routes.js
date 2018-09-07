@@ -19,8 +19,8 @@ export default [
         component: () => import('../views/demo/Export')
     },
     {
-        path: '/cxjf/index',
-        name: 'cxjf.index',
+        path: '/cxjf',
+        name: 'cxjf',
         component: () => import('../views/demo/Cxjf')
     },
     {

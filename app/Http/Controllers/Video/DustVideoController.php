@@ -59,7 +59,8 @@ class DustVideoController extends Controller
         // 过滤掉 buildUnit 或者 dusts 为空的item
         $items = $items->filter(function ($value)
         {
-            return $value->buildUnit->all() && $value->dusts->all();
+            return $value->dusts->all();
+            // 施工单位问题...
         });
 
         foreach ($items as $key => &$value) {
@@ -69,7 +70,6 @@ class DustVideoController extends Controller
             $value['is_warning_count'] = $value->dusts->sum('cur_warn_count');
             unset($value->buildUnit);
         }
-
 
         return successJson($items);
 
