@@ -46,7 +46,7 @@ class CreateDustInfosTable extends Migration
             $table->unsignedInteger('a01006_Rtd_high_pre_warning')->nullable()->comment('气压上限预警');
             $table->unsignedInteger('a01006_Rtd_low_pre_warning')->nullable()->comment('气压下限预警');
             $table->unsignedInteger('a01006_Rtd_high_is_warning')->nullable()->index()->comment('气压上限预警');
-            $table->unsignedInteger('a01006_Rtd_low_is_warning')->index()->index()->nullable()->comment('气压下限报警');
+            $table->unsignedInteger('a01006_Rtd_low_is_warning')->index()->nullable()->comment('气压下限报警');
             $table->unsignedInteger('a01007_Rtd_pre_warning')->nullable()->comment('风速上限预警');
             $table->unsignedInteger('a01007_Rtd_is_warning')->index()->nullable()->comment('风速上限报警');
 

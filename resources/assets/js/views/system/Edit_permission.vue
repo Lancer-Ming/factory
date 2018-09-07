@@ -116,7 +116,7 @@
                             showClose: true,
                             message: res.data.msg
                         })
-
+                
                         this.$router.push({path: '/system/role/index'})
 
                     }

@@ -31,10 +31,13 @@ class HomeController extends Controller
 
     public function gateway()
     {
-        $standard = DB::select('select IMEI from ams_dust_codes where sn = ?', ['000001']);
-        dd($standard);
-        $standard = $standard ? $standard[0] : [];
-
+        $id = DB::select("select id from ams_dust_codes where sn = ? ORDER BY id desc LIMIT 1", ['000003'])[0]->id;
+        dd($id);
+        $message = "QN=20180906103406000;ST=39;CN=2011;PW=123456;MN=690000D5800028F889000003;Flag=4;CP=&&DataTime=20180906103406;a34004-Rtd=45.0;a34002-Rtd=62.7;a34001-Rtd=78.4;LA-Rtd=63.2;a01001-Rtd=28.3;a01002-Rtd=60.0;a01006-Rtd=100.3;a01007-Rtd=0.0;a01008-Rtd=45&&";
+        $puchMsg = $message;
+        $usDataLen = strlen($message);
+        $crc = $this->CRC_16($puchMsg, $usDataLen);
+        return strtoupper(base_convert($crc, 10, 16));
     }
 
     protected function CRC_16($puchMsg, $usDataLen)
@@ -56,20 +59,12 @@ class HomeController extends Controller
     protected function gateTest()
     {
         $message = "##0091QN=20180904160638000;ST=39;CN=2011;PW=123456;USCC=91440101MA59F70720;IMEI=867732039951777&&B8C1";
-        $message = "##0035SN=271909;DATETIME=20180904163444&&";
+        $message = "QN=20180906103406000;ST=39;CN=2011;PW=123456;MN=690000D5800028F889000003;Flag=4;CP=&&DataTime=20180906103406;a34004-Rtd=45.0;a34002-Rtd=62.7;a34001-Rtd=78.4;LA-Rtd=63.2;a01001-Rtd=28.3;a01002-Rtd=60.0;a01006-Rtd=100.3;a01007-Rtd=0.0;a01008-Rtd=45&&";
         $this->message = str_replace(array("\r\n", "\r", "\n"),"", $message);
         $validateCode = substr($this->message, -4);
-        $puchMsg = substr($this->message, 6, -4);
-        $usDataLen = strlen($puchMsg);
+        $puchMsg = $message;
+        $usDataLen = strlen($message);
         $crc = $this->CRC_16($puchMsg, $usDataLen);
         return strtoupper(base_convert($crc, 10, 16));
-        // 获取扬尘处理的实例
-        $dust = Entrance::Dust($message);
-        // 判断状态并且存储数据
-        $dust->store();
-        // 获取要发送给硬件的数据
-//        $message = $dust->sendConnectData($client_id);
-        // 改变 dust 的状态
-        $dust->changeStatus();
     }
 }

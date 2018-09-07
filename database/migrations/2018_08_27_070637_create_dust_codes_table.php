@@ -17,7 +17,7 @@ class CreateDustCodesTable extends Migration
             $table->increments('id');
             $table->string('sn')->index()->nullable()->comment('sn唯一标识');
             $table->string('client_id')->index()->nullable()->comment('客户端唯一标识');
-            $table->string('IMEI')->nullable()->comment('设备的IMEI号');
+            $table->string('IMEI')->index()->nullable()->comment('设备的IMEI号');
             $table->string('SIM')->nullable()->comment('信用卡');
             $table->timestamps();
         });
