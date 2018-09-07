@@ -5,7 +5,6 @@ namespace App\Hardware\DeviceClass;
 use App\Models\Code;
 use GatewayWorker\Lib\Gateway;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class DustClass
 {
@@ -58,10 +57,8 @@ class DustClass
     public function store($client_id)
     {
         $this->client_id = $client_id;
-        Log::info('1'.$this->message);
         // 检验
         if (!$this->CRC_16_Check()) {
-            Log::info('2'.$this->message);
             return;
         }
 
@@ -72,7 +69,6 @@ class DustClass
 
         // 如果 processMessage 是包含IMEI号  就是首次访问。
         if (array_key_exists('IMEI', $processMessage)) {
-            Log::info('4'.json_encode($processMessage));
             // 确认是刚上线
             $this->isInit = true;
             // 查询 IMEI 号
@@ -109,11 +105,9 @@ class DustClass
             $this->isInit = false;
             // 如果是测试环境
             if ($this->isTest) {
-                Log::info('测试：'.$this->message);
                 $this->storeTestData($processMessage);
             } else {
                 $this->sn =  substr($processMessage['MN'], -6);      // 生成sn
-                Log::info('sn::::'.json_encode($this->sn));
                 // 将sn 作为Uid 与 client_id 进行绑定
                 Gateway::bindUid($this->client_id, $this->sn);
                 $this->storeProductionData($processMessage);
@@ -134,7 +128,6 @@ class DustClass
 
         // 根据client_id获取sn
         $sn = Gateway::getUidByClientId($client_id);
-        Log::info(json_encode('sn........'.json_encode($sn)));
         $is_online = Gateway::isUidOnline($sn);
         if ($is_online) {
             DB::update('update ams_dusts set is_online=1 WHERE sn = ?', [$sn]);
@@ -166,14 +159,12 @@ class DustClass
         if ($data) {
             $sn = $data[0]->sn;
         }
-        Log::info('inserCloseTime-----------'.json_encode($sn));
         // 如果 $sn 是空数组 直接return
         if (empty($sn)) {
             return;
         }
         // 查询要退出的那个id
         $id = DB::select("select id from ams_dust_codes where sn = ? ORDER BY id desc LIMIT 1", [$sn])[0]->id;
-        Log::info('id------------------------'.$id);
         $time = date('Y-m-d H:i:s', time());
         DB::update('update ams_dust_codes set updated_at = ? WHERE id = ?', [$time, $id]);
         DB::update('update ams_dusts set is_online=0, pre_warn_count=0, cur_warn_count=0 WHERE sn = ?', [$sn]);
@@ -243,7 +234,6 @@ class DustClass
         // 风速上限报警
         $warningMessage['a01007_Rtd_is_warning'] = (float) $processMessage['a01007-Rtd'] >= $standard->a01007_Rtd_is_warning ? 1 : 0;
 
-        Log::info('warningMessage--------'.json_encode($warningMessage));
         // 判断是否有报警
         if ($warningMessage['a01007_Rtd_is_warning'] || $warningMessage['a01006_Rtd_low_is_warning'] || $warningMessage['a01006_Rtd_high_is_warning'] ||
             $warningMessage['a01002_Rtd_is_warning'] || $warningMessage['a01001_Rtd_low_is_warning'] || $warningMessage['a01001_Rtd_high_is_warning'] ||
@@ -261,11 +251,9 @@ class DustClass
             $warningMessage['pre_warning_status'] = 0;
         }
 
-        Log::info("warning-----------".json_encode($warningMessage['pre_warning_status']).json_encode($warningMessage['is_warning_status']));
         // 新增扬尘数据信息
         $id = DB::table('dust_infos')->insertGetId(['sn'=>$this->sn, 'received_at'=>$time, 'flag'=>$processMessage['Flag'], 'QN'=>$processMessage['QN'], 'CN'=>$processMessage['CN'], 'a34001_Rtd'=>$processMessage['a34001-Rtd'], 'a34002_Rtd'=>$processMessage['a34002-Rtd'],
             'a34004_Rtd'=>$processMessage['a34004-Rtd'], 'LA_Rtd'=>$processMessage['LA-Rtd'], 'a01001_Rtd'=>$processMessage['a01001-Rtd'], 'a01002_Rtd'=>$processMessage['a01002-Rtd'], 'a01006_Rtd'=>$processMessage['a01006-Rtd'], 'a01007_Rtd'=>$processMessage['a01007-Rtd'], 'a01008_Rtd'=>$processMessage['a01008-Rtd']]);
-        Log::info("insert dust\n");
         DB::update('update ams_dust_infos set a34001_Rtd_pre_warning = ?, a34001_Rtd_is_warning = ?, a34002_Rtd_pre_warning = ?, a34002_Rtd_is_warning = ?, a34004_Rtd_pre_warning = ?, a34004_Rtd_is_warning = ?,
         LA_Rtd_pre_warning = ?, LA_Rtd_is_warning = ?, a01001_Rtd_high_pre_warning = ?, a01001_Rtd_high_is_warning = ?, a01001_Rtd_low_pre_warning = ?, a01001_Rtd_low_is_warning = ?,
         a01002_Rtd_pre_warning = ?, a01002_Rtd_is_warning = ?, a01006_Rtd_high_pre_warning = ?, a01006_Rtd_low_pre_warning = ?, a01006_Rtd_high_is_warning = ?, a01006_Rtd_low_is_warning = ?,
@@ -284,7 +272,6 @@ class DustClass
      */
     protected function formatData()
     {
-        Log::info('formatData....');
         // a34004-Rtd：PM2.5    a34002-Rtd：PM10    a34001-Rtd：总悬浮颗粒物 TSP    LA-Rtd：噪音
         // a01001-Rtd：温度    a01002-Rtd：湿度   a01006-Rtd：气压   a01007-Rtd：风速   a01008-Rtd：风向
         $this->message = substr($this->message, 6, -6);
@@ -308,8 +295,6 @@ class DustClass
         }
         // 将格式化好的数据赋值给$processMessage
         $this->processMessage = $formatData;
-
-        Log::info('3');
 
         return $this;
     }
@@ -344,7 +329,6 @@ class DustClass
         $puchMsg = substr($this->message, 6, -4);
         $usDataLen = strlen($puchMsg);
         $crc = $this->CRC_16($puchMsg, $usDataLen);
-        Log::info('validate:'.$validateCode.'--------'.strtoupper(base_convert($crc, 10, 16)));
         return (strtoupper(base_convert($crc, 10, 16))) == $validateCode;
     }
 
