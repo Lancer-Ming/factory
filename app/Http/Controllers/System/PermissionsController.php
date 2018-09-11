@@ -33,9 +33,13 @@ class PermissionsController extends Controller
         forEach($permissions as $key => &$children) {
             $children['children'] = array_values($children['children']);
             forEach($children['children'] as &$child) {
-                $child['children'] = array_values($child['children']);
-                foreach ($child['children'] as &$c) {
-                    $c['children'] = array_values($c['children']);
+                if (array_key_exists('children', $child)) {
+                    $child['children'] = array_values($child['children']);
+                    foreach ($child['children'] as &$c) {
+                        if (array_key_exists('children', $c)) {
+                            $c['children'] = array_values($c['children']);
+                        }
+                    }
                 }
             }
         }
