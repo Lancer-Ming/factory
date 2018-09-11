@@ -181,18 +181,7 @@
             </el-table>
         </el-dialog>
 
-        <el-row class="paginate">
-            <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="currentPage"
-                    :page-sizes="[30, 60, 90, 120]"
-                    :page-size="30"
-                    :pager-count="11"
-                    layout="total, sizes, prev, pager, next, jumper,slot,->"
-                    :total="total">
-            </el-pagination>
-        </el-row>
+
     </div>
 </template>
 
@@ -292,8 +281,8 @@
                 getcontrol(this.currentPage, data, this.pagesize).then(res => {
                     if (res.data.response_status === "success") {
                         console.log(res)
-                        this.tableData = res.data.data
-                        this.total = res.data.total
+                        this.tableData = res.data.data.items
+                        this.total = res.data.data.total
                         this.loading = false
                     }
                 })
