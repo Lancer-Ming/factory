@@ -242,7 +242,7 @@ new Vue({
         initLogo() {
             let href = location.href
             logoUrl.forEach(item => {
-                if (href === item.url) {
+                if (href.indexOf(item.url) > -1) {
                     this.logoImg = item.image
                 }
             })

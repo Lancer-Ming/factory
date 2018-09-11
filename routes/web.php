@@ -148,6 +148,11 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::post('/access_token/get', 'YsUsersController@accessToken')->name('access_token');
         });
     });
+
+    // 地区
+    Route::namespace('Region')->as('region.')->group(function() {
+        Route::get('all', 'RegionsController@index')->name('index');
+    });
 });
 
 
