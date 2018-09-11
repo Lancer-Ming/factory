@@ -36,3 +36,9 @@ export function alarm_type(){
         method: 'get'
     })
 }
+export function alarm_status(){
+    return axios ({
+        url: "/json/alarm_status.json",
+        method: 'get'
+    })
+}

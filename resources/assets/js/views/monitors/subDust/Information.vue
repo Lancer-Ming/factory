@@ -21,13 +21,11 @@
             </el-form-item>
             <el-form-item label="预警状态" size="mini" style="width: 32%">
                 <el-select v-model="form.warning_status" placeholder="请选择活动区域">
-                    <el-option label="全部" value="whole"></el-option>
-                    <el-option label="预警" value="warning"></el-option>
-                    <el-option label="报警" value="danger"></el-option>
+                    <el-option v-for="(item,index) in alarm_status" :label="item.name" :key='index' :value="item.warning_status"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label=""  size="mini" style="width: 10%;">
-                <el-checkbox  name="type"></el-checkbox>
+                <el-checkbox  name="type" v-model="autoQuery"></el-checkbox>
             </el-form-item>
             <el-form-item label="开启自动查询" size="mini" style="width: 20%;">
             </el-form-item>
@@ -40,6 +38,7 @@
                 :data="tableData"
                 border
                 style="width: 100%"
+                v-loading="loading"
         >
             <el-table-column
                     type="index"
@@ -144,6 +143,7 @@
             >
                 <template slot-scope="scope">
                     <span style="color: red;">{{ scope.row.errorMsg}}</span>
+                    <span style="color: #f9bd82;">{{ scope.row.errorMsgPre}}</span>
                 </template>
             </el-table-column>
         </el-table>
@@ -163,7 +163,7 @@
 </template>
 
 <script>
-    import { alarm_type } from "../../../api/json"
+    import { alarm_type,alarm_status } from "../../../api/json"
     import { getinformation } from "../../../api/information"
     import {pagesize, perPagesize} from '../../../config/common'
     export default{
@@ -176,6 +176,10 @@
                 },
                 tableData: [],
                 alarm_type: [],
+                alarm_status:[],
+                IntervalId: '',   //定时器id
+                loading:false,
+                autoQuery: false,
                 currentPage: 1, //当前页数
                 pagesize: pagesize,
                 perPagesize: perPagesize,
@@ -216,6 +220,9 @@
             alarm_type().then(res => {
                 this.alarm_type = res.data.alarm_type
             })
+            alarm_status().then(res => {
+                this.alarm_status = res.data.alarm_status
+            })
             this.getTableData(this.form)
         },
         methods:{
@@ -228,75 +235,58 @@
             handleCrane() {
                 this.distribution = true
             },
-            getTableData(time){
-                getinformation(this.currentPage, this.$route.query.sn, this.pagesize, time).then(res => {
+            getTableData(data){
+                this.loading = true
+                getinformation(this.currentPage, this.$route.query.sn, this.pagesize, data).then(res => {
                     if (res.data.response_status === "success") {
                         console.log(res)
                         this.tableData = res.data.data.data
                         this.total = res.data.data.total
+                       
                     }
+                    this.form.time = this.form.time.split(',')
                     this.tableData.forEach(function(item,index){
-                        item.errorMsg = item.a34001_Rtd_pre_warning ? '扬尘预警|': ''
-                        item.errorMsg += item.a34001_Rtd_is_warning ? '扬尘报警|' : ''
-                        item.errorMsg += item.a34002_Rtd_pre_warning ? 'PM10预警|' : ''
+                        item.errorMsgPre = item.a34001_Rtd_pre_warning ? '扬尘预警|': ''
+                        item.errorMsg = item.a34001_Rtd_is_warning ? '扬尘报警|' : ''
+                        item.errorMsgPre += item.a34002_Rtd_pre_warning ? 'PM10预警|' : ''
                         item.errorMsg += item.a34002_Rtd_is_warning ? 'PM10报警|' : ''
-                        item.errorMsg += item.a34004_Rtd_pre_warning ? 'PM2.5预警|' : ''
+                        item.errorMsgPre += item.a34004_Rtd_pre_warning ? 'PM2.5预警|' : ''
                         item.errorMsg += item.a34004_Rtd_is_warning ? 'PM2.5报警|' : ''
-                        item.errorMsg += item.LA_Rtd_pre_warning ? '噪音上限预警|' : ''
+                        item.errorMsgPre += item.LA_Rtd_pre_warning ? '噪音上限预警|' : ''
                         item.errorMsg += item.LA_Rtd_is_warning ? '噪音上限报警|' : ''
-                        item.errorMsg += item.a01001_Rtd_high_pre_warning ? '温度上限预警|' : ''
+                        item.errorMsgPre += item.a01001_Rtd_high_pre_warning ? '温度上限预警|' : ''
                         item.errorMsg += item.a01001_Rtd_high_is_warning ? '温度上限报警|' : ''
-                        item.errorMsg += item.a01001_Rtd_low_pre_warning ? '温度下限预警|' : ''
+                        item.errorMsgPre += item.a01001_Rtd_low_pre_warning ? '温度下限预警|' : ''
                         item.errorMsg += item.a01001_Rtd_low_is_warning ? '温度下限报警|' : ''
-                        item.errorMsg += item.a01002_Rtd_pre_warning ? '湿度上限预警|' : ''
+                        item.errorMsgPre += item.a01002_Rtd_pre_warning ? '湿度上限预警|' : ''
                         item.errorMsg += item.a01002_Rtd_is_warning ? '湿度上限报警|' : ''
-                        item.errorMsg += item.a01006_Rtd_high_pre_warning ? '气压上限预警|' : ''
-                        item.errorMsg += item.a01006_Rtd_low_pre_warning ? '气压下限预警|' : ''
-                        item.errorMsg += item.a01006_Rtd_high_is_warning ? '气压下限预警|' : ''
+                        item.errorMsgPre += item.a01006_Rtd_high_pre_warning ? '气压上限预警|' : ''
+                        item.errorMsgPre += item.a01006_Rtd_low_pre_warning ? '气压下限预警|' : ''
+                        item.errorMsg += item.a01006_Rtd_high_is_warning ? '气压上限报警|' : ''
                         item.errorMsg += item.a01006_Rtd_low_is_warning ? '气压下限报警|' : ''
-                        item.errorMsg += item.a01007_Rtd_pre_warning ? '风速上限预警|' : ''
+                        item.errorMsgPre += item.a01007_Rtd_pre_warning ? '风速上限预警|' : ''
                         item.errorMsg += item.a01007_Rtd_is_warning ? '风速上限报警|' : ''
-                        item.errorMsg = item.errorMsg.substring(0, item.errorMsg.length - 1)
+                        item.errorMsgPre = item.errorMsgPre.substring(0, item.errorMsgPre.length - 1)
                     })
+                    
+                     this.loading = false
                 })
             },
             search() {
-                let time = this.form.time instanceof Array ? this.form.time.join(',') : this.form.time
-                this.getTableData(time)
+                this.form.time = this.form.time instanceof Array ? this.form.time.join(',') : this.form.time
+                this.getTableData(this.form)
+                
             },
-            // aaa(){
-            //     $('#auto-refresh').change(function() {
-            //         if($('#auto-refresh').is(':checked')){
-            //             sessionStorage.setItem("el-checkbox","true");
-            //             var status = sessionStorage.getItem("el-checkbox");
-            //             if(status == "true"){
-            //                 setInterval(chat, "5000");
-            //                 function chat() {
-            //                     if($('#auto-refresh').is(':checked')){
-            //                         sessionStorage.setItem("el-checkbox","true");
-            //                         location.reload();
-            //                     }
-            //                 }
-            //             }
-            //         }else{
-            //             sessionStorage.setItem("el-checkbox","false");
-            //         }
-            //     });
-            //
-            //
-            //     var status = sessionStorage.getItem("el-checkbox");
-            //     if(status == "true"){
-            //         $('#auto-refresh').attr("checked", true);
-            //         setInterval(chat, "5000");
-            //         function chat() {
-            //             if($('#auto-refresh').is(':checked')){
-            //                 sessionStorage.setItem("el-checkbox","true");
-            //                 location.reload();
-            //             }
-            //         }
-            //     }
-            //
-            // }
+            
+        },
+        watch:{
+            autoQuery(newval,val){
+                if(newval){
+                   this.IntervalId = setInterval(()=>{this.search()},30000)
+                }else{
+                    clearInterval(this.IntervalId)
+                }
+            }
         }
 
     }

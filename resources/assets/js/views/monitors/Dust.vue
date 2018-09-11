@@ -295,6 +295,7 @@
                 this.getTableData(this.form)
             },
             register(){
+                return
                 this.$router.replace({path: '/device/dust/index', query: {sn: '1111'}})
             }
         }

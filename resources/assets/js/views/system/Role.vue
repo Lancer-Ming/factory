@@ -92,10 +92,10 @@
             </el-table-column>
         </el-table>
 
-        <el-dialog title="用户组" :visible.sync="showForm" width="22%">
-            <el-form :model="form">
+        <el-dialog title="用户组" :visible.sync="showForm" width="350px">
+            <el-form :model="form" class="as-form-col">
                 <el-form-item label="用户组名" :label-width="formLabelWidth">
-                    <el-input v-model="form.name" auto-complete="off" style="width:200px;" size="mini"></el-input>
+                    <el-input v-model="form.name" auto-complete="off" style="width:100%;" size="mini"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">

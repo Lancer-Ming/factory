@@ -1,0 +1,12 @@
+{
+    "alarm_status": [
+      {
+        "name": "报警",
+        "warning_status":"is_warning_status" 
+      },
+      {
+        "name": "预警",
+        "warning_status":"pre_warning_status" 
+      }
+    ]
+  }
