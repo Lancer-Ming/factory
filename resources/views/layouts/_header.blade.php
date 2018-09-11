@@ -1,6 +1,6 @@
 <el-header class="header-container" height="auto">
     <div class="header-nav clearfix">
-        <h1 class="web-logo"><img :src="logoImg" class="logo-img clearfix" alt=""></h1>
+        <h1 class="web-logo"><img src="/static/img/logo3.png" class="logo-img clearfix" alt=""></h1>
         <div class="as-header__actions">
             <ul class="as-menu__top clearfix">
                 <li v-for="(header,index) in headers" class="el-menu-item" :key="index" @click="getSideBars(index)" :class="{ is_active: index === activeNavIndex }">
