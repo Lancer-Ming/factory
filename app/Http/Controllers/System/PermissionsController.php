@@ -28,6 +28,18 @@ class PermissionsController extends Controller
                 : Permission::$category;
         }
 
+        $permissions = $permissions->values()->toArray();
+
+        forEach($permissions as $key => &$children) {
+            $children['children'] = array_values($children['children']);
+            forEach($children['children'] as &$child) {
+                $child['children'] = array_values($child['children']);
+                foreach ($child['children'] as &$c) {
+                    $c['children'] = array_values($c['children']);
+                }
+            }
+        }
+
         return successJson($permissions);
     }
 
