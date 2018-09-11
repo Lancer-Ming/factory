@@ -28,6 +28,7 @@
                     type="index"
                     width="50"
                     align="center"
+                    :index="indexMethod"
             >
             </el-table-column>
             <el-table-column
@@ -69,7 +70,7 @@
                     align="center"
             >
                 <template slot-scope="scope">
-                    <span>{{ scope.row.runtime = Math.floor((Date.parse(scope.row.updated_at) - Date.parse(scope.row.created_at))/1000/3600)+"小时"+Math.floor((Date.parse(scope.row.updated_at) - Date.parse(scope.row.created_at))/1000%3600/60)+"分钟" }}</span>
+                    <span>{{ scope.row.runtime = Math.floor((Date.parse(scope.row.updated_at) - Date.parse(scope.row.created_at))/1000/3600)+"小时"+Math.floor((Date.parse(scope.row.updated_at) - Date.parse(scope.row.created_at))/1000%3600/60)+"分钟"}}</span>
                 </template>
             </el-table-column>
         </el-table>
@@ -139,11 +140,22 @@
             this.getTableData()
         },
         methods: {
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+            handleSizeChange(pagesize, sn) {
+                this.pagesize = pagesize
+
+                this.getTableData(this.form.time)
             },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
+            handleCurrentChange(currentPage, sn) {
+                this.currentPage = currentPage
+
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: {page: this.currentPage, sn: this.$route.query.sn}
+                })
+                this.getTableData(this.form.time)
+            },
+            indexMethod(index) {
+                return  index + (this.currentPage - 1) * this.pagesize;
             },
             handleCrane() {
                 this.distribution = true

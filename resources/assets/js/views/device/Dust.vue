@@ -85,6 +85,10 @@
                     width="80"
                     align="center"
             >
+                <template slot-scope="scope">
+                    <i class="el-icon-check" style="color:#588d31;" v-show="JSON.parse(scope.row.func_config).dust"></i>
+                    <i class="el-icon-close" style="color:#aa3f3f;" v-show="!JSON.parse(scope.row.func_config).dust"></i>
+                </template>
             </el-table-column>
             <el-table-column
                     prop="func_config.pm10"
@@ -92,6 +96,10 @@
                     width="80"
                     align="center"
             >
+                <template slot-scope="scope">
+                    <i class="el-icon-check" style="color:#588d31;" v-show="JSON.parse(scope.row.func_config).pm10"></i>
+                    <i class="el-icon-close" style="color:#aa3f3f;" v-show="!JSON.parse(scope.row.func_config).pm10"></i>
+                </template>
             </el-table-column>
             <el-table-column
                     prop="func_config.pm2"
@@ -99,6 +107,10 @@
                     width="80"
                     align="center"
             >
+                <template slot-scope="scope">
+                    <i class="el-icon-check" style="color:#588d31;" v-show="JSON.parse(scope.row.func_config).pm2"></i>
+                    <i class="el-icon-close" style="color:#aa3f3f;" v-show="!JSON.parse(scope.row.func_config).pm2"></i>
+                </template>
             </el-table-column>
             <el-table-column
                     prop="func_config.noise"
@@ -106,6 +118,10 @@
                     width="80"
                     align="center"
             >
+                <template slot-scope="scope">
+                    <i class="el-icon-check" style="color:#588d31;" v-show="JSON.parse(scope.row.func_config).noise"></i>
+                    <i class="el-icon-close" style="color:#aa3f3f;" v-show="!JSON.parse(scope.row.func_config).noise"></i>
+                </template>
             </el-table-column>
             <el-table-column
                     prop="func_config.temperature"
@@ -113,6 +129,10 @@
                     width="80"
                     align="center"
             >
+                <template slot-scope="scope">
+                    <i class="el-icon-check" style="color:#588d31;" v-show="JSON.parse(scope.row.func_config).temperature"></i>
+                    <i class="el-icon-close" style="color:#aa3f3f;" v-show="!JSON.parse(scope.row.func_config).temperature"></i>
+                </template>
             </el-table-column>
             <el-table-column
                     prop="func_config.wind_speed"
@@ -120,6 +140,10 @@
                     width="80"
                     align="center"
             >
+                <template slot-scope="scope">
+                    <i class="el-icon-check" style="color:#588d31;" v-show="JSON.parse(scope.row.func_config).wind_speed"></i>
+                    <i class="el-icon-close" style="color:#aa3f3f;" v-show="!JSON.parse(scope.row.func_config).wind_speed"></i>
+                </template>
             </el-table-column>
             <el-table-column
                     prop="func_config.wind_direction"
@@ -127,6 +151,10 @@
                     width="80"
                     align="center"
             >
+                <template slot-scope="scope">
+                    <i class="el-icon-check" style="color:#588d31;" v-show="JSON.parse(scope.row.func_config).wind_direction"></i>
+                    <i class="el-icon-close" style="color:#aa3f3f;" v-show="!JSON.parse(scope.row.func_config).wind_direction"></i>
+                </template>
             </el-table-column>
             <el-table-column
                     prop="SIM_card"
@@ -155,6 +183,9 @@
                     width="100"
                     align="center"
             >
+                <template slot-scope="scope">
+                    <span>{{ scope.row.is_online == 1 ? '是' : '否' }}</span>
+                </template>
             </el-table-column>
             <el-table-column
                     prop="is_monitor"
@@ -162,6 +193,9 @@
                     width="120"
                     align="center"
             >
+                <template slot-scope="scope">
+                    <span>{{ scope.row.is_monitor == 1 ? '是' : '否' }}</span>
+                </template>
             </el-table-column>
             <el-table-column
                     fixed="right"

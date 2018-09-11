@@ -180,6 +180,19 @@
                 </el-table-column>
             </el-table>
         </el-dialog>
+
+        <el-row class="paginate">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[30, 60, 90, 120]"
+                    :page-size="30"
+                    :pager-count="11"
+                    layout="total, sizes, prev, pager, next, jumper,slot,->"
+                    :total="total">
+            </el-pagination>
+        </el-row>
     </div>
 </template>
 

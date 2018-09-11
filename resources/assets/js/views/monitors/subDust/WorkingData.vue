@@ -36,7 +36,9 @@
                     type="index"
                     width="50"
                     align="center"
+                    :index="indexMethod"
             >
+
             </el-table-column>
             <el-table-column
                     prop="sn"
@@ -134,18 +136,20 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-row>
+
+        <el-row class="paginate">
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
                     :page-sizes="[30, 60, 90, 120]"
-                    :page-size="pagesize"
+                    :page-size="30"
                     :pager-count="11"
                     layout="total, sizes, prev, pager, next, jumper,slot,->"
                     :total="total">
             </el-pagination>
         </el-row>
+
     </div>
 </template>
 
@@ -166,7 +170,7 @@
                 total: null,
                 distribution: false,
                 IntervalId: '',   //定时器id
-                loading:false,
+                loading: false,
                 autoQuery: false,
                 pickerOptions2: {
                     shortcuts: [{
@@ -202,11 +206,22 @@
             this.getTableData()
         },
         methods: {
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+            handleSizeChange(pagesize, sn) {
+                this.pagesize = pagesize
+
+                this.getTableData(this.form.time)
             },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
+            handleCurrentChange(currentPage, sn) {
+                this.currentPage = currentPage
+
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: {page: this.currentPage, sn: this.$route.query.sn}
+                })
+                this.getTableData(this.form.time)
+            },
+            indexMethod(index) {
+                return  index + (this.currentPage - 1) * this.pagesize;
             },
             handleCrane() {
                 this.distribution = true
@@ -219,8 +234,8 @@
                         this.total = res.data.data.total
                     }
 
-                    this.tableData.forEach(function(item,index){
-                        item.errorMsgPre = item.a34001_Rtd_pre_warning ? '扬尘预警|': ''
+                    this.tableData.forEach(function (item, index) {
+                        item.errorMsgPre = item.a34001_Rtd_pre_warning ? '扬尘预警|' : ''
                         item.errorMsg = item.a34001_Rtd_is_warning ? '扬尘报警|' : ''
                         item.errorMsgPre += item.a34002_Rtd_pre_warning ? 'PM10预警|' : ''
                         item.errorMsg += item.a34002_Rtd_is_warning ? 'PM10报警|' : ''
@@ -250,11 +265,13 @@
                 this.getTableData(time)
             }
         },
-        watch:{
-            autoQuery(newval,val){
-                if(newval){
-                   this.IntervalId = setInterval(()=>{this.search()},30000)
-                }else{
+        watch: {
+            autoQuery(newval, val) {
+                if (newval) {
+                    this.IntervalId = setInterval(() => {
+                        this.search()
+                    }, 30000)
+                } else {
                     clearInterval(this.IntervalId)
                 }
             }

@@ -44,6 +44,7 @@
                     type="index"
                     width="50"
                     align="center"
+                    :index="indexMethod"
             >
             </el-table-column>
             <el-table-column
@@ -147,18 +148,20 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-row style="margin-top: 20px;">
+
+        <el-row class="paginate">
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
                     :page-sizes="[30, 60, 90, 120]"
-                    :page-size="pagesize"
+                    :page-size="30"
                     :pager-count="11"
                     layout="total, sizes, prev, pager, next, jumper,slot,->"
                     :total="total">
             </el-pagination>
         </el-row>
+
     </div>
 </template>
 
@@ -226,11 +229,22 @@
             this.getTableData(this.form)
         },
         methods:{
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+            handleSizeChange(pagesize, sn) {
+                this.form.time = this.form.time instanceof Array ? this.form.time.join(',') : this.form.time
+                this.pagesize = pagesize
+                this.getTableData(this.form)
             },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
+            handleCurrentChange(currentPage, sn) {
+                this.form.time = this.form.time instanceof Array ? this.form.time.join(',') : this.form.time
+                this.currentPage = currentPage
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: {page: this.currentPage, sn: this.$route.query.sn}
+                })
+                this.getTableData(this.form)
+            },
+            indexMethod(index) {
+                return  index + (this.currentPage - 1) * this.pagesize;
             },
             handleCrane() {
                 this.distribution = true
