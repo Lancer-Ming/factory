@@ -35,6 +35,7 @@
                     fixed
                     sortable
                     label="#"
+                    :index="indexMethod"
             >
                 <template slot-scope="scope">
                     <span>{{ scope.row.id }}</span>
@@ -110,18 +111,36 @@
                     <i class="el-icon-time"></i> <span style="margin-left: 10px">{{ scope.row.created_at }}</span>
                 </template>
             </el-table-column>
+            <el-table-column
+                    label="管辖地区"
+                    align="center"
+            >
+                <template slot-scope="scope">
+                    <i class="el-icon-time"></i> <span style="margin-left: 10px">{{ scope.row.created_at }}</span>
+                </template>
+            </el-table-column>
 
             <el-table-column label="操作" align="center" width="400">
                 <template slot-scope="scope">
                     <el-button
                             size="mini"
                             type="primary"
+                            style="margin-left:20px;float:left;"
                             @click="handleEdit(scope.$index, scope.row)">编辑
                     </el-button>
                     <el-button
                             size="mini"
                             type="danger"
+                            style="float:left;"
                             @click="handleDelete(scope.$index, scope.row)">删除
+                    </el-button>
+                    <el-button
+                            v-show="(implode(scope.row.roles, 'name').join(',')).indexOf('安监站') > -1"
+                            size="mini"
+                            type="warning"
+                            style="float:left;"
+                            @click="Edited_area"
+                            >编辑地区
                     </el-button>
                 </template>
             </el-table-column>
@@ -159,12 +178,27 @@
             </div>
         </el-dialog>
 
+
+        <el-row class="paginate">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[30, 60, 90, 120]"
+                    :page-size="30"
+                    :pager-count="11"
+                    layout="total, sizes, prev, pager, next, jumper,slot,->"
+                    :total="total">
+            </el-pagination>
+        </el-row>
+
     </div>
 </template>
 
 <script>
     import {getUsers, getRoles, updateUser, addUser, destroyUser} from "../../api/user.js";
     import {implode} from "../../utils/common.js";
+    import {pagesize, perPagesize} from '../../config/common'
 
     export default {
         data() {
@@ -185,11 +219,18 @@
                 options: [],
                 no: '',
                 currentPage: 1,
-                multipleSelection: []
-            };
+                multipleSelection: [],
+                regionShow: false,
+                currentPage: 1, //当前页数
+                pagesize: pagesize,
+                perPagesize: perPagesize,
+                total: null,
+                distribution: false,
+        };
         },
         created() {
             getUsers(this.currentPage).then(res => {
+                console.log(res)
                 this.tableData = res.data.data.data;
             }),
                 getRoles().then(res => {
@@ -200,6 +241,26 @@
                 })
         },
         methods: {
+            handleSizeChange(pagesize) {
+                this.pagesize = pagesize
+                this.getUsers()
+            },
+            handleCurrentChange(currentPage) {
+                this.currentPage = currentPage
+
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: {page: this.currentPage}
+                })
+                this.getUsers()
+
+            },
+            indexMethod(index) {
+                return  index + (this.currentPage - 1) * this.pagesize;
+            },
+            handleCrane() {
+                this.distribution = true
+            },
             handleEdit(index, row) {
                 // 给表单赋值
                 this.formType = 'edit'
@@ -315,7 +376,9 @@
             implode(arr, attr) {
                 return implode(arr, attr);
             },
+            Edited_area(){
 
+            }
         },
     };
 </script>
