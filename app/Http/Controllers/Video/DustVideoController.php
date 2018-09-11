@@ -198,7 +198,7 @@ class DustVideoController extends Controller
         };
 
         $pagesize = $request->pagesize or 30;
-        $dusts = DustCode::with('dust:sn,monitor_place_name')->where($where)->where('sn', $request->sn)->orderBy('id', 'desc')->paginate($pagesize);
+        $dusts = DustCode::with('dust:sn,monitor_place_name')->where($where)->where('sn', $request->sn)->whereNotNull('updated_at')->orderBy('id', 'desc')->paginate($pagesize);
 
         forEach ($dusts as &$dust) {
             $diffTime = strtotime($dust->updated_at) - strtotime($dust->created_at);

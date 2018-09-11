@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public static function prossessItemId()
     {
-        $item_ids = ItemUnit::where('id', \Auth::id())->pluck('item_id');
+        $item_ids = ItemUnit::where('user_id', \Auth::id())->pluck('item_id');
         return $item_ids;
     }
 
