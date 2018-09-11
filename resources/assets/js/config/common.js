@@ -18,7 +18,7 @@ export const logoUrl = [
         image: '/static/img/logo3.png'
     },
     {
-        url: 'http://zhiwang.an-safe.com/#/',
+        url: 'http://deshi.an-safe.com/#/',
         image: '/static/img/logo3.png'
     },
     {
