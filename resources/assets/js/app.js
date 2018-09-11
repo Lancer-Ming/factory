@@ -78,7 +78,6 @@ new Vue({
     methods: {
 
         getSideBars(index) {
-            console.log(index)
             //当为首页时
             if (index == 0) {
                 this.$router.push({path: '/'})
@@ -88,6 +87,8 @@ new Vue({
                 this.sidebars = this.headers[index].children
                 this.isCollapse = false
             }
+
+            console.log(this.sidebars)
             this.activeNavIndex = index
             new Local().set('activeNavIndex', index)
         },
@@ -242,7 +243,7 @@ new Vue({
         initLogo() {
             let href = location.href
             logoUrl.forEach(item => {
-                if (href === item.url) {
+                if (href.indexOf(item.url) > -1) {
                     this.logoImg = item.image
                 }
             })

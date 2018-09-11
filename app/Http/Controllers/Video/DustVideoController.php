@@ -7,6 +7,7 @@ use App\Models\DustCode;
 use App\models\DustInfo;
 use App\Models\DustStandard;
 use App\Models\Item;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -47,6 +48,8 @@ class DustVideoController extends Controller
             }
         };
 
+        // 获取 当前用户拥有的项目
+        $item_ids = User::prossessItemId();
         // 关联模型条件查询
         $items = Item::with(['dusts' => function ($query) use ($dustWhere)
         {
@@ -54,8 +57,9 @@ class DustVideoController extends Controller
         }, 'buildUnit' => function ($query) use ($buildUnitWhere)
         {
             $query->where($buildUnitWhere);
-        }])->where($itemWhere)->orderBy('created_at', 'desc')->select('id', 'name', 'item_no', 'permit_no')->paginate(30);
+        }])->where($itemWhere)->orderBy('created_at', 'desc')->select('id', 'name', 'item_no', 'permit_no')->whereIn('id', $item_ids)->paginate(30);
 
+        $total = $items->total();
         // 过滤掉 buildUnit 或者 dusts 为空的item
         $items = $items->filter(function ($value)
         {
@@ -71,7 +75,10 @@ class DustVideoController extends Controller
             unset($value->buildUnit);
         }
 
-        return successJson($items);
+        $data['items'] = $items;
+        $data['total'] = $total;
+
+        return successJson($data);
 
     }
 

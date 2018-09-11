@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\models\ItemUser;
 use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ class HomeController extends Controller
 
     public function test()
     {
+        $items_id = ItemUser::where('user_id',\Auth::id())->pluck('item_id');
         return view('test');
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Item;
 use App\Http\Requests\ItemRequest;
 use App\Models\Item;
 use App\Models\ItemUnit;
+use App\models\ItemUser;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -19,13 +20,18 @@ class ProjectsController extends Controller
             }
         };
 
-        $items = Item::where($where)->with(['units' => function ($query) {
+        // 查询当前用户可以查看的items的id
+        $items_id = ItemUser::where('user_id',\Auth::id())->pluck('item_id');
+
+        $items = Item::where($where)->whereIn('id', $items_id)->with(['units' => function ($query) {
             $query->orderBy('created_at', 'desc');
         }])->orderBy('created_at', 'desc')->get()->toArray();
 
         if ($request->has('name') && trim($request->name) !== '') {
             $unit_ids = Unit::where($where)->pluck('id');
             $item_ids = \DB::table('item_units')->whereIn('contract_id', $unit_ids)->pluck('item_id');
+            // 将用户管辖的项目 id和关联到的 id
+            $item_ids = array_unique(array_merge($item_ids, $items_id));
             $items2 = Item::whereIn('id', $item_ids)->with(['units' => function ($query) {
                 $query->orderBy('created_at', 'desc');
             }])->orderBy('created_at', 'desc')->get()->toArray();

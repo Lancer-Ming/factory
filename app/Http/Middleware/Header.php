@@ -23,13 +23,13 @@ class Header
 
         foreach($sort_permissions as $key=>$sort_permission) {
             // 如果有用户拥有的一级权限菜单
-            if (Gate::denies($sort_permission->name)) {
+            if (Gate::denies($sort_permission['name'])) {
                 unset($sort_permissions[$key]);
                 continue;
             } else {
-                foreach($sort_permission->children as $k=>$children) {
-                    if (Gate::denies($children->name)) {
-                        unset($sort_permissions[$key]->children[$k]);
+                foreach($sort_permission['children'] as $k=>$children) {
+                    if (Gate::denies($children['name'])) {
+                        unset($sort_permissions[$key]['children'][$k]);
                     }
                 }
             }

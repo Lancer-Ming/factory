@@ -146,8 +146,8 @@
             </el-table-column>
         </el-table>
 
-        <el-dialog title="用户信息" :visible.sync="showForm" width="22%">
-            <el-form :model="form">
+        <el-dialog title="用户信息" :visible.sync="showForm" width="400px">
+            <el-form :model="form" class="as-form-col">
                 <el-form-item label="用户名" :label-width="formLabelWidth">
                     <el-input v-model="form.username" auto-complete="off" style="width:200px;" size="mini"></el-input>
                 </el-form-item>
