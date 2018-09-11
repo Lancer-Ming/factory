@@ -48,7 +48,6 @@
                                         <label class="forget">忘记密码？</label>
                                     </div>
                                     <button class="login-btn" type="submit">登录</button>
-                                    <span class="fot"><i class="glyphicon glyphicon-copyright-mark"></i>广州安拾科技有限公司</span>
                                 </div>
                             </form>
                         </div>
@@ -58,7 +57,7 @@
     </div>
     <div class="login-footer">
             <span>
-                Copyright  © 2018 {{$_SERVER['HTTP_HOST']==='http://as.an-safe.com' ? ' an-safe.com 版权所有': ''}}未禁同意,禁止非法复制
+                Copyright  © 2018 广东德实控股有限公司{{$_SERVER['HTTP_HOST']==='http://as.an-safe.com' ? ' an-safe.com 版权所有': ''}}，安拾科技技术支持，未禁同意,禁止非法复制
                 <br/>
                 <span style="color: #000;margin-top: 10px;">推荐使用火狐、谷歌、Safari、360浏览器（极速模式）体验更佳</span>
             </span>
