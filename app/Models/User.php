@@ -46,4 +46,22 @@ class User extends Authenticatable
         // 查询user和权限拥有的角色是否有交集
         return $permission_roles->intersect($user_roles)->count() > 0;
     }
+
+    public static function prossessItemId()
+    {
+        $item_ids = ItemUnit::where('id', \Auth::id())->pluck('item_id');
+        return $item_ids;
+    }
+
+    public static function authorite($model)
+    {
+        // 获取当前用户拥有的项目id
+        $item_ids = self::prossessItemId()->toArray();
+
+        if (in_array($model->item_id, $item_ids)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

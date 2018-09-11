@@ -582,10 +582,16 @@
         methods: {
             resize() {
             },
-            handleNodeClick(data) {
+            handleNodeClick(data, node) {
+                
+                // 如果是tree的子叶
+                if(node.isLeaf) {
+                    return
+                }
                 if (this.editData.id === data.id) {
                     return
                 }
+                
                 this.editData = data
                 this.editId = data.id
                 this.form = this.editData
