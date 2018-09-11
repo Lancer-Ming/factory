@@ -25,7 +25,7 @@
             </el-container>
         </el-container>
         <el-footer style="height: auto">
-            2018 © 广东德实控股有限公司<br/><span style="color:#666;">安拾科技技术支持</span>
+            2018 © 广东德实控股有限公司<p style="color:#666;">安拾科技技术支持</p>
         </el-footer>
     </el-container>
 </div>
