@@ -213,7 +213,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="ProjectItem = false">取 消</el-button>
+                <el-button @click="projectItem = false">取 消</el-button>
                 <el-button type="primary" @click="itemSenur">确 定</el-button>
             </div>
         </el-dialog>
@@ -432,10 +432,11 @@
             },
             Jurisdiction(id) {
                 this.projectItem = true
-                console.log(id)
                 this.userId = id
                 this.itemId = this.itemIdsSelected
-                console.log(this.itemId)
+                getItem(this.userId).then(res=>{
+                    this.textarea = implode(res.data.data, 'name').join(', ')
+                })
             },
             itemSenur() {
                 updataItem(this.userId, this.itemId).then(res => {
