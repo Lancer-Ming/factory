@@ -17,28 +17,9 @@
         }
     });
 
-    var url = 'http://factory.test/crane';
+    var url = 'http://factory.test/user/1/item';
     var data = {
-        item_id: 2,
-        right_unit_id: 1,
-        produce_unit_id: 1,
-        is_monitor: 1,
-        driver: 1,
-        record_no: '123',
-        floor_no: '1#',
-        model: '123',
-        left_no: '12321312',
-        parameters: "a: {a:1}",
-        left_at: '2018-02-12 23:22:11',
-        install_unit_id: parseInt('1'),
-        sn: '123',
-        GPRS: '32323232',
-        validity_month: 10,
-        model: 10,
-        paid_at: '2018-02-12 23:22:11',
-        installed_at: '2018-02-12 23:22:11',
-        function_config: 'a: {a:1}',
-        identify: 'a: {a:1}',
+        id: 1
     };
     $.post(url, data, function(res) {
         console.log(res)

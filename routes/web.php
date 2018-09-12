@@ -43,6 +43,7 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::get('/{user}', 'UsersController@edit')->name('edit');
             Route::patch('/{user}', 'UsersController@update')->name('update');
             Route::delete('/', 'UsersController@destroy')->name('destroy');
+            Route::post('/{user}/item', 'UsersController@item')->name('item');
         });
 
         // 用户组

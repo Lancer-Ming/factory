@@ -140,7 +140,7 @@ class DustClass
     public function sendConnectData()
     {
         if (!$this->isInit) {
-           return 'ok';
+           return;
         }
         // 主体数据内容
         $result_content = 'SN=' . $this->sn . ';DATETIME=' . date('YmdHis', time()) . '&&';

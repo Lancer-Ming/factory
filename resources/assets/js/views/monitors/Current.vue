@@ -91,6 +91,8 @@
                         })
                         return
                     }
+                    console.log(2222)
+                    this.currentAddressArray = []
                     data.devices.forEach(item => {
                         this.currentAddressArray.push({
                             hls: typeof  item.hls !== 'undefined' ? item.hls : '',
