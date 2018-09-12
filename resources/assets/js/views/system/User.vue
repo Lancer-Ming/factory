@@ -112,6 +112,14 @@
                 </template>
             </el-table-column>
             <el-table-column
+                    label="所属项目"
+                    align="center"
+            >
+                <template slot-scope="scope">
+                    <el-tag size="medium">{{ implode(scope.row.items, 'name').join(',') }}</el-tag>    
+                </template>
+            </el-table-column>
+            <el-table-column
                     label="管辖地区"
                     align="center"
             >
