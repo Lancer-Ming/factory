@@ -11,10 +11,10 @@
                 <el-form-item label="SN" :label-width="formLabelW">
                     <el-input auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="监测点" :label-width="formLabelW">
+                <el-form-item label="所在项目" :label-width="formLabelW">
                     <el-input auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="监测站名称" :label-width="formLabelW">
+                <el-form-item label="监控点名称" :label-width="formLabelW">
                     <el-input auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="是否在线" :label-width="formLabelW">
@@ -67,7 +67,7 @@
             </el-table-column>
             <el-table-column
                     prop="station_name"
-                    label="监测站名称"
+                    label="所在项目"
                     width="120"
                     align="center"
             >
@@ -184,7 +184,7 @@
                     align="center"
             >
                 <template slot-scope="scope">
-                    <span>{{ scope.row.is_online == 1 ? '是' : '否' }}</span>
+                    <span>{{ scope.row.is_online == 1 ? '√' : '×' }}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -194,7 +194,12 @@
                     align="center"
             >
                 <template slot-scope="scope">
-                    <span>{{ scope.row.is_monitor == 1 ? '是' : '否' }}</span>
+                    <span v-if="scope.row.is_monitor == 1">
+                        <i class="el-icon-check" style="color:#588d31;"></i>
+                    </span>
+                    <span v-else>
+                        <i class="el-icon-close" style="color:#aa3f3f;"></i>
+                    </span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -204,7 +209,7 @@
                     align="center"
             >
                 <template slot-scope="scope">
-                    <el-button type="primary" plain size="mini">设置GPS</el-button>
+                    <el-button type="primary" plain size="mini" v-show="JSON.parse(scope.row.func_config).wind_direction">设置GPS</el-button>
                 </template>
             </el-table-column>
         </el-table>
