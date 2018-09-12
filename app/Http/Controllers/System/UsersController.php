@@ -12,7 +12,7 @@ class UsersController extends Controller
 {
     public function index()
     {
-        $users = User::with('roles')->orderBy('created_at', 'desc')->paginate(10);
+        $users = User::with('roles', 'items')->orderBy('created_at', 'desc')->paginate(10);
         return successJson($users);
     }
 
