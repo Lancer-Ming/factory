@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', '安拾智慧工地管理平台') }}</title>
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/page.css') }}" rel="stylesheet">
 </head>
