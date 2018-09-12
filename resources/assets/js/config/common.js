@@ -7,7 +7,7 @@ export const apiUrl= "https://open.ys7.com"
 export const logoUrl = [
     {
         url: 'http://factory.test/#/',
-        image: '/static/img/logo2.png'
+        image: '/static/img/logo3.png'
     },
     {
         url: 'http://factory1.test/#/',

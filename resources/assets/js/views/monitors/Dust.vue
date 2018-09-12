@@ -212,7 +212,6 @@
                     sn: '121212'
                 }],
                 unregistered: false
-
             }
         },
         created() {

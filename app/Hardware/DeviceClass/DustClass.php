@@ -123,7 +123,7 @@ class DustClass
     {
         // 新增带有 sn 的扬尘设备
         if (!DB::select('select id from ams_dusts where sn = ?', [$this->sn])) {
-            DB::insert('insert into ams_dusts (sn) values (?)', [$this->sn]);
+            DB::insert('insert into ams_dusts (sn, item_id) values (?, ?)', [$this->sn, 1]);
         }
 
         // 根据client_id获取sn
