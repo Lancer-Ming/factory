@@ -270,7 +270,7 @@
                 if (newval) {
                     this.IntervalId = setInterval(() => {
                         this.search()
-                    }, 30000)
+                    }, 10000)
                 } else {
                     clearInterval(this.IntervalId)
                 }

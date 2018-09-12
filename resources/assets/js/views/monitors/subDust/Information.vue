@@ -296,7 +296,7 @@
         watch:{
             autoQuery(newval,val){
                 if(newval){
-                   this.IntervalId = setInterval(()=>{this.search()},30000)
+                   this.IntervalId = setInterval(()=>{this.search()},10000)
                 }else{
                     clearInterval(this.IntervalId)
                 }
