@@ -475,7 +475,7 @@
                 total: null,
                 loading: true,
                 searchData: {},
-                chose: false,
+                chose: false,  //是否显示
                 form: {
                     name: '',
                     unit_attr_id: null,

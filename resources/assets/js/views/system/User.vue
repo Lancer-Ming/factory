@@ -116,7 +116,7 @@
                     align="center"
             >
                 <template slot-scope="scope">
-                    <i class="el-icon-time"></i> <span style="margin-left: 10px">{{ scope.row.created_at }}</span>
+                    <span style="margin-left: 10px"></span>
                 </template>
             </el-table-column>
 
@@ -135,12 +135,19 @@
                             @click="handleDelete(scope.$index, scope.row)">删除
                     </el-button>
                     <el-button
+                            size="mini"
+                            type="success"
+                            style="float:left;"
+                            @click="Jurisdiction(scope.row.id)"
+                    >所属权限
+                    </el-button>
+                    <el-button
                             v-show="(implode(scope.row.roles, 'name').join(',')).indexOf('安监站') > -1"
                             size="mini"
                             type="warning"
                             style="float:left;"
                             @click="Edited_area"
-                            >编辑地区
+                    >管辖地区
                     </el-button>
                 </template>
             </el-table-column>
@@ -192,15 +199,39 @@
             </el-pagination>
         </el-row>
 
+        <el-dialog title="所属权限" :visible.sync="projectItem">
+            <el-form :model="form">
+                <el-form-item label="项目名称" :label-width="formLabelWidth">
+                    <el-input
+                            type="textarea"
+                            :rows="2"
+                            placeholder="请输入内容"
+                            v-model="textarea"
+                            @focus="searchUnitBox"
+                    >
+                    </el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="ProjectItem = false">取 消</el-button>
+                <el-button type="primary" @click="itemSenur">确 定</el-button>
+            </div>
+        </el-dialog>
+
+        <search-box :chose="chose" :requestName="item" v-on:dbClickSelection="getItemValue" v-on:closeSearchBox="closeItemValue"></search-box>
     </div>
 </template>
 
 <script>
-    import {getUsers, getRoles, updateUser, addUser, destroyUser} from "../../api/user.js";
+    import {getUsers, getRoles, updateUser, addUser, destroyUser, updataItem, getItem} from "../../api/user.js";
     import {implode} from "../../utils/common.js";
     import {pagesize, perPagesize} from '../../config/common'
+    import SearchBox from '../../components/SearchBox.vue'
 
     export default {
+        components: {
+            SearchBox
+        },
         data() {
             return {
                 tableData: [],
@@ -213,7 +244,7 @@
                     sex: '1',
                     password: "",
                     role_id: [],
-                    email: ""
+                    email: "",
                 },
                 formLabelWidth: "100px",
                 options: [],
@@ -226,7 +257,14 @@
                 perPagesize: perPagesize,
                 total: null,
                 distribution: false,
-        };
+                chose: false,  //是否显示
+                item: 'item',
+                projectItem: false,
+                textarea: '',
+                itemIdsSelected: [],
+                userId: '',
+                itemId: []
+            };
         },
         created() {
             getUsers(this.currentPage).then(res => {
@@ -253,10 +291,9 @@
                     query: {page: this.currentPage}
                 })
                 this.getUsers()
-
             },
             indexMethod(index) {
-                return  index + (this.currentPage - 1) * this.pagesize;
+                return index + (this.currentPage - 1) * this.pagesize;
             },
             handleCrane() {
                 this.distribution = true
@@ -376,8 +413,39 @@
             implode(arr, attr) {
                 return implode(arr, attr);
             },
-            Edited_area(){
-
+            searchUnitBox() {
+                this.chose = true
+            },
+            getItemValue(row) {
+                this.chose = false
+                if (!this.textarea) {
+                    this.textarea = row.name
+                } else {
+                    this.textarea += ', ' + row.name
+                }
+                this.itemIdsSelected.push(row.id)
+            },
+            closeItemValue() {
+                this.chose = false
+            },
+            Edited_area() {
+            },
+            Jurisdiction(id) {
+                this.projectItem = true
+                console.log(id)
+                this.userId = id
+                this.itemId = this.itemIdsSelected
+                console.log(this.itemId)
+            },
+            itemSenur() {
+                updataItem(this.userId, this.itemId).then(res => {
+                    this.$message({
+                        type: 'success',
+                        showClose: true,
+                        message: res.data.msg
+                    })
+                })
+                this.projectItem = false
             }
         },
     };

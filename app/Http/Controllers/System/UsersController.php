@@ -100,6 +100,6 @@ class UsersController extends Controller
     public function item(Request $request, User $user)
     {
         $user->items()->attach($request->id);
-        return successJson('操作成功');
+        return successJson('', '操作成功！');
     }
 }

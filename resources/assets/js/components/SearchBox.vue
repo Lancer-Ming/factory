@@ -1,8 +1,8 @@
 <template>
     <el-dialog title="弹出选择" :visible.sync="chose" class="chose" :before-close="handleClose">
         <el-form :model="form">
-            <div style="width: 60%;margin: -20px 0px 10px 0px;" class="chose-name">
-                名称：<el-input v-model="name"></el-input>
+            <div style="width: 60%;margin: 10px 0px 10px 0px;" class="chose-name">
+                名称：<el-input v-model="name" size="mini"></el-input>
                 <span class="search-btn" @click="unitSearch"><i class="el-icon-search"></i>查询</span>
                 <span class="search-btn" @click="clearSearch"><i class="el-icon-delete"></i>清空</span>
             </div>
