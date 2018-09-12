@@ -99,7 +99,7 @@ class UsersController extends Controller
 
     public function item(Request $request, User $user)
     {
-        $user->items()->attach($request->id);
+        $user->items()->sync($request->id);
         return successJson('操作成功');
     }
 }

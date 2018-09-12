@@ -19,7 +19,7 @@
 
     var url = 'http://factory.test/user/1/item';
     var data = {
-        id: 1
+        id: [1,2,3]
     };
     $.post(url, data, function(res) {
         console.log(res)
