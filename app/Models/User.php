@@ -35,6 +35,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    public function items()
+    {
+        return $this->belongsToMany(Item::class, 'item_user');
+    }
+
     public function hasPermission(Permission $permission)
     {
         // 查询拥有该权限的角色
@@ -46,6 +51,7 @@ class User extends Authenticatable
         // 查询user和权限拥有的角色是否有交集
         return $permission_roles->intersect($user_roles)->count() > 0;
     }
+
 
     public static function prossessItemId()
     {
