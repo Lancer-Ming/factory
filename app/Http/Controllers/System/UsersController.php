@@ -102,4 +102,10 @@ class UsersController extends Controller
         $user->items()->sync($request->id);
         return successJson('操作成功');
     }
+
+    public function getItem(User $user)
+    {
+        $items = $user->items;
+        return successJson($items);
+    }
 }
