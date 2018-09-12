@@ -18,8 +18,8 @@ mix.webpackConfig({
     devtool: "source-map",
     output: {
         publicPath: "/",
-        chunkFilename: 'js/lazy/[name].[chunkhash].js'
-        //chunkFilename: 'js/lazy/[name].js'
+        //chunkFilename: 'js/lazy/[name].[chunkhash].js'
+        chunkFilename: 'js/lazy/[name].js'
     },
     // externals: {
     //     'element-ui': 'Element',
