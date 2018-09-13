@@ -1,4 +1,4 @@
-/*
+    /*
 * person 企业库
 * project 项目管理
 * devices 设备管理
@@ -47,6 +47,12 @@ export default [
         path: '/',
         name: 'Home',
         component: () => import('../views/Home'),
+        meta: { title: '我的桌面' }
+    },
+    {
+        path: '/Hello',
+        name: 'Hello',
+        component: () => import('../components/Hello'),
         meta: { title: '我的桌面' }
     },
     {

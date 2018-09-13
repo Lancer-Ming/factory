@@ -46,11 +46,11 @@ export function destroyUser(id, page) {
     })
 }
 
-export function updataItem(userId,itemId){
+export function updataItem(userId,itemId,pagesize,page){
     return axios({
         url: `/user/${userId}/item`,
         method: 'post',
-        data: {itemId}
+        data: {itemId, pagesize, page}
     })
 }
 export function getItem(userId){

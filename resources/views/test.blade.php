@@ -17,7 +17,7 @@
         }
     });
 
-    var url = 'http://factory.test/user/1/item';
+    var url = 'http://factory.test/user/2/item';
     var data = {
         id: [1,2,3]
     };
