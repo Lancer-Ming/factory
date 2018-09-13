@@ -16,6 +16,7 @@ import $ from 'jquery'
 import {Message} from 'element-ui'
 import {MessageBox} from 'element-ui'
 import axios from 'axios'
+import store from './store'
 
 
 import "babel-polyfill" //低版本浏览器不支持es6转码
@@ -23,6 +24,7 @@ import "babel-polyfill" //低版本浏览器不支持es6转码
 //
 //import i18n from './lang'
 Vue.use(ElementUI)
+
 Vue.prototype.$ = $
 Vue.prototype.axios = axios
 Vue.prototype.message = Message
@@ -36,6 +38,7 @@ Vue.prototype.$echarts = echarts
 import './directives/'
 
 new Vue({
+    store,
     render: h => h(App),
 }).$mount('#layout-app')
 
