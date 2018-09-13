@@ -443,6 +443,7 @@
                 this.userId = id
                 this.itemId = this.itemIdsSelected
                 getItem(this.userId).then(res=>{
+                    console.log(res)
                     this.textarea = implode(res.data.data, 'name').join(', ')
                 })
             },
