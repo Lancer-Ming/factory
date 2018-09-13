@@ -146,7 +146,7 @@
                             size="mini"
                             type="success"
                             style="float:left;"
-                            @click="Jurisdiction(scope.row.id)"
+                            @click="Jurisdiction(scope.row)"
                     >所属权限
                     </el-button>
                     <el-button
@@ -271,7 +271,6 @@
                 textarea: '',
                 itemIdsSelected: [],
                 userId: '',
-                itemId: []
             };
         },
         created() {
@@ -438,16 +437,17 @@
             },
             Edited_area() {
             },
-            Jurisdiction(id) {
+            Jurisdiction(row) {
                 this.projectItem = true
-                this.userId = id
-                this.itemId = this.itemIdsSelected
+                this.userId = row.id
+                this.itemIdsSelected = implode(row.items, 'id')
                 getItem(this.userId).then(res=>{
                     this.textarea = implode(res.data.data, 'name').join(', ')
                 })
             },
             itemSenur() {
-                updataItem(this.userId, this.itemId).then(res => {
+                updataItem(this.userId, this.itemIdsSelected, this.pagesize, this.currentPage).then(res => {
+                    this.tableData = res.data.data.data
                     this.$message({
                         type: 'success',
                         showClose: true,

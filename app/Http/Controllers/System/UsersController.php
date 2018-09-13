@@ -12,7 +12,7 @@ class UsersController extends Controller
 {
     public function index()
     {
-        $users = User::with('roles', 'items')->orderBy('created_at', 'desc')->paginate(10);
+        $users = User::with('roles', 'items')->orderBy('created_at', 'desc')->paginate(config('home.pagesize'));
         return successJson($users);
     }
 
@@ -87,8 +87,11 @@ class UsersController extends Controller
 
     public function item(Request $request, User $user)
     {
-        $user->items()->sync($request->id);
-        return successJson('', '操作成功！');
+        $user->items()->sync($request->itemId);
+
+        $pagesize = $request->has('pagesize') ? $request->pagesize : config('home.pagesize');
+        $users = User::with('roles', 'items')->orderBy('created_at', 'desc')->paginate($pagesize);
+        return successJson($users, '操作成功！');
     }
 
     public function getItem(User $user)

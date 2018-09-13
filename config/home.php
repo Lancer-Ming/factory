@@ -41,7 +41,9 @@ return [
         'factory1.test' => '/static/img/logo2.png',
         'as.an-safe.com' => '/static/img/logo2.png',
         'test.an-safe.com'=>'/static/img/logo2.png',
-    ]
+    ],
+
+    'pagesize' => 30
 
 
 ];
