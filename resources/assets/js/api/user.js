@@ -45,3 +45,17 @@ export function destroyUser(id, page) {
         data: {id}
     })
 }
+
+export function updataItem(userId,itemId,pagesize,page){
+    return axios({
+        url: `/user/${userId}/item`,
+        method: 'post',
+        data: {itemId, pagesize, page}
+    })
+}
+export function getItem(userId){
+    return axios({
+        url: `/user/${userId}/item`,
+        method: 'get',
+    })
+}
