@@ -27,12 +27,30 @@
                 </el-row>
             </div>
         </div>
+
+        <el-row class="paginate">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[4, 8, 12, 16]"
+                    :page-size="pagesize"
+                    :pager-count="11"
+                    layout="total, sizes, prev, pager, next, jumper,slot,->"
+                    :total="total"
+                    align="center"
+            >
+            </el-pagination>
+        </el-row>
+
+
     </div>
 </template>
 
 <script>
     import {getItemWithDevice} from "../../api/current"
     import {implode} from '../../utils/common'
+    import {pagesize, perPagesize} from '../../config/common'
 
     export default {
         data() {
@@ -46,12 +64,18 @@
                 currentAddressObject: {},
                 currentAddressArray: [],
                 currentTreeId: null,
+                currentPage: 1, //当前页数
+                pagesize: 4,
+                total: null,
+                distribution: false,
+                handleNodeData: null
             }
         },
         created() {
-            getItemWithDevice().then(res => {
+            getItemWithDevice(this.currentPage,this.pagesize).then(res => {
                 if (res.data.response_status === "success") {
                     this.data = res.data.data
+                    console.log(this.data)
                     this.$nextTick(function () {
                         this.$refs.tree.setCurrentKey(this.data[0].id)
                         this.handleNodeClick(this.data[0])
@@ -60,18 +84,38 @@
             })
         },
         methods:{
+            handleSizeChange(pagesize) {
+                this.pagesize = pagesize
+                this.renderVideoData(this.handleNodeData)
+            },
+            handleCurrentChange(currentPage) {
+                this.currentPage = currentPage
+                this.renderVideoData(this.handleNodeData)
+                this.$router.replace({
+                    path: this.$route.path, query: {page: this.currentPage}
+                })
+            },
+            handleCrane() {
+                this.distribution = true
+            },
             handleNodeClick(data){
-                console.log(data)
+                this.handleNodeData = data
                 if(this.currentTreeId === data.$treeNodeId){
                     return
                 }
                 this.currentTreeId = data.$treeNodeId
+                this.renderVideoData(data)
+            },
+            filterNode(value, data) {
+                if (!value) return true;
+                return data.d_name.indexOf(value) !== -1;
+            },
+            renderVideoData(data) {
                 // 如果点击的是设备
                 if (typeof data.devices === 'undefined') {
                     this.currentAddressArray = []
                     if (this.currentAddressObject.hlsHd || this.currentAddressObject.hls) {
                         this.$nextTick(() => {
-                            console.log(1)
                             $(`[data-id=${this.currentTreeId}]`).attr('src', '')
                         })
                     }
@@ -82,18 +126,21 @@
                         rtmpHd: data.rtmpHd
                     }
                 } else {  // 如果点击的是项目
-                
+
                     if (data.devices.length === 0) {
                         this.currentAddressArray = []
                         this.$nextTick(() => {
-                            console.log(2)
                             $(`[data-id=${this.currentTreeId}]`).attr('src', '')
                         })
                         return
                     }
-                    console.log(2222)
+                    // 计算该项目的设备总数
+                    this.total = data.devices.length
+                    // 取出当前对应页码的设备
+                    let currentDevicesByPage = data.devices.slice((this.currentPage - 1) * 4, this.currentPage * 4)
+                    console.log(currentDevicesByPage)
                     this.currentAddressArray = []
-                    data.devices.forEach(item => {
+                    currentDevicesByPage.forEach(item=> {
                         this.currentAddressArray.push({
                             hls: typeof  item.hls !== 'undefined' ? item.hls : '',
                             hlsHd: typeof item.hlsHd !== 'undefined' ? item.hlsHd : '',
@@ -103,12 +150,6 @@
                     })
                     this.currentAddressObject = {}
                 }
-
-
-            },
-            filterNode(value, data) {
-                if (!value) return true;
-                return data.d_name.indexOf(value) !== -1;
             }
         },
         watch: {
@@ -152,7 +193,7 @@
     .current-box {
         width: 100%;
         margin: 0 auto;
-        height: 100%;
+        height: 92%;
     }
 
     .current-left {

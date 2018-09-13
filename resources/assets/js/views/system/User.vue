@@ -442,6 +442,7 @@
                 this.userId = row.id
                 this.itemIdsSelected = implode(row.items, 'id')
                 getItem(this.userId).then(res=>{
+                    console.log(res)
                     this.textarea = implode(res.data.data, 'name').join(', ')
                 })
             },
