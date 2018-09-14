@@ -21,6 +21,10 @@ mix.webpackConfig({
         //chunkFilename: 'js/lazy/[name].[chunkhash].js'
         chunkFilename: 'js/lazy/[name].js'
     },
+    entry: {
+        app: ["babel-polyfill", "./resources/assets/js/main.js"]
+
+    }
     // externals: {
     //     'element-ui': 'Element',
     //     'axios': 'axios',

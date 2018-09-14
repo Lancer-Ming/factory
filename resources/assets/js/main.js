@@ -18,7 +18,7 @@ import {MessageBox} from 'element-ui'
 import axios from 'axios'
 
 
-import "babel-polyfill" //低版本浏览器不支持es6转码
+//import "babel-polyfill" //低版本浏览器不支持es6转码
 
 //
 //import i18n from './lang'
