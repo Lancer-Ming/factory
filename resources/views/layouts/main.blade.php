@@ -15,6 +15,6 @@
 {{--<script src="{{ mix('js/vendor.js') }}"></script>--}}
 <script src="{{asset('vendor/ckplayer/ckplayer/ckplayer.js')}}"></script>
 {{--<script src="{{ asset('js/ezuikit.js') }}"></script>--}}
-<script src="{{ mix('js/main.js') }}"></script>
+<script src="{{ mix('main.js') }}"></script>
 </body>
 </html>

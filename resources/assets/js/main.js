@@ -19,7 +19,7 @@ import axios from 'axios'
 import store from './store'
 
 
-//import "babel-polyfill" //低版本浏览器不支持es6转码
+import "babel-polyfill" //低版本浏览器不支持es6转码
 
 //
 //import i18n from './lang'
