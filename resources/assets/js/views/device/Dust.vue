@@ -202,13 +202,7 @@
                     align="center"
             >
                 <template slot-scope="scope">
-<<<<<<< HEAD
-                    <el-button type="primary" plain size="mini" v-show="JSON.parse(scope.row.func_config).gps">设置GPS</el-button>
-=======
-
                     <el-button type="primary" plain size="mini">设置GPS</el-button>
-
->>>>>>> fa0b36f00335619ec7cb70f54ffe156edbeb1146
                 </template>
             </el-table-column>
         </el-table>

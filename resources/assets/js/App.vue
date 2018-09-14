@@ -190,7 +190,7 @@
             homePageAddTab(path, title) {
                 let name = 'index'
                 let isRepeat = false
-                let tabs = this.$root.$data.tabs
+                let tabs = this.tabs
                 tabs.forEach((item, index) => {
                     if (item.name === name) {
                         isRepeat = true
