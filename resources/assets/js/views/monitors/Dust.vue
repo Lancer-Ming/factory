@@ -188,7 +188,7 @@
     import {pagesize, perPagesize} from '../../config/common'
     import {Local} from '../../utils/common'
     import {getcontrol} from '../../api/dustControl'
-
+    import { mapMutations } from 'vuex'
     export default {
         data() {
             return {
@@ -213,6 +213,7 @@
             }
         },
         created() {
+            // this.add(123)
             this.$router.replace({path: this.$route.path, query: {page: this.currentPage}})
             this.getTableData()
         },
@@ -229,6 +230,9 @@
 
 
             addTab(path, title, sn) {
+
+                this.add(456)
+                return
                 let name = path.split('/').join('.').substr(1)
                 let isRepeat = false
                 let tabs = this.$root.$data.tabs
@@ -277,7 +281,6 @@
             getTableData(data = {}) {
                 getcontrol(this.currentPage, data, this.pagesize).then(res => {
                     if (res.data.response_status === "success") {
-                        console.log(res)
                         this.tableData = res.data.data.items
                         this.total = res.data.data.total
                         this.loading = false
@@ -296,7 +299,10 @@
             register(){
                 return
                 this.$router.replace({path: '/device/dust/index', query: {sn: '1111'}})
-            }
+            },
+            ...mapMutations({
+                add: 'changeTabsValue' // 将 `this.add()` 映射为 `this.$store.commit('changeTabsValue')`
+            })
         }
 
     }
