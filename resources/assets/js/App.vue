@@ -288,9 +288,13 @@
                 this.setActiveTabs(tab.name)
             },
             logout() {
-                let form = document.querySelector('.logout');
-                localStorage.clear()
-                form.submit();
+                this.axios({
+                    url: 'logout',
+                    method: 'POST',
+                }).then(res => {
+                    this.setClearAll()
+                    location.href = '/login'
+                })
             },
             openSubMenu(index) {
                 this.currentOpenMenuName[0] = index
@@ -334,7 +338,8 @@
                 setActiveSideBar: 'setActiveSideBar',
                 setRecordTabsWithHeader: 'setRecordTabsWithHeader',
                 setTabs: 'setTabs',
-                setActiveNavIndex: 'setActiveNavIndex'
+                setActiveNavIndex: 'setActiveNavIndex',
+                setClearAll: 'setClearAll'
             }) 
         },
         computed: {

@@ -23,6 +23,15 @@ const actions = {}
   
   // mutations
 const mutations = {
+    setClearAll(state, payload) {
+        state.activeTabs = []
+        state.activeSideBar = '',
+        state.recordTabsWithHeader =  {},
+        state.tabs = [],
+        state.activeNavIndex = 0,
+        state.currentOpenMenuName = []
+        new Local().clear()
+    },
     setActiveTabs(state, payload) {
         state.activeTabs = payload
         new Local().set('activeTabs', payload)
