@@ -22,7 +22,7 @@ mix.webpackConfig({
         chunkFilename: 'js/lazy/[name].js'
     },
     entry: {
-        app: ["babel-polyfill", "./resources/assets/js/main.js"]
+        main: ["babel-polyfill", "./resources/assets/js/main.js"]
 
     }
     // externals: {
