@@ -38,7 +38,7 @@
                 </div>
                 <div class="as-tabs__Menu">
                     <div class="as-tabs__MenuWrap">
-                        <el-tabs type="border-card" closable @tab-remove="removeTab" @tab-click="handleClick" class="as-tabs-box">
+                        <el-tabs v-model="activeTabValue" type="border-card" closable @tab-remove="removeTab" @tab-click="handleClick" class="as-tabs-box">
                             <el-tab-pane
                                     v-for="(item, index) in tabs" :key="item.name" :label="item.title" :name="item.name"
                             >
@@ -142,12 +142,14 @@
                 isCollapse: false,      // 是否折叠
                 isInit: false,   // 是否刷新初始化
                 currentOpenMenuName: [],
-                logoImg: ''
+                logoImg: '',
+                activeTabValue: ''  // 标签当前active 值
             }
 
         },
 
         created() {
+            this.activeTabValue = this.activeTabs   // 用activeTabValue 来暂存activeTab值
             this.switchActivedUrl()
             this.initLogo()
             this.axios.get("/permission").then(res => {
@@ -282,7 +284,8 @@
                 }
             },
             handleClick: function (tab, event) {
-
+                console.log(tab.name)
+                this.setActiveTabs(tab.name)
             },
             logout() {
                 let form = document.querySelector('.logout');
@@ -345,8 +348,6 @@
         },
         watch: {
             activeTabs(val) {
-                console.log(123)
-                return
                 const filter = this.tabs.filter(item => {
                     return item.name === val
                 })[0]
@@ -356,6 +357,8 @@
 
                 // 将currentActiveTab 存到LocalStorage里
                 this.setActiveTabs(val)
+                // 将其暂存给 activeTabValue 为了tab的v-model 达到高亮效果
+                this.activeTabValue = val
 
                 // 如果点击的不是侧边栏
                 if (filter.is_sub) {
@@ -383,6 +386,9 @@
                 } else {
                     this.isInit = false
                 }
+            },
+            activeTabValue(val) {
+                this.setActiveTabs(val)
             }
         },
     }
