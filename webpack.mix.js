@@ -18,8 +18,8 @@ mix.webpackConfig({
     devtool: "source-map",
     output: {
         publicPath: "/",
-        //chunkFilename: 'js/lazy/[name].[chunkhash].js'
-        chunkFilename: 'js/lazy/[name].js'
+        chunkFilename: 'js/lazy/[name].[chunkhash].js' //开启js缓存
+        //chunkFilename: 'js/lazy/[name].js'
     },
     entry: {
         main: ["babel-polyfill", "./resources/assets/js/main.js"]
