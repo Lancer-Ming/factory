@@ -99,4 +99,9 @@ class UsersController extends Controller
         $items = $user->items;
         return successJson($items);
     }
+
+    public function userInfo()
+    {
+        return successJson(\Auth::user());
+    }
 }

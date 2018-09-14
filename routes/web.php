@@ -34,7 +34,6 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::resource('permission', 'PermissionsController')->except(['create', 'show']);
         });
 
-
         // 用户
         Route::prefix('user')->as('system.user.')->group(function() {
             Route::get('/', 'UsersController@index')->name('index');
@@ -46,6 +45,7 @@ Route::middleware(['auth','role','header'])->group(function() {
             Route::post('/{user}/item', 'UsersController@item')->name('item');
             Route::get('/{user}/item', 'UsersController@getItem')->name('get_item');
         });
+        Route::get('/userinfo', 'UsersController@userInfo')->name('user_info');
 
         // 用户组
         Route::prefix('role')->as('system.role.')->group(function() {

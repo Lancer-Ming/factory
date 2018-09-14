@@ -19,7 +19,7 @@
                                 <el-menu class="el-menu-demo" mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
                                     <el-submenu index="2">
                                         <template slot="title">
-                                            <img src="/static/img/user.png" alt="" class="tit-user clearfix">Lancer
+                                            <img src="/static/img/user.png" alt="" class="tit-user clearfix">{{ userName }}
                                         </template>
                                         <el-menu-item index="2-1">
                                             <i class="fa fa-gears" style="color: #fff;display: inline-block;margin: 0 20px 0px 10px;"></i><span class="changepwd">修改密码</span>
@@ -139,6 +139,7 @@
             return {
                 headers: [],    // 导航头
                 sidebars: [],   // 侧边栏
+                userName: '',
                 isCollapse: false,      // 是否折叠
                 isInit: false,   // 是否刷新初始化
                 currentOpenMenuName: [],
@@ -160,6 +161,10 @@
 
                 this.getSideBars(this.activeNavIndex)
 
+            })
+
+            this.axios.get("/userinfo").then(res => {
+                this.userName = res.data.data.username
             })
 
             this.isInit = true
@@ -267,9 +272,9 @@
                 }
 
                 this.setActiveTabs(activeName)
-                this.tabs = tabs.filter(tab => tab.name !== targetName);
+                tabs = tabs.filter(tab => tab.name !== targetName);
                 // 给localStorage里更改tabs
-                this.setTabs(this.tabs)
+                this.setTabs(tabs)
                 // 如果tabs全部关闭了
                 if (this.tabs.length === 0) {
                     // 清空localStorage

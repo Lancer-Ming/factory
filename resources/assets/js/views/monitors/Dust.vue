@@ -237,9 +237,11 @@
                 tabs.forEach((item, index) => {
                     if (item.name === name) {
                         isRepeat = true
+                        // 将sn进行更换
+                        tabs[index].query = {sn}
                     }
                 })
-
+                
                 // 如果是tabs里没有
                 if (!isRepeat) {
                     tabs.push({
@@ -249,29 +251,13 @@
                         is_sub: true,
                         query: {sn}
                     })
-
-                    this.setTabs(tabs)
                 }
+                
+                this.setTabs(tabs)
 
                 this.setActiveTabs(name)
             },
-            removeTab(targetName) {
-                let tabs = this.editableTabs2;
-                let activeName = this.editableTabsValue2;
-                if (activeName === targetName) {
-                    tabs.forEach((tab, index) => {
-                        if (tab.name === targetName) {
-                            let nextTab = tabs[index + 1] || tabs[index - 1];
-                            if (nextTab) {
-                                activeName = nextTab.name;
-                            }
-                        }
-                    });
-                }
-
-                this.editableTabsValue2 = activeName;
-                this.editableTabs2 = tabs.filter(tab => tab.name !== targetName);
-            },
+        
             getTableData(data = {}) {
                 getcontrol(this.currentPage, data, this.pagesize).then(res => {
                     if (res.data.response_status === "success") {
