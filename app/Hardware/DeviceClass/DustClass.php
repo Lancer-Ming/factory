@@ -3,7 +3,6 @@
 namespace App\Hardware\DeviceClass;
 
 use App\Models\Code;
-use GatewayWorker\Lib\Gateway;
 use Illuminate\Support\Facades\DB;
 
 class DustClass
@@ -77,23 +76,20 @@ class DustClass
                 // 如果查询到了 说明已经储存过了
                 $this->snIsHaved = true;
                 $this->sn = $sn[0]->sn;
-                // 将sn 作为Uid 与 client_id 进行绑定
-                Gateway::bindUid($this->client_id, $this->sn);
+
                 // 每次都需要插入一条新的client_id 记录
                 $time = date('Y-m-d H:i:s', time());
                 DB::insert('insert into ams_dust_codes (sn, IMEI, client_id, created_at) values (?, ?, ?, ?)', [$this->sn,$processMessage['IMEI'], $this->client_id,  $time]);
-
+                
                 // 改变 dust 状态
                 $this->changeStatus($client_id);
+
                 return;
             } else {
                 $this->sn = $this->createRandomUniqueCode();
 
-                // 将sn 作为Uid 与 client_id 进行绑定
-                Gateway::bindUid($client_id, $this->sn);
-
                 // 改变 dust 状态
-                $this->changeStatus($client_id);
+                $this->changeStatus();
 
                 // 每次都需要插入一条新的client_id 记录
                 $time = date('Y-m-d H:i:s', time());
@@ -108,8 +104,7 @@ class DustClass
                 $this->storeTestData($processMessage);
             } else {
                 $this->sn =  substr($processMessage['MN'], -6);      // 生成sn
-                // 将sn 作为Uid 与 client_id 进行绑定
-                Gateway::bindUid($this->client_id, $this->sn);
+
                 $this->storeProductionData($processMessage);
             }
         }
@@ -119,7 +114,7 @@ class DustClass
     /**
      * 改变 dust 在线状态
      */
-    public function changeStatus($client_id)
+    public function changeStatus()
     {
         // 新增带有 sn 的扬尘设备
         if (!DB::select('select id from ams_dusts where sn = ?', [$this->sn])) {
@@ -127,11 +122,7 @@ class DustClass
         }
 
         // 根据client_id获取sn
-        $sn = Gateway::getUidByClientId($client_id);
-        $is_online = Gateway::isUidOnline($sn);
-        if ($is_online) {
-            DB::update('update ams_dusts set is_online=1 WHERE sn = ?', [$sn]);
-        }
+        DB::update('update ams_dusts set is_online=1 WHERE sn = ?', [$this->sn]);
     }
 
     /** 发送数据给硬件
@@ -155,7 +146,7 @@ class DustClass
 
     public function insertCloseTime($client_id)
     {
-        $data = DB::select('select sn, id from ams_dust_codes WHERE client_id = ?', [$client_id]);
+        $data = DB::select("select sn, id from ams_dust_codes WHERE client_id = ? ORDER BY id desc LIMIT 1", [$client_id]);
         if ($data) {
             $sn = $data[0]->sn;
         }
@@ -163,8 +154,10 @@ class DustClass
         if (empty($sn)) {
             return;
         }
+
         // 查询要退出的那个id
         $id = DB::select("select id from ams_dust_codes where sn = ? ORDER BY id desc LIMIT 1", [$sn])[0]->id;
+
         $time = date('Y-m-d H:i:s', time());
         DB::update('update ams_dust_codes set updated_at = ? WHERE id = ?', [$time, $id]);
         DB::update('update ams_dusts set is_online=0, pre_warn_count=0, cur_warn_count=0 WHERE sn = ?', [$sn]);

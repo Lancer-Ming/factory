@@ -231,12 +231,9 @@
 
 
             addTab(path, title, sn) {
-
-                this.add(456)
-                return
                 let name = path.split('/').join('.').substr(1)
                 let isRepeat = false
-                let tabs = this.$root.$data.tabs
+                let tabs = this.tabs
                 tabs.forEach((item, index) => {
                     if (item.name === name) {
                         isRepeat = true
@@ -253,14 +250,10 @@
                         query: {sn}
                     })
 
-                    new Local().set('tabs', tabs)
+                    this.setTabs(tabs)
                 }
 
-                new Local().set('activeTabs', name)
-
-                this.$root.$data.tabsValue = name
-
-
+                this.setActiveTabs(name)
             },
             removeTab(targetName) {
                 let tabs = this.editableTabs2;
@@ -302,9 +295,16 @@
                 this.$router.replace({path: '/device/dust/index', query: {sn: '1111'}})
             },
             ...mapMutations({
-                add: 'changeTabsValue' // 将 `this.add()` 映射为 `this.$store.commit('changeTabsValue')`
+                setActiveTabs: 'setActiveTabs',
+                setTabs: 'setTabs',
+            }) 
+        },
+        computed: {
+            ...mapState({
+                tabs: 'tabs',               // 标签数组
+                activeTabs: 'activeTabs',       // 标签值
             })
-        }
+        },
 
     }
 </script>
