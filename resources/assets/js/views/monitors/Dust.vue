@@ -26,7 +26,7 @@
                 </el-form-item>
                 <el-button type="primary" plain size="mini" style="float: left" @click="search">查询</el-button>
                 <el-button size="mini" style="float: left" @click="reset">清空</el-button>
-                <el-button type="warning" icon="el-icon-star-off" circle plain style="float: right;margin-right: 15px" @click="unregistered=true"></el-button>
+                <!-- <el-button type="warning" icon="el-icon-star-off" circle plain style="float: right;margin-right: 15px" @click="unregistered=true"></el-button> -->
             </el-form>
         </el-row>
         <el-row>
@@ -158,7 +158,7 @@
             </el-pagination>
         </el-row>
 
-        <el-dialog title="未登记SN" :visible.sync="unregistered" width="30%" center>
+        <!-- <el-dialog title="未登记SN" :visible.sync="unregistered" width="30%" center>
             <el-table :data="gridData" border style="margin:10px 0px 30px;">
                 <el-table-column
                         prop="id"
@@ -179,7 +179,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 

@@ -44,7 +44,7 @@ class DustVideoController extends Controller
             }
 
             if ($request->has('cur_warn_count') && trim($request->cur_warn_count != '')) {
-                $query->where('cur_warn_count', $request->cur_warn_count);
+                $query->where('cur_warn_count', '>', 0);
             }
         };
 
@@ -66,7 +66,7 @@ class DustVideoController extends Controller
         {
             return $value->dusts->all();
             // 施工单位问题...
-        });
+        })->values();
 
         foreach ($items as $key => &$value) {
             $value['b_unit'] = $value->buildUnit->implode('name');
