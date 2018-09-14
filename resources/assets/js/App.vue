@@ -38,7 +38,7 @@
                 </div>
                 <div class="as-tabs__Menu">
                     <div class="as-tabs__MenuWrap">
-                        <el-tabs v-model="tabsValue" type="border-card" closable @tab-remove="removeTab" @tab-click="handleClick" class="as-tabs-box">
+                        <el-tabs v-model="activeTabValue" type="border-card" closable @tab-remove="removeTab" @tab-click="handleClick" class="as-tabs-box">
                             <el-tab-pane
                                     v-for="(item, index) in tabs" :key="item.name" :label="item.title" :name="item.name"
                             >
@@ -130,6 +130,7 @@
     import {logoUrl} from "./config/common.js"
     import router from './router'
     import Breadcrumb from './components/Breadcrumb'
+    import { mapMutations, mapState } from 'vuex'
     export default{
         name: 'app',
         router,
@@ -139,26 +140,22 @@
                 headers: [],    // 导航头
                 sidebars: [],   // 侧边栏
                 isCollapse: false,      // 是否折叠
-                tabsValue: '0', // 标签值
-                tabs: [],       // 标签数组对象
-                activeNavIndex: 0,  // active 导航
-                activeSideBar: '',  // active 侧边栏
-                recordTabsWithHeader: {},   // 表示记录标签和头的关系
                 isInit: false,   // 是否刷新初始化
                 currentOpenMenuName: [],
-                logoImg: ''
+                logoImg: '',
+                activeTabValue: ''  // 标签当前active 值
             }
 
         },
 
         created() {
-            this.initLocal()
+            this.activeTabValue = this.activeTabs   // 用activeTabValue 来暂存activeTab值
             this.switchActivedUrl()
             this.initLogo()
             this.axios.get("/permission").then(res => {
                 this.headers = res.data.data;
                 if (this.activeSideBar) {
-                    this.activeNavIndex = this.recordTabsWithHeader[this.activeSideBar]
+                    this.setActiveNavIndex(this.recordTabsWithHeader[this.activeSideBar])
                 }
 
                 this.getSideBars(this.activeNavIndex)
@@ -174,15 +171,14 @@
                 if (index == 0) {
                     this.$router.push({path: '/'})
                     this.homePageAddTab('/', '智慧工地首页')
-                    this.activeSideBar = ''
+                    this.setActiveSideBar('')
                 } else {
                     this.sidebars = this.headers[index].children
                     this.isCollapse = false
                 }
 
                 //console.log(this.sidebars)
-                this.activeNavIndex = index
-                new Local().set('activeNavIndex', index)
+                this.setActiveNavIndex(index)
             },
             switchBar() {
                 this.isCollapse = !this.isCollapse
@@ -191,11 +187,15 @@
                 let name = 'index'
                 let isRepeat = false
                 let tabs = this.tabs
-                tabs.forEach((item, index) => {
-                    if (item.name === name) {
-                        isRepeat = true
-                    }
-                })
+                if (tabs) {
+                     tabs.forEach((item, index) => {
+                        if (item.name === name) {
+                            isRepeat = true
+                        }
+                    })
+                } else {
+                    isRepeat = true
+                }
 
                 // 如果是tabs里没有
                 if (!isRepeat) {
@@ -205,12 +205,10 @@
                         path: path
                     })
 
-                    new Local().set('tabs', tabs)
+                    this.setTabs(tabs)
                 }
 
-                new Local().set('activeTabs', name)
-
-                this.tabsValue = name
+                this.setActiveTabs(name)
 
 
             },
@@ -243,22 +241,20 @@
                         path: path
                     })
 
-                    new Local().set('tabs', this.tabs)
+                    this.setTabs(this.tabs)
                 }
-                this.activeSideBar = newTabName
                 // 设置为高亮
-                this.tabsValue = newTabName
-                new Local().set('activeTabs', newTabName)
-                new Local().set('activeSideBar', newTabName)
+                this.setActiveTabs(newTabName)
 
+                this.setActiveSideBar(newTabName)
                 // 对tabs的name和header的index进行关联
                 this.recordTabsWithHeader[newTabName] = this.activeNavIndex
-                new Local().set('recordTabsWithHeader', this.recordTabsWithHeader)
+                this.setRecordTabsWithHeader(this.recordTabsWithHeader)
 
             },
             removeTab(targetName) {
                 let tabs = this.tabs;
-                let activeName = this.tabsValue;
+                let activeName = this.activeTabs;
                 if (activeName === targetName) {
                     tabs.forEach((tab, index) => {
                         if (tab.name === targetName) {
@@ -270,38 +266,31 @@
                     });
                 }
 
-                this.tabsValue = activeName;
+                this.setActiveTabs(activeName)
                 this.tabs = tabs.filter(tab => tab.name !== targetName);
                 // 给localStorage里更改tabs
-                new Local().set('tabs', this.tabs)
+                this.setTabs(this.tabs)
                 // 如果tabs全部关闭了
                 if (this.tabs.length === 0) {
                     // 清空localStorage
                     new Local().clear()
                     // 清空一写data
-                    this.activeNavIndex = null,
-                        this.recordTabsWithHeader = {}
-                    this.activeSideBar = ''
-                    this.tabsValue = ""
+                    this.setActiveNavIndex(null),
+                        this.setRecordTabsWithHeader({})
+                    this.setActiveSideBar('')
+                    this.setActiveTabs('')
                     // 跳转主页
                     this.$router.push({path: '/'})
                 }
             },
             handleClick: function (tab, event) {
-
+                console.log(tab.name)
+                this.setActiveTabs(tab.name)
             },
             logout() {
                 let form = document.querySelector('.logout');
                 localStorage.clear()
                 form.submit();
-            },
-            initLocal() {
-                this.activeSideBar = new Local().get('activeSideBar')
-                this.tabsValue = new Local().get('activeTabs') || '0'
-                this.tabs = new Local().get('tabs') || []
-                this.activeNavIndex = new Local().get('activeNavIndex') || 0
-                this.recordTabsWithHeader = new Local().get('recordTabsWithHeader') || {}
-                this.currentOpenMenuName = new Local().get('currentOpenMenuName') || []
             },
             openSubMenu(index) {
                 this.currentOpenMenuName[0] = index
@@ -339,10 +328,26 @@
                         this.logoImg = item.image
                     }
                 })
-            }
+            },
+            ...mapMutations({
+                setActiveTabs: 'setActiveTabs',
+                setActiveSideBar: 'setActiveSideBar',
+                setRecordTabsWithHeader: 'setRecordTabsWithHeader',
+                setTabs: 'setTabs',
+                setActiveNavIndex: 'setActiveNavIndex'
+            }) 
+        },
+        computed: {
+            ...mapState({
+                tabs: 'tabs',               // 标签数组
+                activeTabs: 'activeTabs',       // 标签值
+                activeSideBar: 'activeSideBar',     // active 侧边栏
+                recordTabsWithHeader: 'recordTabsWithHeader',  // 表示记录标签和头的关系
+                activeNavIndex: 'activeNavIndex',   // active 导航索引
+            })
         },
         watch: {
-            tabsValue(val) {
+            activeTabs(val) {
                 const filter = this.tabs.filter(item => {
                     return item.name === val
                 })[0]
@@ -351,7 +356,9 @@
                 const query = filter.query
 
                 // 将currentActiveTab 存到LocalStorage里
-                new Local().set('activeTabs', val)
+                this.setActiveTabs(val)
+                // 将其暂存给 activeTabValue 为了tab的v-model 达到高亮效果
+                this.activeTabValue = val
 
                 // 如果点击的不是侧边栏
                 if (filter.is_sub) {
@@ -359,7 +366,8 @@
                     this.isInit = false
                     return
                 }
-                new Local().set('activeSideBar', val)
+    
+                this.setActiveSideBar(val)
 
                 // 如果是首页
                 if(val === 'index') {
@@ -370,14 +378,17 @@
 
                 if (!this.isInit) {     // 如果是刷新了页面，这个就不用再次获取了。
                     this.isInit = false
-                    this.activeSideBar = val
-                    this.activeNavIndex = this.recordTabsWithHeader[val]
+                    this.setActiveSideBar(val)
+                    this.setActiveNavIndex(this.recordTabsWithHeader[val])
                     this.getSideBars(this.activeNavIndex)
                     // 并且路由跳转
                     this.$router.push({path: path})
                 } else {
                     this.isInit = false
                 }
+            },
+            activeTabValue(val) {
+                this.setActiveTabs(val)
             }
         },
     }
