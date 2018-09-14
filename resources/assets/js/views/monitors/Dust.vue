@@ -188,7 +188,8 @@
     import {pagesize, perPagesize} from '../../config/common'
     import {Local} from '../../utils/common'
     import {getcontrol} from '../../api/dustControl'
-    import { mapMutations } from 'vuex'
+    import { mapMutations, mapState } from 'vuex'
+
     export default {
         data() {
             return {
