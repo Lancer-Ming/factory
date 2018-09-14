@@ -32,13 +32,13 @@ export function citys(){
 }
 export function alarm_type(){
     return axios ({
-        url: "/json/alarm_type.json",
+        url: "/json/Alarm_type.json",
         method: 'get'
     })
 }
 export function alarm_status(){
     return axios ({
-        url: "/json/alarm_status.json",
+        url: "/json/Alarm_status.json",
         method: 'get'
     })
 }
